@@ -2,6 +2,7 @@
   <div id="app">
     <div id="nav">
       <button class="easyup_menu_btn">
+        7
         <img src="@/assets/images/main/menu_btn.png" alt="메뉴" title="메뉴" />
       </button>
       <router-link to="/" class="easyup_logo">
