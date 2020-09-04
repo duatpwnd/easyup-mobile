@@ -20,7 +20,8 @@
     </div>
     <div class="subscribe_wrap">
       <h2>무료</h2>
-      <button class="subs_btn">구독하기</button>
+      <button class="subs_btn" ref="subs_btn">구독하기</button>
+
       <div>
         <span class="total_lec">총<span class="color">11</span>강</span>
       </div>
@@ -44,15 +45,36 @@
       </div>
       <span class="name">강동원 강사님</span>
     </div>
+    <button class="fixed_subs_btn" v-if="subscribe_btn">구독하기</button>
   </div>
 </template>
 <script>
   export default {
     components: {},
     data() {
-      return {};
+      return {
+        subscribe_btn: false,
+      };
     },
-    methods: {},
+    methods: {
+      subscribe_btn_toggle() {
+        if (this.$refs.subs_btn != undefined) {
+          const btn_offset_top = this.$refs.subs_btn.offsetTop;
+          const btn_h = this.$refs.subs_btn.clientHeight;
+          const scroll_top = window.scrollY;
+          if (scroll_top > btn_offset_top + btn_h) {
+            this.subscribe_btn = true;
+          } else {
+            this.subscribe_btn = false;
+          }
+        }
+      },
+    },
+    created() {
+      window.onscroll = () => {
+        this.subscribe_btn_toggle();
+      };
+    },
   };
 </script>
 <style scoped lang="scss">
@@ -99,6 +121,7 @@
       margin: 15px 0;
       padding: 2% 0;
     }
+
     .total_lec {
       font-size: 1.375rem;
       .color {
@@ -119,5 +142,18 @@
       vertical-align: middle;
       margin-left: 2%;
     }
+  }
+  .fixed_subs_btn {
+    position: fixed;
+    bottom: 0;
+    background: #114fff;
+    color: #ffffff;
+    font-family: "NotoSansCJKkr-Medium";
+    font-size: 2.25rem;
+    text-align: center;
+    padding: 1.3% 0;
+    width: 100%;
+    max-width: 720px;
+    z-index: 2;
   }
 </style>
