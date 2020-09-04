@@ -17,4 +17,19 @@ img {
 button {
   background: white;
   outline: none;
+  border: 0;
+}
+h1 {
+  font-family: "NotoSansCJKkr-Bold";
+}
+h2 {
+  font-family: "NotoSansCJKkr-Medium";
+}
+h3,
+span {
+  font-family: "NotoSansCJKkr-Regular";
+}
+h4,
+p {
+  font-family: "NotoSansCJKkr-DemiLight";
 }

@@ -1,18 +1,25 @@
 <template>
   <div id="popular_lec">
-    <h1>인기 강의</h1>
+    <h2 class="title">인기 강의</h2>
     <p>이지업의 가장 인기가 많은 강의를 확인해보세요</p>
     <ul class="lec_list_wrap">
       <li>
-        <router-link to="/about" class="lec_list">
+        <router-link to="/main/detail" class="lec_list">
           <img
             src="@/assets/images/main/popular_lec1.png"
             alt="이지업"
             title="이지업"
           />
         </router-link>
-        <h3>나도 코딩</h3>
-        <h2>파이썬 코딩 기본편</h2>
+        <h4>나도 코딩</h4>
+        <h2 class="subtitle">파이썬 코딩 기본편</h2>
+        <div class="evaluate">
+          <span class="star">
+            <img src="@/assets/images/common/mid_star.png" />
+          </span>
+          <span class="score">5.0</span>
+          <h1 class="free">FREE</h1>
+        </div>
       </li>
       <li>
         <router-link to="/about" class="lec_list">
@@ -22,8 +29,8 @@
             title="이지업"
           />
         </router-link>
-        <h3>나도 코딩</h3>
-        <h2>파이썬 코딩 기본편</h2>
+        <h4>나도 코딩</h4>
+        <h2 class="subtitle">파이썬 코딩 기본편</h2>
       </li>
       <li>
         <router-link to="/about" class="lec_list">
@@ -33,8 +40,8 @@
             title="이지업"
           />
         </router-link>
-        <h3>나도 코딩</h3>
-        <h2>파이썬 코딩 기본편</h2>
+        <h4>나도 코딩</h4>
+        <h2 class="subtitle">파이썬 코딩 기본편</h2>
       </li>
       <li>
         <router-link to="/about" class="lec_list">
@@ -44,8 +51,8 @@
             title="이지업"
           />
         </router-link>
-        <h3>나도 코딩</h3>
-        <h2>파이썬 코딩 기본편</h2>
+        <h4>나도 코딩</h4>
+        <h2 class="subtitle">파이썬 코딩 기본편</h2>
       </li>
     </ul>
   </div>
@@ -62,24 +69,20 @@
 <style lang="scss" scoped>
   #popular_lec {
     padding: 4.445%;
-    h1 {
+    .title {
       font-size: 2rem;
-      font-family: "NotoSansCJKkr-Medium";
     }
-    h2 {
+    .subtitle {
       font-size: 1.3125rem;
-      font-family: "NotoSansCJKkr-Medium";
     }
-    h3 {
+    h4 {
       font-size: 0.9375rem;
       margin-top: 10px;
-      font-family: "NotoSansCJKkr-DemiLight";
       color: #999999;
     }
     p {
       margin-top: 10px;
       font-size: 1.125rem;
-      font-family: "NotoSansCJKkr-DemiLight";
       color: #999999;
     }
     .lec_list_wrap {
@@ -98,6 +101,25 @@
         .lec_list {
           display: inline-block;
           width: 100%;
+        }
+        .evaluate {
+          margin-bottom: 10px;
+          .star {
+            display: inline-block;
+            width: 7.53%;
+            vertical-align: middle;
+          }
+          .score {
+            margin-left: 7px;
+            vertical-align: middle;
+            font-size: 1.5rem;
+          }
+          .free {
+            float: right;
+            font-size: 1.5rem;
+            color: #114fff;
+            font-weight: bold;
+          }
         }
       }
     }

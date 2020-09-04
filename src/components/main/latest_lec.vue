@@ -1,6 +1,6 @@
 <template>
   <div id="latest_lec">
-    <h1>최신 강의</h1>
+    <h2>최신 강의</h2>
     <p>
       최근 트렌드를 반영한 강의 정보를 확인하세요
     </p>
@@ -34,14 +34,12 @@
 <style scoped lang="scss">
   #latest_lec {
     padding: 4.445%;
-    h1 {
+    h2 {
       font-size: 2rem;
-      font-family: "NotoSansCJKkr-Medium";
     }
     p {
       margin-top: 10px;
       font-size: 1.125rem;
-      font-family: "NotoSansCJKkr-DemiLight";
       color: #999999;
     }
   }

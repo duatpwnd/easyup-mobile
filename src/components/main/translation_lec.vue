@@ -1,6 +1,6 @@
 <template>
   <div id="translation_lec">
-    <h1>번역 강의</h1>
+    <h2>번역 강의</h2>
     <p>
       한글 자막이 제공되는 외국 우수 강의를 구독하세요
     </p>
@@ -34,14 +34,12 @@
 <style scoped lang="scss">
   #translation_lec {
     padding: 4.445%;
-    h1 {
+    h2 {
       font-size: 2rem;
-      font-family: "NotoSansCJKkr-Medium";
     }
     p {
       margin-top: 10px;
       font-size: 1.125rem;
-      font-family: "NotoSansCJKkr-DemiLight";
       color: #999999;
     }
   }
