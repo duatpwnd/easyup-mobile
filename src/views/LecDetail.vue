@@ -16,9 +16,7 @@
       ThumbNail,
     },
     data() {
-      return {
-        test,
-      };
+      return {};
     },
     methods: {},
   };
