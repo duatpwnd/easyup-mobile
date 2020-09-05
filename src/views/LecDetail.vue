@@ -1,6 +1,7 @@
 <template>
   <div>
     <ThumbNail></ThumbNail>
+    <Subscribe></Subscribe>
     <Intro></Intro>
     <LecEval></LecEval>
   </div>
@@ -8,9 +9,11 @@
 <script>
   import ThumbNail from "@/components/lecture_detail/thumbnail";
   import Intro from "@/components/lecture_detail/intro";
+  import Subscribe from "@/components/lecture_detail/subscribe";
   import LecEval from "@/components/lecture_detail/lec_evaluate";
   export default {
     components: {
+      Subscribe,
       LecEval,
       Intro,
       ThumbNail,
