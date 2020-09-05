@@ -69,7 +69,7 @@
       font-size: 2rem;
       position: relative;
       .more_view {
-        font-family: inherit;
+        font-family: "NotoSansCJKkr-Medium";
         position: absolute;
         font-size: 1.125rem;
         color: #114fff;

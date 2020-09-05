@@ -104,11 +104,13 @@
       color: #ffffff;
       font-family: "NotoSansCJKkr-Medium";
       font-size: 2.25rem;
-      text-align: center;
-      padding: 1.3% 0;
+      padding: 15px 0;
       width: 100%;
       max-width: 720px;
       z-index: 2;
+      left: 0;
+      right: 0;
+      margin: auto;
     }
   }
 </style>

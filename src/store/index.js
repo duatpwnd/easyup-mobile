@@ -4,8 +4,24 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
+  state: {
+    isFooter: true,
+  },
+  // getters: {
+  //   getIsFooter(state) {
+  //     console.log("state:", state);
+  //     return state.isFooter;
+  //   },
+  // },
+  mutations: {
+    isFooter(state, boolean) {
+      if (boolean == false) {
+        state.isFooter = false;
+      } else {
+        state.isFooter = true;
+      }
+    },
+  },
   actions: {},
-  modules: {}
+  modules: {},
 });

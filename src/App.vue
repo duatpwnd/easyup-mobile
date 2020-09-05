@@ -6,7 +6,7 @@
         <router-view />
       </keep-alive>
     </transition>
-    <Footer></Footer>
+    <Footer v-if="this.$store.state.isFooter"></Footer>
   </div>
 </template>
 <script>

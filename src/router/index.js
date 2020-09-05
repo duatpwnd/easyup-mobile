@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Main from "../views/Main.vue";
+import store from "@/store";
 Vue.use(VueRouter);
 
 const routes = [
@@ -26,5 +27,12 @@ const router = new VueRouter({
   duplicateNavigationPolicy: "ignore",
   routes,
 });
-
+router.beforeEach((to, from, next) => {
+  if (to.meta.isfooter == false) {
+    store.commit("isFooter", false);
+  } else {
+    store.commit("isFooter", true);
+  }
+  next();
+});
 export default router;
