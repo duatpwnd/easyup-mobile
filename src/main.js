@@ -5,6 +5,7 @@ import store from "./store";
 import VueAwesomeSwiper from "vue-awesome-swiper";
 import "swiper/swiper-bundle.css";
 import VueMq from "vue-mq";
+console.log(process.env);
 Vue.use(VueMq, {
   breakpoints: {
     mobile_noti: 600,

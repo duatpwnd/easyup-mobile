@@ -20,22 +20,18 @@
 <style scoped lang="scss">
   #nav {
     position: relative;
-    height: 80px;
+    /* height: 80px; */
     text-align: center;
+    padding: 5.556% 0px;
     .easyup_logo {
-      display: inline-block;
       width: 24.445%;
-      height: 100%;
-      position: relative;
-      img {
-        vertical-align: middle;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: auto;
-      }
+      height: 37.5%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
     }
     .easyup_menu_btn {
       width: 5.556%;
