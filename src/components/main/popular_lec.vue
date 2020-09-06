@@ -103,19 +103,23 @@
           width: 100%;
         }
         .evaluate {
-          margin-bottom: 10px;
+          margin-bottom: 2%;
+          display: table;
+          width: 100%;
           .star {
-            display: inline-block;
-            width: 7.53%;
+            display: table-cell;
+            width: 7.6%;
             vertical-align: middle;
           }
           .score {
-            margin-left: 7px;
-            vertical-align: middle;
             font-size: 1.5rem;
+            display: table-cell;
+            width: 15%;
+            text-align: center;
           }
           .free {
-            float: right;
+            display: table-cell;
+            text-align: right;
             font-size: 1.5rem;
             color: #114fff;
             font-weight: bold;

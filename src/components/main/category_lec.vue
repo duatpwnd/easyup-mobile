@@ -78,10 +78,7 @@
         right: 0;
         bottom: 0;
         border-radius: 4px;
-        padding: 0 4%;
-        margin: auto;
-        height: 90%;
-        line-height: 220%;
+        padding: 0 18px;
       }
     }
     h3 {
@@ -124,21 +121,24 @@
     }
     .notice_wrap {
       background: #f4f4f4;
-      text-align: center;
       border-radius: 30px;
       padding: 1.45% 4.88%;
-      margin-top: 40px;
+      margin-top: 5%;
       .notice_title {
         color: #114fff;
         font-size: 1.25rem;
         font-weight: bold;
         display: inline-block;
+        width: 20%;
+        text-align: left;
       }
       .notice_contents {
+        text-align: left;
         color: #787878;
         margin-left: 5%;
-        margin-right: 14%;
         font-size: 1.25rem;
+        display: inline-block;
+        width: 75%;
       }
     }
   }

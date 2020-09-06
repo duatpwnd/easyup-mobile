@@ -170,7 +170,7 @@
         .subscribe_btn {
           border-radius: 5px;
           margin-left: 3%;
-          padding: 0.459% 2.112%;
+          padding: 2px 3.05%;
           vertical-align: middle;
           font-family: inherit;
           font-size: 1.125rem;

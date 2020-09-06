@@ -42,8 +42,9 @@
         color: #a4a4a4;
         border: 2px solid #757575;
         border-radius: 20px;
-        padding: 1% 3%;
+        padding: 6px 2.672%;
         margin-right: 2%;
+        font-size: 1.5rem;
       }
     }
   }

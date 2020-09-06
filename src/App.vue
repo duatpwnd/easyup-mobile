@@ -65,9 +65,6 @@
   .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
     opacity: 0;
   }
-  #app {
-    border: 2px solid #ccc;
-  }
 
   #app {
     max-width: 720px;
