@@ -37,12 +37,12 @@
       color: #333333;
     }
     .tag_list {
-      margin-top: 20px;
+      margin-top: 2.5%;
       span {
         color: #a4a4a4;
         border: 2px solid #757575;
         border-radius: 20px;
-        padding: 6px 2.672%;
+        padding: 1% 2.672%;
         margin-right: 2%;
         font-size: 1.5rem;
       }
