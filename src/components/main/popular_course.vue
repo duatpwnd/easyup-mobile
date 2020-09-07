@@ -11,9 +11,19 @@
   </div>
 </template>
 <script>
-  import mixin from "./mixin/mixin.js";
   export default {
-    mixins: [mixin],
+    data() {
+      return {
+        swiperOption: {
+          spaceBetween: 20,
+          slidesPerView: 1.1,
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+        },
+      };
+    },
   };
 </script>
 <style scoped lang="scss">
@@ -28,9 +38,7 @@
       color: #999999;
     }
     .swiper-slide {
-      width: 95%;
-
-      margin-right: 2.44%;
+      margin: 0 auto;
     }
     .swiper {
       margin-top: 20px;

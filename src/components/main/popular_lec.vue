@@ -77,7 +77,7 @@
     }
     h4 {
       font-size: 0.9375rem;
-      margin-top: 2%;
+      margin-top: 10px;
       color: #999999;
     }
     p {
