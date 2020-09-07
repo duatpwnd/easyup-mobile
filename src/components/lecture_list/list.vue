@@ -1,7 +1,7 @@
 <template>
-  <div id="popular_lec">
-    <h2 class="title">인기 강의</h2>
-    <p>이지업의 가장 인기가 많은 강의를 확인해보세요</p>
+  <div id="lecture_list">
+    <h2 class="total_search">전체 검색</h2>
+    <h2 class="total">총<span class="count">120</span>건</h2>
     <ul class="lec_list_wrap">
       <li>
         <router-link to="/main/detail" class="lec_list">
@@ -54,6 +54,28 @@
         <h4>나도 코딩</h4>
         <h2 class="subtitle">파이썬 코딩 기본편</h2>
       </li>
+      <li>
+        <router-link to="/about" class="lec_list">
+          <img
+            src="@/assets/images/main/popular_lec4.png"
+            alt="이지업"
+            title="이지업"
+          />
+        </router-link>
+        <h4>나도 코딩</h4>
+        <h2 class="subtitle">파이썬 코딩 기본편</h2>
+      </li>
+      <li>
+        <router-link to="/about" class="lec_list">
+          <img
+            src="@/assets/images/main/popular_lec4.png"
+            alt="이지업"
+            title="이지업"
+          />
+        </router-link>
+        <h4>나도 코딩</h4>
+        <h2 class="subtitle">파이썬 코딩 기본편</h2>
+      </li>
     </ul>
   </div>
 </template>
@@ -66,16 +88,21 @@
     methods: {},
   };
 </script>
-<style lang="scss" scoped>
-  #popular_lec {
-    padding: 4.445%;
-    .title {
-      font-size: 2rem;
+<style scoped lang="scss">
+  #lecture_list {
+    margin-top: 5%;
+    .total_search {
+      font-size: 1.375rem;
+      display: inline-block;
     }
-    p {
-      margin-top: 2%;
-      font-size: 1.125rem;
-      color: #999999;
+    .total {
+      display: inline-block;
+      font-size: 1.375rem;
+      margin-left: 2%;
+      .count {
+        display: inline-block;
+        color: #114fff;
+      }
     }
     .lec_list_wrap {
       margin-top: 3%;
