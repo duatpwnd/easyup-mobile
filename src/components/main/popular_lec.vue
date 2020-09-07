@@ -72,6 +72,7 @@
     .title {
       font-size: 2rem;
     }
+
     p {
       margin-top: 2%;
       font-size: 1.125rem;

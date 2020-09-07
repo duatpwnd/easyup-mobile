@@ -1,9 +1,5 @@
 <template>
-<<<<<<< HEAD
-  <div>
-=======
   <div id="main">
->>>>>>> 17e0c4e00a191982b530709151c8805f87e86496
     <Banner></Banner>
     <PopularLec></PopularLec>
     <PopularCourse></PopularCourse>
