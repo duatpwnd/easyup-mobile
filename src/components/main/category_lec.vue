@@ -78,7 +78,7 @@
         right: 0;
         bottom: 0;
         border-radius: 4px;
-        padding: 0 18px;
+        padding: 2px 20px;
       }
     }
     h3 {
