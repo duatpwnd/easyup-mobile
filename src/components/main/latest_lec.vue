@@ -11,6 +11,12 @@
           alt="이지업"
           title="이지업"
       /></swiper-slide>
+      <swiper-slide>
+        <img
+          src="@/assets/images/main/popular_lec2.png"
+          alt="이지업"
+          title="이지업"
+      /></swiper-slide>
     </swiper>
   </div>
 </template>
@@ -33,8 +39,8 @@
     }
   }
   .swiper-slide {
-    width: 46.6%;
-    margin-right: 2.44%;
+    // width: 46.6%;
+    // margin-right: 2.44%;
   }
 
   .swiper {

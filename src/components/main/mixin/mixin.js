@@ -2,7 +2,8 @@ let swiperMixin = {
   data() {
     return {
       swiperOption: {
-        slidesPerView: "auto",
+        spaceBetween: 20,
+        slidesPerView: 2.2,
         pagination: {
           el: ".swiper-pagination",
           clickable: true,
