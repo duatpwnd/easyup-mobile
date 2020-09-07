@@ -1,0 +1,57 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+ul {
+  li {
+    list-style: none;
+  }
+}
+a {
+  text-decoration: none;
+}
+img {
+  vertical-align: middle;
+  width: 100%;
+}
+button {
+  background: white;
+  outline: none;
+  border: 0;
+}
+textarea {
+  outline: none;
+}
+h1 {
+  font-family: "NotoSansCJKkr-Bold";
+}
+h2 {
+  font-family: "NotoSansCJKkr-Medium";
+}
+h3,
+span {
+  font-family: "NotoSansCJKkr-Regular";
+}
+h4,
+p {
+  font-family: "NotoSansCJKkr-DemiLight";
+}
+/* 아이폰 input 둥근테두리 그림자 제거 */
+
+input {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+}
+
+/* select 화살표 없애기 */
+
+select {
+  background: white;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+select::-ms-expand {
+  display: none;
+}
