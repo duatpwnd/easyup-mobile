@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="main">
     <Banner></Banner>
     <PopularLec></PopularLec>
     <PopularCourse></PopularCourse>
