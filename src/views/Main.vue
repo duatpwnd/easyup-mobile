@@ -31,6 +31,9 @@
   };
 </script>
 <style scoped lang="scss">
+  #main {
+    position: relative;
+  }
   .tablet {
     color: black;
   }

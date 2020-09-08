@@ -5,7 +5,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    isFooter: true,
+    isFooter: true, // 푸터
+    header_menu: false, // 헤더 메뉴
   },
   // getters: {
   //   getIsFooter(state) {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
       } else {
         state.isFooter = true;
       }
+    },
+    HeaderMenuToggle(state) {
+      state.header_menu = !state.header_menu;
     },
   },
   actions: {},

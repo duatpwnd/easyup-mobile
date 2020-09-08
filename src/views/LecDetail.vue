@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="lec_detail">
     <ThumbNail></ThumbNail>
     <Subscribe></Subscribe>
     <Intro></Intro>

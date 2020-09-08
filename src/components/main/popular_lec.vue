@@ -4,7 +4,7 @@
     <p>이지업의 가장 인기가 많은 강의를 확인해보세요</p>
     <ul class="lec_list_wrap">
       <li>
-        <router-link to="/main/detail" class="lec_list">
+        <router-link to="/lecDetail" class="lec_list">
           <img
             src="@/assets/images/main/popular_lec1.png"
             alt="이지업"

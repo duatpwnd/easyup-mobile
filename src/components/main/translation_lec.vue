@@ -6,20 +6,20 @@
     </p>
     <swiper class="swiper" :options="swiperOption">
       <swiper-slide>
-        <router-link to="/main/list">
+        <router-link to="/lecture_type3">
           <img
             src="@/assets/images/main/popular_lec1.png"
             alt="이지업"
             title="이지업"/></router-link
       ></swiper-slide>
       <swiper-slide>
-        <router-link to="/main/list">
+        <router-link to="/lecture3_type3">
           <img
             src="@/assets/images/main/popular_lec2.png"
             alt="이지업"
             title="이지업"/></router-link></swiper-slide
       ><swiper-slide>
-        <router-link to="/main/list">
+        <router-link to="/lecture3_type3">
           <img
             src="@/assets/images/main/popular_lec3.png"
             alt="이지업"

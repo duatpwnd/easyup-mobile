@@ -9,6 +9,7 @@ ul {
 }
 a {
   text-decoration: none;
+  color: black;
 }
 img {
   vertical-align: middle;
@@ -29,7 +30,8 @@ h2 {
   font-family: "NotoSansCJKkr-Medium";
 }
 h3,
-span {
+span,
+a {
   font-family: "NotoSansCJKkr-Regular";
 }
 h4,
@@ -42,7 +44,12 @@ input {
   -webkit-appearance: none;
   -webkit-border-radius: 0;
 }
-
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
 /* select 화살표 없애기 */
 
 select {
@@ -53,5 +60,11 @@ select {
 }
 
 select::-ms-expand {
+  display: none;
+}
+fieldset {
+  border: 0;
+}
+legend {
   display: none;
 }

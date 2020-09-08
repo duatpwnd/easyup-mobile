@@ -1,0 +1,111 @@
+<template>
+  <div class="menu_modal">
+    <form class="login_form">
+      <fieldset>
+        <legend>로그인정보</legend>
+        <input type="text" class="user_id" placeholder="사용자명" />
+        <input type="password" class="user_pw" placeholder="패스워드" />
+        <button class="login_btn">로그인</button>
+      </fieldset>
+    </form>
+    <div class="user_find">
+      <router-link to="/">회원가입</router-link>
+      <router-link to="/" class="forget">비밀번호 분실</router-link>
+    </div>
+    <div class="lec_course">
+      <button class="lec">강의</button>
+      <button class="course">코스</button>
+    </div>
+    <div class="support">
+      <router-link to="/">공지사항</router-link>
+      <router-link to="/">FAQ</router-link>
+      <router-link to="/">1:1문의</router-link>
+    </div>
+  </div>
+</template>
+<script>
+  export default {
+    components: {},
+    data() {
+      return {};
+    },
+    methods: {},
+  };
+</script>
+<style scoped lang="scss">
+  .menu_modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    width: 72.222%;
+    box-sizing: border-box;
+    background: #f8f8f8;
+    .login_form {
+      background: white;
+      padding: 4.445%;
+      input {
+        width: 100%;
+        padding: 2.208% 4.415%; /* 20px/453px */
+        box-sizing: border-box;
+        border: 2px solid #dbdbdb;
+        border-radius: 4px;
+        background: white;
+        font-size: 1.5rem;
+      }
+
+      .user_pw {
+        margin: 10px 0;
+      }
+      .login_btn {
+        background: #114fff;
+        color: white;
+        width: 100%;
+        padding: 2.203%; /* 10px/454px */
+        font-size: 1.5rem;
+        border-radius: 4px;
+      }
+    }
+    .lec_course {
+      background: white;
+      margin-top: 2%;
+      padding: 4.445%;
+      .lec {
+        text-align: left;
+        width: 100%;
+        font-size: 1.5rem;
+        font-family: "NotoSansCJKkr-Regular";
+        background: url("~@/assets/images/common/right_arrow.png") no-repeat
+          right center;
+      }
+      .course {
+        @extend .lec;
+        margin-top: 4%;
+      }
+    }
+    .support {
+      padding-bottom: 0;
+      background: white;
+      margin-top: 2%;
+      padding: 4.445%;
+      a {
+        font-size: 1.5rem;
+        display: inline-block;
+        width: 33.333%;
+        text-align: center;
+      }
+    }
+    .user_find {
+      padding-bottom: 0;
+      background: white;
+      padding: 4.445%;
+      a {
+        font-size: 1.5rem;
+        display: block;
+      }
+      .forget {
+        margin-top: 4%;
+      }
+    }
+  }
+</style>

@@ -3,17 +3,23 @@
     <Header></Header>
     <transition name="fade" mode="out-in">
       <keep-alive>
-        <router-view />
+        <div class="router-view">
+          <MenuModal v-if="this.$store.state.header_menu"></MenuModal>
+          <router-view />
+        </div>
       </keep-alive>
     </transition>
+
     <Footer v-if="this.$store.state.isFooter"></Footer>
   </div>
 </template>
 <script>
   import Header from "@/components/common/header.vue";
   import Footer from "@/components/common/footer.vue";
+  import MenuModal from "@/components/common/menu_modal.vue";
   export default {
     components: {
+      MenuModal,
       Header,
       Footer,
     },
@@ -70,6 +76,9 @@
   #app {
     max-width: 720px;
     margin: 0 auto;
+  }
+  .router-view {
+    position: relative;
   }
   @media all and (max-width: 600px) {
     html {
