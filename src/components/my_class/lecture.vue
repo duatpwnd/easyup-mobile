@@ -1,23 +1,41 @@
 <template>
   <div>
-    <div class="search">
-      <select class="select" name="" id="">
-        <option value="">전체</option>
-      </select>
-      <input
-        type="text"
-        placeholder="강의명을 검색하세요."
-        class="search_contents"
-      />
+    <div class="search_area">
+      <Search>
+        <input
+          slot="slot_input"
+          type="text"
+          class="search_contents"
+          placeholder="강의명을 입력하세요"
+        />
+      </Search>
     </div>
-    <LectureList></LectureList>
+    <div class="section">
+      <LectureCourseList></LectureCourseList>
+    </div>
+    <div class="section section2">
+      <Compile>
+        <span class="btn btn2" slot="sum">통계</span>
+      </Compile>
+    </div>
+    <div class="section">
+      <LectureCourseList></LectureCourseList>
+      <LectureCourseList></LectureCourseList>
+      <LectureCourseList></LectureCourseList>
+      <LectureCourseList></LectureCourseList>
+      <LectureCourseList></LectureCourseList>
+    </div>
   </div>
 </template>
 <script>
-  import LectureList from "@/components/common/lecture_list.vue";
+  import LectureCourseList from "@/components/common/lecture_course_list.vue";
+  import Compile from "@/components/common/compile.vue";
+  import Search from "@/components/common/search.vue";
   export default {
     components: {
-      LectureList,
+      Search,
+      Compile,
+      LectureCourseList,
     },
     data() {
       return {};
@@ -26,38 +44,15 @@
   };
 </script>
 <style scoped lang="scss">
-  .search {
-    margin-top: 2%;
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
-    }
-    .select {
-      width: 26%;
-      float: left;
-      border: 1px solid #333333;
-      height: 48px;
-      padding-left: 2%;
-      line-height: 48px;
-      font-size: 1.25rem;
-      color: #333333;
-      background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
-        center;
-    }
-    .search_contents {
-      float: left;
-      border: 1px solid #333333;
-      color: #b5b5b5;
-      font-size: 1.25rem;
-      padding: 2%;
-      padding-right: 10%;
-      width: 72%;
-      height: 48px;
-      box-sizing: border-box;
-      margin-left: 2%;
-      background: url("~@/assets/images/lec_list/search_btn.png") no-repeat 95%
-        center / 24px 24px;
-    }
+  .section,
+  .search_area {
+    padding: 4.445%;
+  }
+  .search_area {
+    padding-bottom: 0;
+  }
+  .section2 {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 </style>
