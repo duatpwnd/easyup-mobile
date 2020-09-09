@@ -9,6 +9,8 @@
           <img
             class="lec1_ico"
             src="@/assets/images/main/category_lec1_ico.png"
+            alt="프로그래밍"
+            title="프로그래밍"
           />
           <h3>프로그래밍</h3>
         </span>
@@ -19,6 +21,8 @@
           <img
             class="lec2_ico"
             src="@/assets/images/main/category_lec2_ico.png"
+            alt="머신러닝/딥러닝"
+            title="머신러닝/딥러닝"
           />
           <h3>머신러닝/딥러닝</h3>
         </span>
@@ -28,9 +32,11 @@
         <span>
           <img
             class="lec3_ico"
-            src="@/assets/images/main/category_lec3_ico.png"
+            src="@/assets/images/main/category_lec5_ico.png"
+            alt="전산이론"
+            title="전산이론"
           />
-          <h3>데브옵스</h3>
+          <h3>전산이론</h3>
         </span>
       </router-link>
 
@@ -38,9 +44,11 @@
         <span>
           <img
             class="lec4_ico"
-            src="@/assets/images/main/category_lec4_ico.png"
+            src="@/assets/images/main/category_lec6_ico.png"
+            alt="알고리즘"
+            title="알고리즘"
           />
-          <h3>전산기초/이론</h3>
+          <h3>알고리즘</h3>
         </span>
       </router-link>
     </div>

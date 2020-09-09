@@ -17,6 +17,9 @@
 <style scoped lang="scss">
   .compile_wrap {
     position: relative;
+    background: #f8f8f8;
+    padding: 2% 4.445%;
+    box-sizing: border-box;
     .btn {
       display: inline-block;
       width: 14.33%;
@@ -41,10 +44,10 @@
       text-align: right;
       position: absolute;
       top: 0;
-      right: 0;
+      right: 4.445%;
       bottom: 0;
       margin: auto;
-      height: 74.85%;
+      height: 50%;
     }
   }
 </style>

@@ -5,7 +5,8 @@ import store from "./store";
 import VueAwesomeSwiper from "vue-awesome-swiper";
 import "swiper/swiper-bundle.css";
 import VueMq from "vue-mq";
-console.log(process.env);
+import CKEditor from "ckeditor4-vue";
+Vue.use(CKEditor);
 Vue.use(VueMq, {
   breakpoints: {
     mobile_noti: 600,

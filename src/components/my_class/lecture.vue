@@ -18,7 +18,7 @@
         <span class="btn btn2" slot="sum">통계</span>
       </Compile>
     </div>
-    <div class="section">
+    <div class="section section3">
       <LectureCourseList></LectureCourseList>
       <LectureCourseList></LectureCourseList>
       <LectureCourseList></LectureCourseList>
@@ -47,12 +47,15 @@
   .section,
   .search_area {
     padding: 4.445%;
-  }
-  .search_area {
     padding-bottom: 0;
   }
   .section2 {
     padding-top: 0;
     padding-bottom: 0;
+    margin: 2% 0;
+  }
+  .section3 {
+    padding-top: 0;
+    padding-bottom: 20%;
   }
 </style>

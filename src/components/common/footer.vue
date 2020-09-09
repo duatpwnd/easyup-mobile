@@ -9,12 +9,8 @@
       <span>고객센터</span>
     </div>
     <address>
-      (주)유니윌<br />
-      대표이사:조인형 주소:서울시 강남구 테헤란로124<br />
-      사업자 등록번호:220-86-20171 통신판매업신고:강남 제3339호
+      <pre>(주)유니윌<br />대표이사:조인형   주소:서울시 강남구 테헤란로124<br />사업자 등록번호:220-86-20171    통신판매업신고:강남 제3339호</pre>
     </address>
-    <h1 class="client_support">고객지원 1600-1111</h1>
-    <span>영업시간 09:00 ~ 18:00 토,일 및 공휴일 휴무</span>
   </footer>
 </template>
 <script>
@@ -47,9 +43,11 @@
     address {
       font-style: normal;
       color: #7a7a7a;
-    }
-    .client_support {
-      margin-top: 15px;
+      pre {
+        font-family: "NotoSansCJKkr-Regular";
+        line-height: 2%;
+        line-height: 162%;
+      }
     }
     span {
       color: #7a7a7a;

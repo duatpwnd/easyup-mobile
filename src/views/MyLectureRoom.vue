@@ -6,7 +6,6 @@
     <Board></Board>
     <Notice></Notice>
     <TimeLine></TimeLine>
-    <MyLecMenu></MyLecMenu>
   </div>
 </template>
 <script>
@@ -16,10 +15,8 @@
   import Board from "@/components/my_lecture_room/board.vue";
   import Notice from "@/components/my_lecture_room/notice.vue";
   import TimeLine from "@/components/my_lecture_room/timeline.vue";
-  import MyLecMenu from "@/components/common/mylec_menu.vue";
   export default {
     components: {
-      MyLecMenu,
       UserInfo,
       CurrentIngLec,
       CurrentIngCourse,

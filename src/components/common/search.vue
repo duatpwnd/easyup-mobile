@@ -29,9 +29,7 @@
       width: 26%;
       float: left;
       border: 1px solid #333333;
-      height: 48px;
-      padding-left: 2%;
-      line-height: 48px;
+      padding: 1.83%;
       font-size: 1.25rem;
       color: #333333;
       background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
@@ -42,14 +40,12 @@
       border: 1px solid #333333;
       color: #b5b5b5;
       font-size: 1.25rem;
-      padding: 2%;
-      padding-right: 10%;
       width: 72%;
-      height: 48px;
+      padding: 1.755%;
       box-sizing: border-box;
       margin-left: 2%;
       background: url("~@/assets/images/lec_list/search_btn.png") no-repeat 95%
-        center / 24px 24px;
+        center / 5%;
     }
   }
 </style>

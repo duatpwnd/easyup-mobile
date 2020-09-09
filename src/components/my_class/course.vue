@@ -10,20 +10,33 @@
         />
       </Search>
     </div>
-    <div class="section section2">
+    <div class="section">
+      <LectureCourseList></LectureCourseList>
+    </div>
+    <div class="section2">
       <Compile>
         <span class="sum" slot="sum">구독수 : 21,004명</span>
       </Compile>
+    </div>
+    <div class="section3">
+      <VideoList></VideoList>
+      <VideoList></VideoList>
+      <VideoList></VideoList>
+      <VideoList></VideoList>
     </div>
   </div>
 </template>
 <script>
   import Search from "@/components/common/search.vue";
   import Compile from "@/components/common/compile.vue";
+  import LectureCourseList from "@/components/common/lecture_course_list.vue";
+  import VideoList from "@/components/my_class/video_list.vue";
   export default {
     components: {
+      VideoList,
       Compile,
       Search,
+      LectureCourseList,
     },
     data() {
       return {};
@@ -35,9 +48,9 @@
   .search_area,
   .section {
     padding: 4.445%;
+    padding-bottom: 0;
   }
   .section2 {
-    padding-top: 0;
-    padding-bottom: 0;
+    margin-top: 2%;
   }
 </style>

@@ -9,7 +9,7 @@
         </div>
       </keep-alive>
     </transition>
-
+    <GnbBottomMenu v-if="this.$store.state.gnb_bottom_menu"></GnbBottomMenu>
     <Footer v-if="this.$store.state.isFooter"></Footer>
   </div>
 </template>
@@ -17,8 +17,10 @@
   import Header from "@/components/common/header.vue";
   import Footer from "@/components/common/footer.vue";
   import MenuModal from "@/components/common/menu_modal.vue";
+  import GnbBottomMenu from "@/components/common/gnb_bottom_menu.vue";
   export default {
     components: {
+      GnbBottomMenu,
       MenuModal,
       Header,
       Footer,
@@ -76,6 +78,7 @@
   #app {
     max-width: 720px;
     margin: 0 auto;
+    border: 1px solid #ccc;
   }
   .router-view {
     position: relative;

@@ -3,7 +3,7 @@
     <div class="user_info">
       <span class="profile">
         <img
-          src="@/assets/images/mylecture/profile.png"
+          src="@/assets/images/mylecture_room/profile.png"
           alt="프로필"
           title="프로필"
         />
@@ -86,8 +86,8 @@
         display: inline-block;
         padding: 1.376% 8%;
         box-sizing: border-box;
-        background: url("~@/assets/images/mylecture/report_ico.png") no-repeat
-          80% center / 15.132%; /* 23px/152px */
+        background: url("~@/assets/images/mylecture_room/report_ico.png")
+          no-repeat 80% center / 15.132%; /* 23px/152px */
         background-color: white;
         span {
           font-weight: 600;
@@ -97,8 +97,8 @@
         @extend .report;
         margin-left: 5%;
         padding-left: 5%;
-        background: url("~@/assets/images/mylecture/convert_ico.png") no-repeat
-          90% center / 13.816%; /* 21px/152px */
+        background: url("~@/assets/images/mylecture_room/convert_ico.png")
+          no-repeat 90% center / 13.816%; /* 21px/152px */
         background-color: white;
       }
       .update_date {

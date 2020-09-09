@@ -11,15 +11,13 @@
     <keep-alive>
       <component v-bind:is="type"></component>
     </keep-alive>
-    <MyLecMenu></MyLecMenu>
   </div>
 </template>
 <script>
-  import MyLecMenu from "@/components/common/mylec_menu.vue";
   import Lecture from "@/components/my_class/lecture.vue";
   import Course from "@/components/my_class/course.vue";
   export default {
-    components: { MyLecMenu, Lecture, Course },
+    components: { Lecture, Course },
     data() {
       return {
         isActive: 0,
