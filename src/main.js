@@ -6,6 +6,11 @@ import VueAwesomeSwiper from "vue-awesome-swiper";
 import "swiper/swiper-bundle.css";
 import VueMq from "vue-mq";
 import CKEditor from "ckeditor4-vue";
+import axios from "axios";
+import ApiUrl from "@/assets/js/api_url.js";
+Vue.prototype.$EventBus = new Vue();
+Vue.prototype.$apiurl = ApiUrl;
+Vue.prototype.$axios = axios;
 Vue.use(CKEditor);
 Vue.use(VueMq, {
   breakpoints: {

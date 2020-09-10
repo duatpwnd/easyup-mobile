@@ -5,24 +5,18 @@
       최근 트렌드를 반영한 강의 정보를 확인하세요
     </p>
     <swiper class="swiper" :options="swiperOption">
-      <swiper-slide>
-        <img
-          src="@/assets/images/main/popular_lec1.png"
-          alt="이지업"
-          title="이지업"
-      /></swiper-slide>
-      <swiper-slide>
-        <img
-          src="@/assets/images/main/popular_lec2.png"
-          alt="이지업"
-          title="이지업"
-      /></swiper-slide>
+      <swiper-slide> <LecItem></LecItem></swiper-slide>
+      <swiper-slide> <LecItem></LecItem></swiper-slide>
     </swiper>
   </div>
 </template>
 <script>
   import mixin from "./mixin/mixin.js";
+  import LecItem from "@/components/common/lecture_item.vue";
   export default {
+    components: {
+      LecItem,
+    },
     mixins: [mixin],
   };
 </script>

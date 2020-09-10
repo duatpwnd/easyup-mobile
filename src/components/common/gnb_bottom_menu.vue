@@ -80,7 +80,7 @@
           },
           {
             title: "공지사항",
-            path: "/notice",
+            path: "/notice/list",
             name: require("@/assets/images/common/notice_ico.png"),
             active: require("@/assets/images/common/notice_active_ico.png"),
           },
@@ -109,7 +109,13 @@
           case "/teskregister":
             this.active = 1;
             break;
-          case "/notice":
+          case "/notice/list":
+            this.active = 2;
+            break;
+          case "/notice/read":
+            this.active = 2;
+            break;
+          case "/noticeRegister":
             this.active = 2;
             break;
           case "/share":
@@ -145,7 +151,7 @@
         a {
           display: inline-block;
           width: 100%;
-          padding: 7.23% 0;
+          padding: 10% 0;
           .ico_1 {
             width: 17.78%;
           }

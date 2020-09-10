@@ -12,27 +12,29 @@
         <span class="name">강동원</span>
         <span class="class">강사님의 강의실</span>
         <p class="email">duatpwnd1@naver.com</p>
-        <router-link to="/" class="report"><span>리포트</span></router-link>
 
-        <router-link to="/" class="convert"><span>학생전환</span></router-link>
+        <slot name="convert">
+          <span class="report">리포트</span>
+          <span class="convert" @click="convert()">학생전환</span>
+        </slot>
         <p class="update_date">2019년 8월 29일(업데이트일자:2019년 9월 1일)</p>
       </div>
     </div>
     <ul class="course_info">
       <li>
-        <h3>진행중인 강의</h3>
+        <slot name="info1"> <h3>진행중인 강의</h3></slot>
         <span>5건</span>
       </li>
       <li>
-        <h3>진행중인 코스</h3>
+        <slot name="info2"><h3>진행중인 코스</h3></slot>
         <span>5건</span>
       </li>
       <li>
-        <h3>비활성화 강의</h3>
+        <slot name="info3"><h3>비활성화 강의</h3></slot>
         <span>5건</span>
       </li>
       <li>
-        <h3>비활성화 코스</h3>
+        <slot name="info4"><h3>비활성화 코스</h3></slot>
         <span>5건</span>
       </li>
     </ul>
@@ -44,7 +46,11 @@
     data() {
       return {};
     },
-    methods: {},
+    methods: {
+      convert() {
+        this.$router.push("/studentClaasRoom");
+      },
+    },
   };
 </script>
 <style scoped lang="scss">
@@ -80,8 +86,10 @@
       }
       .report {
         font-size: 1.25rem;
+        font-weight: 600;
         color: #114fff;
         border-radius: 4px;
+        margin-right: 5%;
         width: 40%;
         display: inline-block;
         padding: 1.376% 8%;
@@ -95,7 +103,7 @@
       }
       .convert {
         @extend .report;
-        margin-left: 5%;
+
         padding-left: 5%;
         background: url("~@/assets/images/mylecture_room/convert_ico.png")
           no-repeat 90% center / 13.816%; /* 21px/152px */

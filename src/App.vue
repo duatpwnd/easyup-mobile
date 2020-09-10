@@ -4,7 +4,12 @@
     <transition name="fade" mode="out-in">
       <keep-alive>
         <div class="router-view">
-          <MenuModal v-if="this.$store.state.header_menu"></MenuModal>
+          <div v-if="this.$store.state.login_modal">
+            <LoginBeforeModal
+              v-if="this.$store.state.before_login"
+            ></LoginBeforeModal>
+            <LoginAfterModal v-else></LoginAfterModal>
+          </div>
           <router-view />
         </div>
       </keep-alive>
@@ -16,12 +21,14 @@
 <script>
   import Header from "@/components/common/header.vue";
   import Footer from "@/components/common/footer.vue";
-  import MenuModal from "@/components/common/menu_modal.vue";
+  import LoginBeforeModal from "@/components/login/login_before_modal.vue";
+  import LoginAfterModal from "@/components/login/login_after_modal.vue";
   import GnbBottomMenu from "@/components/common/gnb_bottom_menu.vue";
   export default {
     components: {
       GnbBottomMenu,
-      MenuModal,
+      LoginAfterModal,
+      LoginBeforeModal,
       Header,
       Footer,
     },
@@ -31,7 +38,7 @@
       };
     },
     methods: {},
-
+    mounted() {},
     // watch: {
     //   $route(to, from) {
     //     const toDepth = to.path.split("/").length;
@@ -78,10 +85,19 @@
   #app {
     max-width: 720px;
     margin: 0 auto;
-    border: 1px solid #ccc;
   }
   .router-view {
     position: relative;
+  }
+  @media all and (max-width: 700px) {
+    html {
+      font-size: 14px;
+    }
+  }
+  @media all and (max-width: 650px) {
+    html {
+      font-size: 13px;
+    }
   }
   @media all and (max-width: 600px) {
     html {

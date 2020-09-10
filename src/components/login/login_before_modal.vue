@@ -3,9 +3,21 @@
     <form class="login_form">
       <fieldset>
         <legend>로그인정보</legend>
-        <input type="text" class="user_id" placeholder="사용자명" />
-        <input type="password" class="user_pw" placeholder="패스워드" />
-        <button class="login_btn">로그인</button>
+        <input
+          type="text"
+          class="user_id"
+          v-model="userid"
+          placeholder="사용자명"
+        />
+        <input
+          type="password"
+          class="user_pw"
+          v-model="userpw"
+          placeholder="패스워드"
+        />
+        <BlueBtn>
+          <button slot="blue_btn" @click="login()">로그인</button>
+        </BlueBtn>
       </fieldset>
     </form>
     <div class="user_find">
@@ -24,15 +36,33 @@
   </div>
 </template>
 <script>
+  import BlueBtn from "@/components/common/blue_btn.vue";
   export default {
-    components: {},
-    data() {
-      return {};
+    components: {
+      BlueBtn,
     },
-    methods: {},
+    data() {
+      return {
+        userid: "",
+        userpw: "",
+      };
+    },
+    methods: {
+      login() {
+        //post
+        this.$store.commit("LoginModalChange", false);
+      },
+    },
+    mounted() {},
   };
 </script>
 <style scoped lang="scss">
+  .blue_btn {
+    ::v-deep button {
+      padding: 2.534%; /* 10px/454px */
+      font-size: 1.5rem;
+    }
+  }
   .menu_modal {
     position: absolute;
     top: 0;
@@ -46,7 +76,7 @@
       padding: 4.445%;
       input {
         width: 100%;
-        padding: 2.208% 4.415%; /* 20px/453px */
+        padding: 2.534% 4.415%;
         box-sizing: border-box;
         border: 2px solid #dbdbdb;
         border-radius: 4px;
@@ -56,14 +86,6 @@
 
       .user_pw {
         margin: 10px 0;
-      }
-      .login_btn {
-        background: #114fff;
-        color: white;
-        width: 100%;
-        padding: 2.203%; /* 10px/454px */
-        font-size: 1.5rem;
-        border-radius: 4px;
       }
     }
     .lec_course {
@@ -76,7 +98,7 @@
         font-size: 1.5rem;
         font-family: "NotoSansCJKkr-Regular";
         background: url("~@/assets/images/common/right_arrow.png") no-repeat
-          right center;
+          right center / 3%;
       }
       .course {
         @extend .lec;

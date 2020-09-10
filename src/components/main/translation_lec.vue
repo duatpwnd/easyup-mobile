@@ -6,31 +6,27 @@
     </p>
     <swiper class="swiper" :options="swiperOption">
       <swiper-slide>
-        <router-link to="/lecture_type3">
-          <img
-            src="@/assets/images/main/popular_lec1.png"
-            alt="이지업"
-            title="이지업"/></router-link
+        <LecItem
+          ><router-link class="lec_list" slot="router" to="/lecture_type3">
+            <img
+              src="@/assets/images/main/popular_lec1.png"
+              alt="이지업"
+              title="이지업"
+            />
+          </router-link> </LecItem
       ></swiper-slide>
-      <swiper-slide>
-        <router-link to="/lecture3_type3">
-          <img
-            src="@/assets/images/main/popular_lec2.png"
-            alt="이지업"
-            title="이지업"/></router-link></swiper-slide
-      ><swiper-slide>
-        <router-link to="/lecture3_type3">
-          <img
-            src="@/assets/images/main/popular_lec3.png"
-            alt="이지업"
-            title="이지업"/></router-link
-      ></swiper-slide>
+      <swiper-slide> <LecItem></LecItem></swiper-slide>
+      <swiper-slide> <LecItem></LecItem></swiper-slide>
     </swiper>
   </div>
 </template>
 <script>
+  import LecItem from "@/components/common/lecture_item.vue";
   import mixin from "./mixin/mixin.js";
   export default {
+    components: {
+      LecItem,
+    },
     mixins: [mixin],
   };
 </script>

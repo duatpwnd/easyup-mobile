@@ -7,7 +7,8 @@
       <img src="@/assets/images/main/logo.png" alt="이지업" title="이지업" />
     </router-link>
     <div class="right_menu">
-      <router-link to="/mylecture1" class="myclass">
+      <!-- 학생인지 강사인지  -->
+      <router-link to="/studentClaasRoom" class="myclass">
         <img
           src="@/assets/images/common/myclass_ico.png"
           alt="내강의실"
@@ -32,7 +33,7 @@
     },
     methods: {
       menu_toggle() {
-        this.$store.commit("HeaderMenuToggle");
+        this.$store.commit("LoginMenuToggle");
       },
     },
   };

@@ -6,7 +6,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isFooter: true, // 푸터
-    header_menu: false, // 헤더 메뉴
+    login_modal: false, // 로그인 모달
+    before_login: true, // 로그인 전 모달
     gnb_bottom_menu: false, // 내강좌/코스, 과제게시판, 공지사항, 자료공유 메뉴
   },
   // getters: {
@@ -23,8 +24,17 @@ export default new Vuex.Store({
         state.isFooter = true;
       }
     },
-    HeaderMenuToggle(state) {
-      state.header_menu = !state.header_menu;
+    // 로그인 메뉴 토글
+    LoginMenuToggle(state) {
+      state.login_modal = !state.login_modal;
+    },
+    // 로그인 후 모달
+    LoginModalChange(state, boolean) {
+      if (boolean == false) {
+        state.before_login = false;
+      } else {
+        state.before_login = true;
+      }
     },
     GnbBottomMenu(state, boolean) {
       if (boolean == false) {

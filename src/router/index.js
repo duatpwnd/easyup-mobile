@@ -28,9 +28,15 @@ const routes = [
     meta: { gnbBottomMenu: false },
   },
   {
-    path: "/mylecture1",
+    path: "/teacherClassRoom",
     name: "내강의실(선생님)",
-    component: () => import("../views/MyLectureRoom.vue"),
+    component: () => import("../views/TeacherRoom.vue"),
+    meta: { isFooter: false },
+  },
+  {
+    path: "/studentClaasRoom",
+    name: "내강의실(학생)",
+    component: () => import("../views/StudentRoom.vue"),
     meta: { isFooter: false },
   },
   {
@@ -38,25 +44,6 @@ const routes = [
     name: "내강좌/코스",
     component: () => import("../views/MyLecCouse.vue"),
     meta: { isFooter: false },
-
-    // children: [
-    //   {
-    //     path: "myclass",
-    //     component: () => import("../views/MyClass.vue"),
-    //   },
-    //   {
-    //     path: "board",
-    //     component: () => import("../views/Board.vue"),
-    //   },
-    //   {
-    //     path: "notice",
-    //     component: () => import("../views/Notice.vue"),
-    //   },
-    //   {
-    //     path: "share",
-    //     component: () => import("../views/DataShare.vue"),
-    //   },
-    // ],
   },
   {
     path: "/teskboard",
@@ -81,7 +68,20 @@ const routes = [
     path: "/notice",
     name: "공지사항",
     component: () => import("../views/Notice.vue"),
-    meta: { isFooter: false },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/components/notice/list.vue"),
+        name: "리스트",
+        meta: { isFooter: false },
+      },
+      {
+        path: "read",
+        name: "읽기",
+        component: () => import("@/components/notice/read.vue"),
+        meta: { isFooter: false },
+      },
+    ],
   },
   {
     path: "/teskregister",
@@ -90,7 +90,7 @@ const routes = [
     meta: { isFooter: false },
   },
   {
-    path: "/noticeregister",
+    path: "/noticeRegister",
     name: "공지사항 등록",
     component: () => import("../views/NoticeRegister.vue"),
     meta: { isFooter: false },

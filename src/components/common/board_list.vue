@@ -33,10 +33,12 @@
     .top2 {
       width: 66.667%;
     }
-    .bottom1,
+    .bottom1 {
+      width: 40%;
+    }
     .bottom2,
     .bottom3 {
-      width: 33.333%;
+      width: 30%;
     }
   }
 </style>

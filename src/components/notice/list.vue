@@ -22,14 +22,22 @@
       <span>제목</span>
     </div>
     <div @click="read()">
-      <BoardList></BoardList>
+      <BoardList>
+        <span slot="bottom" class="bottom1">수정일 : 2020.06.12</span>
+      </BoardList>
+      <BoardList>
+        <span slot="bottom" class="bottom1">수정일 : 2020.06.12</span>
+      </BoardList>
+      <BoardList>
+        <span slot="bottom" class="bottom1">수정일 : 2020.06.12</span>
+      </BoardList>
+      <BoardList>
+        <span slot="bottom" class="bottom1">수정일 : 2020.06.12</span>
+      </BoardList>
+      <BoardList>
+        <span slot="bottom" class="bottom1">수정일 : 2020.06.12</span>
+      </BoardList>
     </div>
-    <BoardList></BoardList>
-    <BoardList></BoardList>
-    <BoardList></BoardList>
-    <BoardList></BoardList>
-    <BoardList></BoardList>
-    <BoardList></BoardList>
   </div>
 </template>
 <script>
@@ -47,10 +55,10 @@
     },
     methods: {
       read() {
-        this.$router.push("/teskboard/read");
+        this.$router.push("/notice/read");
       },
       go_to_path() {
-        this.$router.push("/teskregister");
+        this.$router.push("/noticeRegister");
       },
     },
   };

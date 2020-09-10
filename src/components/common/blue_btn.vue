@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <button>글쓰기</button>
+  <div class="blue_btn">
+    <slot name="blue_btn">
+      <button>글쓰기</button>
+    </slot>
   </div>
 </template>
 <script>

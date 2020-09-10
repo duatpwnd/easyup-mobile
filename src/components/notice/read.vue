@@ -2,18 +2,29 @@
   <div>
     <div class="head">
       <span class="title">[파이선 완벽 뽀개기]</span>
-      <span>오늘 강의 과제입니다. 참고해 주세요.</span>
+      <span>전체 휴강 안내드립니다.</span>
     </div>
     <div class="contents">
       <pre>
-강동원 강사님<br><br>파이썬을 이제 막 시작한 여러분 안녕하세요.<br>첫번째 과제입니다.<br>공부 열심히 하세요. 첨부파일 꼭 읽어보시고 이번주 수요일까지 제출 부탁드립니다. 그럼 이만</pre>
+강동원 강사님<br><br>제가 개인적인 사정으로 휴강하게 되었습니다<br>죄송합니다.</pre>
     </div>
     <div class="button_wrap">
-      <BlueBorderBtn class="left_btn">
+      <BlueBorderBtn class="btn">
+        <button slot="blue_border_btn">
+          수정
+        </button>
+      </BlueBorderBtn>
+      <BlueBorderBtn class="btn">
+        <button slot="blue_border_btn">
+          삭제
+        </button>
+      </BlueBorderBtn>
+      <BlueBorderBtn class="btn">
         <button slot="blue_border_btn">
           이전글
-        </button> </BlueBorderBtn
-      ><BlueBorderBtn class="right_btn">
+        </button>
+      </BlueBorderBtn>
+      <BlueBorderBtn class="btn last_btn">
         <button slot="blue_border_btn">
           다음글
         </button>
@@ -26,6 +37,9 @@
   export default {
     components: {
       BlueBorderBtn,
+    },
+    data() {
+      return {};
     },
     methods: {},
   };
@@ -59,13 +73,15 @@
       content: "";
       clear: both;
     }
-    .left_btn {
+    .btn {
       float: left;
       width: 23.172%;
+      &:not(:first-child) {
+        margin-left: 2%;
+      }
     }
-    .right_btn {
+    .last_btn {
       float: right;
-      width: 23.172%;
     }
   }
 </style>

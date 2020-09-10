@@ -38,6 +38,7 @@
       p {
         font-size: 1.25rem;
         color: #757575;
+        text-align: left;
       }
     }
   }

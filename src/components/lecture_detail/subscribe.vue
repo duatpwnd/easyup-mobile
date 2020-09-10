@@ -2,8 +2,11 @@
   <div id="subscribe">
     <div class="subscribe_wrap">
       <h2>무료</h2>
-      <button class="subs_btn" ref="subs_btn">구독하기</button>
-
+      <BlueBtn>
+        <button ref="subs_btn" slot="blue_btn" @click="login()">
+          구독하기
+        </button>
+      </BlueBtn>
       <div>
         <span class="total_lec">총<span class="color">11</span>강</span>
       </div>
@@ -31,8 +34,11 @@
   </div>
 </template>
 <script>
+  import BlueBtn from "@/components/common/blue_btn.vue";
   export default {
-    components: {},
+    components: {
+      BlueBtn,
+    },
     data() {
       return {
         subscribe_btn: false,
@@ -60,22 +66,17 @@
   };
 </script>
 <style scoped lang="scss">
+  .blue_btn {
+    ::v-deep button {
+      border-radius: 20px;
+      font-size: 2.25rem;
+      margin: 15px 0;
+      padding: 2% 0;
+    }
+  }
   #subscribe {
     padding: 4.445%;
     .subscribe_wrap {
-      .subs_btn {
-        background: #114fff;
-        display: block;
-        width: 100%;
-        color: #ffffff;
-        font-family: "NotoSansCJKkr-Medium";
-        font-size: 2.25rem;
-        text-align: center;
-        border-radius: 20px;
-        margin: 15px 0;
-        padding: 2% 0;
-      }
-
       .total_lec {
         font-size: 1.375rem;
         .color {
