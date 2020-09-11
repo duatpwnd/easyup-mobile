@@ -39,6 +39,7 @@
     .title {
       color: #114fff;
       margin-right: 2%;
+      font-weight: 600;
     }
   }
   .contents {

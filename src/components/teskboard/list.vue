@@ -17,27 +17,23 @@
         </button>
       </BlueBtn>
     </div>
-    <div class="title_wrap">
-      <span>강좌명</span>
-      <span>제목</span>
-    </div>
-    <div @click="read()">
-      <BoardList></BoardList>
-    </div>
-    <BoardList></BoardList>
-    <BoardList></BoardList>
-    <BoardList></BoardList>
-    <BoardList></BoardList>
-    <BoardList></BoardList>
-    <BoardList></BoardList>
+    <BoardTitle></BoardTitle>
+    <div class="list" @click="read()"><BoardList></BoardList></div>
+    <div class="list" @click="read()"><BoardList></BoardList></div>
+    <div class="list" @click="read()"><BoardList></BoardList></div>
+    <div class="list" @click="read()"><BoardList></BoardList></div>
+    <div class="list" @click="read()"><BoardList></BoardList></div>
+    <div class="list" @click="read()"><BoardList></BoardList></div>
   </div>
 </template>
 <script>
+  import BoardTitle from "@/components/common/board_title.vue";
   import Search from "@/components/common/search.vue";
   import BoardList from "@/components/common/board_list.vue";
   import BlueBtn from "@/components/common/blue_btn.vue";
   export default {
     components: {
+      BoardTitle,
       BlueBtn,
       BoardList,
       Search,
@@ -70,6 +66,11 @@
       text-align: center;
       color: #333333;
       font-size: 1.25rem;
+    }
+  }
+  .list {
+    &:nth-child(odd) {
+      background: #f8f8f8;
     }
   }
 </style>

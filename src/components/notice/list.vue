@@ -17,35 +17,35 @@
         </button>
       </BlueBtn>
     </div>
-    <div class="title_wrap">
-      <span>강좌명</span>
-      <span>제목</span>
+    <BoardTitle></BoardTitle>
+    <div class="list" @click="read()">
+      <BoardList>
+        <template slot="top">
+          <span class="td left_td">파이썬 완벽 뽀개기</span>
+          <span class="td right_td">전체 휴강 안내드립니다.</span>
+        </template>
+        <span class="td" slot="bottom">수정일 : 2020.06.12</span>
+      </BoardList>
     </div>
-    <div @click="read()">
+    <div class="list" @click="read()">
       <BoardList>
-        <span slot="bottom" class="bottom1">수정일 : 2020.06.12</span>
-      </BoardList>
-      <BoardList>
-        <span slot="bottom" class="bottom1">수정일 : 2020.06.12</span>
-      </BoardList>
-      <BoardList>
-        <span slot="bottom" class="bottom1">수정일 : 2020.06.12</span>
-      </BoardList>
-      <BoardList>
-        <span slot="bottom" class="bottom1">수정일 : 2020.06.12</span>
-      </BoardList>
-      <BoardList>
-        <span slot="bottom" class="bottom1">수정일 : 2020.06.12</span>
+        <template slot="top">
+          <span class="td left_td">파이썬 완벽 뽀개기</span>
+          <span class="td right_td">전체 휴강 안내드립니다.</span>
+        </template>
+        <span class="td" slot="bottom">수정일 : 2020.06.12</span>
       </BoardList>
     </div>
   </div>
 </template>
 <script>
   import Search from "@/components/common/search.vue";
+  import BoardTitle from "@/components/common/board_title.vue";
   import BoardList from "@/components/common/board_list.vue";
   import BlueBtn from "@/components/common/blue_btn.vue";
   export default {
     components: {
+      BoardTitle,
       BlueBtn,
       BoardList,
       Search,
@@ -67,17 +67,9 @@
   .search_area {
     margin: 3.5% 0;
   }
-  .title_wrap {
-    border-top: 2px solid black;
-    margin-top: 3%;
-    background: #f8f8f8;
-    padding: 1%;
-    span {
-      display: inline-table;
-      width: 50%;
-      text-align: center;
-      color: #333333;
-      font-size: 1.25rem;
+  .list {
+    &:nth-child(odd) {
+      background: #f8f8f8;
     }
   }
 </style>

@@ -38,10 +38,11 @@
     .search_contents {
       float: left;
       border: 1px solid #333333;
-      color: #b5b5b5;
+      color: black;
       font-size: 1.25rem;
       width: 72%;
       padding: 1.755%;
+      padding-right: 10%;
       box-sizing: border-box;
       margin-left: 2%;
       background: url("~@/assets/images/lec_list/search_btn.png") no-repeat 95%

@@ -30,6 +30,7 @@
 </script>
 <style scoped lang="scss">
   .notice {
+    border-radius: 5px;
     margin-top: 5%;
     background: #f8f8f8;
     padding: 1.39% 2.778%;

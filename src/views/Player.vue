@@ -1,8 +1,7 @@
 <template>
   <div>
-    <h2>자료 공유 게시판</h2>
-
-    <Notice></Notice>
+    <Video></Video>
+    <Scorm></Scorm>
     <span
       class="tab"
       v-for="(tab, index) in types"
@@ -17,18 +16,19 @@
   </div>
 </template>
 <script>
-  import Notice from "@/components/common/notice.vue";
-  import Tab1 from "@/components/data_share/tab1.vue";
-  import Tab2 from "@/components/data_share/tab2.vue";
+  import Tab1 from "@/components/player/lecture_list.vue";
+  import Tab2 from "@/components/player/lecture_note.vue";
+  import Video from "@/components/player/video.vue";
+  import Scorm from "@/components/player/scorm.vue";
   export default {
-    components: { Tab1, Tab2, Notice },
+    components: { Tab1, Tab2, Video, Scorm },
     data() {
       return {
         isActive: 0,
         type: "Tab1",
         types: [
-          { name: "공유한 파일", target: "Tab1" },
-          { name: "공유받은 파일", target: "Tab2" },
+          { name: "강의 목록", target: "Tab1" },
+          { name: "강의 노트", target: "Tab2" },
         ],
       };
     },
@@ -41,9 +41,6 @@
   };
 </script>
 <style scoped lang="scss">
-  h2 {
-    font-size: 2rem;
-  }
   .tab {
     font-size: 2rem;
     font-weight: 600;

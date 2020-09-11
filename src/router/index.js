@@ -65,6 +65,12 @@ const routes = [
     ],
   },
   {
+    path: "/teskregister",
+    name: "과제등록",
+    component: () => import("../views/TeskRegister.vue"),
+    meta: { isFooter: false },
+  },
+  {
     path: "/notice",
     name: "공지사항",
     component: () => import("../views/Notice.vue"),
@@ -83,16 +89,23 @@ const routes = [
       },
     ],
   },
-  {
-    path: "/teskregister",
-    name: "과제등록",
-    component: () => import("../views/TeskRegister.vue"),
-    meta: { isFooter: false },
-  },
+
   {
     path: "/noticeRegister",
     name: "공지사항 등록",
     component: () => import("../views/NoticeRegister.vue"),
+    meta: { isFooter: false },
+  },
+  {
+    path: "/dataShare",
+    name: "자료공유",
+    component: () => import("../views/DataShare.vue"),
+    meta: { isFooter: false },
+  },
+  {
+    path: "/play",
+    name: "플레이어",
+    component: () => import("../views/Player.vue"),
     meta: { isFooter: false },
   },
 ];

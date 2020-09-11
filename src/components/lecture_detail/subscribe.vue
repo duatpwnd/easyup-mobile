@@ -3,7 +3,7 @@
     <div class="subscribe_wrap">
       <h2>무료</h2>
       <BlueBtn>
-        <button ref="subs_btn" slot="blue_btn" @click="login()">
+        <button ref="subs_btn" slot="blue_btn" @click="video()">
           구독하기
         </button>
       </BlueBtn>
@@ -45,6 +45,9 @@
       };
     },
     methods: {
+      video() {
+        this.$router.push("/play");
+      },
       subscribe_btn_toggle() {
         if (this.$refs.subs_btn != undefined) {
           const btn_offset_top = this.$refs.subs_btn.offsetTop;

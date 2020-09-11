@@ -1,17 +1,23 @@
 <template>
-  <div class="board_list">
-    <span class="top1">파이썬 완벽 뽀개기</span>
-    <span class="top2">오늘 강의 과제입니다. 참고해 주세요.</span>
-    <slot name="bottom">
-      <span class="bottom1">보낸날짜 : 2020.06.12</span>
-      <span class="bottom2">기한 : 2020.06.12</span>
-      <span class="bottom3">제출된 수 : 12/21</span>
-    </slot>
+  <div class="list_wrap">
+    <slot name="checkbox"></slot>
+    <div class="tr top_tr">
+      <slot name="top">
+        <span class="td left_td">파이썬 완벽 뽀개기</span>
+        <span class="td right_td">오늘 강의 과제입니다. 참고해 주세요.</span>
+      </slot>
+    </div>
+    <div class="tr bottom_tr">
+      <slot name="bottom">
+        <span class="td left_td">보낸날짜 : 2020.06.12</span>
+        <span class="td center_td">기한 : 2020.06.12</span>
+        <span class="td right_td">제출된 수 : 12/21</span>
+      </slot>
+    </div>
   </div>
 </template>
 <script>
   export default {
-    components: {},
     data() {
       return {};
     },
@@ -19,26 +25,44 @@
   };
 </script>
 <style scoped lang="scss">
-  .board_list {
-    span {
-      display: inline-table;
-      color: #333333;
-      font-size: 1.25rem;
-      padding: 1%;
-      box-sizing: border-box;
+  .list_wrap {
+    position: relative;
+    .tr {
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
+      }
+      .td {
+        float: left;
+        color: #333333;
+        font-size: 1.25rem;
+        padding: 1%;
+        box-sizing: border-box;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
-    .top1 {
-      width: 33.333%;
+    .top_tr {
+      .left_td {
+        width: 30%;
+      }
+
+      .right_td {
+        width: 70%;
+      }
     }
-    .top2 {
-      width: 66.667%;
-    }
-    .bottom1 {
-      width: 40%;
-    }
-    .bottom2,
-    .bottom3 {
-      width: 30%;
+    .bottom_tr {
+      .left_td {
+        width: 33.33%;
+      }
+      .center_td {
+        width: 33.33%;
+      }
+      .right_td {
+        width: 33.33%;
+      }
     }
   }
 </style>

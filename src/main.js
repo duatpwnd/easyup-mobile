@@ -8,6 +8,8 @@ import VueMq from "vue-mq";
 import CKEditor from "ckeditor4-vue";
 import axios from "axios";
 import ApiUrl from "@/assets/js/api_url.js";
+import Fragment from "vue-fragment";
+Vue.use(Fragment.Plugin);
 Vue.prototype.$EventBus = new Vue();
 Vue.prototype.$apiurl = ApiUrl;
 Vue.prototype.$axios = axios;

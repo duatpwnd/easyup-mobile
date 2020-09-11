@@ -86,7 +86,7 @@
           },
           {
             title: "자료공유",
-            path: "/share",
+            path: "/dataShare",
             name: require("@/assets/images/common/share_ico.png"),
             active: require("@/assets/images/common/share_active_ico.png"),
           },
@@ -118,7 +118,7 @@
           case "/noticeRegister":
             this.active = 2;
             break;
-          case "/share":
+          case "/dataShare":
             this.active = 3;
             break;
 
