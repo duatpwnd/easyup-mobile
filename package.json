@@ -16,6 +16,7 @@
     "ckeditor4-vue": "^1.1.0",
     "core-js": "^3.6.5",
     "jquery": "^3.5.1",
+    "sass-resources-loader": "^2.1.0",
     "swiper": "^6.1.2",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",

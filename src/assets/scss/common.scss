@@ -2,6 +2,12 @@
   margin: 0;
   padding: 0;
 }
+@mixin autoHeight() {
+  display: block;
+  clear: both;
+  content: "";
+}
+
 ul {
   li {
     list-style: none;

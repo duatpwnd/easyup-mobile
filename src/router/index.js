@@ -106,7 +106,7 @@ const routes = [
     path: "/play",
     name: "플레이어",
     component: () => import("../views/Player.vue"),
-    meta: { isFooter: false },
+    meta: { isFooter: false, gnbBottomMenu: false },
   },
 ];
 
@@ -117,7 +117,10 @@ const router = new VueRouter({
   routes,
 });
 router.beforeEach((to, from, next) => {
-  if (to.meta.isFooter == false) {
+  if (to.meta.isFooter == false && to.meta.gnbBottomMenu == false) {
+    store.commit("isFooter", false);
+    store.commit("GnbBottomMenu", false);
+  } else if (to.meta.isFooter == false) {
     store.commit("isFooter", false);
     store.commit("GnbBottomMenu", true);
   } else {

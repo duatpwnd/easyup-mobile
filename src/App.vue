@@ -19,11 +19,11 @@
   </div>
 </template>
 <script>
-  import Header from "@/components/common/header.vue";
-  import Footer from "@/components/common/footer.vue";
+  import Header from "@/components/layout/header.vue";
+  import Footer from "@/components/layout/footer.vue";
   import LoginBeforeModal from "@/components/login/login_before_modal.vue";
   import LoginAfterModal from "@/components/login/login_after_modal.vue";
-  import GnbBottomMenu from "@/components/common/gnb_bottom_menu.vue";
+  import GnbBottomMenu from "@/components/layout/gnb_bottom_menu.vue";
   export default {
     components: {
       GnbBottomMenu,
