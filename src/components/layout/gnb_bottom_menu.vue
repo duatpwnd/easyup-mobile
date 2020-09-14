@@ -86,7 +86,7 @@
           },
           {
             title: "자료공유",
-            path: "/dataShare",
+            path: "/dataShare/list",
             name: require("@/assets/images/common/share_ico.png"),
             active: require("@/assets/images/common/share_active_ico.png"),
           },
@@ -121,7 +121,12 @@
           case "/dataShare":
             this.active = 3;
             break;
-
+          case "/dataShare/list":
+            this.active = 3;
+            break;
+          case "/dataShare/read":
+            this.active = 3;
+            break;
           default:
             this.active = -1;
             break;

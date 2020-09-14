@@ -9,7 +9,7 @@
     </Search>
     <div class="btn_wrap">
       <BlueBtn class="left">
-        <button slot="blue_btn">업로드</button>
+        <button slot="blue_btn" @click="upload()">업로드</button>
       </BlueBtn>
       <BlueBtn class="right">
         <button slot="blue_btn">다운로드</button>
@@ -29,27 +29,29 @@
         <span>파일명</span>
       </template>
     </BoardTitle>
-    <BoardList v-for="(list, index) in arr" :key="index">
-      <CheckBox slot="checkbox">
-        <input
-          type="checkbox"
-          :value="index"
-          v-model="checked_list"
-          slot="check"
-          @change="partial_check()"
-        />
-      </CheckBox>
-      <template slot="top">
-        <span class="td left_td">파이썬 완벽 뽀개기</span>
-        <span class="td right_td">파이썬 초급 예제 2</span>
-      </template>
-      <template slot="bottom">
-        <span class="td left_td">종류 : doc</span>
-        <span class="td">크기 : 31.46k</span>
-        <span class="td ">대상 : 김길동</span>
-        <span class="td ">2020.06.12</span>
-      </template>
-    </BoardList>
+    <div @click="read()" v-for="(list, index) in arr" :key="index">
+      <BoardList>
+        <CheckBox slot="checkbox">
+          <input
+            type="checkbox"
+            :value="index"
+            v-model="checked_list"
+            slot="check"
+            @change="partial_check()"
+          />
+        </CheckBox>
+        <template slot="top">
+          <span class="td left_td">파이썬 완벽 뽀개기</span>
+          <span class="td right_td">파이썬 초급 예제 2</span>
+        </template>
+        <template slot="bottom">
+          <span class="td left_td">종류 : doc</span>
+          <span class="td">크기 : 31.46k</span>
+          <span class="td ">대상 : 김길동</span>
+          <span class="td ">2020.06.12</span>
+        </template>
+      </BoardList>
+    </div>
   </div>
 </template>
 <script>
@@ -74,6 +76,9 @@
       };
     },
     methods: {
+      upload() {
+        this.$router.push("/dataShare/upload");
+      },
       // 전체 체크
       all_check() {
         this.allCheck = !this.allCheck;

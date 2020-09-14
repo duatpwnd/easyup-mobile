@@ -1,64 +1,28 @@
 <template>
   <div>
-    <h2>자료 공유 게시판</h2>
-
-    <Notice></Notice>
-    <span
-      class="tab"
-      v-for="(tab, index) in types"
-      :class="{ active: index == isActive }"
-      :key="index"
-      @click="toggle(tab.target, index)"
-      ><span class="active_bar"></span>{{ tab.name }}</span
-    >
-    <keep-alive>
-      <component v-bind:is="type"></component>
-    </keep-alive>
+    <div class="notice">
+      <h2>자료 공유 게시판</h2>
+      <Notice></Notice>
+    </div>
+    <router-view />
   </div>
 </template>
 <script>
   import Notice from "@/components/common/notice.vue";
-  import Tab1 from "@/components/data_share/tab1.vue";
-  import Tab2 from "@/components/data_share/tab2.vue";
+
   export default {
-    components: { Tab1, Tab2, Notice },
+    components: { Notice },
     data() {
-      return {
-        isActive: 0,
-        type: "Tab1",
-        types: [
-          { name: "공유한 파일", target: "Tab1" },
-          { name: "공유받은 파일", target: "Tab2" },
-        ],
-      };
-    },
-    methods: {
-      toggle(type, index) {
-        this.type = type;
-        this.isActive = index;
-      },
+      return {};
     },
   };
 </script>
 <style scoped lang="scss">
-  h2 {
-    font-size: 2rem;
-  }
-  .tab {
-    font-size: 2rem;
-    font-weight: 600;
-    width: 50%;
-    display: inline-block;
-    text-align: center;
-    background: #f8f8f8;
-    padding: 2% 0;
-  }
-  .active {
-    background: #ffffff;
-    .active_bar {
-      display: block;
-      background: #114fff;
-      padding: 1.5%;
+  .notice {
+    padding: 4.445%;
+    padding-bottom: 2%;
+    h2 {
+      font-size: 2rem;
     }
   }
 </style>

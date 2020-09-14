@@ -100,7 +100,20 @@ const routes = [
     path: "/dataShare",
     name: "자료공유",
     component: () => import("../views/DataShare.vue"),
-    meta: { isFooter: false },
+    children: [
+      {
+        path: "list",
+        name: "리스트",
+        component: () => import("@/components/data_share/list.vue"),
+        meta: { isFooter: false },
+      },
+      {
+        path: "upload",
+        name: "업로드",
+        component: () => import("@/components/data_share/upload.vue"),
+        meta: { isFooter: false },
+      },
+    ],
   },
   {
     path: "/play",

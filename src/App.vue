@@ -38,7 +38,7 @@
       };
     },
     methods: {},
-
+    mounted() {},
     // watch: {
     //   $route(to, from) {
     //     const toDepth = to.path.split("/").length;
@@ -104,20 +104,10 @@
       font-size: 11px;
     }
   }
-  // 갤럭시 s9+, ios13.7
+  // 갤럭시 s9+, 아이폰13 아이폰8
   @media all and (max-width: 420px) {
     html {
       font-size: 9px;
-    }
-  }
-  @media all and (max-width: 360px) {
-    html {
-      font-size: 15px;
-    }
-  }
-  @media all and (max-width: 320px) {
-    html {
-      font-size: 8px;
     }
   }
 </style>
