@@ -97,7 +97,6 @@
         .timer {
           color: #114fff;
           margin-left: 5%;
-          font-weight: 600;
         }
       }
     }
