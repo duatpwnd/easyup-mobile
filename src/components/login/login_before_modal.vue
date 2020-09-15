@@ -14,6 +14,7 @@
           class="user_pw"
           v-model="userpw"
           placeholder="패스워드"
+          autocomplete="true"
         />
         <BlueBtn>
           <button slot="blue_btn" @click="login()">로그인</button>
@@ -21,17 +22,17 @@
       </fieldset>
     </form>
     <div class="user_find">
-      <router-link to="/">회원가입</router-link>
-      <router-link to="/" class="forget">비밀번호 분실</router-link>
+      <span @click="signup()">회원가입</span>
+      <span class="forget" @click="pwChange()">비밀번호 분실</span>
     </div>
     <div class="lec_course">
       <button class="lec">강의</button>
       <button class="course">코스</button>
     </div>
     <div class="support">
-      <router-link to="/">공지사항</router-link>
-      <router-link to="/">FAQ</router-link>
-      <router-link to="/">1:1문의</router-link>
+      <span>공지사항</span>
+      <span>FAQ</span>
+      <span>1:1문의</span>
     </div>
   </div>
 </template>
@@ -48,9 +49,17 @@
       };
     },
     methods: {
+      pwChange() {
+        this.$router.push("/pw_change").catch(() => {});
+        this.$store.commit("LoginMenuToggle");
+      },
       login() {
         //post
         this.$store.commit("LoginModalChange", false);
+      },
+      signup() {
+        this.$router.push("/signup").catch(() => {});
+        this.$store.commit("LoginMenuToggle");
       },
     },
     mounted() {},
@@ -110,7 +119,7 @@
       background: white;
       margin-top: 2%;
       padding: 4.445%;
-      a {
+      span {
         font-size: 1.5rem;
         display: inline-block;
         width: 33.333%;
@@ -121,7 +130,7 @@
       padding-bottom: 0;
       background: white;
       padding: 4.445%;
-      a {
+      span {
         font-size: 1.5rem;
         display: block;
       }

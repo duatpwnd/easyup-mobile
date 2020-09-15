@@ -101,29 +101,17 @@
             this.active = 0;
             break;
           case "/teskboard/list":
-            this.active = 1;
-            break;
           case "/teskboard/read":
-            this.active = 1;
-            break;
           case "/teskregister":
             this.active = 1;
             break;
           case "/notice/list":
-            this.active = 2;
-            break;
           case "/notice/read":
-            this.active = 2;
-            break;
           case "/noticeRegister":
             this.active = 2;
             break;
           case "/dataShare":
-            this.active = 3;
-            break;
           case "/dataShare/list":
-            this.active = 3;
-            break;
           case "/dataShare/read":
             this.active = 3;
             break;

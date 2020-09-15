@@ -16,6 +16,7 @@
     </transition>
     <GnbBottomMenu v-if="this.$store.state.gnb_bottom_menu"></GnbBottomMenu>
     <Footer v-if="this.$store.state.isFooter"></Footer>
+    <ProfileMsgTab v-if="this.$store.state.profile_msg_tab"></ProfileMsgTab>
   </div>
 </template>
 <script>
@@ -24,8 +25,10 @@
   import LoginBeforeModal from "@/components/login/login_before_modal.vue";
   import LoginAfterModal from "@/components/login/login_after_modal.vue";
   import GnbBottomMenu from "@/components/layout/gnb_bottom_menu.vue";
+  import ProfileMsgTab from "@/components/layout/profile_msg_tab.vue";
   export default {
     components: {
+      ProfileMsgTab,
       GnbBottomMenu,
       LoginAfterModal,
       LoginBeforeModal,

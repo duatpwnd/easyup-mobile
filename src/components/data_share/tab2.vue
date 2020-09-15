@@ -107,9 +107,6 @@
       }
       .blue_btn {
         width: 48%;
-        ::v-deep button {
-          padding: 2.173%;
-        }
       }
       .left {
         float: left;

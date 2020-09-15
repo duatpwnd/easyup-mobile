@@ -22,6 +22,7 @@
     margin-top: 3%;
     background: #f8f8f8;
     padding: 1%;
+    text-align: center;
     span {
       display: inline-table;
       width: 50%;

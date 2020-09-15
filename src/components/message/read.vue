@@ -1,0 +1,74 @@
+<template>
+  <div class="read">
+    <h2>메시지</h2>
+    <div class="head">
+      <span>파이선 완벽 뽀개기 - </span>
+      <span>오늘 강의 과제입니다. 참고해 주세요.</span>
+    </div>
+    <div class="contents">
+      <pre>
+강동원 강사님<br><br>파이썬을 이제 막 시작한 여러분 안녕하세요.<br>첫번째 과제입니다.<br>공부 열심히 하세요. 첨부파일 꼭 읽어보시고 이번주 수요일까지 제출 부탁드립니다. 그럼 이만</pre>
+    </div>
+    <div class="button_wrap">
+      <BlueBorderBtn class="left_btn">
+        <button slot="blue_border_btn">
+          답장
+        </button> </BlueBorderBtn
+      ><BlueBorderBtn class="right_btn">
+        <button slot="blue_border_btn">
+          삭제
+        </button>
+      </BlueBorderBtn>
+    </div>
+  </div>
+</template>
+<script>
+  import BlueBorderBtn from "@/components/common/blue_border_btn.vue";
+  export default {
+    components: {
+      BlueBorderBtn,
+    },
+    methods: {},
+  };
+</script>
+<style scoped lang="scss">
+  .read {
+    padding: 4.445%;
+    h2 {
+      font-size: 2rem;
+    }
+    .head {
+      margin-top: 5%;
+      span {
+        font-size: 1.375rem;
+      }
+    }
+    .contents {
+      border-top: 2px solid #333333;
+      border-bottom: 2px solid #333333;
+      padding: 2% 0;
+      margin: 2% 0;
+      pre {
+        white-space: pre-wrap;
+        font-size: 1.25rem;
+        color: #666666;
+        font-family: "NotoSansCJKkr-Regular";
+      }
+    }
+    .button_wrap {
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
+      }
+      .left_btn {
+        float: left;
+        width: 23.172%;
+      }
+      .right_btn {
+        float: right;
+        width: 23.172%;
+      }
+    }
+  }
+</style>

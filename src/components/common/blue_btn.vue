@@ -17,6 +17,7 @@
 <style scoped lang="scss">
   button {
     background: #114fff;
+    border: 2px solid #114fff;
     color: white;
     font-size: 1.75rem;
     width: 100%;

@@ -4,15 +4,15 @@
       <input
         slot="slot_input"
         class="search_contents"
-        placeholder="강의명을 검색하세요."
+        placeholder="검색어를 입력하세요."
       />
     </Search>
     <div class="btn_wrap">
       <BlueBtn class="left">
-        <button slot="blue_btn" @click="upload()">업로드</button>
+        <button slot="blue_btn" @click="upload()">새메시지</button>
       </BlueBtn>
       <BlueBtn class="right">
-        <button slot="blue_btn">다운로드</button>
+        <button slot="blue_btn">삭제</button>
       </BlueBtn>
     </div>
     <BoardTitle>
@@ -25,11 +25,10 @@
             slot="check"
           />
         </CheckBox>
-        <span>강좌명</span>
-        <span>파일명</span>
+        <span>메시지</span>
       </template>
     </BoardTitle>
-    <div @click="read()" v-for="(list, index) in arr" :key="index">
+    <div class="row" @click="read()" v-for="(list, index) in arr" :key="index">
       <BoardList>
         <CheckBox slot="checkbox">
           <input
@@ -42,13 +41,10 @@
         </CheckBox>
         <template slot="top">
           <span class="td left_td">파이썬 완벽 뽀개기</span>
-          <span class="td right_td">파이썬 초급 예제 2</span>
         </template>
         <template slot="bottom">
           <span class="td left_td">종류 : doc</span>
           <span class="td">크기 : 31.46k</span>
-          <span class="td ">대상 : 김길동</span>
-          <span class="td ">2020.06.12</span>
         </template>
       </BoardList>
     </div>
@@ -104,6 +100,11 @@
   .tab1 {
     padding: 4.445%;
     padding-top: 0;
+    .row {
+      &:nth-child(odd) {
+        background: #f8f8f8;
+      }
+    }
     .btn_wrap {
       &:after {
         display: block;
