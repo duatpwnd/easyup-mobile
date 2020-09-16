@@ -1,9 +1,7 @@
 <template>
-  <div class="register">
-    <RegisterComponent>
-      <h2 class="title" slot="title">과제등록</h2>
-    </RegisterComponent>
-  </div>
+  <RegisterComponent>
+    <h2 class="title" slot="title">과제등록</h2>
+  </RegisterComponent>
 </template>
 <script>
   import RegisterComponent from "@/components/common/multiple_register.vue";
@@ -17,8 +15,3 @@
     methods: {},
   };
 </script>
-<style scoped lang="scss">
-  .register {
-    padding: 4.445%;
-  }
-</style>

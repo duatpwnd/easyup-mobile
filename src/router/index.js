@@ -43,33 +43,33 @@ const routes = [
     children: [
       {
         path: "notice",
-        component: () => import("@/components/service_center/notice_list.vue"),
+        component: () => import("@/views/service_center/notice_list.vue"),
         name: "고객센터 공지사항 리스트",
         meta: { isFooter: true },
       },
       {
         path: "faq",
-        component: () => import("@/components/service_center/faq.vue"),
+        component: () => import("@/views/service_center/faq.vue"),
         name: "faq",
         meta: { isFooter: true },
       },
       {
         path: "inquiry",
-        component: () => import("@/components/service_center/inquiry.vue"),
+        component: () => import("@/views/service_center/inquiry.vue"),
         name: "1:1문의",
         meta: { isFooter: true },
       },
 
       {
         path: "list",
-        component: () => import("@/components/service_center/notice_list.vue"),
+        component: () => import("@/views/service_center/notice_list.vue"),
         name: "고객센터 공지사항 리스트",
         meta: { isFooter: true },
       },
       {
         path: "read",
         name: "고객센터 공지사항 읽기",
-        component: () => import("@/components/service_center/notice_read.vue"),
+        component: () => import("@/views/service_center/notice_read.vue"),
         meta: { isFooter: true },
       },
     ],
@@ -108,43 +108,46 @@ const routes = [
   {
     path: "/teskboard",
     name: "과제게시판",
+    redirect: "/teskboard/list",
     component: () => import("../views/TeskBoard.vue"),
     children: [
       {
         path: "list",
-        component: () => import("@/components/teskboard/list.vue"),
+        component: () => import("@/views/teskboard/list.vue"),
         name: "리스트",
         meta: { gnbBottomMenu: true },
       },
       {
         path: "read",
         name: "읽기",
-        component: () => import("@/components/teskboard/read.vue"),
+        component: () => import("@/views/teskboard/read.vue"),
         meta: { gnbBottomMenu: true },
+      },
+      {
+        path: "teskregister",
+        name: "과제등록",
+        component: () => import("@/views/teskboard/TeskRegister.vue"),
+        meta: { gnbBottomMenu: true, notice: false },
       },
     ],
   },
-  {
-    path: "/teskregister",
-    name: "과제등록",
-    component: () => import("../views/TeskRegister.vue"),
-    meta: { gnbBottomMenu: true },
-  },
+
   {
     path: "/notice",
     name: "공지사항",
+    redirect: "/notice/list",
     component: () => import("../views/Notice.vue"),
     children: [
       {
         path: "list",
-        component: () => import("@/components/notice/list.vue"),
+        component: () => import("@/views/notice/list.vue"),
         name: "공지사항 리스트",
         meta: { gnbBottomMenu: true },
       },
       {
         path: "read",
         name: "공지사항 읽기",
-        component: () => import("@/components/notice/read.vue"),
+        component: () => import("@/views/notice/read.vue"),
         meta: { gnbBottomMenu: true },
       },
     ],
@@ -159,18 +162,19 @@ const routes = [
   {
     path: "/dataShare",
     name: "자료공유",
+    redirect: "/dataShare/list",
     component: () => import("../views/DataShare.vue"),
     children: [
       {
         path: "list",
         name: "자료공유 리스트",
-        component: () => import("@/components/data_share/list.vue"),
+        component: () => import("@/views/data_share/list.vue"),
         meta: { gnbBottomMenu: true },
       },
       {
         path: "upload",
         name: "업로드",
-        component: () => import("@/components/data_share/upload.vue"),
+        component: () => import("@/views/data_share/upload.vue"),
         meta: { gnbBottomMenu: true },
       },
     ],
@@ -195,19 +199,19 @@ const routes = [
       {
         path: "list",
         name: "메세지 리스트",
-        component: () => import("@/components/message/list.vue"),
+        component: () => import("@/views/message/list.vue"),
         meta: { profileMsgTab: true },
       },
       {
         path: "read",
         name: "메세지 읽기",
-        component: () => import("@/components/message/read.vue"),
+        component: () => import("@/views/message/read.vue"),
         meta: { profileMsgTab: true },
       },
       {
         path: "newMessage",
         name: "새메시지",
-        component: () => import("@/components/message/new_message.vue"),
+        component: () => import("@/views/message/new_message.vue"),
         meta: { profileMsgTab: true },
       },
     ],

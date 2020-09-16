@@ -1,13 +1,14 @@
 <template>
   <div id="gnb_bottom_menu">
     <ul class="gnb">
-      <li v-for="(list, index) in menu" :key="index" @click="active = index">
-        <router-link
-          :to="list.path"
-          :class="{ 'router-link-active': active == index }"
-        >
+      <li
+        v-for="(list, index) in menu"
+        :key="index"
+        @click="goToPath(list.path, index)"
+      >
+        <span :class="{ 'router-link-active': active == list.path }">
           <img
-            v-if="index == active"
+            v-if="active == list.path"
             :src="list.active"
             :alt="list.title"
             :title="list.title"
@@ -20,42 +21,9 @@
             :title="list.title"
             :class="'ico_' + Number(index + 1)"
           />
-          <h3>{{ list.title }}</h3></router-link
+          <h3>{{ list.title }}</h3></span
         >
       </li>
-      <!-- <li>
-        <router-link to="/teskboard"
-          ><img
-            src="@/assets/images/common/board_ico.png"
-            alt="과제게시판"
-            title="과제게시판"
-            class="ico_2"
-          />
-          <h3>과제게시판</h3></router-link
-        >
-      </li>
-      <li>
-        <router-link to="/mylecture1/mycourse/notice"
-          ><img
-            src="@/assets/images/common/notice_ico.png"
-            alt="공지사항"
-            title="공지사항"
-            class="ico_3"
-          />
-          <h3>공지사항</h3></router-link
-        >
-      </li>
-      <li>
-        <router-link to="/mylecture1/mycourse/share"
-          ><img
-            src="@/assets/images/common/share_ico.png"
-            alt="자료공유"
-            title="자료공유"
-            class="ico_4"
-          />
-          <h3>자료공유</h3></router-link
-        >
-      </li> -->
     </ul>
   </div>
 </template>
@@ -74,51 +42,34 @@
           },
           {
             title: "과제게시판",
-            path: "/teskboard/list",
+            path: "/teskboard",
             name: require("@/assets/images/common/board_ico.png"),
             active: require("@/assets/images/common/board_active_ico.png"),
           },
           {
             title: "공지사항",
-            path: "/notice/list",
+            path: "/notice",
             name: require("@/assets/images/common/notice_ico.png"),
             active: require("@/assets/images/common/notice_active_ico.png"),
           },
           {
             title: "자료공유",
-            path: "/dataShare/list",
+            path: "/dataShare",
             name: require("@/assets/images/common/share_ico.png"),
             active: require("@/assets/images/common/share_active_ico.png"),
           },
         ],
       };
     },
-    methods: {},
+    methods: {
+      goToPath(route, index) {
+        this.active = route;
+        this.$router.push(route).catch(() => {});
+      },
+    },
     mounted() {
       window.onload = () => {
-        switch (this.$router.currentRoute.path) {
-          case "/myclass":
-            this.active = 0;
-            break;
-          case "/teskboard/list":
-          case "/teskboard/read":
-          case "/teskregister":
-            this.active = 1;
-            break;
-          case "/notice/list":
-          case "/notice/read":
-          case "/noticeRegister":
-            this.active = 2;
-            break;
-          case "/dataShare":
-          case "/dataShare/list":
-          case "/dataShare/read":
-            this.active = 3;
-            break;
-          default:
-            this.active = -1;
-            break;
-        }
+        this.active = this.$route.matched[0].path;
       };
     },
   };
@@ -141,7 +92,7 @@
         width: 25%;
         float: left;
         text-align: center;
-        a {
+        span {
           display: inline-block;
           width: 100%;
           padding: 10% 0;

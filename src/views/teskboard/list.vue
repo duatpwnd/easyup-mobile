@@ -46,7 +46,7 @@
         this.$router.push("/teskboard/read");
       },
       go_to_path() {
-        this.$router.push("/teskregister");
+        this.$router.push("/teskboard/teskregister");
       },
     },
   };
