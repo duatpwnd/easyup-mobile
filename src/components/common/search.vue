@@ -29,11 +29,12 @@
       width: 26%;
       float: left;
       border: 1px solid #333333;
-      padding: 1.83%;
+      padding: 0 1.755%;
+      line-height: 2.3;
       font-size: 1.25rem;
       color: #333333;
       background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
-        center;
+        center / 10%;
     }
     .search_contents {
       float: left;
@@ -41,7 +42,8 @@
       color: black;
       font-size: 1.25rem;
       width: 72%;
-      padding: 1.755%;
+      line-height: 2.3;
+      padding: 0 1.755%;
       padding-right: 10%;
       box-sizing: border-box;
       margin-left: 2%;

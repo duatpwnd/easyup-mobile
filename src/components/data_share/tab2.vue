@@ -113,6 +113,10 @@
       }
       .right {
         float: right;
+        button {
+          background: white;
+          color: #114fff;
+        }
       }
     }
     .search {

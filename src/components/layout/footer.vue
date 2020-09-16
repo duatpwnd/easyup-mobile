@@ -1,12 +1,30 @@
 <template>
   <footer>
     <h1>EASYUP</h1>
-    <div class="lnb">
-      <span>이용약관</span>
+    <div class="gnb">
+      <router-link
+        :to="{
+          name: 'policy',
+          query: {
+            action: 'Terms',
+            active: 0,
+          },
+        }"
+        ><span>이용약관</span></router-link
+      >
       <span class="bar">|</span>
-      <span>개인정보취급방침</span>
+      <router-link
+        :to="{
+          name: 'policy',
+          query: {
+            action: 'Privacy',
+            active: 1,
+          },
+        }"
+        ><span>개인정보취급방침</span></router-link
+      >
       <span class="bar">|</span>
-      <span>고객센터</span>
+      <router-link to="/help"><span>고객센터</span></router-link>
     </div>
     <address>
       <pre>(주)유니윌<br />대표이사:조인형   주소:서울시 강남구 테헤란로124<br />사업자 등록번호:220-86-20171    통신판매업신고:강남 제3339호</pre>
@@ -31,26 +49,25 @@
       font-size: 1.5rem;
       font-weight: bold;
     }
-    .lnb {
+    .gnb {
       margin: 10px 0;
       span {
         color: #7a7a7a;
+        font-size: 1.125rem;
+      }
+      .bar {
+        margin: 0 15px;
       }
     }
-    .bar {
-      margin: 0 15px;
-    }
+
     address {
       font-style: normal;
       color: #7a7a7a;
       pre {
         font-family: "NotoSansCJKkr-Regular";
-        line-height: 2%;
         line-height: 162%;
+        font-size: 1rem;
       }
-    }
-    span {
-      color: #7a7a7a;
     }
   }
 </style>

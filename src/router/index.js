@@ -30,6 +30,51 @@ const routes = [
     meta: { isFooter: false, gnbBottomMenu: false, profileMsgTab: false },
   },
   {
+    path: "/policy",
+    name: "policy",
+    component: () => import("../views/Policy.vue"),
+    meta: { isFooter: true },
+  },
+  {
+    path: "/help",
+    name: "help",
+    redirect: "/help/notice",
+    component: () => import("../views/ServiceCenter.vue"),
+    children: [
+      {
+        path: "notice",
+        component: () => import("@/components/service_center/notice_list.vue"),
+        name: "고객센터 공지사항 리스트",
+        meta: { isFooter: true },
+      },
+      {
+        path: "faq",
+        component: () => import("@/components/service_center/faq.vue"),
+        name: "faq",
+        meta: { isFooter: true },
+      },
+      {
+        path: "inquiry",
+        component: () => import("@/components/service_center/inquiry.vue"),
+        name: "1:1문의",
+        meta: { isFooter: true },
+      },
+
+      {
+        path: "list",
+        component: () => import("@/components/service_center/notice_list.vue"),
+        name: "고객센터 공지사항 리스트",
+        meta: { isFooter: true },
+      },
+      {
+        path: "read",
+        name: "고객센터 공지사항 읽기",
+        component: () => import("@/components/service_center/notice_read.vue"),
+        meta: { isFooter: true },
+      },
+    ],
+  },
+  {
     path: "/lecDetail",
     name: "강의상세페이지",
     component: () =>

@@ -14,28 +14,42 @@
   </div>
 </template>
 <script>
-  import Tab1 from "@/components/data_share/tab1.vue";
-  import Tab2 from "@/components/data_share/tab2.vue";
+  import Terms from "@/components/policy/terms.vue";
+  import Privacy from "@/components/policy/privacy.vue";
   export default {
-    components: {
-      Tab1,
-      Tab2,
-    },
+    components: { Terms, Privacy },
     data() {
       return {
         isActive: 0,
-        type: "Tab1",
+        type: "Terms",
         types: [
-          { name: "공유한 파일", target: "Tab1" },
-          { name: "공유받은 파일", target: "Tab2" },
+          { name: "이용약관", target: "Terms" },
+          { name: "개인정보 취급방침", target: "Privacy" },
         ],
       };
     },
     methods: {
       toggle(type, index) {
-        this.type = type;
-        this.isActive = index;
+        this.$router.push({
+          name: "policy",
+          query: {
+            action: type,
+            active: index,
+          },
+        });
       },
+      compSet() {
+        this.type = this.$route.query.action;
+        this.isActive = this.$route.query.active;
+      },
+    },
+    watch: {
+      $route(to, from) {
+        this.compSet();
+      },
+    },
+    created() {
+      this.compSet();
     },
   };
 </script>
@@ -48,21 +62,13 @@
     text-align: center;
     background: #f8f8f8;
     padding: 2% 0;
-    position: relative;
-  }
-  .active_bar {
-    background: #f8f8f8;
-    padding: 1.5%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    box-sizing: border-box;
   }
   .active {
     background: #ffffff;
     .active_bar {
+      display: block;
       background: #114fff;
+      padding: 1.5%;
     }
   }
 </style>
