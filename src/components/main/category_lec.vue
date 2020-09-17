@@ -122,7 +122,7 @@
           padding: 11.34% 6.098%;
           img {
             width: unset;
-            height: 30px;
+            // height: 30px;
           }
         }
       }

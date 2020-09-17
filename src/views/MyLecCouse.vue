@@ -50,7 +50,7 @@
     }
     .active_bar {
       background: #f8f8f8;
-      padding: 1.5%;
+      padding: 1.118%;
       position: absolute;
       top: 0;
       left: 0;

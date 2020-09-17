@@ -5,7 +5,9 @@
       초심자 과정부터 전문가 과정까지, 전 과정을 합리적인 가격에 마스터하세요
     </p>
     <swiper class="swiper" :options="swiperOption">
-      <swiper-slide><img src="@/assets/images/main/course1.png"/></swiper-slide>
+      <swiper-slide
+        ><img src="@/assets/images/main/course1.png" @click="goToPath()"
+      /></swiper-slide>
       <swiper-slide><img src="@/assets/images/main/course2.png"/></swiper-slide>
     </swiper>
   </div>
@@ -23,6 +25,11 @@
           },
         },
       };
+    },
+    methods: {
+      goToPath() {
+        this.$router.push("/courseDetail").catch(() => {});
+      },
     },
   };
 </script>

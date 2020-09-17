@@ -1,12 +1,9 @@
 <template>
   <ul class="gnb">
-    <li v-for="(list, index) in menu" :key="index" @click="active = index">
-      <router-link
-        :to="list.path"
-        :class="{ 'router-link-active': active == index }"
-      >
+    <li v-for="(list, index) in menu" :key="index">
+      <router-link :to="list.path">
         <img
-          v-if="index == active"
+          v-if="list.path == '/' + $route.path.split('/')[1]"
           :src="list.active"
           :alt="list.title"
           :title="list.title"
@@ -39,35 +36,14 @@
           },
           {
             title: "메시지",
-            path: "/msg/list",
+            path: "/msg",
             name: require("@/assets/images/common/msg_ico.png"),
             active: require("@/assets/images/common/msg_active_ico.png"),
           },
         ],
       };
     },
-    methods: {
-      switch_fn() {
-        switch (this.$router.currentRoute.path) {
-          case "/msg/list":
-          case "/msg/read":
-          case "/msg/newMessage":
-            this.active = 1;
-            break;
-          case "/profileModify":
-            this.active = 0;
-            break;
-        }
-      },
-    },
-    watch: {
-      $route(to, from) {
-        this.switch_fn();
-      },
-    },
-    mounted() {
-      this.switch_fn();
-    },
+    methods: {},
   };
 </script>
 <style scoped lang="scss">

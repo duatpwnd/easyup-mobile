@@ -52,7 +52,7 @@
     },
     methods: {
       goToPath() {
-        this.$router.push("/help/read");
+        this.$router.push("/help/notice/read").catch(() => {});
       },
     },
   };

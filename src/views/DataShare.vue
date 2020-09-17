@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="notice">
+    <div class="notice_board">
       <h2>자료 공유 게시판</h2>
       <Notice></Notice>
     </div>
@@ -18,7 +18,7 @@
   };
 </script>
 <style scoped lang="scss">
-  .notice {
+  .notice_board {
     padding: 4.445%;
     padding-bottom: 2%;
     h2 {

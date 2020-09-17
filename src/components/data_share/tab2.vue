@@ -12,7 +12,7 @@
         <button slot="blue_btn">업로드</button>
       </BlueBtn>
       <BlueBtn class="right">
-        <button slot="blue_btn">다운로드</button>
+        <button slot="blue_btn">삭제</button>
       </BlueBtn>
     </div>
     <BoardTitle>

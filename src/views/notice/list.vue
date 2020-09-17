@@ -58,7 +58,7 @@
         this.$router.push("/notice/read");
       },
       go_to_path() {
-        this.$router.push("/noticeRegister");
+        this.$router.push("/notice/noticeRegister");
       },
     },
   };

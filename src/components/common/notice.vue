@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <ul class="notice">
+  <ul class="notice">
+    <slot name="list">
       <li>
         <p>
           · 각 강좌별 과제를 제출할 수 있습니다.
@@ -16,8 +16,8 @@
           · 다른 강좌에 등록하지 않도록 주의해 주세요.
         </p>
       </li>
-    </ul>
-  </div>
+    </slot>
+  </ul>
 </template>
 <script>
   export default {
@@ -31,7 +31,7 @@
 <style scoped lang="scss">
   .notice {
     border-radius: 5px;
-    margin-top: 5%;
+    margin-top: 4%;
     background: #f8f8f8;
     padding: 1.39% 2.778%;
     li {

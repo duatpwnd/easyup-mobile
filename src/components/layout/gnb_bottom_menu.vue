@@ -1,14 +1,10 @@
 <template>
   <div id="gnb_bottom_menu">
     <ul class="gnb">
-      <li
-        v-for="(list, index) in menu"
-        :key="index"
-        @click="goToPath(list.path, index)"
-      >
-        <span :class="{ 'router-link-active': active == list.path }">
+      <li v-for="(list, index) in menu" :key="index">
+        <router-link :to="list.path">
           <img
-            v-if="active == list.path"
+            v-if="list.path == '/' + $route.path.split('/')[1]"
             :src="list.active"
             :alt="list.title"
             :title="list.title"
@@ -21,7 +17,7 @@
             :title="list.title"
             :class="'ico_' + Number(index + 1)"
           />
-          <h3>{{ list.title }}</h3></span
+          <h3>{{ list.title }}</h3></router-link
         >
       </li>
     </ul>
@@ -32,7 +28,6 @@
     components: {},
     data() {
       return {
-        active: -1,
         menu: [
           {
             title: "내 강좌/코스",
@@ -58,20 +53,17 @@
             name: require("@/assets/images/common/share_ico.png"),
             active: require("@/assets/images/common/share_active_ico.png"),
           },
+          {
+            title: "책갈피 관리",
+            path: "/bookmark_manage",
+            name: require("@/assets/images/common/bookmark_ico.png"),
+            active: require("@/assets/images/common/bookmark_active_ico.png"),
+          },
         ],
       };
     },
-    methods: {
-      goToPath(route, index) {
-        this.active = route;
-        this.$router.push(route).catch(() => {});
-      },
-    },
-    mounted() {
-      window.onload = () => {
-        this.active = this.$route.matched[0].path;
-      };
-    },
+    methods: {},
+    mounted() {},
   };
 </script>
 <style scoped lang="scss">
@@ -89,24 +81,25 @@
         clear: both;
       }
       li {
-        width: 25%;
+        width: 20%;
         float: left;
         text-align: center;
-        span {
+        a {
           display: inline-block;
           width: 100%;
           padding: 10% 0;
           .ico_1 {
-            width: 17.78%;
+            width: 22.222%; /* 32px/144px */
           }
-          .ico_2 {
-            width: 18.34%;
+          .ico_2,
+          .ico_4 {
+            width: 22.917%; /* 33px/144px */
           }
           .ico_3 {
-            width: 15.56%;
+            width: 19.444%; /* 28px/144px */
           }
-          .ico_4 {
-            width: 18.34%;
+          .ico_5 {
+            width: 20.833%; /* 30px/144px */
           }
           h3 {
             color: #999999;

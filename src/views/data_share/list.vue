@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="file_wrap">
     <span
       class="tab"
       v-for="(tab, index) in types"
@@ -40,29 +40,33 @@
   };
 </script>
 <style scoped lang="scss">
-  .tab {
-    font-size: 2rem;
-    font-weight: 600;
-    width: 50%;
-    display: inline-block;
-    text-align: center;
-    background: #f8f8f8;
-    padding: 2% 0;
-    position: relative;
-  }
-  .active_bar {
-    background: #f8f8f8;
-    padding: 1.5%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  .active {
-    background: #ffffff;
+  .file_wrap {
+    margin-top: 2%;
+
+    .tab {
+      font-size: 2rem;
+      font-weight: 600;
+      width: 50%;
+      display: inline-block;
+      text-align: center;
+      background: #f8f8f8;
+      padding: 2% 0;
+      position: relative;
+    }
     .active_bar {
-      background: #114fff;
+      background: #f8f8f8;
+      padding: 1.118%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .active {
+      background: #ffffff;
+      .active_bar {
+        background: #114fff;
+      }
     }
   }
 </style>

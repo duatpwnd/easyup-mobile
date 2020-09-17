@@ -48,13 +48,21 @@
     text-align: center;
     background: #f8f8f8;
     padding: 2% 0;
+    position: relative;
+  }
+  .active_bar {
+    background: #f8f8f8;
+    padding: 1.118%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
   }
   .active {
     background: #ffffff;
     .active_bar {
-      display: block;
       background: #114fff;
-      padding: 1.5%;
     }
   }
 </style>

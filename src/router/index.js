@@ -48,37 +48,77 @@ const routes = [
         meta: { isFooter: true },
       },
       {
-        path: "faq",
-        component: () => import("@/views/service_center/faq.vue"),
-        name: "faq",
-        meta: { isFooter: true },
-      },
-      {
-        path: "inquiry",
-        component: () => import("@/views/service_center/inquiry.vue"),
-        name: "1:1문의",
-        meta: { isFooter: true },
-      },
-
-      {
-        path: "list",
-        component: () => import("@/views/service_center/notice_list.vue"),
+        path: "notice/read",
+        component: () => import("@/views/service_center/notice_read.vue"),
         name: "고객센터 공지사항 리스트",
         meta: { isFooter: true },
       },
       {
-        path: "read",
-        name: "고객센터 공지사항 읽기",
-        component: () => import("@/views/service_center/notice_read.vue"),
+        path: "faq",
+        component: () => import("@/views/service_center/faq.vue"),
+        name: "faq",
+        // redirect: "/help/faq/all",
+        // children: [
+        //   {
+        //     path: "all",
+        //     component: () => import("@/views/service_center/faq/all.vue"),
+        //     name: "고객센터 공지사항 리스트",
+        //     meta: { isFooter: true },
+        //   },
+        //   {
+        //     path: "info",
+        //     component: () => import("@/views/service_center/faq/info.vue"),
+        //     name: "고객센터 공지사항 리스트",
+        //     meta: { isFooter: true },
+        //   },
+        //   {
+        //     path: "register",
+        //     component: () => import("@/views/service_center/faq/register.vue"),
+        //     name: "고객센터 공지사항 리스트",
+        //     meta: { isFooter: true },
+        //   },
+        //   {
+        //     path: "subscribe",
+        //     component: () => import("@/views/service_center/faq/subscribe.vue"),
+        //     name: "고객센터 공지사항 리스트",
+        //     meta: { isFooter: true },
+        //   },
+        //   {
+        //     path: "view",
+        //     component: () => import("@/views/service_center/faq/view.vue"),
+        //     name: "고객센터 공지사항 리스트",
+        //     meta: { isFooter: true },
+        //   },
+        //   {
+        //     path: "ex",
+        //     component: () => import("@/views/service_center/faq/ex.vue"),
+        //     name: "고객센터 공지사항 리스트",
+        //     meta: { isFooter: true },
+        //   },
+        // ],
+      },
+      {
+        path: "qna",
+        component: () => import("@/views/service_center/qna.vue"),
+        name: "qna",
         meta: { isFooter: true },
       },
     ],
   },
+
   {
     path: "/lecDetail",
     name: "강의상세페이지",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/LecDetail.vue"),
+    meta: { isFooter: true },
+  },
+
+  {
+    path: "/courseDetail",
+    name: "코스상세페이지",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/CourseDetail.vue"),
     meta: { isFooter: true },
   },
   {
@@ -150,15 +190,15 @@ const routes = [
         component: () => import("@/views/notice/read.vue"),
         meta: { gnbBottomMenu: true },
       },
+      {
+        path: "noticeRegister",
+        name: "공지사항 등록",
+        component: () => import("../views/notice/NoticeRegister.vue"),
+        meta: { gnbBottomMenu: true, notice: false },
+      },
     ],
   },
 
-  {
-    path: "/noticeRegister",
-    name: "공지사항 등록",
-    component: () => import("../views/NoticeRegister.vue"),
-    meta: { gnbBottomMenu: true },
-  },
   {
     path: "/dataShare",
     name: "자료공유",
@@ -180,6 +220,12 @@ const routes = [
     ],
   },
   {
+    path: "/bookmark_manage",
+    name: "책갈피 관리",
+    component: () => import("@/views/data_share/upload.vue"),
+    meta: { gnbBottomMenu: true },
+  },
+  {
     path: "/play",
     name: "플레이어",
     component: () => import("../views/Player.vue"),
@@ -194,6 +240,7 @@ const routes = [
   {
     path: "/msg",
     name: "메세지",
+    redirect: "/msg/list",
     component: () => import("../views/Message.vue"),
     children: [
       {
