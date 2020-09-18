@@ -202,28 +202,40 @@ const routes = [
   {
     path: "/dataShare",
     name: "자료공유",
-    redirect: "/dataShare/list",
     component: () => import("../views/DataShare.vue"),
-    children: [
-      {
-        path: "list",
-        name: "자료공유 리스트",
-        component: () => import("@/views/data_share/list.vue"),
-        meta: { gnbBottomMenu: true },
-      },
-      {
-        path: "upload",
-        name: "업로드",
-        component: () => import("@/views/data_share/upload.vue"),
-        meta: { gnbBottomMenu: true },
-      },
-    ],
+    meta: { gnbBottomMenu: true },
+  },
+  {
+    path: "/dataShare/upload",
+    name: "업로드",
+    component: () => import("@/views/data_share/upload.vue"),
+    meta: { gnbBottomMenu: true },
   },
   {
     path: "/bookmark_manage",
     name: "책갈피 관리",
     component: () => import("@/views/data_share/upload.vue"),
     meta: { gnbBottomMenu: true },
+  },
+  {
+    path: "/techBlog",
+    name: "기술블로그",
+    redirect: "/techBlog/list",
+    component: () => import("@/views/TechBlog.vue"),
+    children: [
+      {
+        path: "list",
+        name: "기슬블로그 리스트",
+        component: () => import("@/views/techblog/list.vue"),
+        meta: { gnbBottomMenu: true },
+      },
+      {
+        path: "read",
+        name: "기슬블로그 읽기",
+        component: () => import("@/views/techblog/read.vue"),
+        meta: { gnbBottomMenu: true },
+      },
+    ],
   },
   {
     path: "/play",

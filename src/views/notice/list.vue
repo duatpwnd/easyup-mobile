@@ -10,13 +10,13 @@
         />
       </Search>
     </div>
-    <div class="write">
+    <!-- <div class="write">
       <BlueBtn>
         <button slot="blue_btn" @click="go_to_path()">
           글쓰기
         </button>
       </BlueBtn>
-    </div>
+    </div> -->
     <BoardTitle></BoardTitle>
     <div class="list" @click="read()">
       <BoardList>
@@ -24,7 +24,7 @@
           <span class="td left_td">파이썬 완벽 뽀개기</span>
           <span class="td right_td">전체 휴강 안내드립니다.</span>
         </template>
-        <span class="td" slot="bottom">수정일 : 2020.06.12</span>
+        <span class="td" slot="bottom">2020.06.12</span>
       </BoardList>
     </div>
     <div class="list" @click="read()">
@@ -33,7 +33,7 @@
           <span class="td left_td">파이썬 완벽 뽀개기</span>
           <span class="td right_td">전체 휴강 안내드립니다.</span>
         </template>
-        <span class="td" slot="bottom">수정일 : 2020.06.12</span>
+        <span class="td" slot="bottom">2020.06.12</span>
       </BoardList>
     </div>
   </div>
@@ -42,11 +42,11 @@
   import Search from "@/components/common/search.vue";
   import BoardTitle from "@/components/common/board_title.vue";
   import BoardList from "@/components/common/board_list.vue";
-  import BlueBtn from "@/components/common/blue_btn.vue";
+  // import BlueBtn from "@/components/common/blue_btn.vue";
   export default {
     components: {
       BoardTitle,
-      BlueBtn,
+      // BlueBtn,
       BoardList,
       Search,
     },
@@ -68,7 +68,7 @@
     margin: 3.5% 0;
   }
   .list {
-    &:nth-child(odd) {
+    &:nth-child(even) {
       background: #f8f8f8;
     }
   }

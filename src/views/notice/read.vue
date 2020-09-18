@@ -14,7 +14,7 @@
           수정
         </button>
       </BlueBorderBtn>
-      <BlueBorderBtn class="btn">
+      <!-- <BlueBorderBtn class="btn">
         <button slot="blue_border_btn">
           삭제
         </button>
@@ -23,7 +23,7 @@
         <button slot="blue_border_btn">
           이전글
         </button>
-      </BlueBorderBtn>
+      </BlueBorderBtn> -->
       <BlueBorderBtn class="btn last_btn">
         <button slot="blue_border_btn">
           다음글

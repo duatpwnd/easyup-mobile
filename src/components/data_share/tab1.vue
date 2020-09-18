@@ -29,7 +29,12 @@
         <span>파일명</span>
       </template>
     </BoardTitle>
-    <div @click="read()" v-for="(list, index) in arr" :key="index">
+    <div
+      class="file_list"
+      @click="read()"
+      v-for="(list, index) in arr"
+      :key="index"
+    >
       <BoardList>
         <CheckBox slot="checkbox">
           <input
@@ -46,9 +51,6 @@
         </template>
         <template slot="bottom">
           <span class="td left_td">종류 : doc</span>
-          <span class="td">크기 : 31.46k</span>
-          <span class="td ">대상 : 김길동</span>
-          <span class="td ">2020.06.12</span>
         </template>
       </BoardList>
     </div>
@@ -127,6 +129,11 @@
     .search {
       margin: 2% 0;
     }
+    .file_list {
+      &:nth-child(odd) {
+        background: #f8f8f8;
+      }
+    }
     .list_wrap {
       ::v-deep .top_tr {
         .left_td {
@@ -140,11 +147,6 @@
       ::v-deep .bottom_tr {
         .left_td {
           padding-left: 9%;
-        }
-      }
-      .bottom_tr {
-        .td {
-          width: 25%;
         }
       }
     }

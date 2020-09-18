@@ -40,11 +40,10 @@
           />
         </CheckBox>
         <template slot="top">
-          <span class="td left_td">파이썬 완벽 뽀개기</span>
+          <span class="td">강사님께.</span>
         </template>
         <template slot="bottom">
-          <span class="td left_td">수신자 : 윤계상</span>
-          <span class="td">발신일 : 2020.06.12</span>
+          <span class="td ">윤계상 2020.06.12</span>
         </template>
       </BoardList>
     </div>
@@ -132,21 +131,9 @@
       margin: 2% 0;
     }
     .list_wrap {
-      ::v-deep .top_tr {
-        .left_td {
-          padding-left: 9%;
-          width: 100%;
-        }
-      }
-      ::v-deep .bottom_tr {
-        .left_td {
-          padding-left: 9%;
-        }
-      }
-      .bottom_tr {
-        .td {
-          width: 50%;
-        }
+      .td {
+        padding-left: 9%;
+        width: 100%;
       }
     }
   }

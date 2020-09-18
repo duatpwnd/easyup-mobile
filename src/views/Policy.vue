@@ -63,10 +63,11 @@
     background: #f8f8f8;
     padding: 2% 0;
     position: relative;
+    color: #999999;
   }
   .active_bar {
     background: #f8f8f8;
-    padding: 1.118%;
+    height: 4px;
     position: absolute;
     top: 0;
     left: 0;
@@ -75,6 +76,7 @@
   }
   .active {
     background: #ffffff;
+    color: black;
     .active_bar {
       background: #114fff;
     }

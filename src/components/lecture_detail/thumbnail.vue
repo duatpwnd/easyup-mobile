@@ -6,14 +6,17 @@
       title="파이썬 코딩 기본편"
     />
     <div id="tag_wrap">
-      <h3 class="sub_title">프로그래밍</h3>
-      <h2 class="title">파이썬 코딩 기본편 -6시간 뒤면 여러분도 개발자!</h2>
-      <div class="tag_list">
-        <span>#파이썬</span>
-        <span>#python</span>
-        <span>#코딩</span>
-        <span>#coding</span>
-      </div>
+      <slot name="title_wrap">
+        <h3 class="sub_title">프로그래밍</h3>
+        <h2 class="title">파이썬 코딩 기본편 -6시간 뒤면 여러분도 개발자!</h2>
+        <div class="tag_list">
+          <span>#파이썬</span>
+          <span>#python</span>
+          <span>#코딩</span>
+          <span>#coding</span><span>#coding</span><span>#coding</span
+          ><span>#coding</span><span>#coding</span>
+        </div>
+      </slot>
     </div>
     <div class="update_noti">
       <span>2020년 8월 29일(업데이트 일자:2020년 9월 1일)</span>
@@ -37,14 +40,19 @@
       color: #333333;
     }
     .tag_list {
-      margin-top: 2.5%;
+      margin-top: 5px;
+      line-height: 35px;
       span {
         color: #a4a4a4;
         border: 2px solid #757575;
         border-radius: 20px;
-        padding: 1% 2.672%;
-        margin-right: 2%;
-        font-size: 1.5rem;
+        height: 24px;
+        width: 64px;
+        display: inline-block;
+        margin-right: 0.763%;
+        font-size: 12px;
+        text-align: center;
+        line-height: 24px;
       }
     }
   }

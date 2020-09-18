@@ -15,14 +15,17 @@
     </div>
     <div class="section2">
       <Compile>
-        <span class="sum" slot="sum">구독수 : 21,004명</span>
+        <template slot="progress">
+          <span class="btn" slot="progress">상세</span>
+          <span class="date">2020.06.20</span>
+        </template>
       </Compile>
-    </div>
-    <div class="section3">
-      <VideoList></VideoList>
-      <VideoList></VideoList>
-      <VideoList></VideoList>
-      <VideoList></VideoList>
+      <div class="video_wrap">
+        <VideoList></VideoList>
+        <VideoList></VideoList>
+        <VideoList></VideoList>
+        <VideoList></VideoList>
+      </div>
     </div>
   </div>
 </template>
@@ -52,5 +55,10 @@
   }
   .section2 {
     margin-top: 2%;
+    padding: 4px 0 16px 0;
+    background: #f8f8f8;
+    .video_wrap {
+      margin-top: 10px;
+    }
   }
 </style>

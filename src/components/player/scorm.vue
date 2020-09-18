@@ -52,17 +52,19 @@
     .progress {
       width: 100%;
       background: #dbdbdb;
-      height: 16px;
+      height: 8px;
       border-radius: 10px;
       display: inline-block;
-      line-height: 16px;
       margin: 4% 0;
+      position: relative;
       .progress_bar {
         display: inline-block;
         border-radius: 10px;
         background: #114fff;
         width: 40%;
-        height: 16px;
+        height: 8px;
+        position: absolute;
+        top: 0;
       }
     }
     .process {

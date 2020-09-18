@@ -5,9 +5,7 @@
       <h3 slot="info2">구독중인 코스</h3>
       <h3 slot="info3">종료된 강의</h3>
       <h3 slot="info4">종료된 코스</h3>
-      <span slot="convert" @click="convert()">
-        <span class="convert">강사전환</span>
-      </span>
+      <span slot="convert" @click="convert()" class="convert">강사전환</span>
     </UserInfo>
     <CurrentIngLec>
       <h2 slot="title1">현재 구독중인 강의</h2>

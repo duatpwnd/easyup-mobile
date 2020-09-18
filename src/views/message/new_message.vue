@@ -42,7 +42,6 @@
 <style scoped lang="scss">
   .msg_send {
     padding: 4.445%;
-
     .title {
       font-size: 2rem;
     }

@@ -86,9 +86,9 @@
 <style scoped lang="scss">
   .list {
     .item_section {
-      border-bottom: 3px solid #ccc;
+      border-bottom: 3px solid #f8f8f8;
       .items {
-        border-bottom: 3px solid #ccc;
+        border-bottom: 3px solid #f8f8f8;
         padding: 2% 4.445%;
       }
       .no_items {
@@ -108,14 +108,15 @@
     }
     .toggle_btn {
       text-align: center;
-
+      padding: 2% 0;
       position: relative;
+      border-bottom: 2px solid #f8f8f8;
       img {
         // width: 3.333%; /* 24px/720px */
         width: 4.583%;
         position: absolute;
         top: 0;
-        left: 0;
+        left: 4.445%;
         bottom: 0;
         margin: auto;
       }

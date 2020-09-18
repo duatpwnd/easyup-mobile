@@ -13,10 +13,8 @@
     <div class="section">
       <LectureCourseList></LectureCourseList>
     </div>
-    <div class="section section2">
-      <Compile>
-        <span class="btn btn2" slot="sum">통계</span>
-      </Compile>
+    <div class="section2">
+      <Compile> </Compile>
     </div>
     <div class="section section3">
       <LectureCourseList></LectureCourseList>
@@ -57,5 +55,8 @@
   .section3 {
     padding-top: 0;
     padding-bottom: 20%;
+    .list_wrap {
+      margin-top: 10px;
+    }
   }
 </style>

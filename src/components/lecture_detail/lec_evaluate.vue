@@ -5,11 +5,11 @@
       <div class="left_sec">
         <h3>5.0</h3>
         <div class="star_wrap">
-          <span><img src="@/assets/images/common/big_star.png" alt=""/></span>
-          <span><img src="@/assets/images/common/big_star.png" alt=""/></span>
-          <span><img src="@/assets/images/common/big_star.png" alt=""/></span>
-          <span><img src="@/assets/images/common/big_star.png" alt=""/></span>
-          <span><img src="@/assets/images/common/big_star.png" alt=""/></span>
+          <img src="@/assets/images/common/big_star.png" alt="" />
+          <img src="@/assets/images/common/big_star.png" alt="" />
+          <img src="@/assets/images/common/big_star.png" alt="" />
+          <img src="@/assets/images/common/big_star.png" alt="" />
+          <img src="@/assets/images/common/big_star.png" alt="" />
         </div>
         <button class="eval_btn">강의 평가</button>
       </div>
@@ -17,9 +17,11 @@
         <div class="line">
           <span class="left_star_wrap">
             <span class="left_star">
-              <span class="star">
-                <img src="@/assets/images/common/small_star.png" alt="" />
-              </span>
+              <img
+                src="@/assets/images/common/small_star.png"
+                alt=""
+                class="star"
+              />
               <span class="star_count">5</span>
             </span>
           </span>
@@ -28,9 +30,11 @@
         <div class="line">
           <span class="left_star_wrap">
             <span class="left_star">
-              <span class="star">
-                <img src="@/assets/images/common/small_star.png" alt="" />
-              </span>
+              <img
+                src="@/assets/images/common/small_star.png"
+                alt=""
+                class="star"
+              />
               <span class="star_count">4</span>
             </span>
           </span>
@@ -39,9 +43,11 @@
         <div class="line">
           <span class="left_star_wrap">
             <span class="left_star">
-              <span class="star">
-                <img src="@/assets/images/common/small_star.png" alt="" />
-              </span>
+              <img
+                src="@/assets/images/common/small_star.png"
+                alt=""
+                class="star"
+              />
               <span class="star_count">3</span>
             </span>
           </span>
@@ -50,9 +56,11 @@
         <div class="line">
           <span class="left_star_wrap">
             <span class="left_star">
-              <span class="star">
-                <img src="@/assets/images/common/small_star.png" alt="" />
-              </span>
+              <img
+                src="@/assets/images/common/small_star.png"
+                alt=""
+                class="star"
+              />
               <span class="star_count">2</span>
             </span>
           </span>
@@ -61,9 +69,11 @@
         <div class="line">
           <span class="left_star_wrap">
             <span class="left_star">
-              <span class="star">
-                <img src="@/assets/images/common/small_star.png" alt="" />
-              </span>
+              <img
+                src="@/assets/images/common/small_star.png"
+                alt=""
+                class="star"
+              />
               <span class="star_count">1</span>
             </span>
           </span>
@@ -111,44 +121,41 @@
     padding: 4.445%;
   }
   .section_wrap {
-    margin-top: 20px;
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
-    }
+    margin-top: 10px;
+
     .left_sec {
-      width: 40.5%;
+      width: 41%;
       text-align: center;
-      float: left;
+      vertical-align: middle;
+      display: inline-block;
       h3 {
-        font-size: 1.875rem;
+        font-size: 15px;
       }
       .star_wrap {
-        margin-bottom: 20px;
-        margin-top: 10px;
-        span {
-          width: 10.6%;
-          display: inline-block;
+        margin: 5px 0;
+        img {
+          width: 17px;
+          height: 16px;
         }
       }
       .eval_btn {
         background: #114fff;
         color: white;
         border-radius: 5px;
-        font-size: 1.375rem;
-        padding: 2% 12%;
+        font-size: 11px;
+        padding: 3px 26.95%;
       }
     }
     .right_sec {
-      width: 56.5%;
-      margin-left: 3%;
-      float: right;
+      width: 59%;
+      display: inline-block;
+      vertical-align: middle;
       span {
         display: inline-block;
         vertical-align: middle;
         img {
           vertical-align: middle;
+          width: 50%;
         }
       }
       .line {
@@ -156,27 +163,34 @@
           margin-top: 1%;
         }
         .left_star_wrap {
-          width: 25%;
+          width: 23%;
           .left_star {
             width: 100%;
-
+            .star {
+              width: 10px;
+              height: 10px;
+            }
             .star_count {
-              margin-left: 15%;
-              font-size: 18px;
+              font-size: 12px;
+              margin-left: 4px;
             }
           }
         }
         .progress {
-          width: 75%;
+          width: 77%;
           background: #dbdbdb;
-          height: 23px;
+          height: 8px;
           border-radius: 4px;
+          position: relative;
           .progress_bar {
             border-radius: 4px;
             vertical-align: unset;
             background: #114fff;
             width: 40%;
-            height: 23px;
+            height: 8px;
+            position: absolute;
+            top: 0;
+            left: 0;
           }
         }
       }

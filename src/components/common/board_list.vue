@@ -54,6 +54,10 @@
       }
     }
     .bottom_tr {
+      .td {
+        color: #999999;
+        font-size: 1.125rem;
+      }
       .left_td {
         width: 33.33%;
       }

@@ -91,6 +91,7 @@
   }
   .router-view {
     position: relative;
+    padding-bottom: 50%;
   }
   @media all and (max-width: 700px) {
     html {
@@ -111,6 +112,11 @@
   @media all and (max-width: 420px) {
     html {
       font-size: 9px;
+    }
+  }
+  @media all and (max-width: 360px) {
+    html {
+      font-size: 8px;
     }
   }
 </style>

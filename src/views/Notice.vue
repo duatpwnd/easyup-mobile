@@ -2,18 +2,13 @@
   <div id="notice">
     <div v-if="notice">
       <h2 class="title">공지사항</h2>
-      <Notice></Notice>
     </div>
     <router-view />
   </div>
 </template>
 <script>
-  import Notice from "@/components/common/notice.vue";
-
   export default {
-    components: {
-      Notice,
-    },
+    components: {},
     data() {
       return {
         notice: true,

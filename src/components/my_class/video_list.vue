@@ -22,7 +22,6 @@
 <style scoped lang="scss">
   .video_list {
     width: 100%;
-    background: #f8f8f8;
     padding: 0.5% 4.445%;
     box-sizing: border-box;
     span {

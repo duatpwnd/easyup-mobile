@@ -170,12 +170,13 @@
         .subscribe_btn {
           border-radius: 5px;
           margin-left: 3%;
-          padding: 2px 3.05%;
+          width: 54px;
+          height: 16px;
           vertical-align: middle;
           font-family: inherit;
-          font-size: 1.125rem;
+          font-size: 9px;
           color: #114fff;
-          border: 2px solid #114fff;
+          border: 1px solid #114fff;
         }
         .total_lec {
           font-size: 1.25rem;

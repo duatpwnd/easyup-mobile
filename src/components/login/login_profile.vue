@@ -15,9 +15,11 @@
     <div class="lnb_menu">
       <button class="lnb" @click="lecture()">강의</button>
       <button class="lnb">코스</button>
-      <button class="lnb">기술블로그</button>
+      <button class="lnb" @click="goToPath('/techBlog')">기술블로그</button>
       <button class="lnb">내강의실</button>
-      <button class="lnb" @click="modify()">개인정보 확인/수정</button>
+      <button class="lnb" @click="goToPath('/profileModify')">
+        개인정보 확인/수정
+      </button>
     </div>
     <div class="support">
       <router-link to="/">공지사항</router-link>
@@ -44,10 +46,11 @@
       };
     },
     methods: {
-      modify() {
-        this.$router.push("/profileModify").catch(() => {});
+      goToPath(url) {
+        this.$router.push(url).catch(() => {});
         this.$store.commit("LoginMenuToggle");
       },
+
       lecture() {
         this.$EventBus.$emit("GoToLecture", true);
       },

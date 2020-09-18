@@ -35,12 +35,12 @@
             name: require("@/assets/images/common/lec_course_ico.png"),
             active: require("@/assets/images/common/lec_course_active_ico.png"),
           },
-          {
-            title: "과제게시판",
-            path: "/teskboard",
-            name: require("@/assets/images/common/board_ico.png"),
-            active: require("@/assets/images/common/board_active_ico.png"),
-          },
+          // {
+          //   title: "과제게시판",
+          //   path: "/teskboard",
+          //   name: require("@/assets/images/common/board_ico.png"),
+          //   active: require("@/assets/images/common/board_active_ico.png"),
+          // },
           {
             title: "공지사항",
             path: "/notice",
@@ -81,31 +81,24 @@
         clear: both;
       }
       li {
-        width: 20%;
+        width: 25%;
+
         float: left;
         text-align: center;
         a {
           display: inline-block;
           width: 100%;
-          padding: 10% 0;
-          .ico_1 {
-            width: 22.222%; /* 32px/144px */
-          }
-          .ico_2,
-          .ico_4 {
-            width: 22.917%; /* 33px/144px */
-          }
-          .ico_3 {
-            width: 19.444%; /* 28px/144px */
-          }
-          .ico_5 {
-            width: 20.833%; /* 30px/144px */
+          padding: 10px;
+          box-sizing: border-box;
+          img {
+            height: 17px;
+            width: 16px;
           }
           h3 {
             color: #999999;
-            font-size: 1.125rem;
+            font-size: 9px;
             font-weight: 500;
-            margin-top: 5%;
+            margin-top: 2.3px;
           }
         }
         .router-link-active {

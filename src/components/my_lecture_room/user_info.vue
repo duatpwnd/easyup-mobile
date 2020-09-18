@@ -85,17 +85,19 @@
         margin-bottom: 3%;
       }
       .report {
-        font-size: 1.25rem;
+        font-size: 10px;
         font-weight: 600;
         color: #114fff;
         border-radius: 4px;
         margin-right: 5%;
-        width: 40%;
+        width: 68px;
+        padding: 0 7.5px;
+        height: 20px;
+        line-height: 20px;
         display: inline-block;
-        padding: 1.376% 8%;
         box-sizing: border-box;
         background: url("~@/assets/images/mylecture_room/report_ico.png")
-          no-repeat 80% center / 15.132%; /* 23px/152px */
+          no-repeat 100%-7.5 center/ 11.5px 11.5px;
         background-color: white;
         span {
           font-weight: 600;
@@ -104,9 +106,8 @@
       .convert {
         @extend .report;
 
-        padding-left: 5%;
         background: url("~@/assets/images/mylecture_room/convert_ico.png")
-          no-repeat 90% center / 13.816%; /* 21px/152px */
+          no-repeat 100%-7.5 center / 10.5px 8px;
         background-color: white;
       }
       .update_date {

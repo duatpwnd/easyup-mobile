@@ -5,55 +5,51 @@
 
     <div class="category_list">
       <router-link to="/">
-        <span>
-          <img
-            class="lec1_ico"
-            src="@/assets/images/main/category_lec1_ico.png"
-            alt="프로그래밍"
-            title="프로그래밍"
-          />
-          <h3>프로그래밍</h3>
-        </span>
+        <img
+          style="height:15px;"
+          class="lec1_ico"
+          src="@/assets/images/main/category_lec1_ico.png"
+          alt="프로그래밍"
+          title="프로그래밍"
+        />
+        <h3>프로그래밍</h3>
       </router-link>
 
       <router-link to="/">
-        <span>
-          <img
-            class="lec2_ico"
-            src="@/assets/images/main/category_lec2_ico.png"
-            alt="머신러닝/딥러닝"
-            title="머신러닝/딥러닝"
-          />
-          <h3>머신러닝/딥러닝</h3>
-        </span>
+        <img
+          style="height:16.5px;"
+          class="lec2_ico"
+          src="@/assets/images/main/category_lec2_ico.png"
+          alt="머신러닝/딥러닝"
+          title="머신러닝/딥러닝"
+        />
+        <h3>머신러닝/딥러닝</h3>
       </router-link>
 
       <router-link to="/">
-        <span>
-          <img
-            class="lec3_ico"
-            src="@/assets/images/main/category_lec5_ico.png"
-            alt="전산이론"
-            title="전산이론"
-          />
-          <h3>전산이론</h3>
-        </span>
+        <img
+          style="height:17px;"
+          class="lec3_ico"
+          src="@/assets/images/main/category_lec5_ico.png"
+          alt="전산이론"
+          title="전산이론"
+        />
+        <h3>전산이론</h3>
       </router-link>
 
       <router-link to="/">
-        <span>
-          <img
-            class="lec4_ico"
-            src="@/assets/images/main/category_lec6_ico.png"
-            alt="알고리즘"
-            title="알고리즘"
-          />
-          <h3>알고리즘</h3>
-        </span>
+        <img
+          style="height:15px;"
+          class="lec4_ico"
+          src="@/assets/images/main/category_lec6_ico.png"
+          alt="알고리즘"
+          title="알고리즘"
+        />
+        <h3>알고리즘</h3>
       </router-link>
     </div>
     <div class="notice_wrap">
-      <h1 class="notice_title">공지사항</h1>
+      <span class="notice_title">공지사항</span>
       <span :class="$mq" class="notice_contents"
         >코로나 극복 프로젝트 모든 강의 25% 할인</span
       >
@@ -79,74 +75,84 @@
       .more_view {
         font-family: "NotoSansCJKkr-Medium";
         position: absolute;
-        font-size: 1.125rem;
+        font-size: 9px;
         color: #114fff;
         border: 1px solid #114fff;
         top: 0;
         right: 0;
         bottom: 0;
+        height: 16px;
+        padding: 1px 10px;
         border-radius: 4px;
-        padding: 2px 20px;
+        margin: auto;
       }
     }
     h3 {
-      font-size: 0.875rem;
-      margin-top: 10px;
+      font-size: 7px;
       color: #333333;
       white-space: nowrap;
+      position: absolute;
+      top: 30px;
+      left: 0;
+      right: 0;
+      margin: auto;
     }
     p {
-      margin-top: 10px;
+      margin-top: 4px;
       font-size: 1.125rem;
       color: #999999;
     }
     .category_list {
-      margin-top: 20px;
+      margin-top: 8px;
 
       a {
         border: 1px solid #666666;
-
         vertical-align: middle;
-        box-sizing: border-box;
         text-align: center;
         display: inline-block;
-        width: 23.173%;
-        // .lec1_ico {
-        //   width: 62.86%;
-        // }
+        width: 23.17%;
+        height: 48px;
+        position: relative;
+        box-sizing: border-box;
         &:not(:last-child) {
           margin-right: 2%;
         }
-        span {
-          display: inline-block;
-          padding: 11.34% 6.098%;
-          img {
-            width: unset;
-            // height: 30px;
-          }
+
+        img {
+          position: absolute;
+          width: unset;
+          top: 10px;
+          left: 0;
+          right: 0;
+          margin: auto;
         }
       }
     }
     .notice_wrap {
       background: #f4f4f4;
       border-radius: 30px;
-      padding: 1.45% 4.88%;
-      margin-top: 5%;
+      padding: 4px 4.88%;
+      margin-top: 24px;
+      position: relative;
+      height: 24px;
+      box-sizing: border-box;
       .notice_title {
         color: #114fff;
-        font-size: 1.25rem;
-        font-weight: bold;
-        display: inline-block;
-        width: 20%;
-        text-align: left;
+        font-size: 10px;
+        font-weight: 600;
+        position: absolute;
+        top: 0;
+        line-height: 24px;
       }
       .notice_contents {
-        text-align: left;
         color: #787878;
-        margin-left: 5%;
-        font-size: 1.25rem;
-        display: inline-block;
-        width: 75%;
+        font-size: 10px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        text-align: center;
+        width: 100%;
+        line-height: 24px;
       }
     }
   }

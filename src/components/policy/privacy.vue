@@ -45,6 +45,6 @@ d. 보안에 따른 활용
     font-family: "NotoSansCJKkr-DemiLight";
     white-space: pre-wrap;
     color: #666666;
-    font-size: 18px;
+    font-size: 9px;
   }
 </style>
