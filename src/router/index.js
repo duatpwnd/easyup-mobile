@@ -30,6 +30,12 @@ const routes = [
     meta: { isFooter: false, gnbBottomMenu: false, profileMsgTab: false },
   },
   {
+    path: "/findByEmail",
+    name: "이메일로 비밀번호 임시 발급",
+    component: () => import("../views/FindByEmail.vue"),
+    meta: { isFooter: false, gnbBottomMenu: false, profileMsgTab: false },
+  },
+  {
     path: "/policy",
     name: "policy",
     component: () => import("../views/Policy.vue"),
@@ -214,8 +220,28 @@ const routes = [
   {
     path: "/bookmark_manage",
     name: "책갈피 관리",
-    component: () => import("@/views/data_share/upload.vue"),
-    meta: { gnbBottomMenu: true },
+    redirect: "/bookmark_manage/list",
+    component: () => import("@/views/BookmarkManage.vue"),
+    children: [
+      {
+        path: "list",
+        name: "책갈피 리스트",
+        component: () => import("@/views/bookmark_manage/list.vue"),
+        meta: { gnbBottomMenu: true },
+      },
+      {
+        path: "read",
+        name: "책갈피 메모읽기",
+        component: () => import("@/views/bookmark_manage/read.vue"),
+        meta: { gnbBottomMenu: true },
+      },
+      {
+        path: "add",
+        name: "책갈피 메모추가",
+        component: () => import("@/views/bookmark_manage/add.vue"),
+        meta: { gnbBottomMenu: true },
+      },
+    ],
   },
   {
     path: "/techBlog",
@@ -227,13 +253,13 @@ const routes = [
         path: "list",
         name: "기슬블로그 리스트",
         component: () => import("@/views/techblog/list.vue"),
-        meta: { gnbBottomMenu: true },
+        meta: { isFooter: false, gnbBottomMenu: false, profileMsgTab: false },
       },
       {
         path: "read",
         name: "기슬블로그 읽기",
         component: () => import("@/views/techblog/read.vue"),
-        meta: { gnbBottomMenu: true },
+        meta: { isFooter: true },
       },
     ],
   },

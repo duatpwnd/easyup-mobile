@@ -50,8 +50,10 @@
           <textarea
             name=""
             id=""
+            readonly
+            disabled
             rows="3"
-            placeholder="서비스 이용약관"
+            placeholder="서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관서비스 이용약관"
           ></textarea>
         </div>
         <div class="row agree">
@@ -94,10 +96,10 @@
     .noti {
       color: #999999;
       font-size: 1.25rem;
-      margin: 2% 0;
+      margin: 4px 0 15px 0;
     }
     .blue_btn {
-      margin-top: 5%;
+      margin-top: 20px;
       width: calc(100% - 35%);
       float: right;
       ::v-deep button {
@@ -105,51 +107,46 @@
       }
     }
     .row {
-      margin-top: 2%;
+      margin-top: 5px;
       clear: both;
 
       input,
       textarea,
       select {
-        font-size: 1.5rem;
         font-family: "NotoSansCJKkr-Regular";
+        font-size: 9px;
         width: calc(100% - 35%);
-        box-sizing: border-box;
         border: 1px solid #ccc;
         border-radius: 5px;
         outline: none;
-        padding: 1%;
+        padding: 5px 6px;
+        height: 28px;
+        line-height: 13px;
+        box-sizing: border-box;
       }
       select {
         background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
-          center;
+          center / 7px 5px;
       }
       textarea {
         vertical-align: top;
         resize: none;
-        font-size: 1.125rem;
+
+        height: 60px;
         &::placeholder {
           color: #666666;
-          font-size: 1.125rem;
+          font-size: 9px;
         }
       }
 
       .dt {
         width: 35%;
         display: inline-block;
-        font-size: 1.5rem;
+        font-size: 12px;
         font-family: "NotoSansCJKkr-Regular";
         .required {
           color: #114fff;
         }
-      }
-      .file {
-        width: auto;
-        color: #114fff;
-        border: 1px solid #114fff;
-        border-radius: 5px;
-        font-size: 1.5rem;
-        padding: 0.763% 5.946%;
       }
     }
     .agree {

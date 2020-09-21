@@ -41,7 +41,7 @@
     border: 1px solid #333333;
     color: black;
     font-size: 1.25rem;
-    width: 100%;
+    width: 91.11%;
     line-height: 2.3;
     padding: 0 1.755%;
     padding-right: 10%;

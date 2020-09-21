@@ -64,8 +64,8 @@
 <style scoped lang="scss">
   .blue_btn {
     ::v-deep button {
-      font-size: 1.5rem;
-      padding: 2% 0;
+      height: 28px;
+      font-size: 12px;
     }
   }
   .menu_modal {

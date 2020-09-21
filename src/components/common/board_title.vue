@@ -21,7 +21,7 @@
     border-top: 2px solid black;
     margin-top: 3%;
     background: #f8f8f8;
-    padding: 1%;
+    padding: 5px;
     text-align: center;
     span {
       display: inline-table;

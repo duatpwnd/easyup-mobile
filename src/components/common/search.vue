@@ -34,7 +34,7 @@
       font-size: 1.25rem;
       color: #333333;
       background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
-        center / 10%;
+        center / 7px 5px;
     }
     .search_contents {
       float: left;
@@ -48,7 +48,7 @@
       box-sizing: border-box;
       margin-left: 2%;
       background: url("~@/assets/images/lec_list/search_btn.png") no-repeat 95%
-        center / 5%;
+        center / 12px 12px;
     }
   }
 </style>

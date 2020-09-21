@@ -127,7 +127,7 @@
     }
     .title {
       display: inline-block;
-      border-bottom: 10px solid #5ef4ff;
+      border-bottom: 8px solid #5ef4ff;
     }
     .title2 {
       margin-top: 50px;
@@ -145,9 +145,9 @@
           display: block;
           font-size: 1.5rem;
           .check_ico {
-            width: unset;
-            margin-right: 2%;
-            vertical-align: -1px;
+            width: 10px;
+            height: 9px;
+            margin-right: 5px;
           }
         }
       }

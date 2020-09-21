@@ -19,10 +19,13 @@
     background: #114fff;
     border: 2px solid #114fff;
     color: white;
-    font-size: 1.75rem;
+    font-size: 14px;
     width: 100%;
     border-radius: 5px;
-    padding: 1.5% 0;
+    height: 28px;
+    line-height: 20px;
+    padding: 4px 0;
+    box-sizing: border-box;
     font-family: "NotoSansCJKkr-Medium";
   }
 </style>

@@ -50,24 +50,26 @@
       }
     }
     .row {
-      margin-top: 2%;
+      margin-top: 5px;
       select {
-        font-size: 1.5rem;
         font-family: "NotoSansCJKkr-Regular";
+        font-size: 12px;
         width: calc(100% - 35%);
-        box-sizing: border-box;
         border: 1px solid #ccc;
         border-radius: 5px;
         outline: none;
-        padding: 1%;
+        padding: 5px 6px;
+        height: 28px;
+        line-height: 13px;
+        box-sizing: border-box;
         background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
-          center;
+          center / 7px 5px;
       }
 
       .dt {
         width: 35%;
         display: inline-block;
-        font-size: 1.5rem;
+        font-size: 12px;
         font-family: "NotoSansCJKkr-Regular";
         .required {
           color: #114fff;
@@ -77,12 +79,15 @@
         display: none;
       }
       .file {
-        width: auto;
+        height: 24px;
         color: #114fff;
         border: 1px solid #114fff;
         border-radius: 5px;
-        font-size: 1.5rem;
-        padding: 0.763% 5.946%;
+        font-size: 11px;
+        width: 76px;
+        display: inline-block;
+        text-align: center;
+        line-height: 24px;
       }
     }
   }

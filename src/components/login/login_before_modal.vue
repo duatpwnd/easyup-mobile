@@ -50,7 +50,7 @@
     },
     methods: {
       pwChange() {
-        this.$router.push("/pw_change").catch(() => {});
+        this.$router.push("/findByEmail").catch(() => {});
         this.$store.commit("LoginMenuToggle");
       },
       login() {
@@ -68,8 +68,8 @@
 <style scoped lang="scss">
   .blue_btn {
     ::v-deep button {
-      padding: 2.534%; /* 10px/454px */
-      font-size: 1.5rem;
+      height: 28px;
+      font-size: 12px;
     }
   }
   .menu_modal {
@@ -85,12 +85,13 @@
       padding: 4.445%;
       input {
         width: 100%;
-        padding: 2.534% 4.415%;
+        height: 28px;
         box-sizing: border-box;
         border: 2px solid #dbdbdb;
         border-radius: 4px;
         background: white;
-        font-size: 1.5rem;
+        font-size: 12px;
+        padding: 5px 10px;
       }
 
       .user_pw {

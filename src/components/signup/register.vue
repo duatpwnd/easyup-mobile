@@ -120,7 +120,7 @@
       }
       select {
         background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
-          center;
+          center / 7px 5px;
       }
       textarea {
         vertical-align: top;

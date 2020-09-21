@@ -37,7 +37,7 @@
         float: left;
         color: #333333;
         font-size: 1.25rem;
-        padding: 1%;
+        padding: 5px;
         box-sizing: border-box;
         text-overflow: ellipsis;
         overflow: hidden;

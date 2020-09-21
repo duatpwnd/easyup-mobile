@@ -92,7 +92,7 @@
           box-sizing: border-box;
           img {
             height: 17px;
-            width: 16px;
+            width: 20%;
           }
           h3 {
             color: #999999;

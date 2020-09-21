@@ -72,9 +72,9 @@
   .blue_btn {
     ::v-deep button {
       border-radius: 20px;
-      font-size: 2.25rem;
-      margin: 15px 0;
-      padding: 2% 0;
+      margin: 10px 0;
+      height: 40px;
+      line-height: 32px;
     }
   }
   #subscribe {
@@ -107,8 +107,9 @@
       background: #114fff;
       color: #ffffff;
       font-family: "NotoSansCJKkr-Medium";
-      font-size: 2.25rem;
-      padding: 15px 0;
+      font-size: 18px;
+      height: 40px;
+      line-height: 40px;
       width: 100%;
       max-width: 720px;
       z-index: 2;
