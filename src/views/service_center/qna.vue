@@ -28,7 +28,7 @@
       <fieldset>
         <div class="row">
           <label class="dt">질문선택<span class="required">＊</span></label>
-          <select name="" id="">
+          <select>
             <option value="">강동원</option>
           </select>
         </div>
@@ -52,12 +52,7 @@
 
         <div class="row">
           <label class="dt">내용<span class="required">＊</span></label>
-          <textarea
-            name=""
-            id=""
-            rows="3"
-            placeholder="서비스 이용약관"
-          ></textarea>
+          <textarea rows="3" placeholder="서비스 이용약관"></textarea>
         </div>
         <div class="row">
           <label class="dt">파일첨부</label>

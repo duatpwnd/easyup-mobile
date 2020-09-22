@@ -28,7 +28,7 @@
             alt="책갈피 메모읽기"
             title="책갈피 메모읽기"
             class="bookmark_read_btn"
-            @click="go_to_path('/bookmark_manage/read')"
+            @click="go_to_path('/bookmarkManage/read')"
           />
         </template>
         <span class="td" slot="bottom">2020.06.12</span>
@@ -44,7 +44,7 @@
             alt="책갈피 메모생성"
             title="책갈피 메모생성"
             class="bookmark_add_btn"
-            @click="go_to_path('/bookmark_manage/add')"
+            @click="go_to_path('/bookmarkManage/add')"
           />
         </template>
         <span class="td" slot="bottom">2020.06.12</span>

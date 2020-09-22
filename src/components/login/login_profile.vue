@@ -35,6 +35,7 @@
 </template>
 <script>
   import BlueBtn from "@/components/common/blue_btn.vue";
+  import { mapState, mapMutations } from "vuex";
   export default {
     components: {
       BlueBtn,
@@ -45,17 +46,26 @@
         userpw: "",
       };
     },
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_loginModal: "login_modal",
+      }),
+    },
     methods: {
       goToPath(url) {
         this.$router.push(url).catch(() => {});
-        this.$store.commit("LoginMenuToggle");
+        this.$store.commit("toggleStore/Toggle", {
+          login_modal: !this.toggleStore_loginModal,
+        });
       },
 
       lecture() {
         this.$EventBus.$emit("GoToLecture", true);
       },
       logout() {
-        this.$store.commit("LoginModalChange", true);
+        this.$store.commit("toggleStore/Toggle", {
+          before_login: true,
+        });
       },
     },
     mounted() {},

@@ -24,7 +24,7 @@
         ></textarea>
         <div class="btn_wrap">
           <BlueBtn class="left">
-            <button slot="blue_btn">입력</button>
+            <button slot="blue_btn" @click="enter()">입력</button>
           </BlueBtn>
           <BlueBtn class="right">
             <button slot="blue_btn" @click="write_cancel()">취소</button>
@@ -67,6 +67,9 @@
       };
     },
     methods: {
+      enter() {
+        this.write_cancel();
+      },
       write() {
         this.editor = true;
         this.write_btn = false;

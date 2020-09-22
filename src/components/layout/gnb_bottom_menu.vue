@@ -31,7 +31,7 @@
         menu: [
           {
             title: "내 강좌/코스",
-            path: "/myclass",
+            path: "/myClass",
             name: require("@/assets/images/common/lec_course_ico.png"),
             active: require("@/assets/images/common/lec_course_active_ico.png"),
           },
@@ -55,7 +55,7 @@
           },
           {
             title: "책갈피 관리",
-            path: "/bookmark_manage",
+            path: "/bookmarkManage",
             name: require("@/assets/images/common/bookmark_ico.png"),
             active: require("@/assets/images/common/bookmark_active_ico.png"),
           },

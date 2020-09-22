@@ -67,11 +67,13 @@
     },
     methods: {
       goToComponent(path) {
-        this.$router.push({
-          query: {
-            category: path,
-          },
-        });
+        this.$router
+          .push({
+            query: {
+              category: path,
+            },
+          })
+          .catch(() => {});
       },
     },
   };

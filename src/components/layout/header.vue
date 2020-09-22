@@ -26,14 +26,22 @@
   </div>
 </template>
 <script>
+  import { mapState, mapMutations } from "vuex";
   export default {
     components: {},
     data() {
       return {};
     },
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_loginModal: "login_modal",
+      }),
+    },
     methods: {
       menu_toggle() {
-        this.$store.commit("LoginMenuToggle");
+        this.$store.commit("toggleStore/Toggle", {
+          login_modal: !this.toggleStore_loginModal,
+        });
       },
     },
   };

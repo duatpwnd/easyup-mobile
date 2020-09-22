@@ -30,13 +30,15 @@
     },
     methods: {
       toggle(type, index) {
-        this.$router.push({
-          name: "policy",
-          query: {
-            action: type,
-            active: index,
-          },
-        });
+        this.$router
+          .push({
+            name: "policy",
+            query: {
+              action: type,
+              active: index,
+            },
+          })
+          .catch(() => {});
       },
       compSet() {
         this.type = this.$route.query.action;

@@ -22,8 +22,10 @@
       </fieldset>
     </form>
     <div class="user_find">
-      <span @click="signup()">회원가입</span>
-      <span class="forget" @click="pwChange()">비밀번호 분실</span>
+      <span @click="goToPath('/signup')">회원가입</span>
+      <span class="forget" @click="goToPath('/findByEmail')"
+        >비밀번호 분실</span
+      >
     </div>
     <div class="lec_course">
       <button class="lec">강의</button>
@@ -38,6 +40,7 @@
 </template>
 <script>
   import BlueBtn from "@/components/common/blue_btn.vue";
+  import { mapState, mapMutations } from "vuex";
   export default {
     components: {
       BlueBtn,
@@ -48,18 +51,23 @@
         userpw: "",
       };
     },
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_loginModal: "login_modal",
+      }),
+    },
     methods: {
-      pwChange() {
-        this.$router.push("/findByEmail").catch(() => {});
-        this.$store.commit("LoginMenuToggle");
+      goToPath(url) {
+        this.$router.push(url).catch(() => {});
+        this.$store.commit("toggleStore/Toggle", {
+          login_modal: !this.toggleStore_loginModal,
+        });
       },
       login() {
         //post
-        this.$store.commit("LoginModalChange", false);
-      },
-      signup() {
-        this.$router.push("/signup").catch(() => {});
-        this.$store.commit("LoginMenuToggle");
+        this.$store.commit("toggleStore/Toggle", {
+          before_login: false,
+        });
       },
     },
     mounted() {},

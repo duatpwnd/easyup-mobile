@@ -4,19 +4,17 @@
     <transition name="fade" mode="out-in">
       <keep-alive>
         <div class="router-view">
-          <div v-if="this.$store.state.login_modal">
-            <LoginBeforeModal
-              v-if="this.$store.state.before_login"
-            ></LoginBeforeModal>
+          <div v-if="toggleStore_loginModal">
+            <LoginBeforeModal v-if="toggleStore_beforeLogin"></LoginBeforeModal>
             <LoginAfterModal v-else></LoginAfterModal>
           </div>
           <router-view />
         </div>
       </keep-alive>
     </transition>
-    <GnbBottomMenu v-if="this.$store.state.gnb_bottom_menu"></GnbBottomMenu>
-    <Footer v-if="this.$store.state.isFooter"></Footer>
-    <ProfileMsgTab v-if="this.$store.state.profile_msg_tab"></ProfileMsgTab>
+    <GnbBottomMenu v-if="toggleStore_gnbBottomMenu"></GnbBottomMenu>
+    <Footer v-if="toggleStore_isFooter"></Footer>
+    <ProfileMsgTab v-if="toggleStore_profileMsgTab"></ProfileMsgTab>
   </div>
 </template>
 <script>
@@ -26,6 +24,7 @@
   import LoginAfterModal from "@/components/login/login_after_modal.vue";
   import GnbBottomMenu from "@/components/layout/gnb_bottom_menu.vue";
   import ProfileMsgTab from "@/components/layout/profile_msg_tab.vue";
+  import { mapState, mapMutations } from "vuex";
   export default {
     components: {
       ProfileMsgTab,
@@ -35,10 +34,17 @@
       Header,
       Footer,
     },
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_isFooter: "isFooter",
+        toggleStore_profileMsgTab: "ProfileMsgTab",
+        toggleStore_gnbBottomMenu: "GnbBottomMenu",
+        toggleStore_loginModal: "login_modal",
+        toggleStore_beforeLogin: "before_login",
+      }),
+    },
     data() {
-      return {
-        // transitionName: "fade",
-      };
+      return {};
     },
     methods: {},
     mounted() {},
@@ -88,10 +94,13 @@
   #app {
     max-width: 720px;
     margin: 0 auto;
+    height: 100%;
+    position: relative;
   }
   .router-view {
     position: relative;
     padding-bottom: 50%;
+    min-height: 100%;
   }
   @media all and (max-width: 700px) {
     html {

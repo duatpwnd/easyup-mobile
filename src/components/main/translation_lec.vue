@@ -7,7 +7,7 @@
     <swiper class="swiper" :options="swiperOption">
       <swiper-slide>
         <LecItem
-          ><router-link class="lec_list" slot="router" to="/lecture_type3">
+          ><router-link class="lec_list" slot="router" to="/">
             <img
               src="@/assets/images/main/popular_lec1.png"
               alt="이지업"

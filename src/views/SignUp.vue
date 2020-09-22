@@ -41,7 +41,7 @@
         </div>
         <div class="row">
           <label class="dt">언어</label>
-          <select name="" id="">
+          <select name="">
             <option value="">korea</option>
           </select>
         </div>
@@ -49,7 +49,6 @@
           <label class="dt">서비스 이용약관</label>
           <textarea
             name=""
-            id=""
             readonly
             disabled
             rows="3"
@@ -81,7 +80,7 @@
     },
     methods: {
       register() {
-        this.$router.push("/signup_complete").catch(() => {});
+        this.$router.push("/signupComplete").catch(() => {});
       },
     },
   };

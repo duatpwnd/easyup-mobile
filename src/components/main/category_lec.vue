@@ -4,7 +4,7 @@
     <p>관심 있는 분야의 강의를 한눈에 확인하세요</p>
 
     <div class="category_list">
-      <router-link to="/">
+      <router-link to="/category">
         <img
           style="height:15px;"
           class="lec1_ico"
