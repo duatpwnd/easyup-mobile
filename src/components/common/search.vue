@@ -1,7 +1,9 @@
 <template>
   <div class="search">
     <select class="select" name="" id="">
-      <option value="">전체</option>
+      <option value="">최신 등록순</option>
+      <option value="">이름순</option>
+      <option value="">평점순</option>
     </select>
     <slot name="slot_input">
       <input type="text" class="search_contents" />
