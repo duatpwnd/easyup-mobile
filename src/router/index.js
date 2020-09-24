@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Main from "../views/Main.vue";
 import store from "@/store";
 Vue.use(VueRouter);
 
@@ -8,7 +7,7 @@ const routes = [
   {
     path: "/",
     name: "main",
-    component: Main,
+    component: () => import("../views/Main.vue"),
     meta: { isFooter: true },
   },
   {
@@ -284,4 +283,4 @@ router.beforeEach((to, from, next) => {
   store.commit("toggleStore/Toggle", result);
   next();
 });
-export default router;
+export { router, routes };

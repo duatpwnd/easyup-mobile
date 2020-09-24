@@ -98,97 +98,97 @@
   };
 </script>
 <style scoped lang="scss">
-  h2 {
-    font-size: 2rem;
-  }
   #lec_eval {
     padding: 4.445%;
-  }
-  .section_wrap {
-    margin-top: 10px;
+    h2 {
+      font-size: 2rem;
+    }
+    .section_wrap {
+      margin-top: 10px;
 
-    .left_sec {
-      width: 41%;
-      text-align: center;
-      vertical-align: middle;
-      display: inline-block;
-      h3 {
-        font-size: 15px;
-      }
-      .star_wrap {
-        margin: 5px 0;
-        img {
-          width: 17px;
-          height: 16px;
+      .left_sec {
+        width: 41%;
+        text-align: center;
+        vertical-align: middle;
+        display: inline-block;
+        h3 {
+          font-size: 15px;
+        }
+        .star_wrap {
+          margin: 5px 0;
+          img {
+            width: 17px;
+            height: 16px;
+          }
+        }
+        .eval_btn {
+          background: #114fff;
+          color: white;
+          border-radius: 5px;
+          font-size: 11px;
+          padding: 3px 26.95%;
         }
       }
-      .eval_btn {
-        background: #114fff;
-        color: white;
-        border-radius: 5px;
-        font-size: 11px;
-        padding: 3px 26.95%;
-      }
-    }
-    .right_sec {
-      width: 59%;
-      display: inline-block;
-      vertical-align: middle;
-      span {
+      .right_sec {
+        width: 59%;
         display: inline-block;
         vertical-align: middle;
-        img {
+        span {
+          display: inline-block;
           vertical-align: middle;
-          width: 50%;
-        }
-      }
-      .line {
-        &:not(:first-child) {
-          margin-top: 1%;
-        }
-        .left_star_wrap {
-          width: 23%;
-          .left_star {
-            width: 100%;
-            .star {
-              width: 10px;
-              height: 10px;
-            }
-            .star_count {
-              font-size: 12px;
-              margin-left: 4px;
-            }
+          img {
+            vertical-align: middle;
+            width: 50%;
           }
         }
-        .progress {
-          width: 77%;
-          background: #dbdbdb;
-          height: 8px;
-          border-radius: 4px;
-          position: relative;
-          .progress_bar {
-            border-radius: 4px;
-            vertical-align: unset;
-            background: #114fff;
-            width: 40%;
+        .line {
+          &:not(:first-child) {
+            margin-top: 1%;
+          }
+          .left_star_wrap {
+            width: 23%;
+            .left_star {
+              width: 100%;
+              .star {
+                width: 10px;
+                height: 10px;
+              }
+              .star_count {
+                font-size: 12px;
+                margin-left: 4px;
+              }
+            }
+          }
+          .progress {
+            width: 77%;
+            background: #dbdbdb;
             height: 8px;
-            position: absolute;
-            top: 0;
-            left: 0;
+            border-radius: 4px;
+            position: relative;
+            .progress_bar {
+              border-radius: 4px;
+              vertical-align: unset;
+              background: #114fff;
+              width: 40%;
+              height: 8px;
+              position: absolute;
+              top: 0;
+              left: 0;
+            }
           }
         }
       }
     }
-  }
 
-  .more_view_btn {
-    margin-top: 7%;
-    border: 2px solid #114fff;
-    color: #114fff;
-    width: 100%;
-    padding: 1% 0;
-    border-radius: 15px;
-    font-family: "NotoSansCJKkr-Medium";
-    font-size: 1.5rem;
+    .more_view_btn {
+      margin-top: 7%;
+      border: 2px solid #114fff;
+      color: #114fff;
+      width: 100%;
+      padding: 1% 0;
+      border-radius: 15px;
+      font-family: "NotoSansCJKkr-Medium";
+      font-size: 1.5rem;
+    }
   }
 </style>

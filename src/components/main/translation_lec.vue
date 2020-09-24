@@ -42,10 +42,6 @@
       color: #999999;
     }
   }
-  .swiper-slide {
-    // width: 45.6%;
-    // margin-right: 2.44%;
-  }
   .swiper {
     margin-top: 20px;
   }

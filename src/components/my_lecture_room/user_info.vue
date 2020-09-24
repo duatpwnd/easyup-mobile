@@ -10,7 +10,9 @@
       </span>
       <div class="info">
         <span class="name">강동원</span>
-        <span class="class">강사님의 강의실</span>
+        <slot name="isTeacher">
+          <span class="class">강사님의 강의실</span>
+        </slot>
         <p class="email">duatpwnd1@naver.com</p>
 
         <slot name="convert">
