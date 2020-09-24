@@ -29,12 +29,7 @@
         <span>파일명</span>
       </template>
     </BoardTitle>
-    <div
-      class="file_list"
-      @click="read()"
-      v-for="(list, index) in arr"
-      :key="index"
-    >
+    <div class="file_list" v-for="(list, index) in arr" :key="index">
       <BoardList>
         <CheckBox slot="checkbox">
           <input

@@ -80,10 +80,10 @@
     }
     .board_list {
       ::v-deep .td1 {
-        width: 70%;
+        width: 62%;
       }
       .td2 {
-        width: 15%;
+        width: 23%;
       }
       .td3 {
         font-weight: bold;

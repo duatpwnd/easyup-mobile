@@ -1,7 +1,7 @@
 <template>
   <div class="comment_list">
     <div class="comment_header">
-      <span><img src="@/assets/images/common/mid_star.png" alt=""/></span>
+      <img src="@/assets/images/common/mid_star.png" alt="" />
       <span class="name">김길동</span>
       <span class="date">4일전</span>
       <span class="btn_wrap">
@@ -34,35 +34,32 @@
     margin-top: 9%;
     .comment_header {
       position: relative;
-      span {
-        display: inline-block;
-        vertical-align: middle;
+      img {
+        width: 12px;
+        height: 11px;
       }
       .name {
-        margin-left: 2%;
+        margin-left: 10px;
         color: #333333;
-        font-size: 1.5rem;
+        font-size: 12px;
+        vertical-align: middle;
       }
       .date {
         color: #999999;
-        font-size: 0.9375rem;
-        margin: 0 2%;
+        font-size: 10px;
+        margin: 0 5px;
+        vertical-align: middle;
       }
       .btn_wrap {
         position: absolute;
         top: 0;
         right: 0;
-        bottom: 0;
-        height: 82%;
-        margin: auto;
-        width: 25%;
-        text-align: center;
         span {
           color: #114fff;
-          font-size: 1.125rem;
+          font-size: 9px;
         }
         .remove_btn {
-          margin: 0 7%;
+          margin: 0 10px;
         }
       }
     }

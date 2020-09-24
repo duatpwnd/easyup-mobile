@@ -48,25 +48,25 @@ const routes = [
     children: [
       {
         path: "notice",
-        component: () => import("@/views/service_center/notice_list.vue"),
+        component: () => import("@/views/service_center/NoticeList.vue"),
         name: "noticeList",
         meta: { isFooter: true },
       },
       {
         path: "notice/read",
-        component: () => import("@/views/service_center/notice_read.vue"),
+        component: () => import("@/views/service_center/NoticeRead.vue"),
         name: "noticeRead",
         meta: { isFooter: true },
       },
       {
         path: "faq",
-        component: () => import("@/views/service_center/faq.vue"),
+        component: () => import("@/views/service_center/Faq.vue"),
         name: "faq",
         meta: { isFooter: true },
       },
       {
         path: "qna",
-        component: () => import("@/views/service_center/qna.vue"),
+        component: () => import("@/views/service_center/Qna.vue"),
         name: "qna",
         meta: { isFooter: true },
       },
@@ -141,20 +141,20 @@ const routes = [
 
   {
     path: "/notice",
-    name: "공지사항",
+    name: "내강의실 공지사항",
     redirect: "/notice/list",
     component: () => import("../views/Notice.vue"),
     children: [
       {
         path: "list",
-        component: () => import("@/views/notice/list.vue"),
-        name: "공지사항 리스트",
+        component: () => import("@/views/notice/List.vue"),
+        name: "내강의실 공지사항 리스트",
         meta: { GnbBottomMenu: true },
       },
       {
         path: "read",
-        name: "공지사항 읽기",
-        component: () => import("@/views/notice/read.vue"),
+        name: "내강의실 공지사항 읽기",
+        component: () => import("@/views/notice/Read.vue"),
         meta: { GnbBottomMenu: true },
       },
       {
@@ -175,7 +175,7 @@ const routes = [
   {
     path: "/dataShare/upload",
     name: "업로드",
-    component: () => import("@/views/data_share/upload.vue"),
+    component: () => import("@/views/data_share/Upload.vue"),
     meta: { GnbBottomMenu: true },
   },
   {
@@ -187,19 +187,19 @@ const routes = [
       {
         path: "list",
         name: "책갈피 리스트",
-        component: () => import("@/views/bookmark_manage/list.vue"),
+        component: () => import("@/views/bookmark_manage/List.vue"),
         meta: { GnbBottomMenu: true },
       },
       {
         path: "read",
         name: "책갈피 메모읽기",
-        component: () => import("@/views/bookmark_manage/read.vue"),
+        component: () => import("@/views/bookmark_manage/Read.vue"),
         meta: { GnbBottomMenu: true },
       },
       {
         path: "add",
         name: "책갈피 메모추가",
-        component: () => import("@/views/bookmark_manage/add.vue"),
+        component: () => import("@/views/bookmark_manage/Add.vue"),
         meta: { GnbBottomMenu: true },
       },
     ],
@@ -213,13 +213,13 @@ const routes = [
       {
         path: "list",
         name: "기슬블로그 리스트",
-        component: () => import("@/views/techblog/list.vue"),
+        component: () => import("@/views/techblog/List.vue"),
         meta: { isFooter: false },
       },
       {
         path: "read",
         name: "기슬블로그 읽기",
-        component: () => import("@/views/techblog/read.vue"),
+        component: () => import("@/views/techblog/Read.vue"),
         meta: { isFooter: true },
       },
     ],
@@ -245,19 +245,19 @@ const routes = [
       {
         path: "list",
         name: "메세지 리스트",
-        component: () => import("@/views/message/list.vue"),
+        component: () => import("@/views/message/List.vue"),
         meta: { ProfileMsgTab: true },
       },
       {
         path: "read",
         name: "메세지 읽기",
-        component: () => import("@/views/message/read.vue"),
+        component: () => import("@/views/message/Read.vue"),
         meta: { ProfileMsgTab: true },
       },
       {
         path: "newMessage",
         name: "새메시지",
-        component: () => import("@/views/message/new_message.vue"),
+        component: () => import("@/views/message/NewMessage.vue"),
         meta: { ProfileMsgTab: true },
       },
     ],

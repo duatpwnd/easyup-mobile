@@ -146,7 +146,7 @@
             margin-top: 1%;
           }
           .left_star_wrap {
-            width: 23%;
+            width: 15%;
             .left_star {
               width: 100%;
               .star {
@@ -160,7 +160,7 @@
             }
           }
           .progress {
-            width: 77%;
+            width: 85%;
             background: #dbdbdb;
             height: 8px;
             border-radius: 4px;

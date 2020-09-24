@@ -1,6 +1,8 @@
 <template>
   <div class="tr">
-    <span class="td td1">비전공자는 어떻게 개발자가 되는가</span>
+    <span class="td td1"
+      >비전공자는 어떻게 개발자가 되는가비전공자는 어떻게 개발자가 되는가</span
+    >
     <slot name="right">
       <span class="td td2">12명</span>
     </slot>
