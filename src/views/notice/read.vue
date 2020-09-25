@@ -9,34 +9,24 @@
 강동원 강사님<br><br>제가 개인적인 사정으로 휴강하게 되었습니다<br>죄송합니다.</pre>
     </div>
     <div class="button_wrap">
-      <BlueBorderBtn class="btn">
-        <button slot="blue_border_btn">
+      <BlueBtn class="btn">
+        <button slot="blue_btn">
           수정
         </button>
-      </BlueBorderBtn>
-      <!-- <BlueBorderBtn class="btn">
-        <button slot="blue_border_btn">
-          삭제
-        </button>
-      </BlueBorderBtn>
-      <BlueBorderBtn class="btn">
-        <button slot="blue_border_btn">
-          이전글
-        </button>
-      </BlueBorderBtn> -->
-      <BlueBorderBtn class="btn last_btn">
-        <button slot="blue_border_btn">
+      </BlueBtn>
+      <BlueBtn class="btn last_btn">
+        <button slot="blue_btn">
           다음글
         </button>
-      </BlueBorderBtn>
+      </BlueBtn>
     </div>
   </div>
 </template>
 <script>
-  import BlueBorderBtn from "@/components/common/blue_border_btn.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
   export default {
     components: {
-      BlueBorderBtn,
+      BlueBtn,
     },
     data() {
       return {};
@@ -77,6 +67,14 @@
     .btn {
       float: left;
       width: 23.172%;
+      button {
+        border: 1px solid #114fff;
+        background: white;
+        color: #114fff;
+        height: 24px;
+        line-height: 16px;
+        font-size: 12px;
+      }
       &:not(:first-child) {
         margin-left: 2%;
       }

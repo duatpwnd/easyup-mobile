@@ -85,6 +85,7 @@
         padding: 1px 10px;
         border-radius: 4px;
         margin: auto;
+        line-height: 14px;
       }
     }
     h3 {
@@ -98,7 +99,7 @@
       margin: auto;
     }
     p {
-      margin-top: 4px;
+      margin-top: 5px;
       font-size: 1.125rem;
       color: #999999;
     }

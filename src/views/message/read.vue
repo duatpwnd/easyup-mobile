@@ -10,23 +10,23 @@
 강동원 강사님<br><br>파이썬을 이제 막 시작한 여러분 안녕하세요.<br>첫번째 과제입니다.<br>공부 열심히 하세요. 첨부파일 꼭 읽어보시고 이번주 수요일까지 제출 부탁드립니다. 그럼 이만</pre>
     </div>
     <div class="button_wrap">
-      <BlueBorderBtn class="left_btn">
-        <button slot="blue_border_btn">
+      <BlueBtn class="left_btn">
+        <button slot="blue_btn">
           답장
-        </button> </BlueBorderBtn
-      ><BlueBorderBtn class="right_btn">
-        <button slot="blue_border_btn">
+        </button> </BlueBtn
+      ><BlueBtn class="right_btn">
+        <button slot="blue_btn">
           삭제
         </button>
-      </BlueBorderBtn>
+      </BlueBtn>
     </div>
   </div>
 </template>
 <script>
-  import BlueBorderBtn from "@/components/common/blue_border_btn.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
   export default {
     components: {
-      BlueBorderBtn,
+      BlueBtn,
     },
     methods: {},
   };
@@ -56,6 +56,14 @@
       }
     }
     .button_wrap {
+      button {
+        border: 1px solid #114fff;
+        background: white;
+        color: #114fff;
+        height: 24px;
+        line-height: 16px;
+        font-size: 12px;
+      }
       &:after {
         display: block;
         content: "";

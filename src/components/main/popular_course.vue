@@ -40,7 +40,7 @@
       font-size: 2rem;
     }
     p {
-      margin-top: 10px;
+      margin-top: 5px;
       font-size: 1.125rem;
       color: #999999;
     }
@@ -48,7 +48,7 @@
       margin: 0 auto;
     }
     .swiper {
-      margin-top: 20px;
+      margin-top: 8px;
     }
   }
 </style>

@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/blue_btn.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
 
   export default {
     components: { BlueBtn },

@@ -6,7 +6,7 @@
     <router-link
       class="tab"
       :to="{
-        name: 'faq',
+        name: 'helpFaq',
         query: {
           category: 'all',
         },

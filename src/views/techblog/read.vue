@@ -38,27 +38,25 @@
       </BlueBtn>
     </div>
     <div class="button_wrap">
-      <BlueBorderBtn class="left_btn">
-        <button slot="blue_border_btn">
+      <BlueBtn class="left_btn">
+        <button slot="blue_btn">
           이전글
-        </button> </BlueBorderBtn
-      ><BlueBorderBtn class="right_btn">
-        <button slot="blue_border_btn">
+        </button> </BlueBtn
+      ><BlueBtn class="right_btn">
+        <button slot="blue_btn">
           다음글
         </button>
-      </BlueBorderBtn>
+      </BlueBtn>
     </div>
   </div>
 </template>
 <script>
-  // import CommentList from "@/components/common/comment_list.vue";
-  import BlueBtn from "@/components/common/blue_btn.vue";
-  import BlueBorderBtn from "@/components/common/blue_border_btn.vue";
+  // import CommentList from "@/components/common/CommentList.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
   export default {
     components: {
       // CommentList,
       BlueBtn,
-      BlueBorderBtn,
     },
     data() {
       return {
@@ -144,6 +142,7 @@
         .btn_wrap {
           border-bottom: 2px solid #333333;
           margin-top: 10px;
+
           &:after {
             display: block;
             content: "";
@@ -168,6 +167,14 @@
     .button_wrap {
       padding: 4.445%;
       padding-top: 0;
+      button {
+        border: 1px solid #114fff;
+        background: white;
+        color: #114fff;
+        height: 24px;
+        line-height: 16px;
+        font-size: 12px;
+      }
       &:after {
         display: block;
         content: "";

@@ -67,8 +67,8 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common//blue_btn.vue";
-  import Search from "@/components/common/search.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import Search from "@/components/common/Search.vue";
   import Notice from "@/components/common/notice.vue";
   export default {
     components: {

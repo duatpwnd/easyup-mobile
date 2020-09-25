@@ -71,8 +71,8 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/blue_btn.vue";
-  import CheckBox from "@/components/common/checkbox.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import CheckBox from "@/components/common/BaseCheckBox.vue";
   export default {
     components: { CheckBox, BlueBtn },
     data() {

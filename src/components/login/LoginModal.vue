@@ -23,7 +23,7 @@
     </form>
     <div class="user_find">
       <span @click="goToPath('/signup')">회원가입</span>
-      <span class="forget" @click="goToPath('/findByEmail')"
+      <span class="forget" @click="goToPath('/lostPassword')"
         >비밀번호 분실</span
       >
     </div>
@@ -39,7 +39,7 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/blue_btn.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
   import { mapState, mapMutations } from "vuex";
   export default {
     components: {

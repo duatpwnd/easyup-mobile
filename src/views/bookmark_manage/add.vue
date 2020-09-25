@@ -29,8 +29,8 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/blue_btn.vue";
-  import CkEditor from "@/components/common/ckeditor.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import CkEditor from "@/components/common/CkEditor.vue";
   export default {
     components: {
       BlueBtn,
@@ -63,6 +63,9 @@
       }
       .blue_btn {
         width: 40%;
+        button {
+          line-height: 18px;
+        }
       }
       .contents {
         vertical-align: top;

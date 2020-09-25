@@ -31,7 +31,7 @@
     padding: 30.5%;
     background-color: white;
     border-radius: 4px;
-    border: 2px solid #d1d1d1;
+    border: 1px solid #d1d1d1;
     height: 0;
     position: absolute;
     top: 0;

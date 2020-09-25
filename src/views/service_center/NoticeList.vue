@@ -43,8 +43,8 @@
   </div>
 </template>
 <script>
-  import BoardTitle from "@/components/common/board_title.vue";
-  import Search from "@/components/common/search.vue";
+  import BoardTitle from "@/components/common/BoardTitle.vue";
+  import Search from "@/components/common/Search.vue";
   export default {
     components: { BoardTitle, Search },
     data() {

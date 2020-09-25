@@ -1,6 +1,4 @@
 import { shallowMount, mount } from "@vue/test-utils";
-import MockAdapter from "axios-mock-adapter";
-import axios from "axios";
 import SubsCribe from "@/components/lecture_detail/Subscribe.vue";
 
 describe("SubsCribe Component", () => {

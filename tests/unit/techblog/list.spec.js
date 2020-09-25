@@ -21,6 +21,5 @@ describe("App", () => {
     });
 
     await wrapper.vm.$nextTick();
-    console.log(wrapper.html());
   });
 });

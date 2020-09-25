@@ -51,7 +51,7 @@
   </div>
 </template>
 <script>
-  import LecItem from "@/components/common/lecture_item.vue";
+  import LecItem from "@/components/common/LectureItem.vue";
   export default {
     components: {
       LecItem,
@@ -70,12 +70,12 @@
     }
 
     p {
-      margin-top: 2%;
+      margin-top: 5px;
       font-size: 1.125rem;
       color: #999999;
     }
     .lec_list_wrap {
-      margin-top: 3%;
+      margin-top: 8px;
       &:after {
         display: block;
         clear: both;

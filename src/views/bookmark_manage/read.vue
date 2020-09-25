@@ -24,35 +24,24 @@
       </div>
     </div>
     <div class="button_wrap">
-      <BlueBorderBtn class="btn">
-        <button slot="blue_border_btn">
+      <BlueBtn class="btn">
+        <button slot="blue_btn">
           수정
         </button>
-      </BlueBorderBtn>
-      <!-- <BlueBorderBtn class="btn">
-        <button slot="blue_border_btn">
+      </BlueBtn>
+      <BlueBtn class="btn last_btn">
+        <button slot="blue_btn">
           삭제
         </button>
-      </BlueBorderBtn>
-      <BlueBorderBtn class="btn">
-        <button slot="blue_border_btn">
-          이전글
-        </button>
-      </BlueBorderBtn> -->
-      <BlueBorderBtn class="btn last_btn">
-        <button slot="blue_border_btn">
-          삭제
-        </button>
-      </BlueBorderBtn>
+      </BlueBtn>
     </div>
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/blue_btn.vue";
-  import BlueBorderBtn from "@/components/common/blue_border_btn.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
+
   export default {
     components: {
-      BlueBorderBtn,
       BlueBtn,
     },
     data() {
@@ -82,7 +71,10 @@
       position: relative;
       button {
         width: 40%;
-        font-size: 12px;
+        font-size: 10px;
+        height: 20px;
+        line-height: 18px;
+        padding: 0;
       }
       .date {
         position: absolute;
@@ -112,6 +104,14 @@
     .btn {
       float: left;
       width: 23.172%;
+      button {
+        border: 1px solid #114fff;
+        background: white;
+        color: #114fff;
+        height: 24px;
+        line-height: 16px;
+        font-size: 12px;
+      }
       &:not(:first-child) {
         margin-left: 2%;
       }

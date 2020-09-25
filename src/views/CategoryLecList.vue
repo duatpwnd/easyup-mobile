@@ -27,8 +27,8 @@
   </div>
 </template>
 <script>
-  import Search from "@/components/common/search.vue";
-  import LecItem from "@/components/common/lecture_item.vue";
+  import Search from "@/components/common/Search.vue";
+  import LecItem from "@/components/common/LectureItem.vue";
   export default {
     components: {
       LecItem,

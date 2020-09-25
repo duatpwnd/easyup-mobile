@@ -28,7 +28,7 @@
     },
     methods: {
       back() {
-        this.$EventBus.$emit("LoginProfile", true);
+        this.$EventBus.$emit("LoginInfo", true);
       },
     },
     mounted() {},

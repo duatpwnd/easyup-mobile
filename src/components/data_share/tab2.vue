@@ -29,12 +29,7 @@
         <span>파일명</span>
       </template>
     </BoardTitle>
-    <div
-      class="file_list"
-      @click="read()"
-      v-for="(list, index) in arr"
-      :key="index"
-    >
+    <div class="file_list" v-for="(list, index) in arr" :key="index">
       <BoardList>
         <CheckBox slot="checkbox">
           <input
@@ -57,12 +52,15 @@
   </div>
 </template>
 <script>
-  import CheckBox from "@/components/common/checkbox.vue";
-  import BoardTitle from "@/components/common/board_title.vue";
-  import BoardList from "@/components/common/board_list.vue";
-  import Search from "@/components/common/search.vue";
-  import BlueBtn from "@/components/common/blue_btn.vue";
+  import CheckBox from "@/components/common/BaseCheckBox.vue";
+  import BoardTitle from "@/components/common/BoardTitle.vue";
+  import BoardList from "@/components/common/BoardList.vue";
+  import Search from "@/components/common/Search.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import mixin from "@/components/mixins/check_event.js";
   export default {
+    mixins: [mixin],
+
     components: {
       CheckBox,
       BoardList,
@@ -71,32 +69,13 @@
       Search,
     },
     data() {
-      return {
-        arr: [0, 1, 2, 3],
-        checked_list: [],
-        allCheck: false,
-      };
+      return {};
     },
-    methods: {
-      // 전체 체크
-      all_check() {
-        this.allCheck = !this.allCheck;
-        if (this.allCheck) {
-          this.checked_list = this.arr;
-        } else {
-          this.checked_list = [];
-        }
-      },
-      // 부분체크
-      partial_check() {
-        if (this.arr.length != this.checked_list.length) {
-          this.allCheck = false;
-        } else {
-          this.allCheck = true;
-        }
-      },
-    },
+
     mounted() {},
+    created() {
+      this.arr = [0, 1, 2, 3, 4, 5, 6];
+    },
   };
 </script>
 <style scoped lang="scss">

@@ -11,8 +11,8 @@
   </div>
 </template>
 <script>
-  import mixin from "./mixin/mixin.js";
-  import LecItem from "@/components/common/lecture_item.vue";
+  import mixin from "@/components/mixins/swiper.js";
+  import LecItem from "@/components/common/LectureItem.vue";
   export default {
     components: {
       LecItem,
@@ -27,13 +27,13 @@
       font-size: 2rem;
     }
     p {
-      margin-top: 10px;
+      margin-top: 5px;
       font-size: 1.125rem;
       color: #999999;
     }
   }
 
   .swiper {
-    margin-top: 20px;
+    margin-top: 8px;
   }
 </style>

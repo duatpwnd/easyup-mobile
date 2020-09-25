@@ -51,8 +51,8 @@
   import Subscribe from "@/components/lecture_detail/subscribe";
   import ThumbNail from "@/components/lecture_detail/thumbnail";
   import LecEval from "@/components/lecture_detail/lec_evaluate";
-  import CourseIem from "@/components/common/lecture_item.vue";
-  import BlueBtn from "@/components/common/blue_btn.vue";
+  import CourseIem from "@/components/common/LectureItem.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
   export default {
     components: {
       BlueBtn,

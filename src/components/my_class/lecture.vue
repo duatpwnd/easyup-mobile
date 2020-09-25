@@ -26,9 +26,9 @@
   </div>
 </template>
 <script>
-  import LectureCourseList from "@/components/common/lecture_course_list.vue";
-  import Compile from "@/components/common/compile.vue";
-  import Search from "@/components/common/search.vue";
+  import LectureCourseList from "@/components/common/LectureCourseList.vue";
+  import Compile from "@/components/common/Compile.vue";
+  import Search from "@/components/common/Search.vue";
   export default {
     components: {
       Search,

@@ -39,10 +39,10 @@
   </div>
 </template>
 <script>
-  import Search from "@/components/common/search.vue";
-  import BoardTitle from "@/components/common/board_title.vue";
-  import BoardList from "@/components/common/board_list.vue";
-  // import BlueBtn from "@/components/common/blue_btn.vue";
+  import Search from "@/components/common/Search.vue";
+  import BoardTitle from "@/components/common/BoardTitle.vue";
+  import BoardList from "@/components/common/BoardList.vue";
+  // import BlueBtn from "@/components/common/BaseButton.vue";
   export default {
     components: {
       BoardTitle,

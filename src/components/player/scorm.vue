@@ -11,29 +11,29 @@
       </div>
     </div>
     <div class="btn_wrap">
-      <BlueBorderBtn class="btn">
-        <button slot="blue_border_btn">
+      <BlueBtn class="btn">
+        <button slot="blue_btn">
           강의평가
         </button>
-      </BlueBorderBtn>
-      <BlueBorderBtn class="btn bookmark">
-        <button slot="blue_border_btn">
+      </BlueBtn>
+      <BlueBtn class="btn bookmark">
+        <button slot="blue_btn">
           책갈피 +
         </button>
-      </BlueBorderBtn>
-      <BlueBorderBtn class="btn next">
-        <button slot="blue_border_btn">
+      </BlueBtn>
+      <BlueBtn class="btn next">
+        <button slot="blue_btn">
           다음강의 보기
         </button>
-      </BlueBorderBtn>
+      </BlueBtn>
     </div>
   </div>
 </template>
 <script>
-  import BlueBorderBtn from "@/components/common/blue_border_btn.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
   export default {
     components: {
-      BlueBorderBtn,
+      BlueBtn,
     },
     data() {
       return {};
@@ -86,7 +86,12 @@
         float: left;
         width: 23.171%; /* 152px/656px */
         button {
-          padding: 3% 0;
+          border: 1px solid #114fff;
+          background: white;
+          color: #114fff;
+          height: 24px;
+          line-height: 16px;
+          font-size: 12px;
         }
       }
       .next {

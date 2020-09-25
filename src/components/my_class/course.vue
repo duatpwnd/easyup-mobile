@@ -30,9 +30,9 @@
   </div>
 </template>
 <script>
-  import Search from "@/components/common/search.vue";
-  import Compile from "@/components/common/compile.vue";
-  import LectureCourseList from "@/components/common/lecture_course_list.vue";
+  import Search from "@/components/common/Search.vue";
+  import Compile from "@/components/common/Compile.vue";
+  import LectureCourseList from "@/components/common/LectureCourseList.vue";
   import VideoList from "@/components/my_class/video_list.vue";
   export default {
     components: {

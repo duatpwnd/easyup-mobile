@@ -13,11 +13,27 @@
     </div>
 
     <div class="lnb_menu">
-      <button class="lnb" @click="lecture()">강의</button>
+      <button class="lnb" @click="goToLecture()">강의</button>
       <button class="lnb">코스</button>
-      <button class="lnb" @click="goToPath('/techBlog')">기술블로그</button>
+      <button
+        class="lnb"
+        @click="
+          goToPath('/techBlog', {
+            login_modal: !toggleStore_loginModal,
+          })
+        "
+      >
+        기술블로그
+      </button>
       <button class="lnb">내강의실</button>
-      <button class="lnb" @click="goToPath('/profileModify')">
+      <button
+        class="lnb"
+        @click="
+          goToPath('/profileModify', {
+            login_modal: !toggleStore_loginModal,
+          })
+        "
+      >
         개인정보 확인/수정
       </button>
     </div>
@@ -28,13 +44,22 @@
     </div>
     <div class="logout">
       <BlueBtn>
-        <button slot="blue_btn" @click="logout()">로그아웃</button>
+        <button
+          slot="blue_btn"
+          @click="
+            goToPath('/', {
+              before_login: true,
+            })
+          "
+        >
+          로그아웃
+        </button>
       </BlueBtn>
     </div>
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/blue_btn.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
   import { mapState, mapMutations } from "vuex";
   export default {
     components: {
@@ -52,20 +77,13 @@
       }),
     },
     methods: {
-      goToPath(url) {
+      goToPath(url, obj) {
         this.$router.push(url).catch(() => {});
-        this.$store.commit("toggleStore/Toggle", {
-          login_modal: !this.toggleStore_loginModal,
-        });
+        this.$store.commit("toggleStore/Toggle", obj);
       },
 
-      lecture() {
+      goToLecture() {
         this.$EventBus.$emit("GoToLecture", true);
-      },
-      logout() {
-        this.$store.commit("toggleStore/Toggle", {
-          before_login: true,
-        });
       },
     },
     mounted() {},

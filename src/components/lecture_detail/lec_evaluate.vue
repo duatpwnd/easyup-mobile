@@ -86,7 +86,7 @@
   </div>
 </template>
 <script>
-  import CommentList from "@/components/common/comment_list.vue";
+  import CommentList from "@/components/common/CommentList.vue";
   export default {
     components: {
       CommentList,

@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-  import CkEditor from "@/components/common/ckeditor.vue";
+  import CkEditor from "@/components/common/CkEditor.vue";
   export default {
     components: {
       CkEditor,

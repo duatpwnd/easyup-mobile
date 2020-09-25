@@ -6,27 +6,25 @@
   </div>
 </template>
 <script>
-  import LoginProfile from "./login_profile";
+  import LoginInfo from "./LoginInfo";
   import GoToLecture from "./go_to_lecture_list";
   export default {
     components: {
-      LoginProfile,
+      LoginInfo,
       GoToLecture,
     },
     data() {
       return {
-        type: "LoginProfile",
+        type: "LoginInfo",
       };
     },
     methods: {},
     mounted() {
-      this.$nextTick(() => {
-        this.$EventBus.$on("GoToLecture", () => {
-          this.type = "GoToLecture";
-        });
-        this.$EventBus.$on("LoginProfile", () => {
-          this.type = "LoginProfile";
-        });
+      this.$EventBus.$on("GoToLecture", () => {
+        this.type = "GoToLecture";
+      });
+      this.$EventBus.$on("LoginInfo", () => {
+        this.type = "LoginInfo";
       });
     },
   };

@@ -5,8 +5,8 @@
       <keep-alive>
         <div class="router-view">
           <div v-if="toggleStore_loginModal">
-            <LoginBeforeModal v-if="toggleStore_beforeLogin"></LoginBeforeModal>
-            <LoginAfterModal v-else></LoginAfterModal>
+            <LoginModal v-if="toggleStore_beforeLogin"></LoginModal>
+            <LoginLnb v-else></LoginLnb>
           </div>
           <router-view />
         </div>
@@ -20,8 +20,8 @@
 <script>
   import Header from "@/components/layout/header.vue";
   import Footer from "@/components/layout/footer.vue";
-  import LoginBeforeModal from "@/components/login/login_before_modal.vue";
-  import LoginAfterModal from "@/components/login/login_after_modal.vue";
+  import LoginModal from "@/components/login/LoginModal.vue";
+  import LoginLnb from "@/components/login/LoginLnb.vue";
   import GnbBottomMenu from "@/components/layout/gnb_bottom_menu.vue";
   import ProfileMsgTab from "@/components/layout/profile_msg_tab.vue";
   import { mapState, mapMutations } from "vuex";
@@ -29,8 +29,8 @@
     components: {
       ProfileMsgTab,
       GnbBottomMenu,
-      LoginAfterModal,
-      LoginBeforeModal,
+      LoginModal,
+      LoginLnb,
       Header,
       Footer,
     },
