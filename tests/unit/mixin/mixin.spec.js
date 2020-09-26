@@ -3,7 +3,7 @@ import mixin from "@/components/mixins/check_event.js";
 import TestComponent from "@/components/data_share/tab1.vue";
 // const localVue = createLocalVue();
 // localVue.use(mixin);
-describe("mixin test", () => {
+describe("mixin", () => {
   const wrapper = shallowMount(TestComponent, {
     mixins: [mixin],
   });
