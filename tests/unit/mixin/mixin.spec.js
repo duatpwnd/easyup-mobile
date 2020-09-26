@@ -7,7 +7,7 @@ describe("mixin test", () => {
   const wrapper = shallowMount(TestComponent, {
     mixins: [mixin],
   });
-  test.skip("all check event", () => {
+  test("all check event", () => {
     jest.spyOn(wrapper.vm, "all_check");
     wrapper.vm.all_check();
     expect(wrapper.vm.all_check).toHaveBeenCalled();
@@ -17,15 +17,13 @@ describe("mixin test", () => {
       expect(wrapper.vm.checked_list).toStrictEqual([]);
     }
   });
-  test("partial check event", async () => {
+  test("partial check event", () => {
     jest.spyOn(wrapper.vm, "partial_check");
-    await wrapper.vm.partial_check();
+    wrapper.vm.partial_check();
     expect(wrapper.vm.partial_check).toHaveBeenCalled();
     if (wrapper.vm.arr.length != wrapper.vm.checked_list.length) {
-      console.log("다르다", wrapper.vm.arr, wrapper.vm.checked_list);
       expect(wrapper.vm.allCheck).toBeFalsy();
     } else {
-      console.log("같다", wrapper.vm.arr, wrapper.vm.checked_list);
       expect(wrapper.vm.allCheck).toBeTruthy();
     }
   });
