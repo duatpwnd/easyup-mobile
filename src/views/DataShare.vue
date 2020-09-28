@@ -15,8 +15,8 @@
   </div>
 </template>
 <script>
-  import Tab1 from "@/components/data_share/tab1.vue";
-  import Tab2 from "@/components/data_share/tab2.vue";
+  import Tab1 from "@/components/data_share/Tab1.vue";
+  import Tab2 from "@/components/data_share/Tab2.vue";
   export default {
     components: {
       Tab1,

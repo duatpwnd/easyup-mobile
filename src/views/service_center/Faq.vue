@@ -55,7 +55,7 @@
   </div>
 </template>
 <script>
-  import List from "@/components/faq/list.vue";
+  import List from "@/components/faq/List.vue";
   import Search from "@/components/common/Search.vue";
   export default {
     components: {

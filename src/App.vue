@@ -18,12 +18,12 @@
   </div>
 </template>
 <script>
-  import Header from "@/components/layout/header.vue";
-  import Footer from "@/components/layout/footer.vue";
+  import Header from "@/components/layout/Header.vue";
+  import Footer from "@/components/layout/Footer.vue";
   import LoginModal from "@/components/login/LoginModal.vue";
   import LoginLnb from "@/components/login/LoginLnb.vue";
-  import GnbBottomMenu from "@/components/layout/gnb_bottom_menu.vue";
-  import ProfileMsgTab from "@/components/layout/profile_msg_tab.vue";
+  import GnbBottomMenu from "@/components/layout/GnbBottomMenu.vue";
+  import ProfileMsgTab from "@/components/layout/ProfileMsgTab.vue";
   import { mapState, mapMutations } from "vuex";
   export default {
     components: {
