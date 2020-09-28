@@ -9,12 +9,12 @@
   </div>
 </template>
 <script>
-  import Banner from "@/components/main/banner.vue";
-  import PopularLec from "@/components/main/popular_lec.vue";
-  import PopularCourse from "@/components/main/popular_course.vue";
-  import LatestLec from "@/components/main/latest_lec.vue";
-  import TranslationLec from "@/components/main/translation_lec.vue";
-  import CategoryLec from "@/components/main/category_lec.vue";
+  import Banner from "@/components/main/Banner.vue";
+  import PopularLec from "@/components/main/PopularLecture.vue";
+  import PopularCourse from "@/components/main/PopularCourse.vue";
+  import LatestLec from "@/components/main/LatestLecture.vue";
+  import TranslationLec from "@/components/main/TranslationLecture.vue";
+  import CategoryLec from "@/components/main/MainCategory.vue";
   export default {
     components: {
       CategoryLec,

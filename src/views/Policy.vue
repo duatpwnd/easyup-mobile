@@ -14,8 +14,8 @@
   </div>
 </template>
 <script>
-  import Terms from "@/components/policy/terms.vue";
-  import Privacy from "@/components/policy/privacy.vue";
+  import Terms from "@/components/policy/Terms.vue";
+  import Privacy from "@/components/policy/Privacy.vue";
   export default {
     components: { Terms, Privacy },
     data() {

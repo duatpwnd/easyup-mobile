@@ -16,10 +16,10 @@
   </div>
 </template>
 <script>
-  import Tab1 from "@/components/player/lecture_list.vue";
-  import Tab2 from "@/components/player/lecture_note.vue";
-  import Video from "@/components/player/video.vue";
-  import Scorm from "@/components/player/scorm.vue";
+  import Tab1 from "@/components/player/LectureList.vue";
+  import Tab2 from "@/components/player/LectureNote.vue";
+  import Video from "@/components/player/Video.vue";
+  import Scorm from "@/components/player/Scorm.vue";
   export default {
     components: { Tab1, Tab2, Video, Scorm },
     data() {

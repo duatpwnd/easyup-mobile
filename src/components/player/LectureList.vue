@@ -66,7 +66,7 @@
   </div>
 </template>
 <script>
-  import Item from "./item.vue";
+  import Item from "@/components/player/Item.vue";
   export default {
     components: {
       Item,
