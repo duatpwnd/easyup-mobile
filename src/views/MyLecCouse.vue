@@ -14,8 +14,8 @@
   </div>
 </template>
 <script>
-  import Lecture from "@/components/my_class/lecture.vue";
-  import Course from "@/components/my_class/course.vue";
+  import Lecture from "@/components/my_class/Lecture.vue";
+  import Course from "@/components/my_class/Course.vue";
   export default {
     components: { Lecture, Course },
     data() {

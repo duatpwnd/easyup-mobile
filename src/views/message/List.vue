@@ -14,8 +14,8 @@
   </div>
 </template>
 <script>
-  import Tab1 from "@/components/message/tab1.vue";
-  import Tab2 from "@/components/message/tab2.vue";
+  import Tab1 from "@/components/message/Tab1.vue";
+  import Tab2 from "@/components/message/Tab2.vue";
   export default {
     components: {
       Tab1,

@@ -92,7 +92,6 @@
 <style scoped lang="scss">
   .blue_btn {
     ::v-deep button {
-      height: 28px;
       font-size: 12px;
     }
   }

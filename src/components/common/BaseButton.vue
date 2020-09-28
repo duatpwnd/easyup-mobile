@@ -23,7 +23,7 @@
     width: 100%;
     border-radius: 5px;
     height: 28px;
-    line-height: 20px;
+    line-height: 19px;
     padding: 4px 0;
     box-sizing: border-box;
     font-family: "NotoSansCJKkr-Medium";

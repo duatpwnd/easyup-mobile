@@ -95,7 +95,7 @@
         width: 68px;
         padding: 0 7.5px;
         height: 20px;
-        line-height: 20px;
+        line-height: 21px;
         display: inline-block;
         box-sizing: border-box;
         background: url("~@/assets/images/mylecture_room/report_ico.png")

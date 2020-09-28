@@ -185,10 +185,10 @@
       border: 2px solid #114fff;
       color: #114fff;
       width: 100%;
-      padding: 1% 0;
+      height: 24px;
       border-radius: 15px;
       font-family: "NotoSansCJKkr-Medium";
-      font-size: 1.5rem;
+      font-size: 12px;
     }
   }
 </style>

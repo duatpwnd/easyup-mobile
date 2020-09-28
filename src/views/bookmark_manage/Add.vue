@@ -63,9 +63,6 @@
       }
       .blue_btn {
         width: 40%;
-        button {
-          line-height: 18px;
-        }
       }
       .contents {
         vertical-align: top;

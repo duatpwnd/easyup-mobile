@@ -109,7 +109,6 @@
       font-family: "NotoSansCJKkr-Medium";
       font-size: 18px;
       height: 40px;
-      line-height: 40px;
       width: 100%;
       max-width: 720px;
       z-index: 2;
