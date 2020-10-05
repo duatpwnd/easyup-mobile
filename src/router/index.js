@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "@/store";
+import VueCookies from "vue-cookies";
 Vue.use(VueRouter);
 
 const routes = [
@@ -8,13 +9,13 @@ const routes = [
     path: "/",
     name: "main",
     component: () => import("../views/Main.vue"),
-    meta: { isFooter: true },
+    meta: { isFooter: true, unauthorized: true },
   },
   {
     path: "/signup",
     name: "signup",
     component: () => import("../views/SignUp.vue"),
-    meta: { isFooter: false },
+    meta: { isFooter: false, unauthorized: true },
   },
   {
     path: "/signupComplete",
@@ -270,7 +271,45 @@ const router = new VueRouter({
   duplicateNavigationPolicy: "ignore",
   routes,
 });
-router.beforeEach((to, from, next) => {
+
+router.beforeEach(async (to, from, next) => {
+  console.log("beforeEach");
+  if (
+    VueCookies.get("access_token") === null &&
+    VueCookies.get("refresh_token") !== null
+  ) {
+    if (to.matched.some((record) => record.meta.unauthorized)) {
+      if (to.path !== "/") {
+        console.log("인증됬으니 가면 안됨", from);
+        next("/");
+      } else {
+        next();
+      }
+    } else {
+      console.log("엑세스 토큰 발급요청");
+      next();
+    }
+  } else if (
+    VueCookies.get("access_token") === null &&
+    VueCookies.get("refresh_token") == null
+  ) {
+    if (to.matched.some((record) => record.meta.unauthorized)) {
+      console.log("인증필요없음");
+      next();
+    } else {
+      console.log("인증해주세요");
+      next("/");
+    }
+  } else {
+    console.log("엑세스토큰, 리프레시토큰 둘다있음");
+    if (to.path !== "/") {
+      console.log("인증됬으니 가면 안됨", from);
+      next("/");
+    } else {
+      next();
+    }
+  }
+
   const arr = ["GnbBottomMenu", "isFooter", "ProfileMsgTab"];
   const result = arr.reduce((acc, el) => {
     if (el == Object.keys(to.meta)[0]) {
@@ -281,6 +320,5 @@ router.beforeEach((to, from, next) => {
     return acc;
   }, {});
   store.commit("toggleStore/Toggle", result);
-  next();
 });
 export { router, routes };

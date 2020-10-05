@@ -65,18 +65,18 @@
       },
       login() {
         //  post;
-        this.$axios
-          .post(``, {
-            user_id: this.userid,
-            user_password: this.userpw,
-          })
-          .then((result) => {
-            // this.$cookies.set("token", "111");
-          })
-          .catch((err) => {
-            // console.log("에러");
-          });
-
+        // this.$axios
+        //   .post(``, {
+        //     user_id: this.userid,
+        //     user_password: this.userpw,
+        //   })
+        //   .then((result) => {
+        //     this.$cookies.set("token", "111");
+        //   })
+        //   .catch((err) => {
+        //     // console.log("에러");
+        //   });
+        this.$cookies.set("access_token", "111");
         this.$store.commit("toggleStore/Toggle", {
           before_login: false,
         });

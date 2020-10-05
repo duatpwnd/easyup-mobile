@@ -44,14 +44,7 @@
     </div>
     <div class="logout">
       <BlueBtn>
-        <button
-          slot="blue_btn"
-          @click="
-            goToPath('/', {
-              before_login: true,
-            })
-          "
-        >
+        <button slot="blue_btn" @click="logout()">
           로그아웃
         </button>
       </BlueBtn>
@@ -77,6 +70,12 @@
       }),
     },
     methods: {
+      logout() {
+        this.$cookies.remove("access_token");
+        this.goToPath("/", {
+          before_login: true,
+        });
+      },
       goToPath(url, obj) {
         this.$router.push(url).catch(() => {});
         this.$store.commit("toggleStore/Toggle", obj);
