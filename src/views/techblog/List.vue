@@ -20,7 +20,7 @@
   </div>
 </template>
 <script>
-  import TechBlogList from "@/components/techblog/list.vue";
+  import TechBlogList from "@/components/techblog/List.vue";
   export default {
     components: {
       TechBlogList,
