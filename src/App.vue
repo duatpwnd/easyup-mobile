@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :class="$mq">
     <Header></Header>
     <transition name="fade" mode="out-in">
       <keep-alive>
@@ -47,7 +47,17 @@
       return {};
     },
     methods: {},
-    mounted() {},
+    mounted() {
+      // 가로모드 세로모드 감지
+      window.addEventListener("resize", function() {
+        if (window.matchMedia("(orientation: portrait)").matches) {
+          // Portrait 모드일 때 실행할 스크립트
+          // 폭과 높이가 같으면 Portrait 모드로 인식돼요
+        } else {
+          // Landscape 모드일 때 실행할 스크립트
+        }
+      });
+    },
     // watch: {
     //   $route(to, from) {
     //     const toDepth = to.path.split("/").length;
@@ -117,7 +127,8 @@
       font-size: 11px;
     }
   }
-  // 갤럭시 s9+, 아이폰13 아이폰8
+  // 갤럭시 s9+ (세로:412,가로:798),
+  // 아이폰8 (세로: 320) 아이폰은 플러스계열만 가로모드 지원
   @media all and (max-width: 420px) {
     html {
       font-size: 9px;

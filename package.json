@@ -20,6 +20,8 @@
     "swiper": "^6.1.2",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",
+    "vue-cookie": "^1.1.4",
+    "vue-cookies": "^1.7.4",
     "vue-fragment": "^1.5.1",
     "vue-mq": "^1.0.1",
     "vue-router": "^3.2.0",

@@ -34,7 +34,4 @@
   #main {
     position: relative;
   }
-  .tablet {
-    color: black;
-  }
 </style>

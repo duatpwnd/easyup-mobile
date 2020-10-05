@@ -64,7 +64,19 @@
         });
       },
       login() {
-        //post
+        //  post;
+        this.$axios
+          .post(``, {
+            user_id: this.userid,
+            user_password: this.userpw,
+          })
+          .then((result) => {
+            // this.$cookies.set("token", "111");
+          })
+          .catch((err) => {
+            // console.log("에러");
+          });
+
         this.$store.commit("toggleStore/Toggle", {
           before_login: false,
         });
