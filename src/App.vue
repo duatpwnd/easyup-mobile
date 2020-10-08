@@ -5,8 +5,8 @@
       <keep-alive>
         <div class="router-view">
           <div v-if="toggleStore_loginModal">
-            <LoginModal v-if="toggleStore_beforeLogin"></LoginModal>
-            <LoginLnb v-else></LoginLnb>
+            <LoginLnb v-if="userStore_token"></LoginLnb>
+            <LoginModal v-else></LoginModal>
           </div>
           <router-view />
         </div>
@@ -40,7 +40,11 @@
         toggleStore_profileMsgTab: "ProfileMsgTab",
         toggleStore_gnbBottomMenu: "GnbBottomMenu",
         toggleStore_loginModal: "login_modal",
-        toggleStore_beforeLogin: "before_login",
+        // toggleStore_beforeLogin: "before_login",
+        toggleStore_token: "token",
+      }),
+      ...mapState("userStore", {
+        userStore_token: "token",
       }),
     },
     data() {

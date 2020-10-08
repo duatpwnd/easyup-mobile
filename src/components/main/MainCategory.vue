@@ -48,12 +48,6 @@
         <h3>알고리즘</h3>
       </router-link>
     </div>
-    <div class="notice_wrap">
-      <span class="notice_title">공지사항</span>
-      <span :class="$mq" class="notice_contents"
-        >코로나 극복 프로젝트 모든 강의 25% 할인</span
-      >
-    </div>
   </div>
 </template>
 <script>
@@ -67,8 +61,7 @@
 </script>
 <style scoped lang="scss">
   #category_lec {
-    padding: 4.445%;
-
+    margin-top: 24px;
     h2 {
       font-size: 2rem;
       position: relative;
@@ -127,33 +120,6 @@
           right: 0;
           margin: auto;
         }
-      }
-    }
-    .notice_wrap {
-      background: #f4f4f4;
-      border-radius: 30px;
-      padding: 4px 4.88%;
-      margin-top: 24px;
-      position: relative;
-      height: 24px;
-      box-sizing: border-box;
-      .notice_title {
-        color: #114fff;
-        font-size: 10px;
-        font-weight: 600;
-        position: absolute;
-        top: 0;
-        line-height: 24px;
-      }
-      .notice_contents {
-        color: #787878;
-        font-size: 10px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        text-align: center;
-        width: 100%;
-        line-height: 24px;
       }
     }
   }

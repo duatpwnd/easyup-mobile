@@ -50,7 +50,7 @@
 <script>
   import Subscribe from "@/components/lecture_detail/subscribe";
   import ThumbNail from "@/components/lecture_detail/thumbnail";
-  import LecEval from "@/components/lecture_detail/lec_evaluate";
+  import LecEval from "@/components/lecture_detail/CommentWrap";
   import CourseIem from "@/components/common/LectureItem.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   export default {

@@ -17,7 +17,7 @@
           autocomplete="true"
         />
         <BlueBtn>
-          <button slot="blue_btn" @click="login()">로그인</button>
+          <button slot="blue_btn" type="button" @click="login()">로그인</button>
         </BlueBtn>
       </fieldset>
     </form>
@@ -76,10 +76,10 @@
         //   .catch((err) => {
         //     // console.log("에러");
         //   });
+
         this.$cookies.set("access_token", "111");
-        this.$store.commit("toggleStore/Toggle", {
-          before_login: false,
-        });
+        this.$store.commit("userStore/loginToken", "111");
+        this.$router.push("/").catch(() => {});
       },
     },
     mounted() {},

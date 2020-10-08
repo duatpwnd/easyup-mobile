@@ -71,10 +71,10 @@
     },
     methods: {
       logout() {
+        console.log("로그아웃호출");
         this.$cookies.remove("access_token");
-        this.goToPath("/", {
-          before_login: true,
-        });
+        this.$store.commit("userStore/loginToken", null);
+        this.$router.push("/").catch(() => {});
       },
       goToPath(url, obj) {
         this.$router.push(url).catch(() => {});

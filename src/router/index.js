@@ -16,12 +16,26 @@ const routes = [
     name: "signup",
     component: () => import("../views/SignUp.vue"),
     meta: { isFooter: false, unauthorized: true },
+    beforeEnter(to, from, next) {
+      if (VueCookies.get("access_token")) {
+        next("/");
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/signupComplete",
     name: "signupComplete",
     component: () => import("../views/SignUpComplete.vue"),
     meta: { isFooter: false },
+    beforeEnter(to, from, next) {
+      if (VueCookies.get("access_token")) {
+        next("/");
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/pwChange",
@@ -39,7 +53,7 @@ const routes = [
     path: "/policy",
     name: "policy",
     component: () => import("../views/Policy.vue"),
-    meta: { isFooter: true },
+    meta: { isFooter: true, unauthorized: true },
   },
   {
     path: "/help",
@@ -51,25 +65,25 @@ const routes = [
         path: "notice",
         component: () => import("@/views/service_center/NoticeList.vue"),
         name: "helpNoticeList",
-        meta: { isFooter: true },
+        meta: { isFooter: true, unauthorized: true },
       },
       {
         path: "notice/read",
         component: () => import("@/views/service_center/NoticeRead.vue"),
         name: "helpNoticeRead",
-        meta: { isFooter: true },
+        meta: { isFooter: true, unauthorized: true },
       },
       {
         path: "faq",
         component: () => import("@/views/service_center/Faq.vue"),
         name: "helpFaq",
-        meta: { isFooter: true },
+        meta: { isFooter: true, unauthorized: true },
       },
       {
         path: "qna",
         component: () => import("@/views/service_center/Qna.vue"),
         name: "helpQna",
-        meta: { isFooter: true },
+        meta: { isFooter: true, unauthorized: true },
       },
     ],
   },
@@ -273,52 +287,32 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  console.log("beforeEach");
-  if (
-    VueCookies.get("access_token") === null &&
-    VueCookies.get("refresh_token") !== null
-  ) {
-    if (to.matched.some((record) => record.meta.unauthorized)) {
-      if (to.path !== "/") {
-        console.log("인증됬으니 가면 안됨", from);
-        next("/");
-      } else {
-        next();
-      }
-    } else {
-      console.log("엑세스 토큰 발급요청");
-      next();
-    }
-  } else if (
-    VueCookies.get("access_token") === null &&
-    VueCookies.get("refresh_token") == null
-  ) {
-    if (to.matched.some((record) => record.meta.unauthorized)) {
-      console.log("인증필요없음");
-      next();
-    } else {
-      console.log("인증해주세요");
-      next("/");
-    }
-  } else {
-    console.log("엑세스토큰, 리프레시토큰 둘다있음");
-    if (to.path !== "/") {
-      console.log("인증됬으니 가면 안됨", from);
-      next("/");
-    } else {
-      next();
-    }
+  if (VueCookies.get("access_token")) {
+    store.commit("userStore/loginToken", 111);
   }
-
-  const arr = ["GnbBottomMenu", "isFooter", "ProfileMsgTab"];
-  const result = arr.reduce((acc, el) => {
-    if (el == Object.keys(to.meta)[0]) {
-      acc[el] = Object.values(to.meta)[0];
-    } else {
-      acc[el] = false;
-    }
-    return acc;
-  }, {});
-  store.commit("toggleStore/Toggle", result);
+  // if (
+  //   VueCookies.get("access_token") === null &&
+  //   VueCookies.get("refresh_token") !== null
+  // ) {
+  //   // 엑세스 토큰 발급로직
+  // }
+  if (
+    VueCookies.get("access_token") ||
+    to.matched.some((record) => record.meta.unauthorized)
+  ) {
+    const arr = ["GnbBottomMenu", "isFooter", "ProfileMsgTab"];
+    const result = arr.reduce((acc, el) => {
+      if (el == Object.keys(to.meta)[0]) {
+        acc[el] = Object.values(to.meta)[0];
+      } else {
+        acc[el] = false;
+      }
+      return acc;
+    }, {});
+    store.commit("toggleStore/Toggle", result);
+    next();
+  } else {
+    alert("로그인을 해주세요");
+  }
 });
 export { router, routes };
