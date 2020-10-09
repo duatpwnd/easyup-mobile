@@ -13,7 +13,7 @@
           <img
             src="@/assets/images/common/mid_empty_star.png"
             alt=""
-            v-for="(score, index) in Number(5 - list.reviews.score)"
+            v-for="(score, index) in Number(5 - Math.round(list.reviews.score))"
             :key="'empty' + index"
           />
           <span class="name">{{ list.reviews.user_name }}</span>
@@ -25,6 +25,19 @@
         <p class="contents">
           {{ list.reviews.contents }}
         </p>
+        <CommentList
+          class="reply_list"
+          v-for="(reply, index) in list.reviews_comment"
+          :key="'reply' + index"
+        >
+          <template slot="comment">
+            <div class="comment_header">
+              <span class="name">{{ reply.user_name }}</span>
+              <span class="date">{{ reply.timeAgo }}</span>
+            </div>
+            <p class="contents">{{ reply.contents }}</p>
+          </template>
+        </CommentList>
       </template>
     </CommentList>
     <button class="more_view_btn">더 많은 평가 보기</button>
@@ -65,86 +78,6 @@
   #comment_wrap {
     padding: 4.445%;
     padding-top: 0;
-    h2 {
-      font-size: 2rem;
-    }
-    .section_wrap {
-      margin-top: 10px;
-
-      .left_sec {
-        width: 41%;
-        text-align: center;
-        vertical-align: middle;
-        display: inline-block;
-        h3 {
-          font-size: 15px;
-        }
-        .star_wrap {
-          margin: 5px 0;
-          img {
-            width: 17px;
-            height: 16px;
-          }
-        }
-        .eval_btn {
-          background: #114fff;
-          color: white;
-          border-radius: 5px;
-          font-size: 11px;
-          padding: 3px 26.95%;
-        }
-      }
-      .right_sec {
-        width: 59%;
-        display: inline-block;
-        vertical-align: middle;
-        span {
-          display: inline-block;
-          vertical-align: middle;
-          img {
-            vertical-align: middle;
-            width: 50%;
-          }
-        }
-        .line {
-          &:not(:first-child) {
-            margin-top: 1%;
-          }
-          .left_star_wrap {
-            width: 15%;
-            .left_star {
-              width: 100%;
-              .star {
-                width: 10px;
-                height: 10px;
-              }
-              .star_count {
-                font-size: 12px;
-                margin-left: 4px;
-              }
-            }
-          }
-          .progress {
-            width: 85%;
-            background: #dbdbdb;
-            height: 8px;
-            border-radius: 4px;
-            position: relative;
-            .progress_bar {
-              border-radius: 4px;
-              vertical-align: unset;
-              background: #114fff;
-              width: 40%;
-              height: 8px;
-              position: absolute;
-              top: 0;
-              left: 0;
-            }
-          }
-        }
-      }
-    }
-
     .more_view_btn {
       margin-top: 7%;
       border: 2px solid #114fff;
@@ -154,6 +87,15 @@
       border-radius: 15px;
       font-family: "NotoSansCJKkr-Medium";
       font-size: 12px;
+    }
+    .reply_list {
+      margin-top: 15px;
+      margin-left: 10%;
+      ::v-deep .comment_header {
+        .name {
+          margin-left: 0;
+        }
+      }
     }
   }
 </style>

@@ -52,7 +52,7 @@
           </span>
           <span
             class="star_wrap"
-            v-for="(grade, index) in Number(5 - detail.ranking)"
+            v-for="(grade, index) in Number(5 - Math.round(detail.ranking))"
             :key="'empty' + index"
           >
             <img src="@/assets/images/common/small_empty_star.png" alt="" />
@@ -141,6 +141,7 @@
     <div id="lec_eval">
       <h2>강의평가</h2>
       <div class="section_wrap">
+        <!-- 강의평가 LEFT SECTION -->
         <div class="left_sec">
           <h3>{{ detail.ranking }}</h3>
           <div class="star_wrap">
@@ -158,7 +159,7 @@
             />
 
             <img
-              v-for="(grade, index) in Number(5 - detail.ranking)"
+              v-for="(grade, index) in Number(5 - Math.round(detail.ranking))"
               :key="'empty' + index"
               src="@/assets/images/common/big_empty_star.png"
               alt=""
@@ -166,6 +167,7 @@
           </div>
           <button class="eval_btn">강의 평가</button>
         </div>
+        <!-- 강의평가 RIGHT SECTION -->
         <div class="right_sec">
           <div class="line">
             <span class="left_star_wrap">
@@ -235,7 +237,7 @@
         </div>
       </div>
     </div>
-    <CommentWrap> </CommentWrap>
+    <CommentWrap></CommentWrap>
   </div>
 </template>
 <script>
