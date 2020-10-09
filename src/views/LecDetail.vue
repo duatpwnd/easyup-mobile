@@ -196,7 +196,7 @@
           <button class="eval_btn">강의 평가</button>
         </div>
         <!-- 강의평가 RIGHT SECTION -->
-        <ProgressBar :max="35" :value="6"></ProgressBar>
+
         <div class="right_sec">
           <div class="line">
             <span class="left_star_wrap">
@@ -209,6 +209,7 @@
                 <span class="star_count">5</span>
               </span>
             </span>
+            <ProgressBar :max="35" :value="6"></ProgressBar>
             <span class="progress"><span class="progress_bar"> </span></span>
           </div>
           <div class="line">
