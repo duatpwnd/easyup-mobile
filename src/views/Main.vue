@@ -118,6 +118,7 @@
   import LecItem from "@/components/common/LectureItem.vue";
   import CategoryLec from "@/components/main/MainCategory.vue";
   import Slide from "@/components/common/Slide.vue";
+
   // import Test from "@/components/main/PopularCourse.vue";
   export default {
     components: {
@@ -256,6 +257,14 @@
     .category_section {
       padding-top: 0;
       padding-bottom: 0;
+    }
+    ::v-deep .vue-star-rating {
+      display: unset;
+      .vue-star-rating-rating-text {
+        font-size: 12px;
+        color: #333333;
+        margin-left: 10px;
+      }
     }
   }
 </style>

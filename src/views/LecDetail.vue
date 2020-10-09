@@ -1,5 +1,33 @@
 <template>
   <div id="lec_detail">
+    <StarRating
+      :rating="3.5"
+      :star-size="10"
+      :read-only="true"
+      :increment="0.01"
+      :star-points="[
+        23,
+        2,
+        14,
+        17,
+        0,
+        19,
+        10,
+        34,
+        7,
+        50,
+        23,
+        43,
+        38,
+        50,
+        36,
+        34,
+        46,
+        19,
+        31,
+        17,
+      ]"
+    ></StarRating>
     <!-- <ThumbNail></ThumbNail> -->
     <img
       :src="detail.course_image"
@@ -168,6 +196,7 @@
           <button class="eval_btn">강의 평가</button>
         </div>
         <!-- 강의평가 RIGHT SECTION -->
+        <ProgressBar :max="35" :value="6"></ProgressBar>
         <div class="right_sec">
           <div class="line">
             <span class="left_star_wrap">
@@ -246,11 +275,13 @@
   // import Subscribe from "@/components/lecture_detail/subscribe";
   import CommentWrap from "@/components/lecture_detail/CommentWrap";
   import BlueBtn from "@/components/common/BaseButton.vue";
-
+  import StarRating from "vue-star-rating";
+  import ProgressBar from "@/components/common/ProgressBar.vue";
   export default {
     components: {
       BlueBtn,
-
+      StarRating,
+      ProgressBar,
       // Subscribe,
       CommentWrap,
       // Intro,
