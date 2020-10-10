@@ -198,7 +198,11 @@
         <!-- 강의평가 RIGHT SECTION -->
 
         <div class="right_sec">
-          <div class="line">
+          <div
+            class="line"
+            v-for="(list, index) in score_info.score_list"
+            :key="index"
+          >
             <span class="left_star_wrap">
               <span class="left_star">
                 <img
@@ -206,13 +210,16 @@
                   alt=""
                   class="star"
                 />
-                <span class="star_count">5</span>
+                <span class="star_count">{{ list.title }}</span>
               </span>
             </span>
-            <ProgressBar :max="35" :value="6"></ProgressBar>
-            <span class="progress"><span class="progress_bar"> </span></span>
+            <ProgressBar
+              :max="score_info.total"
+              :value="list.count"
+            ></ProgressBar>
+            <!-- <span class="progress"><span class="progress_bar"> </span></span> -->
           </div>
-          <div class="line">
+          <!-- <div class="line">
             <span class="left_star_wrap">
               <span class="left_star">
                 <img
@@ -263,7 +270,7 @@
               </span>
             </span>
             <span class="progress"><span class="progress_bar"> </span></span>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

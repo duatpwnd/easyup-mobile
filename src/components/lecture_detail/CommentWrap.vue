@@ -76,11 +76,11 @@
             const score = {
               total: result.data.data.length,
               score_list: [
-                scoreCount(5),
-                scoreCount(4),
-                scoreCount(3),
-                scoreCount(2),
-                scoreCount(1),
+                { title: 5, count: scoreCount(5) },
+                { title: 4, count: scoreCount(4) },
+                { title: 3, count: scoreCount(3) },
+                { title: 2, count: scoreCount(2) },
+                { title: 1, count: scoreCount(1) },
               ],
             };
             this.$emit("emitScoreCount", score);
