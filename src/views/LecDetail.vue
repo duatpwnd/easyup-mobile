@@ -267,7 +267,7 @@
         </div>
       </div>
     </div>
-    <CommentWrap></CommentWrap>
+    <CommentWrap @emitScoreCount="scoreCount()"></CommentWrap>
   </div>
 </template>
 <script>
@@ -292,9 +292,13 @@
       return {
         subscribe_btn: false,
         detail: "",
+        score_info: "", // 각 별점의 개수
       };
     },
     methods: {
+      scoreCount(result) {
+        this.score_info = result;
+      },
       video() {
         this.$router.push("/play");
       },

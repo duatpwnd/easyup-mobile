@@ -55,6 +55,13 @@
       };
     },
     methods: {
+      // 각별점 개수 필터링
+      scoreCount(result) {
+        const filter = obj.filter((el, index) => {
+          return el.reviews.score == result;
+        });
+        return filter.length;
+      },
       // 강의평가 조회
       getCommentList() {
         const data = {
@@ -66,6 +73,17 @@
           .then((result) => {
             console.log("댓글", result.data.data);
             this.comment = result.data.data;
+            const score = {
+              total: result.data.data.length,
+              score_list: [
+                scoreCount(5),
+                scoreCount(4),
+                scoreCount(3),
+                scoreCount(2),
+                scoreCount(1),
+              ],
+            };
+            this.$emit("emitScoreCount", score);
           });
       },
     },
