@@ -1,33 +1,5 @@
 <template>
   <div id="lec_detail">
-    <StarRating
-      :rating="3.5"
-      :star-size="10"
-      :read-only="true"
-      :increment="0.01"
-      :star-points="[
-        23,
-        2,
-        14,
-        17,
-        0,
-        19,
-        10,
-        34,
-        7,
-        50,
-        23,
-        43,
-        38,
-        50,
-        36,
-        34,
-        46,
-        19,
-        31,
-        17,
-      ]"
-    ></StarRating>
     <!-- <ThumbNail></ThumbNail> -->
     <img
       :src="detail.course_image"
@@ -65,6 +37,34 @@
           >
         </div>
         <div>
+          <StarRating
+            :rating="detail.ranking"
+            :star-size="10"
+            :read-only="true"
+            :increment="0.01"
+            :star-points="[
+              23,
+              2,
+              14,
+              17,
+              0,
+              19,
+              10,
+              34,
+              7,
+              50,
+              23,
+              43,
+              38,
+              50,
+              36,
+              34,
+              46,
+              19,
+              31,
+              17,
+            ]"
+          ></StarRating>
           <span
             class="star_wrap"
             v-for="(grade, index) in Number(Math.floor(detail.ranking))"
@@ -172,6 +172,34 @@
         <!-- 강의평가 LEFT SECTION -->
         <div class="left_sec">
           <h3>{{ detail.ranking }}</h3>
+          <StarRating
+            :rating="detail.ranking"
+            :star-size="10"
+            :read-only="true"
+            :increment="0.01"
+            :star-points="[
+              23,
+              2,
+              14,
+              17,
+              0,
+              19,
+              10,
+              34,
+              7,
+              50,
+              23,
+              43,
+              38,
+              50,
+              36,
+              34,
+              46,
+              19,
+              31,
+              17,
+            ]"
+          ></StarRating>
           <div class="star_wrap">
             <img
               v-for="(grade, index) in Number(Math.floor(detail.ranking))"
