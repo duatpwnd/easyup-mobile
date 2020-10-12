@@ -106,7 +106,13 @@ const routes = [
   {
     path: "/category",
     name: "category",
-    component: () => import("../views/CategoryLecList.vue"),
+    component: () => import("../views/LectureList.vue"),
+    meta: { isFooter: true },
+  },
+  {
+    path: "/course",
+    name: "course",
+    component: () => import("../views/LectureList.vue"),
     meta: { isFooter: true },
   },
   {

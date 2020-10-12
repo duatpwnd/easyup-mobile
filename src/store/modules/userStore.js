@@ -5,7 +5,6 @@ const userStore = {
   },
   mutations: {
     loginToken(state, param) {
-      console.log("토큰옴", param);
       state.token = param;
     },
   },

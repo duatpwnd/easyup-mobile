@@ -14,7 +14,18 @@
 
     <div class="lnb_menu">
       <button class="lnb" @click="goToLecture()">강의</button>
-      <button class="lnb">코스</button>
+      <router-link
+        class="lnb"
+        :to="{
+          path: '/course',
+          query: {
+            action: 'get_session_list',
+            pageCurrent: 1,
+            order: 'type_date',
+          },
+        }"
+        >코스</router-link
+      >
       <button
         class="lnb"
         @click="

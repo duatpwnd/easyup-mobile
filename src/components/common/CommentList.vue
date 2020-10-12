@@ -27,7 +27,9 @@
 </script>
 <style scoped lang="scss">
   .comment_list {
-    margin-top: 9%;
+    &:not(:first-child) {
+      margin-top: 9%;
+    }
     .comment_header {
       position: relative;
       img {

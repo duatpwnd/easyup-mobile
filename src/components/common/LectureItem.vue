@@ -9,7 +9,9 @@
         />
       </router-link>
     </slot>
-    <h4>나도 코딩</h4>
+    <slot name="teacher">
+      <h4>나도 코딩</h4>
+    </slot>
     <slot name="subtitle">
       <h2 class="subtitle">파이썬 코딩 기본편</h2>
     </slot>

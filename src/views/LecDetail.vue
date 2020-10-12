@@ -1,6 +1,5 @@
 <template>
-  <div id="lec_detail">
-    <!-- <ThumbNail></ThumbNail> -->
+  <div id="lec_detail" v-if="detail">
     <img
       :src="detail.course_image"
       alt="파이썬 코딩 기본편"
@@ -10,8 +9,10 @@
       <slot name="title_wrap">
         <h3 class="sub_title">{{ detail.category }}</h3>
         <h2 class="title">{{ detail.title }}!</h2>
-        <div class="tag_list" v-for="(list, index) in detail.tags" :key="index">
-          <span>{{ detail.list }}</span>
+        <div class="tag_list">
+          <span v-for="(list, index) in detail.tags" :key="index">
+            {{ list.tag }}</span
+          >
         </div>
       </slot>
     </div>
@@ -65,63 +66,37 @@
               17,
             ]"
           ></StarRating>
-          <span
-            class="star_wrap"
-            v-for="(grade, index) in Number(Math.floor(detail.ranking))"
-            :key="'full' + index"
-          >
-            <img src="@/assets/images/common/small_star.png" alt="" />
-          </span>
-          <span
-            class="star_wrap"
-            v-if="Number.isInteger(detail.ranking) == false"
-          >
-            <img src="@/assets/images/common/small_half_star.png" alt="" />
-          </span>
-          <span
-            class="star_wrap"
-            v-for="(grade, index) in Number(5 - Math.round(detail.ranking))"
-            :key="'empty' + index"
-          >
-            <img src="@/assets/images/common/small_empty_star.png" alt="" />
-          </span>
-
-          <span class="score">{{ detail.ranking }}점</span>
         </div>
         <span class="name">{{ detail.teachers }}</span>
       </div>
       <button class="fixed_subs_btn" v-if="subscribe_btn">구독하기</button>
     </div>
-    <!-- <Subscribe></Subscribe> -->
-    <!-- description :: S  -->
-    <!-- <Intro></Intro> -->
     <div id="intro">
-      <h2 class="title" v-if="detail.description[0].underline">
-        {{ detail.description[0].title }}
-      </h2>
-      <h2 v-else>{{ detail.description[0].title }}</h2>
-      <div
-        class="description_contents"
-        v-html="detail.description[0].content"
-      ></div>
-      <h2 class="title title2" v-if="detail.description[1].underline">
-        {{ detail.description[1].title }}
-      </h2>
-      <h2 class="title2" v-else>{{ detail.description[1].title }}</h2>
-      <div class="recommand_list" v-html="detail.description[1].content"></div>
-      <!-- <ul class="recommand_list">
-        <li>
-          <span
-            ><img
-              class="check_ico"
-              src="@/assets/images/lec_detail/check.png"
-              alt=""
-            />코딩에 관심이 있지만, 어떻게 시작해야 할 지 혼란스러운 분</span
-          >
-        </li>
-      </ul> -->
-      <div class="example">
-        <h2>강의 예시 및 소개</h2>
+      <div v-if="typeof detail.description[0] != 'undefined'">
+        <h2 class="title" v-if="detail.description[0].underline">
+          {{ detail.description[0].title }}
+        </h2>
+        <h2 v-else>{{ detail.description[0].title }}</h2>
+        <div
+          class="description_contents"
+          v-html="detail.description[0].content"
+        ></div>
+      </div>
+      <div v-if="typeof detail.description[1] != 'undefined'">
+        <h2 class="title title2" v-if="detail.description[1].underline">
+          {{ detail.description[1].title }}
+        </h2>
+        <h2 class="title2" v-else>{{ detail.description[1].title }}</h2>
+        <div
+          class="recommand_list"
+          v-html="detail.description[1].content"
+        ></div>
+      </div>
+      <div class="example" v-if="typeof detail.description[2] != 'undefined'">
+        <h2 class="title" v-if="detail.description[2].underline">
+          {{ detail.description[2].title }}
+        </h2>
+        <h2 v-else>{{ detail.description[2].title }}</h2>
         <div
           class="description_contents"
           v-html="detail.description[2].content"
@@ -132,38 +107,42 @@
           적용하실 수 있을 겁니다.
         </div>
       </div>
-      <div class="curriculum">
-        <div class="curriculum_header">
-          <h2 class="curriculum_title">커리큘럼</h2>
-          <button class="subscribe_btn">강의 구독</button>
-          <span class="total_lec">총 {{ detail.curriculum_list.count }}강</span>
-        </div>
-        <ul
-          class="curriculum_list"
-          v-for="(list, index) in detail.curriculum_list.items"
-          :key="index"
-        >
-          <li v-if="list.children_count != null">
-            <span class="lec_title">
-              {{ list.title }}
-            </span>
-            <span class="lec_num">
-              {{ list.children_count }}
-            </span>
-          </li>
-          <li v-else>
-            <span class="lec_title else_lec_title">
-              {{ list.title }}
-            </span>
-          </li>
-        </ul>
+    </div>
+    <div class="curriculum">
+      <div class="curriculum_header">
+        <h2 class="curriculum_title">커리큘럼</h2>
+        <button class="subscribe_btn">강의 구독</button>
+        <span class="total_lec">총 {{ detail.curriculum_list.count }}강</span>
       </div>
-      <div class="teacher_intro">
-        <h2 class="intro">강사소개</h2>
-        <div class="name" v-html="detail.teacher_introduce[0].content"></div>
-        <!-- <h3 class="career">현:아이티윌 전임 강사</h3>
+      <ul
+        class="curriculum_list"
+        v-for="(list, index) in detail.curriculum_list.items"
+        :key="index"
+      >
+        <li v-if="list.children_count != null">
+          <span class="lec_title">
+            {{ list.title }}
+          </span>
+          <span class="lec_num">
+            {{ list.children_count }}
+          </span>
+        </li>
+        <li v-else>
+          <span class="lec_title else_lec_title">
+            {{ list.title }}
+          </span>
+        </li>
+      </ul>
+    </div>
+    <div class="teacher_intro">
+      <h2 class="intro">강사소개</h2>
+      <div
+        class="name"
+        v-if="detail.teacher_introduce.length !== 0"
+        v-html="detail.teacher_introduce[0].content"
+      ></div>
+      <!-- <h3 class="career">현:아이티윌 전임 강사</h3>
         <h3 class="career">전:EBS 1타 강사</h3> -->
-      </div>
     </div>
     <!-- description :: E  -->
     <div id="lec_eval">
@@ -174,7 +153,7 @@
           <h3>{{ detail.ranking }}</h3>
           <StarRating
             :rating="detail.ranking"
-            :star-size="10"
+            :star-size="17"
             :read-only="true"
             :increment="0.01"
             :star-points="[
@@ -200,31 +179,10 @@
               17,
             ]"
           ></StarRating>
-          <div class="star_wrap">
-            <img
-              v-for="(grade, index) in Number(Math.floor(detail.ranking))"
-              :key="'full' + index"
-              src="@/assets/images/common/big_star.png"
-              alt=""
-            />
 
-            <img
-              v-if="Number.isInteger(detail.ranking) == false"
-              src="@/assets/images/common/big_half_star.png"
-              alt=""
-            />
-
-            <img
-              v-for="(grade, index) in Number(5 - Math.round(detail.ranking))"
-              :key="'empty' + index"
-              src="@/assets/images/common/big_empty_star.png"
-              alt=""
-            />
-          </div>
           <button class="eval_btn">강의 평가</button>
         </div>
         <!-- 강의평가 RIGHT SECTION -->
-
         <div class="right_sec">
           <div
             class="line"
@@ -245,70 +203,14 @@
               :max="score_info.total"
               :value="list.count"
             ></ProgressBar>
-            <!-- <span class="progress"><span class="progress_bar"> </span></span> -->
           </div>
-          <!-- <div class="line">
-            <span class="left_star_wrap">
-              <span class="left_star">
-                <img
-                  src="@/assets/images/common/small_star.png"
-                  alt=""
-                  class="star"
-                />
-                <span class="star_count">4</span>
-              </span>
-            </span>
-            <span class="progress"><span class="progress_bar"> </span></span>
-          </div>
-          <div class="line">
-            <span class="left_star_wrap">
-              <span class="left_star">
-                <img
-                  src="@/assets/images/common/small_star.png"
-                  alt=""
-                  class="star"
-                />
-                <span class="star_count">3</span>
-              </span>
-            </span>
-            <span class="progress"><span class="progress_bar"> </span></span>
-          </div>
-          <div class="line">
-            <span class="left_star_wrap">
-              <span class="left_star">
-                <img
-                  src="@/assets/images/common/small_star.png"
-                  alt=""
-                  class="star"
-                />
-                <span class="star_count">2</span>
-              </span>
-            </span>
-            <span class="progress"><span class="progress_bar"> </span></span>
-          </div>
-          <div class="line">
-            <span class="left_star_wrap">
-              <span class="left_star">
-                <img
-                  src="@/assets/images/common/small_star.png"
-                  alt=""
-                  class="star"
-                />
-                <span class="star_count">1</span>
-              </span>
-            </span>
-            <span class="progress"><span class="progress_bar"> </span></span>
-          </div> -->
         </div>
       </div>
     </div>
-    <CommentWrap @emitScoreCount="scoreCount()"></CommentWrap>
+    <CommentWrap @emitScoreCount="scoreCount"></CommentWrap>
   </div>
 </template>
 <script>
-  // import ThumbNail from "@/components/lecture_detail/thumbnail";
-  // import Intro from "@/components/lecture_detail/intro";
-  // import Subscribe from "@/components/lecture_detail/subscribe";
   import CommentWrap from "@/components/lecture_detail/CommentWrap";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import StarRating from "vue-star-rating";
@@ -318,10 +220,7 @@
       BlueBtn,
       StarRating,
       ProgressBar,
-      // Subscribe,
       CommentWrap,
-      // Intro,
-      // ThumbNail,
     },
     data() {
       return {
@@ -332,6 +231,7 @@
     },
     methods: {
       scoreCount(result) {
+        console.log(result);
         this.score_info = result;
       },
       video() {
@@ -351,19 +251,16 @@
       },
       // 강의 상세 조회
       async getLectureDetail() {
-        console.log("강의상세조회");
+        console.log("강의상세조회", this.$route.query.id);
         const data = {
           action: "get_course_info",
-          course_id: "61",
+          course_id: this.$route.query.id,
         };
         await this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
             console.log("강의상세:", result.data.data);
             this.detail = result.data.data;
-            // Object.keys(result.data.data).forEach((d, index) => {
-            //   this[d] = Object.values(result.data.data)[index];
-            // });
           });
       },
     },
@@ -394,7 +291,7 @@
         border: 2px solid #757575;
         border-radius: 20px;
         height: 24px;
-        width: 64px;
+        padding: 0 10px;
         display: inline-block;
         margin-right: 0.763%;
         font-size: 12px;
@@ -422,6 +319,14 @@
         line-height: 32px;
       }
     }
+    ::v-deep .vue-star-rating {
+      display: unset;
+      .vue-star-rating-rating-text {
+        font-size: 12px;
+        color: #333333;
+        margin-left: 10px;
+      }
+    }
     .subscribe_wrap {
       .total_lec {
         font-size: 1.375rem;
@@ -433,10 +338,7 @@
         font-size: 1.375rem;
         color: #666666;
       }
-      .star_wrap {
-        width: 2.593%;
-        display: inline-block;
-      }
+
       .score {
         font-size: 1.375rem;
         color: #333333;
@@ -476,22 +378,14 @@
     .description_contents {
       margin-top: 10px;
       color: #666666;
-      font-size: 1.5rem;
+      font-size: 14px;
       text-align: justify;
+      font-family: "NotoSansCJKkr-Regular";
     }
     .recommand_list {
       margin-top: 20px;
-      li {
-        span {
-          display: block;
-          font-size: 1.5rem;
-          .check_ico {
-            width: 10px;
-            height: 9px;
-            margin-right: 5px;
-          }
-        }
-      }
+      font-size: 14px;
+      font-family: "NotoSansCJKkr-Regular";
     }
     .example {
       margin-top: 50px;
@@ -500,87 +394,90 @@
         margin-top: 20px;
       }
     }
-    .curriculum {
-      margin-top: 50px;
-      .curriculum_header {
-        position: relative;
-        .curriculum_title {
-          display: inline-block;
-          vertical-align: middle;
-        }
-        .subscribe_btn {
-          border-radius: 5px;
-          margin-left: 3%;
-          width: 54px;
-          height: 16px;
-          vertical-align: middle;
-          font-family: inherit;
-          font-size: 9px;
-          color: #114fff;
-          border: 1px solid #114fff;
-        }
-        .total_lec {
-          font-size: 1.25rem;
-          color: #333333;
-          line-height: 100%;
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          margin: auto;
-          height: 50%;
-        }
+  }
+  .curriculum {
+    margin-top: 30px;
+    padding: 0 4.445%;
+    .curriculum_header {
+      position: relative;
+      .curriculum_title {
+        display: inline-block;
+        vertical-align: middle;
       }
-      .curriculum_list {
-        li {
-          margin-top: 2%;
-          .lec_title,
-          .lec_num {
-            font-size: 1.25rem;
-            color: #333333;
-            background: #f8f8f8;
-            padding: 1% 2%;
-            box-sizing: border-box;
-            border-radius: 12px;
-          }
-          .lec_title {
-            display: inline-block;
-            width: 85%;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-          }
-          .else_lec_title {
-            width: 100%;
-            border-radius: 12px;
-          }
-          .lec_num {
-            width: 13%;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            margin-left: 2%;
-            display: inline-block;
-            text-align: center;
-          }
-        }
+      .subscribe_btn {
+        border-radius: 5px;
+        margin-left: 3%;
+        width: 54px;
+        height: 16px;
+        vertical-align: middle;
+        font-family: inherit;
+        font-size: 9px;
+        color: #114fff;
+        border: 1px solid #114fff;
+      }
+      .total_lec {
+        font-size: 1.25rem;
+        color: #333333;
+        line-height: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        height: 50%;
       }
     }
-    .teacher_intro {
-      .intro {
-        font-size: 2rem;
-        margin-top: 7.6%;
-      }
-      .name {
-        font-size: 1.5rem;
-        margin: 2.287% 0;
-      }
-      .career {
-        color: #999999;
-        font-size: 1.25rem;
+    .curriculum_list {
+      li {
+        margin-top: 2%;
+        .lec_title,
+        .lec_num {
+          font-size: 1.25rem;
+          color: #333333;
+          background: #f8f8f8;
+          padding: 1% 2%;
+          box-sizing: border-box;
+          border-radius: 12px;
+        }
+        .lec_title {
+          display: inline-block;
+          width: 85%;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+        .else_lec_title {
+          width: 100%;
+          border-radius: 12px;
+        }
+        .lec_num {
+          width: 13%;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          margin-left: 2%;
+          display: inline-block;
+          text-align: center;
+        }
       }
     }
   }
+  .teacher_intro {
+    margin-top: 30px;
+    padding: 0 4.445%;
+    .intro {
+      font-size: 2rem;
+    }
+    .name {
+      font-size: 1.5rem;
+      margin: 2.287% 0;
+    }
+    .career {
+      color: #999999;
+      font-size: 1.25rem;
+    }
+  }
   #lec_eval {
-    padding: 4.445%;
+    margin-top: 30px;
+    padding: 0 4.445%;
     h2 {
       font-size: 2rem;
     }
@@ -595,11 +492,11 @@
         h3 {
           font-size: 15px;
         }
-        .star_wrap {
+        ::v-deep .vue-star-rating {
           margin: 5px 0;
-          img {
-            width: 17px;
-            height: 16px;
+          display: block;
+          .vue-star-rating-rating-text {
+            display: none;
           }
         }
         .eval_btn {

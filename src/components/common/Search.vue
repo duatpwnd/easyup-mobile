@@ -1,12 +1,17 @@
 <template>
   <div class="search">
-    <select class="select" name="" id="">
-      <option value="">최신 등록순</option>
-      <option value="">이름순</option>
-      <option value="">평점순</option>
-    </select>
+    <slot name="option">
+      <select class="select" name="" id="">
+        <option value="type_date">최신 등록순</option>
+        <option value="type_name">이름순</option>
+        <option value="type_rating">평점순</option>
+      </select>
+    </slot>
     <slot name="slot_input">
       <input type="text" class="search_contents" />
+    </slot>
+    <slot name="search_btn">
+      <button class="search_btn"></button>
     </slot>
   </div>
 </template>
@@ -22,6 +27,7 @@
 <style scoped lang="scss">
   .search {
     margin-top: 2%;
+    position: relative;
     &:after {
       display: block;
       content: "";
@@ -49,8 +55,19 @@
       padding-right: 10%;
       box-sizing: border-box;
       margin-left: 2%;
+      // background: url("~@/assets/images/lec_list/search_btn.png") no-repeat 95%
+      //   center / 12px 12px;
+    }
+    .search_btn {
       background: url("~@/assets/images/lec_list/search_btn.png") no-repeat 95%
         center / 12px 12px;
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      top: 0;
+      right: 10px;
+      bottom: 0;
+      margin: auto;
     }
   }
 </style>

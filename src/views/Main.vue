@@ -2,7 +2,10 @@
   <div id="main">
     <!-- 배너 :: S -->
     <Slide :swiper_option="slide_option.banner">
-      <swiper-slide slot="list" v-for="(list, index) in banner" :key="index"
+      <swiper-slide
+        slot="list"
+        v-for="(list, index) in list.banner"
+        :key="index"
         ><img :src="list.image_url"
       /></swiper-slide>
     </Slide>
@@ -13,9 +16,22 @@
       <h2 class="title">인기 강의</h2>
       <p class="suggest">이지업의 가장 인기가 많은 강의를 확인해보세요</p>
       <div class="lec_list_wrap">
-        <div class="li" v-for="(list, index) in popular_lecture" :key="index">
+        <div
+          class="li"
+          v-for="(list, index) in list.popular_lecture"
+          :key="index"
+        >
           <LecItem>
-            <router-link class="lec_list" slot="router" to="/lecDetail">
+            <router-link
+              class="lec_list"
+              slot="router"
+              :to="{
+                path: '/lecDetail',
+                query: {
+                  id: list.id,
+                },
+              }"
+            >
               <img :src="list.image_url" alt="이지업" title="이지업" />
             </router-link>
             <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
@@ -38,10 +54,17 @@
       <Slide :swiper_option="slide_option.popular_course">
         <swiper-slide
           slot="list"
-          v-for="(list, index) in popular_course"
+          v-for="(list, index) in list.popular_course"
           :key="index"
-          ><img :src="list.image_url"
-        /></swiper-slide>
+          ><router-link
+            :to="{
+              path: '/lecDetail',
+              query: {
+                id: list.id,
+              },
+            }"
+            ><img :src="list.image_url"/></router-link
+        ></swiper-slide>
       </Slide>
     </div>
     <!-- <Test></Test> -->
@@ -56,11 +79,20 @@
       <Slide :swiper_option="slide_option.latest_lecture">
         <swiper-slide
           slot="list"
-          v-for="(list, index) in latest_lecture"
+          v-for="(list, index) in list.latest_lecture"
           :key="index"
         >
           <LecItem>
-            <router-link class="lec_list" slot="router" to="/lecDetail">
+            <router-link
+              class="lec_list"
+              slot="router"
+              :to="{
+                path: '/lecDetail',
+                query: {
+                  id: list.id,
+                },
+              }"
+            >
               <img :src="list.image_url" alt="이지업" title="이지업" />
             </router-link>
             <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
@@ -83,11 +115,20 @@
       <Slide :swiper_option="slide_option.latest_lecture">
         <swiper-slide
           slot="list"
-          v-for="(list, index) in translation_lecture"
+          v-for="(list, index) in list.translation_lecture"
           :key="index"
         >
           <LecItem>
-            <router-link class="lec_list" slot="router" to="/lecDetail">
+            <router-link
+              class="lec_list"
+              slot="router"
+              :to="{
+                path: '/lecDetail',
+                query: {
+                  id: list.id,
+                },
+              }"
+            >
               <img :src="list.image_url" alt="이지업" title="이지업" />
             </router-link>
             <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
@@ -156,12 +197,7 @@
             },
           },
         },
-        banner: "",
-        latest_lecture: "",
-        popular_lecture: "",
-        popular_course: "",
-        translation_lecture: "",
-        recent_notice: "",
+        list: "",
       };
     },
     methods: {
@@ -173,9 +209,7 @@
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
             console.log(result);
-            Object.keys(result.data.data).forEach((d, index) => {
-              this[d] = Object.values(result.data.data)[index];
-            });
+            this.list = result.data.data;
           });
       },
     },

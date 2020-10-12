@@ -57,7 +57,7 @@
     methods: {
       // 각별점 개수 필터링
       scoreCount(result) {
-        const filter = obj.filter((el, index) => {
+        const filter = this.comment.filter((el, index) => {
           return el.reviews.score == result;
         });
         return filter.length;
@@ -66,7 +66,7 @@
       getCommentList() {
         const data = {
           action: "get_course_review",
-          course_id: "61",
+          course_id: this.$route.query.id,
         };
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
@@ -76,11 +76,11 @@
             const score = {
               total: result.data.data.length,
               score_list: [
-                { title: 5, count: scoreCount(5) },
-                { title: 4, count: scoreCount(4) },
-                { title: 3, count: scoreCount(3) },
-                { title: 2, count: scoreCount(2) },
-                { title: 1, count: scoreCount(1) },
+                { title: 5, count: this.scoreCount(5) },
+                { title: 4, count: this.scoreCount(4) },
+                { title: 3, count: this.scoreCount(3) },
+                { title: 2, count: this.scoreCount(2) },
+                { title: 1, count: this.scoreCount(1) },
               ],
             };
             this.$emit("emitScoreCount", score);
@@ -94,8 +94,8 @@
 </script>
 <style scoped lang="scss">
   #comment_wrap {
-    padding: 4.445%;
-    padding-top: 0;
+    margin-top: 30px;
+    padding: 0 4.445%;
     .more_view_btn {
       margin-top: 7%;
       border: 2px solid #114fff;
