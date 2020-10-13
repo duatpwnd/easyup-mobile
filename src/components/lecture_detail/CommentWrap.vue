@@ -40,7 +40,10 @@
         </CommentList>
       </template>
     </CommentList>
-    <button class="more_view_btn">더 많은 평가 보기</button>
+    <p class="noti" v-if="comment.length === 0">등록된 강의평가가 없습니다.</p>
+    <button class="more_view_btn" v-else-if="comment.length > 4">
+      더 많은 평가 보기
+    </button>
   </div>
 </template>
 <script>
@@ -104,6 +107,11 @@
       border-radius: 15px;
       font-family: "NotoSansCJKkr-Medium";
       font-size: 12px;
+    }
+    .noti {
+      color: #333;
+      font-size: 14px;
+      text-align: center;
     }
     .reply_list {
       margin-top: 15px;
