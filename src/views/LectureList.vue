@@ -4,17 +4,16 @@
       <span>강의 > 전체</span>
     </div>
     <Search>
-      <template slot="option">
-        <select
-          class="select"
-          v-model="order"
-          @change="getList(1, order, keyword)"
-        >
-          <option value="type_date">최신 등록순</option>
-          <option value="type_name">이름순</option>
-          <option value="type_rating">평점순</option>
-        </select>
-      </template>
+      <select
+        slot="option"
+        class="select"
+        v-model="order"
+        @change="getList(1, order, keyword)"
+      >
+        <option value="type_date">최신 등록순</option>
+        <option value="type_name">이름순</option>
+        <option value="type_rating">평점순</option>
+      </select>
       <input
         slot="slot_input"
         class="search_contents"

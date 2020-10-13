@@ -46,6 +46,7 @@
 <script>
   import CommentList from "@/components/common/CommentList.vue";
   export default {
+    props: ["action"],
     components: {
       CommentList,
     },
@@ -64,10 +65,8 @@
       },
       // 강의평가 조회
       getCommentList() {
-        const data = {
-          action: "get_course_review",
-          course_id: this.$route.query.id,
-        };
+        const data = this.action;
+        console.log(data);
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {

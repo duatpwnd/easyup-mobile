@@ -58,7 +58,7 @@
           :key="index"
           ><router-link
             :to="{
-              path: '/lecDetail',
+              path: '/courseDetail',
               query: {
                 id: list.id,
               },

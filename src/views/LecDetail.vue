@@ -33,7 +33,7 @@
         </BlueBtn>
         <div>
           <span class="total_lec"
-            >총<span class="color">{{ detail.total_lecture }}</span
+            >총<span class="color"> {{ detail.total_lecture }}</span
             >강</span
           >
         </div>
@@ -207,7 +207,13 @@
         </div>
       </div>
     </div>
-    <CommentWrap @emitScoreCount="scoreCount"></CommentWrap>
+    <CommentWrap
+      :action="{
+        action: 'get_course_review',
+        course_id: $route.query.id,
+      }"
+      @emitScoreCount="scoreCount"
+    ></CommentWrap>
   </div>
 </template>
 <script>
@@ -251,11 +257,11 @@
       },
       // 강의 상세 조회
       async getLectureDetail() {
-        console.log("강의상세조회", this.$route.query.id);
         const data = {
           action: "get_course_info",
           course_id: this.$route.query.id,
         };
+
         await this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
