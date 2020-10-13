@@ -64,22 +64,28 @@
         });
       },
       login() {
-        //  post;
-        // this.$axios
-        //   .post(``, {
-        //     user_id: this.userid,
-        //     user_password: this.userpw,
-        //   })
-        //   .then((result) => {
-        //     this.$cookies.set("token", "111");
-        //   })
-        //   .catch((err) => {
-        //     // console.log("에러");
-        //   });
+        const data = {
+          action: "login",
+          userid: this.userid,
+          userpw: this.userpw,
+        };
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .then((result) => {
+            console.log(result.data.data[0].access_token);
+            this.$cookies.set("access_token", result.data.data[0].access_token);
+            this.$store.commit(
+              "userStore/loginToken",
+              result.data.data[0].access_token
+            );
+          })
+          .catch((err) => {
+            // console.log("에러");
+          });
 
-        this.$cookies.set("access_token", "111");
-        this.$store.commit("userStore/loginToken", "111");
-        this.$router.push("/").catch(() => {});
+        // this.$cookies.set("access_token", "111");
+        // this.$store.commit("userStore/loginToken", "111");
+        // this.$router.push("/").catch(() => {});
       },
     },
     mounted() {},

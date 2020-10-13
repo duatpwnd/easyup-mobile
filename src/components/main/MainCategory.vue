@@ -8,7 +8,9 @@
         :to="{
           path: '/category',
           query: {
+            category_code: 'PROGRAMMING',
             action: 'get_course_list',
+            keyword: '',
             pageCurrent: 1,
             order: 'type_date',
           },
@@ -24,7 +26,18 @@
         <h3>프로그래밍</h3>
       </router-link>
 
-      <router-link to="/">
+      <router-link
+        :to="{
+          path: '/category',
+          query: {
+            category_code: 'AI',
+            action: 'get_course_list',
+            keyword: '',
+            pageCurrent: 1,
+            order: 'type_date',
+          },
+        }"
+      >
         <img
           style="height:16.5px;"
           class="lec2_ico"
@@ -35,7 +48,18 @@
         <h3>머신러닝/딥러닝</h3>
       </router-link>
 
-      <router-link to="/">
+      <router-link
+        :to="{
+          path: '/category',
+          query: {
+            category_code: 'BASIC',
+            action: 'get_course_list',
+            pageCurrent: 1,
+            keyword: '',
+            order: 'type_date',
+          },
+        }"
+      >
         <img
           style="height:17px;"
           class="lec3_ico"
@@ -46,7 +70,18 @@
         <h3>전산이론</h3>
       </router-link>
 
-      <router-link to="/">
+      <router-link
+        :to="{
+          path: '/category',
+          query: {
+            category_code: 'ALGORITHM',
+            action: 'get_course_list',
+            keyword: '',
+            pageCurrent: 1,
+            order: 'type_date',
+          },
+        }"
+      >
         <img
           style="height:15px;"
           class="lec4_ico"
@@ -62,10 +97,6 @@
 <script>
   export default {
     components: {},
-    data() {
-      return {};
-    },
-    methods: {},
   };
 </script>
 <style scoped lang="scss">

@@ -34,8 +34,9 @@
             >
               <img :src="list.image_url" alt="이지업" title="이지업" />
             </router-link>
+            <h4 slot="teacher">{{ list.teachers }}</h4>
             <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
-            <span slot="grade" class="score">{{ list.grade }}</span>
+            <span slot="grade" class="score">{{ list.ranking }}</span>
             <h1 class="free" slot="free" v-if="list.isfree == 'Y'">
               FREE
             </h1>
@@ -95,8 +96,10 @@
             >
               <img :src="list.image_url" alt="이지업" title="이지업" />
             </router-link>
+            <h4 slot="teacher">{{ list.teachers }}</h4>
+
             <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
-            <span slot="grade" class="score">{{ list.grade }}</span>
+            <span slot="grade" class="score">{{ list.ranking }}</span>
             <h1 class="free" slot="free" v-if="list.isfree == 'Y'">
               FREE
             </h1>
@@ -131,8 +134,10 @@
             >
               <img :src="list.image_url" alt="이지업" title="이지업" />
             </router-link>
+            <h4 slot="teacher">{{ list.teachers }}</h4>
+
             <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
-            <span slot="grade" class="score">{{ list.grade }}</span>
+            <span slot="grade" class="score">{{ list.ranking }}</span>
             <h1 class="free" slot="free" v-if="list.isfree == 'Y'">
               FREE
             </h1>

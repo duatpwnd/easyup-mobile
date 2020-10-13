@@ -10,8 +10,22 @@
         <h3 class="sub_title">{{ detail.category }}</h3>
         <h2 class="title">{{ detail.title }}!</h2>
         <div class="tag_list">
-          <span v-for="(list, index) in detail.tags" :key="index">
-            {{ list.tag }}</span
+          <router-link
+            class="tag"
+            :to="{
+              path: '/course',
+              query: {
+                action: 'get_course_list',
+                pageCurrent: 1,
+                order: 'type_date',
+                keyword: '',
+                tag: list.tag.replace('#', ''),
+              },
+            }"
+            v-for="(list, index) in detail.tags"
+            :key="index"
+          >
+            {{ list.tag }}</router-link
           >
         </div>
       </slot>
@@ -221,7 +235,11 @@
   import BlueBtn from "@/components/common/BaseButton.vue";
   import StarRating from "vue-star-rating";
   import ProgressBar from "@/components/common/ProgressBar.vue";
+  import mixin from "@/components/mixins/lec_course_detail.js";
+
   export default {
+    mixins: [mixin],
+
     components: {
       BlueBtn,
       StarRating,
@@ -229,31 +247,11 @@
       CommentWrap,
     },
     data() {
-      return {
-        subscribe_btn: false,
-        detail: "",
-        score_info: "", // 각 별점의 개수
-      };
+      return {};
     },
     methods: {
-      scoreCount(result) {
-        console.log(result);
-        this.score_info = result;
-      },
       video() {
         this.$router.push("/play");
-      },
-      subscribe_btn_toggle() {
-        if (this.$refs.subs_btn != undefined) {
-          const btn_offset_top = this.$refs.subs_btn.offsetTop;
-          const btn_h = this.$refs.subs_btn.clientHeight;
-          const scroll_top = window.scrollY;
-          if (scroll_top > btn_offset_top + btn_h) {
-            this.subscribe_btn = true;
-          } else {
-            this.subscribe_btn = false;
-          }
-        }
       },
       // 강의 상세 조회
       async getLectureDetail() {
@@ -261,7 +259,15 @@
           action: "get_course_info",
           course_id: this.$route.query.id,
         };
+        /*
+        , {
+            headers: {
+              Authorization: this.$cookies.get("access_token"),
+            },
+          }
+        */
 
+        console.log(this.$cookies.get("access_token"));
         await this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
@@ -272,9 +278,6 @@
     },
     created() {
       this.getLectureDetail();
-      window.onscroll = () => {
-        this.subscribe_btn_toggle();
-      };
     },
   };
 </script>
@@ -292,7 +295,7 @@
     .tag_list {
       margin-top: 5px;
       line-height: 35px;
-      span {
+      .tag {
         color: #a4a4a4;
         border: 2px solid #757575;
         border-radius: 20px;

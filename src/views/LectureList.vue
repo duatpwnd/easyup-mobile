@@ -38,7 +38,7 @@
             class="lec_list"
             slot="router"
             :to="{
-              path: '/',
+              path: $route.name == 'course' ? '/courseDetail' : '/lecDetail',
               query: {
                 id: list.id,
               },
@@ -96,6 +96,10 @@
           current: num,
           order: order,
           keyword: keyword,
+          category_code: this.$route.query.category_code
+            ? this.$route.query.category_code
+            : null,
+          tag: this.$route.query.tag,
         };
         console.log(data);
         this.$axios
@@ -110,6 +114,9 @@
                   pageCurrent: num,
                   order: order,
                   keyword: keyword,
+
+                  category_code: this.$route.query.category_code,
+                  tag: this.$route.query.tag,
                 },
               })
               .catch(() => {});
@@ -121,8 +128,9 @@
     },
     watch: {
       $route(to, from) {
-        if (to.path != from.path) {
-          console.log(to, from);
+        console.log(to, from);
+
+        if (to.query.category_code != from.query.category_code) {
           this.getList(
             this.$route.query.pageCurrent,
             this.$route.query.order,

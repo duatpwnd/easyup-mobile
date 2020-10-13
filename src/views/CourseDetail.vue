@@ -10,8 +10,22 @@
         <h3 class="sub_title">{{ detail.category }}</h3>
         <h2 class="title">{{ detail.title }}!</h2>
         <div class="tag_list">
-          <span v-for="(list, index) in detail.tags" :key="index">
-            {{ list.tag }}</span
+          <router-link
+            class="tag"
+            :to="{
+              path: '/course',
+              query: {
+                action: 'get_course_list',
+                pageCurrent: 1,
+                order: 'type_date',
+                keyword: '',
+                tag: list.tag.replace('#', ''),
+              },
+            }"
+            v-for="(list, index) in detail.tags"
+            :key="index"
+          >
+            {{ list.tag }}</router-link
           >
         </div>
       </slot>
@@ -131,7 +145,10 @@
 
   import CourseIem from "@/components/common/LectureItem.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
+  import mixin from "@/components/mixins/lec_course_detail.js";
+
   export default {
+    mixins: [mixin],
     components: {
       StarRating,
       CommentWrap,
@@ -139,30 +156,9 @@
       CourseIem,
     },
     data() {
-      return {
-        action: "",
-        subscribe_btn: false,
-        detail: "",
-        score_info: "", // 각 별점의 개수
-      };
+      return {};
     },
     methods: {
-      scoreCount(result) {
-        console.log(result);
-        this.score_info = result;
-      },
-      subscribe_btn_toggle() {
-        if (this.$refs.subs_btn != undefined) {
-          const btn_offset_top = this.$refs.subs_btn.offsetTop;
-          const btn_h = this.$refs.subs_btn.clientHeight;
-          const scroll_top = window.scrollY;
-          if (scroll_top > btn_offset_top + btn_h) {
-            this.subscribe_btn = true;
-          } else {
-            this.subscribe_btn = false;
-          }
-        }
-      },
       // 강의 상세 조회
       async getCourseDetail() {
         const data = {

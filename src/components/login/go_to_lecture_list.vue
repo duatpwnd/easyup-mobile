@@ -2,20 +2,20 @@
   <div class="menu_modal">
     <h3 @click="back()"><button class="back"></button>이전 메뉴로 돌아가기</h3>
     <ul class="list">
-      <li>
-        <router-link to="/">강의명</router-link>
-      </li>
-      <li>
-        <router-link to="/">강의명</router-link>
-      </li>
-      <li>
-        <router-link to="/">강의명</router-link>
-      </li>
-      <li>
-        <router-link to="/">강의명</router-link>
-      </li>
-      <li>
-        <router-link to="/">강의명</router-link>
+      <li v-for="(list, index) in category_list" :key="index">
+        <router-link
+          :to="{
+            path: '/category',
+            query: {
+              category_code: index,
+              action: 'get_course_list',
+              keyword: '',
+              pageCurrent: 1,
+              order: 'type_date',
+            },
+          }"
+          >{{ list }}</router-link
+        >
       </li>
     </ul>
   </div>
@@ -24,14 +24,30 @@
   export default {
     components: {},
     data() {
-      return {};
+      return {
+        category_list: "",
+      };
     },
     methods: {
+      async getCategoryList() {
+        const data = {
+          action: "get_category_list",
+        };
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .then((result) => {
+            console.log(result);
+            this.category_list = result.data.data;
+          });
+      },
       back() {
         this.$EventBus.$emit("LoginInfo", true);
       },
     },
     mounted() {},
+    created() {
+      this.getCategoryList();
+    },
   };
 </script>
 <style scoped lang="scss">

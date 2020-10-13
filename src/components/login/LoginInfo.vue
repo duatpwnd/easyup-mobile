@@ -22,6 +22,7 @@
             action: 'get_session_list',
             pageCurrent: 1,
             order: 'type_date',
+            keyword: '',
           },
         }"
         >코스</router-link
