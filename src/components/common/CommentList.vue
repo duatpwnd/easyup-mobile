@@ -6,7 +6,7 @@
         <span class="name">김길동</span>
         <span class="date">4일전</span>
         <span class="btn_wrap">
-          <span>수정</span>
+          <span class="modify_btn">수정</span>
           <span class="remove_btn">삭제</span>
           <span>댓글</span>
         </span>
@@ -56,8 +56,9 @@
           color: #114fff;
           font-size: 9px;
         }
-        .remove_btn {
-          margin: 0 10px;
+        .remove_btn,
+        .modify_btn {
+          margin-right: 10px;
         }
       }
     }

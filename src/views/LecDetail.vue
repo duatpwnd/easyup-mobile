@@ -1,5 +1,9 @@
 <template>
   <div id="lec_detail" v-if="detail">
+    <StarScoreModal
+      :ranking="detail.ranking"
+      v-show="toggleStore_scoreModal"
+    ></StarScoreModal>
     <img
       :src="detail.course_image"
       alt="파이썬 코딩 기본편"
@@ -40,8 +44,19 @@
     <div id="subscribe">
       <div class="subscribe_wrap">
         <h2>무료</h2>
-        <BlueBtn>
-          <button ref="subs_btn" slot="blue_btn" @click="video()">
+
+        <BlueBtn v-if="is_subscribe">
+          <button
+            ref="subs_btn"
+            class="active_subscribe"
+            slot="blue_btn"
+            @click="video()"
+          >
+            구독중
+          </button>
+        </BlueBtn>
+        <BlueBtn v-else>
+          <button ref="subs_btn" slot="blue_btn">
             구독하기
           </button>
         </BlueBtn>
@@ -83,7 +98,11 @@
         </div>
         <span class="name">{{ detail.teachers }}</span>
       </div>
-      <button class="fixed_subs_btn" v-if="subscribe_btn">구독하기</button>
+
+      <button class="fixed_subs_btn" v-if="subscribe_btn">
+        <span v-if="is_subscribe" class="active_subscribe">구독중</span>
+        <span v-else>구독하기</span>
+      </button>
     </div>
     <div id="intro">
       <div v-if="typeof detail.description[0] != 'undefined'">
@@ -159,6 +178,7 @@
         <h3 class="career">전:EBS 1타 강사</h3> -->
     </div>
     <!-- description :: E  -->
+
     <div id="lec_eval">
       <h2>강의평가</h2>
       <div class="section_wrap">
@@ -194,7 +214,13 @@
             ]"
           ></StarRating>
 
-          <button class="eval_btn">강의 평가</button>
+          <button
+            class="eval_btn"
+            v-if="is_subscribe == false"
+            @click="scoreModal()"
+          >
+            강의 평가
+          </button>
         </div>
         <!-- 강의평가 RIGHT SECTION -->
         <div class="right_sec">
@@ -231,20 +257,31 @@
   </div>
 </template>
 <script>
+  import StarScoreModal from "@/components/common/StarScoreModal.vue";
   import CommentWrap from "@/components/lecture_detail/CommentWrap";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import StarRating from "vue-star-rating";
   import ProgressBar from "@/components/common/ProgressBar.vue";
   import mixin from "@/components/mixins/lec_course_detail.js";
+  import { mapState, mapMutations } from "vuex";
 
   export default {
     mixins: [mixin],
 
     components: {
+      StarScoreModal,
       BlueBtn,
       StarRating,
       ProgressBar,
       CommentWrap,
+    },
+    computed: {
+      ...mapState("userStore", {
+        userStore_token: "token",
+      }),
+      ...mapState("toggleStore", {
+        toggleStore_scoreModal: "score_modal",
+      }),
     },
     data() {
       return {};
@@ -253,21 +290,18 @@
       video() {
         this.$router.push("/play");
       },
+      scoreModal() {
+        this.$store.commit("toggleStore/Toggle", {
+          score_modal: true,
+        });
+      },
+
       // 강의 상세 조회
       async getLectureDetail() {
         const data = {
           action: "get_course_info",
           course_id: this.$route.query.id,
         };
-        /*
-        , {
-            headers: {
-              Authorization: this.$cookies.get("access_token"),
-            },
-          }
-        */
-
-        console.log(this.$cookies.get("access_token"));
         await this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
@@ -277,7 +311,9 @@
       },
     },
     created() {
-      this.getLectureDetail();
+      this.$axios
+        .all([this.isSubscribe(), this.getLectureDetail()])
+        .then(this.$axios.spread((countries, cities) => {}));
     },
   };
 </script>
@@ -328,6 +364,10 @@
         line-height: 32px;
       }
     }
+    .active_subscribe {
+      background-color: #ff114a;
+      border-color: #ff114a;
+    }
     ::v-deep .vue-star-rating {
       display: unset;
       .vue-star-rating-rating-text {
@@ -362,13 +402,18 @@
       color: #ffffff;
       font-family: "NotoSansCJKkr-Medium";
       font-size: 18px;
-      height: 40px;
       width: 100%;
       max-width: 720px;
       z-index: 2;
       left: 0;
       right: 0;
       margin: auto;
+      span {
+        width: 100%;
+        display: block;
+        height: 40px;
+        line-height: 40px;
+      }
     }
   }
   #intro {

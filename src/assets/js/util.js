@@ -1,23 +1,31 @@
+import axios from "axios";
+import ApiUrl from "./api_url.js";
+import VueCookies from "vue-cookies";
+import store from "@/store/index.js";
+import { router } from "@/router/index.js";
+
 class App {
-  constructor(a, b) {
-    this.a = a;
-    this.b = b;
-  }
-  static test1() {
-    console.log("정적메소드");
-  }
-  test() {
+  static test() {
     console.log("test");
   }
-}
-class newApp extends App {
-  constructor(c, d) {
-    super(c, d);
+  static getLectureDetail(id) {
+    console.log("정적메소드");
+    // 강의 상세 조회
+    const data = {
+      action: "get_course_info",
+      course_id: id,
+    };
+    axios.post(ApiUrl.main_list, JSON.stringify(data)).then((result) => {
+      console.log("강의상세:", result.data.data);
+      this.detail = result.data.data;
+    });
   }
-  test1() {
-    console.log("test1", this.a);
-    super.test();
-    return "success";
+  static logOut() {
+    VueCookies.remove("access_token");
+    store.commit("userStore/loginToken", null);
+    router.push("/").catch(() => {});
+    return "sc";
   }
 }
-export { App, newApp };
+
+export default App;

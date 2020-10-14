@@ -93,7 +93,7 @@ const routes = [
     name: "lecDetail",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/LecDetail.vue"),
-    meta: { isFooter: true },
+    meta: { isFooter: true, unauthorized: true },
   },
 
   {
@@ -101,19 +101,19 @@ const routes = [
     name: "courseDetail",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/CourseDetail.vue"),
-    meta: { isFooter: true },
+    meta: { isFooter: true, unauthorized: true },
   },
   {
     path: "/category",
     name: "category",
     component: () => import("../views/LectureList.vue"),
-    meta: { isFooter: true },
+    meta: { isFooter: true, unauthorized: true },
   },
   {
     path: "/course",
     name: "course",
     component: () => import("../views/LectureList.vue"),
-    meta: { isFooter: true },
+    meta: { isFooter: true, unauthorized: true },
   },
   {
     path: "/teacherClassRoom",
@@ -294,7 +294,7 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, from, next) => {
   if (VueCookies.get("access_token")) {
-    store.commit("userStore/loginToken", 111);
+    store.commit("userStore/loginToken", VueCookies.get("access_token"));
   }
   // if (
   //   VueCookies.get("access_token") === null &&

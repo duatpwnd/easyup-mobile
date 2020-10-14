@@ -69,19 +69,39 @@
           userid: this.userid,
           userpw: this.userpw,
         };
-        this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
-          .then((result) => {
-            console.log(result.data.data[0].access_token);
-            this.$cookies.set("access_token", result.data.data[0].access_token);
-            this.$store.commit(
-              "userStore/loginToken",
-              result.data.data[0].access_token
-            );
-          })
-          .catch((err) => {
-            // console.log("에러");
+        if (this.userid.trim().length == 0 || this.userpw.trim().length == 0) {
+          this.$store.commit("toggleStore/Toggle", {
+            notice_modal: true,
           });
+          this.$store.commit(
+            "toggleStore/noticeMessage",
+            "아이디 또는 비밀번호를 입력해주세요."
+          );
+        } else {
+          this.$axios
+            .post(this.$ApiUrl.main_list, JSON.stringify(data))
+            .then((result) => {
+              console.log(result);
+              if (result.data.error) {
+                this.$store.commit("toggleStore/Toggle", {
+                  notice_modal: true,
+                });
+                this.$store.commit(
+                  "toggleStore/noticeMessage",
+                  result.data.message
+                );
+              } else {
+                this.$cookies.set(
+                  "access_token",
+                  result.data.data[0].access_token
+                );
+                this.$store.commit("userStore/loginToken", result.data.data[0]);
+              }
+            })
+            .catch((err) => {
+              // console.log("에러");
+            });
+        }
 
         // this.$cookies.set("access_token", "111");
         // this.$store.commit("userStore/loginToken", "111");
