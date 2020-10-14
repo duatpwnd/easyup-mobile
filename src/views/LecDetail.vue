@@ -269,7 +269,11 @@
 
         console.log(this.$cookies.get("access_token"));
         await this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("access_token"),
+            },
+          })
           .then((result) => {
             console.log("강의상세:", result.data.data);
             this.detail = result.data.data;

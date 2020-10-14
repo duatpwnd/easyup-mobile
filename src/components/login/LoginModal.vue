@@ -72,12 +72,9 @@
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
-            console.log(result.data.data[0].access_token);
-            this.$cookies.set("access_token", result.data.data[0].access_token);
-            this.$store.commit(
-              "userStore/loginToken",
-              result.data.data[0].access_token
-            );
+            console.log(result.data.data);
+            this.$cookies.set("user_info", result.data.data[0]);
+            this.$store.commit("userStore/loginToken", result.data.data[0]);
           })
           .catch((err) => {
             // console.log("에러");

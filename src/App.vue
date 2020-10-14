@@ -1,11 +1,13 @@
 <template>
   <div id="app" :class="$mq">
     <Header></Header>
+    {{ userStore_userinfo.access_token }}567
+
     <transition name="fade" mode="out-in">
       <keep-alive>
         <div class="router-view">
           <div v-if="toggleStore_loginModal">
-            <LoginLnb v-if="userStore_token"></LoginLnb>
+            <LoginLnb v-if="userStore_userinfo.access_token"></LoginLnb>
             <LoginModal v-else></LoginModal>
           </div>
           <router-view />
@@ -44,7 +46,7 @@
         toggleStore_token: "token",
       }),
       ...mapState("userStore", {
-        userStore_token: "token",
+        userStore_userinfo: "userinfo",
       }),
     },
     data() {

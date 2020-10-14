@@ -293,8 +293,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  if (VueCookies.get("access_token")) {
-    store.commit("userStore/loginToken", 111);
+  console.log(VueCookies.get("user_info"));
+  if (VueCookies.get("user_info")) {
+    store.commit("userStore/loginToken", VueCookies.get("user_info"));
   }
   // if (
   //   VueCookies.get("access_token") === null &&

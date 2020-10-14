@@ -84,8 +84,11 @@
     methods: {
       logout() {
         console.log("로그아웃호출");
-        this.$cookies.remove("access_token");
-        this.$store.commit("userStore/loginToken", null);
+        this.$cookies.remove("user_info");
+        this.$store.commit("userStore/loginToken", {
+          access_token: null,
+          info: "",
+        });
         this.$router.push("/").catch(() => {});
       },
       goToPath(url, obj) {

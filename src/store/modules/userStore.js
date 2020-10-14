@@ -1,11 +1,14 @@
 const userStore = {
   namespaced: true,
   state: {
-    token: null,
+    userinfo: {
+      access_token: null,
+      info: "",
+    },
   },
   mutations: {
     loginToken(state, param) {
-      state.token = param;
+      state.userinfo = param;
     },
   },
 };
