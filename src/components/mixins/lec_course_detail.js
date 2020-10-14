@@ -10,7 +10,7 @@ let detail = {
         .post(this.$ApiUrl.main_list, JSON.stringify(data), {
           headers: {
             Authorization:
-              "Bearer " + this.$cookies.get("userinfo").access_token,
+              "Bearer " + this.$cookies.get("user_info").access_token,
           },
         })
         .then((result) => {
