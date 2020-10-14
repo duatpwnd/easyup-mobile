@@ -1,8 +1,7 @@
 <template>
   <div id="app" :class="$mq">
+    <NoticeModal v-if="toggleStore_noticeModal"></NoticeModal>
     <Header></Header>
-    {{ userStore_userinfo.access_token }}567
-
     <transition name="fade" mode="out-in">
       <keep-alive>
         <div class="router-view">
@@ -26,9 +25,13 @@
   import LoginLnb from "@/components/login/LoginLnb.vue";
   import GnbBottomMenu from "@/components/layout/GnbBottomMenu.vue";
   import ProfileMsgTab from "@/components/layout/ProfileMsgTab.vue";
+  import NoticeModal from "@/components/common/NoticeModal.vue";
+
   import { mapState, mapMutations } from "vuex";
   export default {
     components: {
+      NoticeModal,
+
       ProfileMsgTab,
       GnbBottomMenu,
       LoginModal,
@@ -42,8 +45,7 @@
         toggleStore_profileMsgTab: "ProfileMsgTab",
         toggleStore_gnbBottomMenu: "GnbBottomMenu",
         toggleStore_loginModal: "login_modal",
-        // toggleStore_beforeLogin: "before_login",
-        toggleStore_token: "token",
+        toggleStore_noticeModal: "notice_modal",
       }),
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",

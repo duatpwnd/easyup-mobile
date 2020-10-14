@@ -16,8 +16,8 @@ if (process.env.NODE_ENV == "development") {
 }
 axios.interceptors.request.use(
   (config) => {
-    console.log("http요청전", config);
-    // config.headers.Authorization = VueCookies.get("access_token");
+    // console.log("http요청전", config);
+    // config.headers.Authorization = "Bearer " + VueCookies.get("access_token");
 
     // config.headers.access_token = VueCookies.get("access_token");
     // config.headers.refresh_token = VueCookies.get("refresh_token");
@@ -39,7 +39,12 @@ axios.interceptors.request.use(
 // Add a response interceptor
 axios.interceptors.response.use(
   (response) => {
-    console.log("http요청후", response);
+    // console.log("http요청후", response, response.data.error);
+    if (response.data.error) {
+      // router.push("/");
+      // VueCookies.remove("access_token");
+      // store.commit("userStore/loginToken", null);
+    }
     return response;
   },
   (error) => {

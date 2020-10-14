@@ -93,7 +93,7 @@ const routes = [
     name: "lecDetail",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/LecDetail.vue"),
-    meta: { isFooter: true },
+    meta: { isFooter: true, unauthorized: true },
   },
 
   {
@@ -101,19 +101,19 @@ const routes = [
     name: "courseDetail",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/CourseDetail.vue"),
-    meta: { isFooter: true },
+    meta: { isFooter: true, unauthorized: true },
   },
   {
     path: "/category",
     name: "category",
     component: () => import("../views/LectureList.vue"),
-    meta: { isFooter: true },
+    meta: { isFooter: true, unauthorized: true },
   },
   {
     path: "/course",
     name: "course",
     component: () => import("../views/LectureList.vue"),
-    meta: { isFooter: true },
+    meta: { isFooter: true, unauthorized: true },
   },
   {
     path: "/teacherClassRoom",
@@ -293,6 +293,12 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+  // VueCookies.set("user_info", {
+  //   access_token: "fasd",
+  //   info: {
+  //     userid: 20,
+  //   },
+  // });
   console.log(VueCookies.get("user_info"));
   if (VueCookies.get("user_info")) {
     store.commit("userStore/loginToken", VueCookies.get("user_info"));
