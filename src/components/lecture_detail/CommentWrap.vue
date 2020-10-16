@@ -22,17 +22,27 @@
             <span
               class="modify_btn"
               v-if="userStore_info.info.user_id == list.reviews.user_id"
-              @click="scoreModal(list.reviews.id)"
+              @click="
+                scoreModal(
+                  list.reviews.id,
+                  list.reviews.score,
+                  list.reviews.contents
+                )
+              "
               >수정</span
             >
             <span
               class="remove_btn"
+              @click="comment_del(list.reviews.id)"
               v-if="userStore_info.info.user_id == list.reviews.user_id"
               >삭제</span
             >
             <span
               v-if="userStore_info.access_token"
-              @click="id = list.reviews.id"
+              @click="
+                id = list.reviews.id;
+                toggle('edit', index);
+              "
               >댓글</span
             >
           </span>
@@ -40,7 +50,7 @@
         <p class="contents">
           {{ list.reviews.contents }}
         </p>
-        <div class="edit_wrap">
+        <div class="edit_wrap" ref="edit" v-show="active">
           <textarea
             placeholder="내용을 입력해주세요.(300자)"
             class="edit"
@@ -50,7 +60,9 @@
           ></textarea>
           <div class="btn_wrap">
             <BlueBtn class="left">
-              <button slot="blue_btn" @click="reply_comment_add()">입력</button>
+              <button slot="blue_btn" @click="reply_comment_add()">
+                입력
+              </button>
             </BlueBtn>
             <BlueBtn class="right">
               <button slot="blue_btn" @click="write_cancel()">취소</button>
@@ -69,10 +81,13 @@
               <span class="btn_wrap">
                 <span
                   class="modify_btn"
+                  @click="toggle('reply_edit', index)"
                   v-if="userStore_info.info.user_id == reply.user_id"
                   >수정</span
                 >
-                <span v-if="userStore_info.info.user_id == reply.user_id"
+                <span
+                  @click="reply_comment_del(reply.id)"
+                  v-if="userStore_info.info.user_id == reply.user_id"
                   >삭제</span
                 >
               </span>
@@ -80,18 +95,22 @@
             <p class="contents">{{ reply.contents }}</p>
             <div
               class="edit_wrap"
-              v-show="userStore_info.info.user_id == reply.user_id"
+              ref="reply_edit"
+              v-show="active && userStore_info.info.user_id == reply.user_id"
             >
               <textarea
                 placeholder="내용을 입력해주세요.(300자)"
                 class="edit"
                 name=""
                 id=""
-                v-on:input="contents = $event.target.value"
+                ref="reply_contents_edit"
               ></textarea>
               <div class="btn_wrap">
                 <BlueBtn class="left">
-                  <button slot="blue_btn" @click="reply_comment_add()">
+                  <button
+                    slot="blue_btn"
+                    @click="reply_comment_modify(reply.id, index)"
+                  >
                     입력
                   </button>
                 </BlueBtn>
@@ -133,81 +152,64 @@
     },
     data() {
       return {
+        active: false,
         contents: "",
         id: "", // 리뷰아이디
         comment: "",
       };
     },
     methods: {
-      scoreModal(id) {
-        this.id = id;
-        this.$store.commit("toggleStore/Toggle", {
+      toggle(el, index) {
+        if (this.$refs[el][index].style.display == "none") {
+          this.$refs[el][index].style.display = "block";
+        } else {
+          this.$refs[el][index].style.display = "none";
+        }
+      },
+      toggleOff() {
+        this.$refs.edit.forEach((el, index) => {
+          el.style.display = "none";
+        });
+        this.$refs.reply_edit.forEach((el, index) => {
+          el.style.display = "none";
+        });
+      },
+      scoreModal(id, score, contents) {
+        this.$store.commit("toggleStore/scoreToggle", {
+          review_id: id,
           score_modal: true,
+          score: score,
+          score_contents: contents,
         });
       },
       // 댓글 삭제
-      // comment_del(index) {
-      //   const obj = {
-      //     a: "delete_review",
-      //     review_id: index,
-      //   };
-      //   //console.log('삭제:',obj);
-      //   $.ajax({
-      //     type: "POST",
-      //     url: "{{_p.web_ajax}}review.ajax.php",
-      //     data: obj,
-      //     success: function(result) {
-      //       const parse = JSON.parse(result);
-      //       //console.log(parse);
-      //       Comment.comment_list();
-      //     },
-      //   });
-      // },
-      // 댓글 수정
-      comment_modify(index) {
-        // const obj = {
-        //   a: "modify_review",
-        //   star: $(`.big-star img[src='{{_p.web_img}}star_on.png']`).length,
-        //   review_id: index,
-        //   contents: $("#lec_edit")
-        //     .val()
-        //     .trim(),
-        // };
-        // $.ajax({
-        //   type: "POST",
-        //   url: "{{_p.web_ajax}}review.ajax.php",
-        //   data: obj,
-        //   success: function(result) {
-        //     const parse = JSON.parse(result);
-        //     //console.log(parse,parse.msg);
-        //     modal_toggle(".mask1", parse.msg);
-        //     if (parse.result) {
-        //       Comment.comment_list();
-        //     }
-        //   },
-        // });
+      comment_del(index) {
+        const obj = {
+          action: "delete_review",
+          review_id: index,
+        };
+        console.log("삭제:", obj);
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log("댓글삭제", result);
+            if (result.data.error != true) {
+              this.$Util.default.noticeMessage(result.data.data.msg);
+
+              this.$EventBus.$emit("commentReload", true);
+            } else {
+              console.log("토큰없당");
+              this.$Util.default.logOut();
+            }
+          });
       },
-      // // 댓글 더보기
-      // comment_more_view() {
-      //   const obj = {
-      //     a: "list_more",
-      //     type: rv_type,
-      //     course_id: rv_id,
-      //   };
-      //   //console.log('더보기:',obj);
-      //   $.ajax({
-      //     type: "POST",
-      //     url: "{{_p.web_ajax}}review.ajax.php",
-      //     data: obj,
-      //     success: function(result) {
-      //       const parse = JSON.parse(result);
-      //       //console.log(parse);
-      //       $(".more-bt").toggle();
-      //       // 댓글부분
-      //       $("#review-wrap-box").append($(parse.reviewList));
-      //     },
-      //   });
-      // },
+
       // 답글 추가
       reply_comment_add() {
         const data = {
@@ -226,13 +228,9 @@
           .then((result) => {
             console.log("답글등록", result);
             if (result.data.error != true) {
-              this.$store.commit("toggleStore/Toggle", {
-                notice_modal: true,
-              });
-              this.$store.commit(
-                "toggleStore/noticeMessage",
-                result.data.data.msg
-              );
+              this.$Util.default.noticeMessage(result.data.data.msg);
+
+              this.toggleOff();
               this.getCommentList();
             } else {
               console.log("토큰없당");
@@ -243,47 +241,54 @@
         this.write_cancel();
       },
       // 답글 수정
-      reply_comment_modify(index) {
-        // const obj = {
-        //   action: "modify_comment",
-        //   review_comment_id: index,
-        //   contents: $("#review_comment_" + index + " textarea")
-        //     .val()
-        //     .trim(),
-        // };
-        // //console.log('수정:',obj);
-        // $.ajax({
-        //   type: "POST",
-        //   url: "{{_p.web_ajax}}review.ajax.php",
-        //   data: obj,
-        //   success: function(result) {
-        //     const parse = JSON.parse(result);
-        //     //console.log(parse,parse.msg);
-        //     modal_toggle(".mask1", parse.msg);
-        //     if (parse.result) {
-        //       Comment.comment_list();
-        //     }
-        //   },
-        // });
+      reply_comment_modify(index, num) {
+        const obj = {
+          action: "modify_comment",
+          review_comment_id: index,
+          contents: this.$refs["reply_contents_edit"][num].value,
+        };
+        //console.log('수정:',obj);
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log("수정등록", result);
+            if (result.data.error != true) {
+              this.$Util.default.noticeMessage(result.data.data.msg);
+
+              this.getCommentList();
+            } else {
+              console.log("토큰없당");
+              this.$Util.default.logOut();
+            }
+          });
       },
-      // // 답글 삭제
-      // reply_comment_del(index) {
-      //   const obj = {
-      //     a: "delete_comment",
-      //     review_comment_id: index,
-      //   };
-      //   //console.log('삭제:',obj);
-      //   $.ajax({
-      //     type: "POST",
-      //     url: "{{_p.web_ajax}}review.ajax.php",
-      //     data: obj,
-      //     success: function(result) {
-      //       const parse = JSON.parse(result);
-      //       //console.log(parse);
-      //       Comment.comment_list();
-      //     },
-      //   });
-      // },
+      // 답글 삭제
+      reply_comment_del(index) {
+        console.log(index);
+        const obj = {
+          action: "delete_comment",
+          review_comment_id: index,
+        };
+        console.log("삭제:", obj);
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log("삭제완료", result);
+            this.getCommentList();
+          });
+      },
       write_cancel() {
         this.editor = -1;
         // this.write_btn = true;

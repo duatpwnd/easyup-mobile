@@ -3,18 +3,41 @@
     <h2>업로드</h2>
     <div class="row">
       <label class="dt">강의선택</label>
-      <select name="" id="">
-        <option value="">선택</option>
+      <select name="" id="" @change="targetSelect()" v-model="selected">
+        <option value="null">강의를 선택해주세요.</option>
+        <option
+          :value="value"
+          v-for="(list, value, key) in select_list"
+          :key="key"
+          >{{ list }}</option
+        >
       </select>
     </div>
-
+    <div class="row" v-if="selected != null">
+      <label class="dt">구독회원 파일 공유(중복가능)</label>
+      <select class="share_list" v-model="shared_recipients" multiple>
+        <option
+          :value="value"
+          v-for="(list, value, key) in share_list"
+          :key="key"
+          >{{ list }}</option
+        >
+      </select>
+    </div>
     <div class="row">
       <label class="dt">파일첨부</label>
-      <input type="file" id="upload" />
+      <input
+        type="file"
+        accept=".png,.jpg,.jpeg,.gif"
+        id="upload"
+        ref="upload"
+        @change="fileSelect()"
+      />
       <label for="upload" class="file">파일 선택</label>
+      <span class="file_name">{{ file_obj.name }}</span>
     </div>
     <BlueBtn>
-      <button slot="blue_btn">업로드</button>
+      <button slot="blue_btn" @click="upload()">업로드</button>
     </BlueBtn>
   </div>
 </template>
@@ -26,12 +49,82 @@
       BlueBtn,
     },
     data() {
-      return {};
+      return {
+        file_obj: "",
+        select_list: "", // 강의선택 리스트
+        selected: null, // 강의선택 v-model
+        share_list: "", // 공유 받을사람
+        shared_recipients: [], // 공유받을사람 v-model
+      };
     },
     methods: {
       goToPath() {
         this.$router.push("/help/read");
       },
+      fileSelect() {
+        const selected_file = this.$refs.upload.files[0];
+        this.file_obj = selected_file;
+      },
+      upload() {
+        const formData = new FormData();
+        formData.append("action", "upload_dropbox_file");
+        formData.append("code", this.selected);
+        formData.append("recipients", this.shared_recipients);
+        formData.append("file", this.file_obj);
+
+        this.$axios
+          .post(this.$ApiUrl.main_list, formData, {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log(result);
+            if (result.data.data.length == 1) {
+              this.$router.push("/dataShare");
+            }
+          });
+      },
+      targetSelect() {
+        const data = {
+          action: "get_dropbox_target_select",
+          code: this.selected,
+        };
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log("공유받은사람:", result);
+            this.share_list = result.data.data;
+          });
+      },
+      dropBoxList() {
+        const data = {
+          action: "get_dropbox_course_select",
+        };
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log(result);
+            this.select_list = result.data.data;
+          });
+      },
+    },
+    created() {
+      this.dropBoxList();
     },
   };
 </script>
@@ -65,7 +158,9 @@
         background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
           center / 7px 5px;
       }
-
+      .share_list {
+        height: auto;
+      }
       .dt {
         width: 35%;
         display: inline-block;
@@ -88,6 +183,9 @@
         display: inline-block;
         text-align: center;
         line-height: 24px;
+      }
+      .file_name {
+        margin-left: 10px;
       }
     }
   }

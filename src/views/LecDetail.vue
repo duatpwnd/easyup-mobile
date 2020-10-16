@@ -1,8 +1,8 @@
 <template>
   <div id="lec_detail" v-if="detail">
     <StarScoreModal
-      :ranking="detail.ranking"
-      v-show="toggleStore_scoreModal"
+      :score_info="toggleStore_score_info"
+      v-if="toggleStore_score_info.score_modal"
     ></StarScoreModal>
     <img
       :src="detail.course_image"
@@ -241,6 +241,7 @@
             <ProgressBar
               :max="score_info.total"
               :value="list.count"
+              :percent="null"
             ></ProgressBar>
           </div>
         </div>
@@ -276,7 +277,7 @@
     },
     computed: {
       ...mapState("toggleStore", {
-        toggleStore_scoreModal: "score_modal",
+        toggleStore_score_info: "score_info",
       }),
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
@@ -289,9 +290,12 @@
       video() {
         this.$router.push("/play");
       },
+      // 강의평가 모달
       scoreModal() {
-        this.$store.commit("toggleStore/Toggle", {
+        this.$store.commit("toggleStore/scoreToggle", {
           score_modal: true,
+          score: 0,
+          score_contents: "",
         });
       },
 
@@ -322,9 +326,11 @@
       });
     },
     created() {
-      this.$axios
-        .all([this.isSubscribe(), this.getLectureDetail()])
-        .then(this.$axios.spread((countries, cities) => {}));
+      console.log(this.$cookies.get("user_info"));
+      if (this.$cookies.get("user_info") != null) {
+        this.isSubscribe();
+      }
+      this.getLectureDetail();
     },
   };
 </script>
@@ -369,7 +375,7 @@
     padding: 4.445%;
     .blue_btn {
       ::v-deep button {
-        border-radius: 20px;
+        border-radius: 10px;
         margin: 10px 0;
         height: 40px;
         line-height: 32px;

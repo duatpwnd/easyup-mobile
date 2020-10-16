@@ -49,13 +49,34 @@ let detail = {
       score_info: "", // 각 별점의 개수
     };
   },
+  computed: {
+    detect_token() {
+      return this.$store.getters["userStore/isToken"];
+    },
+  },
+  watch: {
+    detect_token(a, b) {
+      console.log(a, b);
+      this.isSubscribe();
+    },
+  },
   mounted() {
-    this.$store.watch((el, index) => {
-      if (el.userStore.token == null) {
-        console.log("구독중 함수실행");
-        this.isSubscribe();
-      }
-    });
+    // this.$store.watch(
+    //   () => this.$store.getters.isToken,
+    //   (n) => {
+    //     console.log("watched: ", n);
+    //   }
+    // );
+    // this.$store.watch(this.$store.getters.isToken, (state) => {
+    //   console.log(state);
+    // if (
+    //   el.userStore.userinfo.access_token != null &&
+    //   this.$route.name == "lecDetail"
+    // ) {
+    //   console.log("구독중 함수실행");
+    //   this.isSubscribe();
+    // }
+    // });
   },
   created() {
     window.onscroll = () => {

@@ -8,14 +8,18 @@
     </router-link>
     <div class="right_menu">
       <!-- 학생인지 강사인지  -->
-      <router-link to="/studentClaasRoom" class="myclass">
+      <router-link
+        to="/studentClaasRoom"
+        class="myclass"
+        v-if="userStore_userinfo.access_token"
+      >
         <img
           src="@/assets/images/common/myclass_ico.png"
           alt="내강의실"
           title="내강의실"
         />
       </router-link>
-      <router-link to="/" class="msg">
+      <router-link to="/" class="msg" v-if="userStore_userinfo.access_token">
         <img
           src="@/assets/images/common/message_ico.png"
           alt="메세지 수신함"
@@ -33,6 +37,9 @@
       return {};
     },
     computed: {
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
       ...mapState("toggleStore", {
         toggleStore_loginModal: "login_modal",
       }),

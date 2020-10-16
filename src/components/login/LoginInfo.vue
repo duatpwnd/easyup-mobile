@@ -37,7 +37,7 @@
       >
         기술블로그
       </button>
-      <button class="lnb">내강의실</button>
+      <router-link to="/studentClaasRoom" class="lnb">내강의실</router-link>
       <button
         class="lnb"
         @click="

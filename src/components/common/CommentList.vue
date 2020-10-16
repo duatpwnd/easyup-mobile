@@ -11,8 +11,6 @@
           <span>댓글</span>
         </span>
       </div>
-
-      <p class="contents"></p>
     </slot>
   </div>
 </template>

@@ -1,9 +1,10 @@
 <template>
   <div class="lec_eval_modal">
-    {{ rating }}
     <StarRating
-      :rating="Number(score)"
+      :rating="Number(rating)"
+      :v-model="contents"
       :star-size="17"
+      :increment="1"
       @rating-selected="setRating"
       :star-points="[
         23,
@@ -36,13 +37,20 @@
         maxlength="300"
         placeholder="300자 이내로 입력해 주세요."
         class="lec_edit"
-        v-on:input="contents = $event.target.value"
+        v-model="contents"
       ></textarea>
     </div>
     <div class="btn_wrap">
       <slot name="modify">
         <BlueBtn class="left">
-          <button slot="blue_btn" @click="add_review()">
+          <button
+            v-if="score_info.review_id"
+            slot="blue_btn"
+            @click="comment_modify()"
+          >
+            수정
+          </button>
+          <button v-else slot="blue_btn" @click="add_review()">
             저장
           </button>
         </BlueBtn>
@@ -63,13 +71,13 @@
 
   export default {
     props: {
-      ranking: {
-        type: Number,
+      score_info: {
+        type: Object,
       },
     },
     computed: {
       ...mapState("toggleStore", {
-        toggleStore_score: "score",
+        toggleStore_score_info: "score_info",
       }),
     },
     components: {
@@ -78,8 +86,8 @@
     },
     data() {
       return {
-        contents: "",
-        rating: this.ranking,
+        contents: this.score_info.score_contents,
+        rating: this.score_info.score,
       };
     },
     methods: {
@@ -87,10 +95,40 @@
         this.rating = rating;
       },
       cancel() {
-        this.$store.commit("toggleStore/Toggle", {
-          score_modal: false,
+        this.$store.commit("toggleStore/scoreToggle", {
+          review_id: "",
+          score_modal: false, // 강의평가 모달
+          score: 0, // 스코어점수
+          score_mode: "", // 스코어 모드(수정할때인지, 평가일때인지)
+          score_contents: "", // 스코어 컨텐츠
         });
       },
+      // 댓글 수정
+      comment_modify() {
+        const obj = {
+          action: "modify_review",
+          star: this.rating,
+          review_id: this.score_info.review_id,
+          contents: this.contents,
+        };
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log("수정완료", result);
+            if (result.data.error != true) {
+              this.$Util.default.noticeMessage(result.data.data.msg);
+              this.$EventBus.$emit("commentReload", true);
+              this.cancel();
+            }
+          });
+      },
+      // 댓글 추가
       add_review() {
         const data = {
           action: "add_review",
@@ -99,29 +137,27 @@
           contents: this.contents.trim(),
           type: "course",
         };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
-          .then((result) => {
-            console.log("댓글등록", result);
-            if (result.data.error != true) {
-              this.$store.commit("toggleStore/Toggle", {
-                notice_modal: true,
-              });
-              this.$store.commit(
-                "toggleStore/noticeMessage",
-                result.data.data.msg
-              );
-              this.$EventBus.$emit("commentReload", true);
-              this.cancel();
-            }
-          });
+        if (data.star == 0) {
+          this.$Util.default.noticeMessage("점수를 선택해주세요.");
+        } else {
+          this.$axios
+            .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+              headers: {
+                Authorization: this.$cookies.get("user_info")
+                  ? "Bearer " + this.$cookies.get("user_info").access_token
+                  : null,
+              },
+            })
+            .then((result) => {
+              console.log("댓글등록", result);
+              if (result.data.error != true) {
+                this.$Util.default.noticeMessage(result.data.data.msg);
+
+                this.$EventBus.$emit("commentReload", true);
+                this.cancel();
+              }
+            });
+        }
       },
     },
   };

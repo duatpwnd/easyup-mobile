@@ -1,23 +1,20 @@
 <template>
-  <dl class="item_wrap">
-    <dt>
-      <img
-        src="@/assets/images/common/question_ico.png"
-        alt="질문"
-        title="질문"
-        class="que_ico"
-      />
-      <slot name="dt">
-        [회훤정보] 회원 가입 시 반드시 이메일 주소로 가입해야 하나요?
-      </slot>
-    </dt>
-    <dd>
+  <div>
+    <dl class="item_wrap">
+      <dt>
+        <img
+          src="@/assets/images/common/question_ico.png"
+          alt="질문"
+          title="질문"
+          class="que_ico"
+        />
+        <slot name="category"> <span> </span></slot>
+      </dt>
       <slot name="dd">
-        A. 회원의 고유 정보 확인은 물론 별도의 이메일 정보를 중복 등록하지
-        않아도 되기에 이메일 주소를 사용하여 가입해주세요.
+        <dd>ddd</dd>
       </slot>
-    </dd>
-  </dl>
+    </dl>
+  </div>
 </template>
 <script>
   export default {
@@ -48,6 +45,9 @@
       background: #f8f8f8;
       padding: 1.5%;
       border-radius: 5px;
+    }
+    .active {
+      display: block;
     }
   }
 </style>

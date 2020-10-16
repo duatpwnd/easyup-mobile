@@ -29,13 +29,13 @@ const routes = [
     name: "signupComplete",
     component: () => import("../views/SignUpComplete.vue"),
     meta: { isFooter: false },
-    beforeEnter(to, from, next) {
-      if (VueCookies.get("access_token")) {
-        next("/");
-      } else {
-        next();
-      }
-    },
+    // beforeEnter(to, from, next) {
+    //   if (VueCookies.get("access_token")) {
+    //     next("/");
+    //   } else {
+    //     next();
+    //   }
+    // },
   },
   {
     path: "/pwChange",
@@ -299,7 +299,6 @@ router.beforeEach(async (to, from, next) => {
   //     userid: 20,
   //   },
   // });
-  console.log(VueCookies.get("user_info"));
   if (VueCookies.get("user_info")) {
     store.commit("userStore/loginToken", VueCookies.get("user_info"));
   }
@@ -309,23 +308,16 @@ router.beforeEach(async (to, from, next) => {
   // ) {
   //   // 엑세스 토큰 발급로직
   // }
-  if (
-    VueCookies.get("access_token") ||
-    to.matched.some((record) => record.meta.unauthorized)
-  ) {
-    const arr = ["GnbBottomMenu", "isFooter", "ProfileMsgTab"];
-    const result = arr.reduce((acc, el) => {
-      if (el == Object.keys(to.meta)[0]) {
-        acc[el] = Object.values(to.meta)[0];
-      } else {
-        acc[el] = false;
-      }
-      return acc;
-    }, {});
-    store.commit("toggleStore/Toggle", result);
-    next();
-  } else {
-    alert("로그인을 해주세요");
-  }
+  const arr = ["GnbBottomMenu", "isFooter", "ProfileMsgTab"];
+  const result = arr.reduce((acc, el) => {
+    if (el == Object.keys(to.meta)[0]) {
+      acc[el] = Object.values(to.meta)[0];
+    } else {
+      acc[el] = false;
+    }
+    return acc;
+  }, {});
+  store.commit("toggleStore/Toggle", result);
+  next();
 });
 export { router, routes };

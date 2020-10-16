@@ -1,28 +1,18 @@
 <template>
-  <div class="read">
+  <div class="read" v-if="info">
     <div class="head">
       <span>[서비스 중단 안내] 서비스 개선 작업에 의한 중단</span>
     </div>
-    <div class="contents">
-      <pre>
-
-
-
-이지업을 사랑해주시는 고객 여러분께 감사의 말씀을 드립니다.<br> 더 나은 서비스를 제공하기 위하여 서비스 일시적 중단 작업에 들어갑니다.<br> 27일 오전 10시부터 11시까지 서비스가 중단됩니다.<br> 접속하지 마세요 경고합니다. 감사합니다..
-
-
-
-</pre>
-    </div>
+    <div class="contents" v-html="info.info.contents"></div>
     <div class="button_wrap">
-      <BlueBtn class="btn">
-        <button slot="blue_btn">
+      <BlueBtn class="btn" v-if="info.prev">
+        <button slot="blue_btn" @click="noticeView(info.prev)">
           이전글
         </button>
       </BlueBtn>
 
       <BlueBtn class="btn last_btn">
-        <button slot="blue_btn">
+        <button slot="blue_btn" @click="noticeView(info.next)">
           다음글
         </button>
       </BlueBtn>
@@ -36,9 +26,36 @@
       BlueBtn,
     },
     data() {
-      return {};
+      return {
+        info: "",
+      };
     },
-    methods: {},
+    methods: {
+      noticeView(id) {
+        console.log(id);
+        const data = {
+          action: "get_cs_view",
+          id: id, //게시물ID
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {})
+          .then((result) => {
+            console.log(result.data.data);
+            this.info = result.data.data;
+            this.$router
+              .push({
+                query: {
+                  id: id,
+                },
+              })
+              .catch(() => {});
+          });
+      },
+    },
+    created() {
+      this.noticeView(this.$route.query.id);
+    },
   };
 </script>
 <style scoped lang="scss">

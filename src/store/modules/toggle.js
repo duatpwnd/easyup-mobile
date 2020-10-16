@@ -6,14 +6,21 @@ const toggle = {
     isFooter: true, // 푸터
     GnbBottomMenu: false, // 내강좌/코스, 과제게시판, 공지사항, 자료공유 메뉴
     ProfileMsgTab: false, // 프로필 편집 ,메세지 탭
-    score_modal: false, // 강의평가 모달
-    score: 0, // 스코어점수
+    score_info: {
+      review_id: "", // 댓글 수정 아이디
+      score_modal: false, // 강의평가 모달
+      score: 0, // 스코어점수
+      score_contents: "", // 스코어 컨텐츠
+    },
     notice_modal: false, // 각종 경고 모달
     notice_message: "", // 각종 경고 메세지
   },
   mutations: {
     noticeMessage(state, param) {
       state.notice_message = param;
+    },
+    scoreToggle(state, obj) {
+      state.score_info = obj;
     },
     Toggle(state, obj) {
       console.log(obj);

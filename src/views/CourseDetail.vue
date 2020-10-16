@@ -174,7 +174,9 @@
       },
     },
     created() {
-      this.getCourseDetail();
+      this.$axios
+        .all([this.isSubscribe(), this.getCourseDetail()])
+        .then(this.$axios.spread((countries, cities) => {}));
     },
   };
 </script>

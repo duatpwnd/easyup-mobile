@@ -1,6 +1,14 @@
 <template>
   <div>
-    <router-link class="tab" to="/help/notice"
+    <router-link
+      class="tab"
+      :to="{
+        path: '/help/notice',
+        query: {
+          pageCurrent: 1,
+          keyword: '',
+        },
+      }"
       ><span class="active_bar"></span>공지사항
     </router-link>
     <router-link
@@ -9,6 +17,8 @@
         name: 'helpFaq',
         query: {
           category: 'all',
+          current: 1,
+          keyword: '',
         },
       }"
       ><span class="active_bar"></span>FAQ</router-link

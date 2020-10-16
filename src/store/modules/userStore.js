@@ -6,6 +6,11 @@ const userStore = {
       info: "",
     },
   },
+  getters: {
+    isToken(state) {
+      return state.userinfo.access_token;
+    },
+  },
   mutations: {
     loginToken(state, param) {
       state.userinfo = param;

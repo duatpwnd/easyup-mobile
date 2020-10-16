@@ -24,7 +24,16 @@
         ><span>개인정보취급방침</span></router-link
       >
       <span class="bar">|</span>
-      <router-link to="/help"><span>고객센터</span></router-link>
+      <router-link
+        :to="{
+          path: '/help/notice',
+          query: {
+            pageCurrent: 1,
+            keyword: '',
+          },
+        }"
+        ><span>고객센터</span></router-link
+      >
     </div>
     <address>
       <pre>(주)유니윌<br />대표이사:조인형   주소:서울시 강남구 테헤란로124<br />사업자 등록번호:220-86-20171    통신판매업신고:강남 제3339호</pre>

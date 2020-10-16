@@ -10,7 +10,7 @@
       지금 바로 EASYUP 강좌를 시작해보세요!
     </p>
     <BlueBtn>
-      <button slot="blue_btn">로그인 하기</button>
+      <button slot="blue_btn" @click="login()">로그인 하기</button>
     </BlueBtn>
   </div>
 </template>
@@ -22,7 +22,13 @@
     data() {
       return {};
     },
-    methods: {},
+    methods: {
+      login() {
+        this.$store.commit("toggleStore/Toggle", {
+          login_modal: !this.toggleStore_loginModal,
+        });
+      },
+    },
   };
 </script>
 <style scoped lang="scss">

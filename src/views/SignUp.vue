@@ -9,41 +9,39 @@
           <label class="dt" for="last_name"
             >성<span class="required">＊</span></label
           >
-          <input type="text" id="last_name" />
+          <input v-model="lastname" type="text" id="last_name" />
         </div>
         <div class="row">
           <label class="dt" for="first_name"
             >이름<span class="required">＊</span></label
           >
-          <input type="text" id="first_name" />
+          <input v-model="firstname" type="text" id="first_name" />
         </div>
         <div class="row">
           <label class="dt" for="email"
             >이메일<span class="required">＊</span></label
           >
-          <input type="text" id="email" />
+          <input v-model="email" type="text" id="email" />
         </div>
         <div class="row">
           <label class="dt" for="pw"
             >비밀번호<span class="required">＊</span></label
           >
-          <input type="password" id="pw" autocomplete="true" />
+          <input v-model="pw1" type="password" id="pw" />
         </div>
         <div class="row">
           <label class="dt" for="re_pw"
             >비밀번호 확인<span class="required">＊</span></label
           >
-          <input type="password" id="re_pw" autocomplete="true" />
+          <input v-model="pw2" type="password" id="re_pw" />
         </div>
         <div class="row">
           <label class="dt">연락처</label>
-          <input type="tell" id="phone" />
+          <input v-model="phone" type="tell" id="phone" />
         </div>
         <div class="row">
-          <label class="dt">언어</label>
-          <select name="">
-            <option value="">korea</option>
-          </select>
+          <label class="dt">유니잡ID</label>
+          <input v-model="unijob_id" type="text" />
         </div>
         <div class="row">
           <label class="dt">서비스 이용약관</label>
@@ -57,7 +55,13 @@
         </div>
         <div class="row agree">
           <CheckBox>
-            <input type="checkbox" checked id="check" slot="check" />
+            <input
+              v-model="agree"
+              type="checkbox"
+              checked
+              id="check"
+              slot="check"
+            />
           </CheckBox>
           <label for="check">약관 내용을 모두 확인하였으며 동의합니다.</label>
         </div>
@@ -76,11 +80,44 @@
   export default {
     components: { CheckBox, BlueBtn },
     data() {
-      return {};
+      return {
+        lastname: "",
+        firstname: "",
+        email: "",
+        pw1: "",
+        pw2: "",
+        phone: "",
+        unijob_id: "",
+        agree: "",
+      };
     },
     methods: {
       register() {
-        this.$router.push("/signupComplete").catch(() => {});
+        if (this.agree == false) {
+          this.$Util.default.noticeMessage("약관 내용에 동의 해주세요.");
+        } else {
+          const data = {
+            action: "join",
+            firstname: this.firstname, //필수
+            lastname: this.lastname, //필수
+            email: this.email, //필수, 이메일 형식체크, 이미 사용중인 계정인지는 백단에서 체크하고 있음
+            password: this.pw1, //필수
+            password_confirm: this.pw2, //필수, 비밀번호란과 동일여부 체크
+            phone: this.phone, //옵션, 입력할 경우 숫자만 입력
+            unijob_id: this.unijob_id, // 아는사람만
+          };
+          this.$axios
+            .post(this.$ApiUrl.main_list, JSON.stringify(data))
+            .then((result) => {
+              console.log(result);
+              if (result.data.error) {
+                this.$Util.default.noticeMessage(result.data.message);
+              } else {
+                this.$router.push("/signupComplete").catch(() => {});
+              }
+            })
+            .catch((err) => {});
+        }
       },
     },
   };

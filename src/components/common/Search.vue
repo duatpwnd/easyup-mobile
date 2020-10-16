@@ -1,11 +1,11 @@
 <template>
   <div class="search">
     <slot name="option">
-      <select class="select" name="" id="">
+      <!-- <select class="select" name="" id="">
         <option value="type_date">최신 등록순</option>
         <option value="type_name">이름순</option>
         <option value="type_rating">평점순</option>
-      </select>
+      </select> -->
     </slot>
     <slot name="slot_input">
       <input type="text" class="search_contents" />

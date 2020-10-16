@@ -39,8 +39,12 @@ axios.interceptors.request.use(
 // Add a response interceptor
 axios.interceptors.response.use(
   (response) => {
+    console.log(response);
     // console.log("http요청후", response, response.data.error);
     if (response.data.error) {
+      console.log("토큰없음");
+      Util.default.noticeMessage("로그인을 해주세요.");
+      Util.default.logOut();
       // router.push("/");
       // VueCookies.remove("access_token");
       // store.commit("userStore/loginToken", null);

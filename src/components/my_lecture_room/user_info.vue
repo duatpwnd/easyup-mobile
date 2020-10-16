@@ -23,22 +23,24 @@
       </div>
     </div>
     <ul class="course_info">
-      <li>
-        <slot name="info1"> <h3>진행중인 강의</h3></slot>
-        <span>5건</span>
-      </li>
-      <li>
-        <slot name="info2"><h3>진행중인 코스</h3></slot>
-        <span>5건</span>
-      </li>
-      <li>
-        <slot name="info3"><h3>비활성화 강의</h3></slot>
-        <span>5건</span>
-      </li>
-      <li>
-        <slot name="info4"><h3>비활성화 코스</h3></slot>
-        <span>5건</span>
-      </li>
+      <slot name="info">
+        <li>
+          <h3>진행중인 강의</h3>
+          <span>5건</span>
+        </li>
+        <li>
+          <h3>진행중인 코스</h3>
+          <span>5건</span>
+        </li>
+        <li>
+          <h3>비활성화 강의</h3>
+          <span>5건</span>
+        </li>
+        <li>
+          <h3>비활성화 코스</h3>
+          <span>5건</span>
+        </li>
+      </slot>
     </ul>
   </div>
 </template>

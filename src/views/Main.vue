@@ -1,5 +1,5 @@
 <template>
-  <div id="main">
+  <div id="main" v-if="list">
     <!-- 배너 :: S -->
     <Slide :swiper_option="slide_option.banner">
       <swiper-slide
@@ -152,9 +152,7 @@
       <CategoryLec></CategoryLec>
       <div class="notice_wrap">
         <span class="notice_title">공지사항</span>
-        <span class="notice_contents"
-          >코로나 극복 프로젝트 모든 강의 25% 할인</span
-        >
+        <span class="notice_contents">{{ list.recent_notice.title }}</span>
         <!-- {{recent_notice}} -->
       </div>
     </div>

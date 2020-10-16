@@ -2,56 +2,72 @@
   <div class="faq">
     <ul class="faq_gnb">
       <li
-        @click="goToComponent('all')"
+        @click="getList('all', '', 1)"
         :class="{ active: 'all' == $route.query.category }"
       >
         <span>전체</span>
       </li>
       <li><span class="bar">｜</span></li>
       <li
-        @click="goToComponent('info')"
+        @click="getList('info', '', 1)"
         :class="{ active: 'info' == $route.query.category }"
       >
         <span>회원 정보</span>
       </li>
       <li><span class="bar">｜</span></li>
       <li
-        @click="goToComponent('register')"
-        :class="{ active: 'register' == $route.query.category }"
+        @click="getList('regist', '', 1)"
+        :class="{ active: 'regist' == $route.query.category }"
       >
         <span>강의/코스등록</span>
       </li>
       <li><span class="bar">｜</span></li>
       <li
-        @click="goToComponent('subscribe')"
+        @click="getList('subscribe', '', 1)"
         :class="{ active: 'subscribe' == $route.query.category }"
       >
         <span>강의/코스구독</span>
       </li>
       <li><span class="bar">｜</span></li>
       <li
-        @click="goToComponent('view')"
-        :class="{ active: 'view' == $route.query.category }"
+        @click="getList('player', '', 1)"
+        :class="{ active: 'player' == $route.query.category }"
       >
         <span>강의시청</span>
       </li>
       <li><span class="bar">｜</span></li>
       <li
-        @click="goToComponent('ex')"
-        :class="{ active: 'ex' == $route.query.category }"
+        @click="getList('etc', '', 1)"
+        :class="{ active: 'etc' == $route.query.category }"
       >
         <span>기타</span>
       </li>
     </ul>
     <Search>
       <input
+        v-model="keyword"
         slot="slot_input"
         class="search_contents"
         placeholder="검색어를 입력하세요."
       />
+      <button
+        slot="search_btn"
+        class="search_btn"
+        @click="getList($route.query.category, keyword, 1)"
+      ></button>
     </Search>
-    <h2>총<span class="num">9</span>건</h2>
-    <List></List>
+    <h2>
+      총<span class="num">{{ list.total_count }}</span
+      >건
+    </h2>
+    <List v-for="(li, index) in list.list" :key="index">
+      <template slot="category">
+        <span @click="slide(index)">[{{ li.category }}]{{ li.title }}</span>
+      </template>
+      <dd slot="dd" ref="dd" v-show="active">
+        {{ li.contents }}
+      </dd>
+    </List>
   </div>
 </template>
 <script>
@@ -63,24 +79,69 @@
       Search,
     },
     data() {
-      return {};
+      return {
+        list: "",
+        keyword: "",
+        active: false,
+      };
     },
     methods: {
-      goToComponent(path) {
-        this.$router
-          .push({
-            query: {
-              category: path,
-            },
-          })
-          .catch(() => {});
+      slide(index) {
+        if (this.$refs.dd[index].style.display == "none") {
+          this.$refs.dd[index].style.display = "block";
+        } else {
+          this.$refs.dd[index].style.display = "none";
+        }
       },
+      getList(category, keyword, current) {
+        console.log(category, keyword, current);
+        const data = {
+          action: "get_cs_list", //필수
+          current: current, //필수
+          type: "faq",
+          category: category,
+          keyword: keyword, //옵션
+        };
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {})
+          .then((result) => {
+            if (this.$refs.dd != undefined) {
+              this.$refs.dd.forEach((el, index) => {
+                el.style.display = "none";
+              });
+            }
+            this.list = result.data.data;
+            this.keyword = keyword;
+            this.$router
+              .push({
+                query: {
+                  category: category,
+                  keyword: keyword,
+                  current: current,
+                },
+              })
+              .catch(() => {});
+          });
+      },
+    },
+    created() {
+      this.getList(
+        this.$route.query.category,
+        this.$route.query.keyword,
+        this.$route.query.current
+      );
     },
   };
 </script>
 <style scoped lang="scss">
   .faq {
     padding: 4.445%;
+    .search {
+      .search_contents {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
     h2 {
       font-size: 1.375rem;
       margin-top: 2.5%;

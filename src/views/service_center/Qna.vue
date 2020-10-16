@@ -1,12 +1,5 @@
 <template>
   <div class="qna">
-    <Search>
-      <input
-        slot="slot_input"
-        class="search_contents"
-        placeholder="검색어를 입력하세요."
-      />
-    </Search>
     <Notice>
       <template slot="list">
         <li>
@@ -29,38 +22,56 @@
         <div class="row">
           <label class="dt">질문선택<span class="required">＊</span></label>
           <select>
-            <option value="">강동원</option>
+            <option value="all">전체</option>
+            <option value="info">회원정보</option>
+            <option value="regist">강의/코스 등록</option>
+            <option value="subscribe">강의/코스 구독</option>
+            <option value="player">강의시청</option>
+            <option value="etc">기타</option>
           </select>
         </div>
         <div class="row">
           <label class="dt" for="first_name"
             >이름<span class="required">＊</span></label
           >
-          <input type="text" id="first_name" />
+          <input type="text" v-model="name" id="first_name" />
         </div>
         <div class="row">
           <label class="dt" for="email"
             >이메일<span class="required">＊</span></label
           >
-          <input type="text" id="email" />
+          <input type="text" v-model="email" id="email" />
         </div>
 
         <div class="row">
           <label class="dt">휴대폰<span class="required">＊</span></label>
-          <input type="tell" id="phone" />
+          <input type="tell" v-model="phone" id="phone" />
         </div>
 
         <div class="row">
           <label class="dt">내용<span class="required">＊</span></label>
-          <textarea rows="3" placeholder="서비스 이용약관"></textarea>
+          <textarea
+            rows="3"
+            v-model="contents"
+            placeholder="서비스 이용약관"
+          ></textarea>
         </div>
         <div class="row">
           <label class="dt">파일첨부</label>
-          <input type="file" id="upload" />
+          <input
+            type="file"
+            accept=".png,.jpg,.jpeg,.gif"
+            id="upload"
+            ref="upload"
+            @change="fileSelect()"
+          />
           <label for="upload" class="file">파일 선택</label>
+          <div class="file_name">{{ file_obj.name }}</div>
         </div>
         <BlueBtn>
-          <button slot="blue_btn" @click="register()">문의하기</button>
+          <button type="button" slot="blue_btn" @click="register()">
+            문의하기
+          </button>
         </BlueBtn>
       </fieldset>
     </form>
@@ -68,20 +79,72 @@
 </template>
 <script>
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import Search from "@/components/common/Search.vue";
   import Notice from "@/components/common/notice.vue";
   export default {
     components: {
       BlueBtn,
       Notice,
-      Search,
     },
     data() {
-      return {};
+      return {
+        file_obj: "",
+        name: "",
+        category: "",
+        email: "",
+        phone: "",
+        contents: "",
+      };
     },
     methods: {
+      fileSelect() {
+        const selected_file = this.$refs.upload.files[0];
+        this.file_obj = selected_file;
+      },
       goToPath() {
         this.$router.push("/help/read");
+      },
+      validationCheck() {
+        return new Promise((resolve, reject) => {
+          if (this.name.trim().length == 0) {
+            this.$Util.default.noticeMessage("이름을 입력하세요");
+          } else if (this.email.trim().length == 0) {
+            this.$Util.default.noticeMessage("이메일을 입력하세요");
+          } else {
+            resolve("success");
+          }
+        });
+      },
+      register() {
+        this.validationCheck().then((result) => {
+          console.log(result);
+          if (result == "success") {
+            const formData = new FormData();
+            formData.append("action", "send_qna");
+            formData.append("add_file", this.file_obj);
+            formData.append("name", this.name);
+            formData.append("email", this.email);
+            formData.append("phone", this.phone);
+            formData.append("contents", this.contents);
+            formData.append("category", "all");
+            console.log(formData);
+            // const data = {
+            //   action: "send_qna",
+            //   category: "all",
+            //   name: this.name,
+            //   email: this.email,
+            //   phone: this.phone,
+            //   contents: this.contents,
+            //   add_file: formData,
+            // };
+            // console.log(data);
+            this.$axios
+              .post(this.$ApiUrl.main_list, formData)
+              .then((result) => {
+                console.log(result);
+                this.$Util.default.noticeMessage(result.data.data[0]);
+              });
+          }
+        });
       },
     },
   };
@@ -165,6 +228,9 @@
           display: inline-block;
           text-align: center;
           line-height: 24px;
+        }
+        .file_name {
+          margin-left: 35%;
         }
       }
     }
