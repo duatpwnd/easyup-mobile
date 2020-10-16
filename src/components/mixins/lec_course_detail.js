@@ -9,17 +9,20 @@ let detail = {
       await this.$axios
         .post(this.$ApiUrl.main_list, JSON.stringify(data), {
           headers: {
-            Authorization:
-              "Bearer " + this.$cookies.get("user_info").access_token,
+            Authorization: this.$cookies.get("user_info")
+              ? "Bearer " + this.$cookies.get("user_info").access_token
+              : null,
           },
         })
         .then((result) => {
           console.log("구독여부", result);
           if (result.data.error != true) {
             this.is_subscribe = result.data.data.isSubscribe;
+            this.isPossibleReview = result.data.data.isPossibleReview;
           }
         });
     },
+
     scoreCount(result) {
       console.log(result);
       this.score_info = result;
@@ -39,6 +42,7 @@ let detail = {
   },
   data() {
     return {
+      isPossibleReview: false,
       is_subscribe: false,
       subscribe_btn: false,
       detail: "",

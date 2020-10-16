@@ -213,10 +213,9 @@
               17,
             ]"
           ></StarRating>
-
           <button
             class="eval_btn"
-            v-if="is_subscribe == false"
+            v-if="isPossibleReview && userStore_userinfo.access_token"
             @click="scoreModal()"
           >
             강의 평가
@@ -279,6 +278,9 @@
       ...mapState("toggleStore", {
         toggleStore_scoreModal: "score_modal",
       }),
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
     },
     data() {
       return {};
@@ -302,7 +304,9 @@
         await this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data), {
             headers: {
-              Authorization: this.$cookies.get("user_info").access_token,
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
             },
           })
           .then((result) => {
@@ -310,6 +314,12 @@
             this.detail = result.data.data;
           });
       },
+    },
+    mounted() {
+      this.$EventBus.$on("commentReload", () => {
+        console.log("리로드 왔다");
+        this.getLectureDetail();
+      });
     },
     created() {
       this.$axios

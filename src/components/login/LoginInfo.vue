@@ -8,8 +8,8 @@
           title="프로필"
         />
       </span>
-      <h2>강동원 강사님</h2>
-      <h3>duatpwnd1@naver.com</h3>
+      <h2>{{ userStore_userinfo.info.username }}</h2>
+      <h3>{{ userStore_userinfo.info.email }}</h3>
     </div>
 
     <div class="lnb_menu">
@@ -79,6 +79,9 @@
     computed: {
       ...mapState("toggleStore", {
         toggleStore_loginModal: "login_modal",
+      }),
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
       }),
     },
     methods: {

@@ -32,10 +32,7 @@
             >
             <span
               v-if="userStore_info.access_token"
-              @click="
-                isActive = !isActive;
-                id = list.reviews.id;
-              "
+              @click="id = list.reviews.id"
               >댓글</span
             >
           </span>
@@ -43,7 +40,7 @@
         <p class="contents">
           {{ list.reviews.contents }}
         </p>
-        <div class="edit_wrap" v-if="isActive">
+        <div class="edit_wrap">
           <textarea
             placeholder="내용을 입력해주세요.(300자)"
             class="edit"
@@ -73,7 +70,6 @@
                 <span
                   class="modify_btn"
                   v-if="userStore_info.info.user_id == reply.user_id"
-                  @click="isActive = !isActive"
                   >수정</span
                 >
                 <span v-if="userStore_info.info.user_id == reply.user_id"
@@ -84,7 +80,7 @@
             <p class="contents">{{ reply.contents }}</p>
             <div
               class="edit_wrap"
-              v-show="userStore_info.info.user_id == reply.user_id && isActive"
+              v-show="userStore_info.info.user_id == reply.user_id"
             >
               <textarea
                 placeholder="내용을 입력해주세요.(300자)"
@@ -138,7 +134,6 @@
     data() {
       return {
         contents: "",
-        isActive: false,
         id: "", // 리뷰아이디
         comment: "",
       };
@@ -168,31 +163,30 @@
       //     },
       //   });
       // },
-      // // 댓글 수정
-      // comment_modify(index) {
-      //   const obj = {
-      //     a: "modify_review",
-      //     star: $(`.big-star img[src='{{_p.web_img}}star_on.png']`).length,
-      //     review_id: $(".lec_hidden").val(),
-      //     contents: $("#lec_edit")
-      //       .val()
-      //       .trim(),
-      //   };
-      //   //console.log('수정:',obj);
-      //   $.ajax({
-      //     type: "POST",
-      //     url: "{{_p.web_ajax}}review.ajax.php",
-      //     data: obj,
-      //     success: function(result) {
-      //       const parse = JSON.parse(result);
-      //       //console.log(parse,parse.msg);
-      //       modal_toggle(".mask1", parse.msg);
-      //       if (parse.result) {
-      //         Comment.comment_list();
-      //       }
-      //     },
-      //   });
-      // },
+      // 댓글 수정
+      comment_modify(index) {
+        // const obj = {
+        //   a: "modify_review",
+        //   star: $(`.big-star img[src='{{_p.web_img}}star_on.png']`).length,
+        //   review_id: index,
+        //   contents: $("#lec_edit")
+        //     .val()
+        //     .trim(),
+        // };
+        // $.ajax({
+        //   type: "POST",
+        //   url: "{{_p.web_ajax}}review.ajax.php",
+        //   data: obj,
+        //   success: function(result) {
+        //     const parse = JSON.parse(result);
+        //     //console.log(parse,parse.msg);
+        //     modal_toggle(".mask1", parse.msg);
+        //     if (parse.result) {
+        //       Comment.comment_list();
+        //     }
+        //   },
+        // });
+      },
       // // 댓글 더보기
       // comment_more_view() {
       //   const obj = {
@@ -224,8 +218,9 @@
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data), {
             headers: {
-              Authorization:
-                "Bearer " + this.$cookies.get("user_info").access_token,
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
             },
           })
           .then((result) => {

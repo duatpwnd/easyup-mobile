@@ -1,8 +1,10 @@
 <template>
   <div class="lec_eval_modal">
+    {{ rating }}
     <StarRating
-      v-model="rating"
+      :rating="Number(score)"
       :star-size="17"
+      @rating-selected="setRating"
       :star-points="[
         23,
         2,
@@ -38,11 +40,14 @@
       ></textarea>
     </div>
     <div class="btn_wrap">
-      <BlueBtn class="left">
-        <button slot="blue_btn" @click="add_review()">
-          저장
-        </button>
-      </BlueBtn>
+      <slot name="modify">
+        <BlueBtn class="left">
+          <button slot="blue_btn" @click="add_review()">
+            저장
+          </button>
+        </BlueBtn>
+      </slot>
+
       <BlueBtn class="right">
         <button slot="blue_btn" @click="cancel()">
           취소
@@ -54,11 +59,18 @@
 <script>
   import BlueBtn from "@/components/common/BaseButton.vue";
   import StarRating from "vue-star-rating";
+  import { mapState, mapMutations } from "vuex";
+
   export default {
     props: {
       ranking: {
         type: Number,
       },
+    },
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_score: "score",
+      }),
     },
     components: {
       BlueBtn,
@@ -71,6 +83,9 @@
       };
     },
     methods: {
+      setRating(rating) {
+        this.rating = rating;
+      },
       cancel() {
         this.$store.commit("toggleStore/Toggle", {
           score_modal: false,
@@ -88,8 +103,9 @@
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data), {
             headers: {
-              Authorization:
-                "Bearer " + this.$cookies.get("user_info").access_token,
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
             },
           })
           .then((result) => {
