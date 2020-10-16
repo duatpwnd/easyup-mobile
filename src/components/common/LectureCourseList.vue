@@ -1,24 +1,33 @@
 <template>
   <div class="list_wrap">
     <div class="list list_left">
-      <img src="@/assets/images/common/popular_lec1.png" class="thumb" alt="" />
-      <img
-        src="@/assets/images/common/playing_ico.png"
-        class="playing_ico"
-        alt=""
-        @click="playing()"
-      />
+      <slot name="thumbnail">
+        <img
+          src="@/assets/images/common/popular_lec1.png"
+          class="thumb"
+          alt=""
+        />
+        <img
+          src="@/assets/images/common/playing_ico.png"
+          class="playing_ico"
+          alt=""
+          @click="playing()"
+        />
+      </slot>
     </div>
     <div class="list list_right">
-      <span class="name">강동원 강사님</span>
-      <h2>
-        파이썬 코딩 기본편 - 6시간 뒤면 여러분도 개발자! 여기까지 제목 3줄 허용
-      </h2>
-      <div class="list_right_bottom">
-        <span class="ing_ico">진행중</span>
-        <span class="star_cell"> </span>
-        <span class="num">5</span>
-      </div>
+      <slot name="info">
+        <span class="name">강동원 강사님</span>
+        <h2>
+          파이썬 코딩 기본편 - 6시간 뒤면 여러분도 개발자! 여기까지 제목 3줄
+          허용
+        </h2>
+        <div class="list_right_bottom">
+          <span class="ing_ico">진행중</span>
+          <span class="star_cell"> </span>
+          <span class="num">5</span>
+        </div>
+      </slot>
     </div>
   </div>
 </template>

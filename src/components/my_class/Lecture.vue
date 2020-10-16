@@ -26,11 +26,30 @@
       </div>
     </div>
     <div class="section section3">
-      <LectureCourseList></LectureCourseList>
-      <LectureCourseList></LectureCourseList>
-      <LectureCourseList></LectureCourseList>
-      <LectureCourseList></LectureCourseList>
-      <LectureCourseList></LectureCourseList>
+      <LectureCourseList
+        v-for="(list, index) in lec_course_list.list"
+        :key="index"
+      >
+        <template slot="thumbnail">
+          <img :src="list.thumbnail" class="thumb" alt="" />
+          <img
+            src="@/assets/images/common/playing_ico.png"
+            class="playing_ico"
+            alt=""
+          />
+        </template>
+        <template slot="info">
+          <span class="name">{{ list.teacher }}</span>
+          <h2>
+            {{ list.title }}
+          </h2>
+          <div class="list_right_bottom">
+            <span class="ing_ico">진행중</span>
+            <span class="star_cell"> </span>
+            <span class="num">{{ list.ranking }}</span>
+          </div>
+        </template>
+      </LectureCourseList>
     </div>
   </div>
 </template>
@@ -43,9 +62,56 @@
       LectureCourseList,
     },
     data() {
-      return {};
+      return {
+        lec_course_list: "",
+      };
     },
-    methods: {},
+    methods: {
+      getMyCourse(num, order, keyword) {
+        const data = {
+          action: "get_my_course",
+          current: num == undefined ? 1 : num,
+          search_status: order == undefined ? "all" : order,
+          keyword: keyword == undefined ? "" : keyword,
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log(result);
+            this.lec_course_list = result.data.data;
+            // this.$router
+            //   .push({
+            //     query: {
+            //       action: this.$route.query.action,
+            //       pageCurrent: num,
+            //       order: order,
+            //       keyword: keyword,
+
+            //       category_code: this.$route.query.category_code,
+            //       tag: this.$route.query.tag,
+            //     },
+            //   })
+            //   .catch(() => {});
+            // this.order = order;
+            // this.keyword = keyword;
+            // this.current = num;
+          });
+      },
+    },
+    created() {
+      this.getMyCourse(
+        this.$route.query.pageCurrent,
+        this.$route.query.order,
+        this.$route.query.keyword
+      );
+    },
   };
 </script>
 <style scoped lang="scss">
