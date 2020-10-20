@@ -2,10 +2,16 @@
   <div class="tab1">
     <Search>
       <input
+        v-model="keyword"
         slot="slot_input"
         class="search_contents"
         placeholder="검색어를 입력하세요."
       />
+      <button
+        slot="search_btn"
+        class="search_btn"
+        @click="getList('received', 1, keyword)"
+      ></button>
     </Search>
     <div class="btn_wrap">
       <BlueBtn class="left">
@@ -14,7 +20,7 @@
         </button>
       </BlueBtn>
       <BlueBtn class="right">
-        <button slot="blue_btn">삭제</button>
+        <button slot="blue_btn" @click="deleteMessage('received')">삭제</button>
       </BlueBtn>
     </div>
     <BoardTitle>
@@ -30,42 +36,61 @@
         <span>메시지</span>
       </template>
     </BoardTitle>
-    <div class="row" v-for="(list, index) in arr" :key="index">
-      <BoardList>
+    <div class="row">
+      <BoardList v-for="(li, index) in list.list" :key="index">
         <CheckBox slot="checkbox">
           <input
             type="checkbox"
-            :value="index"
+            :value="li.id"
             v-model="checked_list"
             slot="check"
             @change="partial_check()"
           />
         </CheckBox>
         <template slot="top">
-          <span class="td left_td" @click="goToPath('/msg/read')"
-            >파이썬 완벽 뽀개기</span
-          >
+          <span class="td" @click="goToPath('/msg/read')">{{ li.title }}</span>
         </template>
         <template slot="bottom">
-          <span class="td left_td" @click="goToPath('/msg/read')"
-            >종류 : doc</span
+          <span class="td " @click="goToPath('/msg/read')"
+            >{{ li.user_name }} {{ li.send_date }}</span
           >
-          <span class="td" @click="goToPath('/msg/read')">크기 : 31.46k</span>
         </template>
       </BoardList>
+      <Pagination>
+        <template slot="paging">
+          <li
+            class="prev"
+            @click="getList('received', Number(current) - 1, keyword)"
+            v-if="current > 1"
+          >
+            이전페이지
+          </li>
+          <li
+            class="next"
+            v-if="list.total_page != current && list.total_page > 1"
+            @click="getList('received', Number(current) + 1, keyword)"
+          >
+            다음페이지
+          </li>
+        </template>
+      </Pagination>
     </div>
   </div>
 </template>
 <script>
+  import Pagination from "@/components/common/Pagination.vue";
+
   import CheckBox from "@/components/common/BaseCheckBox.vue";
   import BoardTitle from "@/components/common/BoardTitle.vue";
   import BoardList from "@/components/common/BoardList.vue";
   import Search from "@/components/common/Search.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import mixin from "@/components/mixins/check_event.js";
+  import mixin from "./mixin.js";
   export default {
     mixins: [mixin],
     components: {
+      Pagination,
+
       CheckBox,
       BoardList,
       BoardTitle,
@@ -75,18 +100,27 @@
     data() {
       return {};
     },
-    methods: {
-      goToPath(url) {
-        this.$router.push(url).catch(() => {});
-      },
-    },
+    methods: {},
     mounted() {},
+    created() {
+      this.getList(
+        "received",
+        this.$route.query.pageCurrent,
+        this.$route.query.keyword
+      );
+    },
   };
 </script>
 <style scoped lang="scss">
   .tab1 {
     padding: 4.445%;
     padding-top: 0;
+    .search {
+      .search_contents {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
     .row {
       &:nth-child(odd) {
         background: #f8f8f8;
@@ -116,24 +150,9 @@
       margin: 2% 0;
     }
     .list_wrap {
-      ::v-deep .top_tr {
-        .left_td {
-          padding-left: 9%;
-          width: 39%;
-        }
-        .right_td {
-          width: 61%;
-        }
-      }
-      ::v-deep .bottom_tr {
-        .left_td {
-          padding-left: 9%;
-        }
-      }
-      .bottom_tr {
-        .td {
-          width: 25%;
-        }
+      .td {
+        padding-left: 9%;
+        width: 100%;
       }
     }
   }

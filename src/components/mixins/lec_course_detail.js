@@ -2,10 +2,15 @@ let detail = {
   methods: {
     // 구독 여부 조회
     async isSubscribe() {
-      const data = {
-        action: "check_subscribe_course",
-        course_id: this.$route.query.id,
-      };
+      const data = {};
+      if (this.$route.name == "lecDetail") {
+        data["action"] = "check_subscribe_course";
+        data["course_id"] = this.$route.query.id;
+      } else {
+        data["action"] = "check_subscribe_session";
+        data["session_id"] = this.$route.query.id;
+      }
+      console.log(data);
       await this.$axios
         .post(this.$ApiUrl.main_list, JSON.stringify(data), {
           headers: {

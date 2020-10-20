@@ -118,27 +118,31 @@
         this.validationCheck().then((result) => {
           console.log(result);
           if (result == "success") {
-            const formData = new FormData();
-            formData.append("action", "send_qna");
-            formData.append("add_file", this.file_obj);
-            formData.append("name", this.name);
-            formData.append("email", this.email);
-            formData.append("phone", this.phone);
-            formData.append("contents", this.contents);
-            formData.append("category", "all");
-            console.log(formData);
-            // const data = {
-            //   action: "send_qna",
-            //   category: "all",
-            //   name: this.name,
-            //   email: this.email,
-            //   phone: this.phone,
-            //   contents: this.contents,
-            //   add_file: formData,
-            // };
-            // console.log(data);
+            // const formData = new FormData();
+            // formData.append("action", "send_qna");
+            // formData.append("add_file", this.file_obj);
+            // formData.append("name", this.name);
+            // formData.append("email", this.email);
+            // formData.append("phone", this.phone);
+            // formData.append("contents", this.contents);
+            // formData.append("category", "all");
+            // console.log(formData);
+            const data = {
+              action: "send_qna",
+              category: "all",
+              name: this.name,
+              email: this.email,
+              phone: this.phone,
+              contents: this.contents,
+              add_file: this.file_obj,
+            };
+            console.log(data);
             this.$axios
-              .post(this.$ApiUrl.main_list, formData)
+              .post(this.$ApiUrl.main_list, data, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              })
               .then((result) => {
                 console.log(result);
                 this.$Util.default.noticeMessage(result.data.data[0]);

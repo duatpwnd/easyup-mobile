@@ -1,36 +1,29 @@
 <template>
   <div>
     <div class="head">
-      <span class="title">[파이선 완벽 뽀개기]</span>
-      <span>TEST</span>
+      <span class="title">[{{ info.course_name }}]</span>
+      <span>{{ info.section_name }} {{ info.title }}</span>
     </div>
     <div class="contents_wrap">
       <BlueBtn>
         <template slot="blue_btn">
-          <button>
-            타임라인 01:11:11
-          </button>
-          <span class="date">2020.06.12</span>
+          <button>타임라인 {{ info.check_point }}</button>
+          <span class="date">{{ info.created_at }}</span>
         </template>
       </BlueBtn>
-      <div class="contents">
-        본 수업에서는 리눅스의 사용법을 다룹니다. 특히 초심자들이 어려워하는
-        부분이 명령어를 이용해서 컴퓨터를 제어하는 법입니다. 여기서는 초심자가
-        명령어를 사용하는데 필요한 가장 보편적인 규칙을 최소한으로 다룹니다.
-        또한 리눅스와 인터넷은 서로 뗄레야 뗄 수 없는 관계에 있습니다. 하지만
-        리눅스와 인터넷 모두 익숙해지는데 많은 노력이 필요합니다. 여기서는
-        인터넷이 동작하는 원리와 리눅스를 함께 다룸으로서 인터넷에 대한 가장
-        보편적인 규칙을 파악하는데도 도움이 될 수 있도록 수업을 구성했습니다.
-      </div>
+      <div class="contents" v-html="info.contents"></div>
     </div>
     <div class="button_wrap">
       <BlueBtn class="btn">
-        <button slot="blue_btn">
+        <button
+          slot="blue_btn"
+          @click="go_to_path('/bookmarkManage/add', info.id)"
+        >
           수정
         </button>
       </BlueBtn>
       <BlueBtn class="btn last_btn">
-        <button slot="blue_btn">
+        <button slot="blue_btn" @click="deleteBookmark()">
           삭제
         </button>
       </BlueBtn>
@@ -45,9 +38,78 @@
       BlueBtn,
     },
     data() {
-      return {};
+      return {
+        info: "",
+      };
     },
-    methods: {},
+
+    methods: {
+      go_to_path(url, id) {
+        this.$router
+          .push({
+            path: url,
+            query: {
+              id: id,
+              mode: "modify",
+            },
+          })
+          .catch(() => {});
+      },
+
+      deleteBookmark() {
+        const data = {
+          action: "delete_bookmark",
+          id: this.$route.query.id, //게시물ID
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log(result);
+            if (result.data.data.result == 1) {
+              this.$router.push({
+                path: "/bookmarkManage",
+                query: {
+                  keyword: "",
+                  pageCurrent: 1,
+                  order: "course_name",
+                },
+              });
+            }
+          });
+      },
+      bookmarkRead() {
+        const data = {
+          action: "get_bookmark_info",
+          id: this.$route.query.id, //게시물ID
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log(result.data);
+            this.info = result.data.data.info;
+            this.info.check_point = this.$Util.default.getTimeStringSeconds(
+              this.info.check_point
+            );
+          });
+      },
+    },
+    created() {
+      this.bookmarkRead();
+    },
   };
 </script>
 <style scoped lang="scss">

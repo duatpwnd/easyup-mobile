@@ -41,7 +41,7 @@ axios.interceptors.response.use(
   (response) => {
     console.log(response);
     // console.log("http요청후", response, response.data.error);
-    if (response.data.error) {
+    if (response.data.type == "token") {
       console.log("토큰없음");
       Util.default.noticeMessage("로그인을 해주세요.");
       Util.default.logOut();

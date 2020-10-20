@@ -84,6 +84,9 @@
       };
     },
     methods: {
+      upload() {
+        this.$router.push("/dataShare/upload");
+      },
       // 공유한 파일 삭제
       deleteFile() {
         console.log(this.checked_list);

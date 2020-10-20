@@ -1,7 +1,12 @@
 <template>
   <ul class="gnb">
     <li v-for="(list, index) in menu" :key="index">
-      <router-link :to="list.path">
+      <router-link
+        :to="{
+          path: list.path,
+          query: list.query,
+        }"
+      >
         <img
           v-if="list.path == '/' + $route.path.split('/')[1]"
           :src="list.active"
@@ -36,9 +41,13 @@
           },
           {
             title: "메시지",
-            path: "/msg",
+            path: "/msg/receivedList",
             name: require("@/assets/images/common/msg_ico.png"),
             active: require("@/assets/images/common/msg_active_ico.png"),
+            query: {
+              pageCurrent: 1,
+              keyword: "",
+            },
           },
         ],
       };

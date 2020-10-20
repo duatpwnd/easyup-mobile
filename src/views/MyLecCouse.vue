@@ -1,39 +1,38 @@
 <template>
   <div class="my_lec_course">
-    <span
+    <router-link
       class="tab"
-      v-for="(tab, index) in types"
-      :class="{ active: index == isActive }"
-      :key="index"
-      @click="toggle(tab.target, index)"
-      ><span class="active_bar"></span>{{ tab.name }}</span
+      :to="{
+        path: '/myClass/lecture',
+        query: {
+          keyword: '',
+          pageCurrent: 1,
+          order: '',
+        },
+      }"
+      ><span class="active_bar"></span>강의
+    </router-link>
+    <router-link
+      class="tab"
+      :to="{
+        path: '/myClass/course',
+        query: {
+          keyword: '',
+          pageCurrent: 1,
+          order: '',
+        },
+      }"
+      ><span class="active_bar"></span>코스</router-link
     >
-    <keep-alive>
-      <component v-bind:is="type"></component>
-    </keep-alive>
+    <router-view></router-view>
   </div>
 </template>
 <script>
-  import Lecture from "@/components/my_class/Lecture.vue";
-  import Course from "@/components/my_class/Course.vue";
   export default {
-    components: { Lecture, Course },
     data() {
-      return {
-        isActive: 0,
-        type: "Lecture",
-        types: [
-          { name: "강의", target: "Lecture" },
-          { name: "코스", target: "Course" },
-        ],
-      };
+      return {};
     },
-    methods: {
-      toggle(type, index) {
-        this.type = type;
-        this.isActive = index;
-      },
-    },
+    methods: {},
   };
 </script>
 <style scoped lang="scss">
@@ -47,17 +46,18 @@
       background: #f8f8f8;
       padding: 2% 0;
       position: relative;
+      .active_bar {
+        background: #f8f8f8;
+        height: 4px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+      }
     }
-    .active_bar {
-      background: #f8f8f8;
-      height: 4px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .active {
+    .router-link-active {
+      color: black;
       background: #ffffff;
       .active_bar {
         background: #114fff;

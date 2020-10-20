@@ -130,8 +130,23 @@ const routes = [
   {
     path: "/myClass",
     name: "myClass",
+    redirect: "/myClass/lecture",
+
     component: () => import("../views/MyLecCouse.vue"),
-    meta: { GnbBottomMenu: true },
+    children: [
+      {
+        path: "lecture",
+        component: () => import("../views/myclass/Lecture.vue"),
+        name: "myClassLecture",
+        meta: { GnbBottomMenu: true },
+      },
+      {
+        path: "course",
+        name: "myClassCourse",
+        component: () => import("@/views/myclass/Course.vue"),
+        meta: { GnbBottomMenu: true },
+      },
+    ],
   },
   {
     path: "/teskboard",
@@ -260,13 +275,19 @@ const routes = [
   {
     path: "/msg",
     name: "msg",
-    redirect: "/msg/list",
+    redirect: "/msg/receivedList",
     component: () => import("../views/Message.vue"),
     children: [
       {
-        path: "list",
-        name: "msgList",
-        component: () => import("@/views/message/List.vue"),
+        path: "receivedList",
+        name: "receivedList",
+        component: () => import("@/views/message/Tab1.vue"),
+        meta: { ProfileMsgTab: true },
+      },
+      {
+        path: "sentList",
+        name: "sentList",
+        component: () => import("@/views/message/Tab2.vue"),
         meta: { ProfileMsgTab: true },
       },
       {

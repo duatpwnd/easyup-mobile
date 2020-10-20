@@ -1,5 +1,5 @@
 <template>
-  <swiper class="swiper" :options="swiper_option">
+  <swiper class="swiper" :options="swiper_option" ref="mySwiper">
     <slot name="list"> </slot>
   </swiper>
 </template>
@@ -16,6 +16,9 @@
       return {};
     },
     methods: {},
+    updated() {
+      this.$refs.mySwiper.swiper.slideTo(0);
+    },
   };
 </script>
 <style scoped lang="scss">

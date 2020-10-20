@@ -1,9 +1,7 @@
 <template>
   <div class="manage">
     <h2>책갈피 관리</h2>
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+    <router-view></router-view>
   </div>
 </template>
 <script>

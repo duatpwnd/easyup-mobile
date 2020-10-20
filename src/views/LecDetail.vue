@@ -241,7 +241,6 @@
             <ProgressBar
               :max="score_info.total"
               :value="list.count"
-              :percent="null"
             ></ProgressBar>
           </div>
         </div>
@@ -326,7 +325,6 @@
       });
     },
     created() {
-      console.log(this.$cookies.get("user_info"));
       if (this.$cookies.get("user_info") != null) {
         this.isSubscribe();
       }
@@ -608,23 +606,20 @@
               }
             }
           }
-          .progress {
-            width: 85%;
-            background: #dbdbdb;
+          ::v-deep .progress_bar {
             height: 8px;
-            border-radius: 4px;
             position: relative;
-            .progress_bar {
-              border-radius: 4px;
-              vertical-align: unset;
-              background: #114fff;
-              width: 40%;
-              height: 8px;
-              position: absolute;
-              top: 0;
-              left: 0;
-            }
+            width: 85%;
+            margin: 0;
           }
+
+          // progress {
+          //   width: 85%;
+          //   background: #dbdbdb;
+          //   height: 8px;
+          //   border-radius: 4px;
+
+          // }
         }
       }
     }

@@ -1,6 +1,6 @@
 <template>
   <div id="my_lecture" v-if="dashboard_list">
-    <UserInfo>
+    <UserInfo v-if="top_count">
       <span slot="isTeacher" class="class">님의강의실</span>
       <template slot="info">
         <li>
@@ -47,11 +47,11 @@
                 ><span class="percent">60%</span></span
               ></span
             > -->
-            <ProgressBar
-              :max="100"
-              :value="Number(list.progress)"
-              :percent="list.progress + '%'"
-            ></ProgressBar>
+            <ProgressBar :max="100" :value="Number(list.progress)"
+              ><span class="percent" slot="percent_txt">{{
+                list.progress + "%"
+              }}</span></ProgressBar
+            >
           </span>
         </template>
       </List>
@@ -91,17 +91,18 @@
         </span>
         <span slot="right" class="td td2">{{ list.insert_date }}</span>
       </List>
-      <h2>타임라인</h2>
-      <List> </List>
+      <TimeLine></TimeLine>
     </div>
   </div>
 </template>
 <script>
+  import TimeLine from "@/components/my_lecture_room/timeline.vue";
   import List from "@/components/my_lecture_room/list.vue";
   import UserInfo from "@/components/my_lecture_room/user_info.vue";
   import ProgressBar from "@/components/common/ProgressBar.vue";
   export default {
     components: {
+      TimeLine,
       ProgressBar,
       List,
       UserInfo,
@@ -161,22 +162,24 @@
         text-align: right;
         vertical-align: middle;
         display: inline-block;
-        ::v-deep progress {
-          width: 57%;
-          margin-left: 5%;
+        ::v-deep .progress_bar {
+          width: 55%;
+          margin-left: 5px;
+          margin-right: 0;
           height: 16px;
-          vertical-align: middle;
+          position: relative;
           border: 1px solid #cacaca;
+          progress::-webkit-progress-value {
+            background: #ecedee;
+          }
+          progress::-moz-progress-bar {
+            background: #ecedee;
+          }
+          progress::-webkit-progress-bar {
+            background: white;
+          }
         }
-        progress::-webkit-progress-value {
-          background: #ecedee;
-        }
-        progress::-moz-progress-bar {
-          background: #ecedee;
-        }
-        progress::-webkit-progress-bar {
-          background: white;
-        }
+
         // .progress {
         //   width: 57%;
         //   margin-left: 5%;

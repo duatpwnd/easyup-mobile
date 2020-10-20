@@ -1,37 +1,87 @@
 <template>
   <section>
     <h2>타임라인</h2>
-    <div class="table">
-      <span class="td td1">비전공자는 어떻게 개발자가 되는가</span>
-      <span class="td td2">12명</span>
-    </div>
-    <div class="table">
-      <span class="td td1">비전공자는 어떻게 개발자가 되는가</span>
-      <span class="td td2">12명</span>
-    </div>
-    <div class="table">
-      <span class="td td1">비전공자는 어떻게 개발자가 되는가</span>
-      <span class="td td2">12명</span>
-    </div>
-    <div class="table">
-      <span class="td td1">비전공자는 어떻게 개발자가 되는가</span>
-      <span class="td td2">12명</span>
-    </div>
+    <Slide :swiper_option="slide_option.timeline">
+      <swiper-slide
+        slot="list"
+        v-for="(list, index) in timeline_list.list"
+        :key="index"
+        ><h2>{{ list.login_date }}</h2>
+        <img :src="list.course_image"/>
+        <p v-html="list.showTxt"></p></swiper-slide
+    ></Slide>
+    <Pagination>
+      <template slot="paging">
+        <li
+          class="prev"
+          @click="getDashboardTimeline(Number(current) - 1)"
+          v-if="current > 1"
+        >
+          이전페이지
+        </li>
+        <li
+          class="next"
+          v-if="timeline_list.total_page != current"
+          @click="getDashboardTimeline(Number(current) + 1)"
+        >
+          다음페이지
+        </li>
+      </template>
+    </Pagination>
   </section>
 </template>
 <script>
+  import Pagination from "@/components/common/Pagination.vue";
+
+  import Slide from "@/components/common/Slide.vue";
   export default {
-    components: {},
-    data() {
-      return {};
+    components: {
+      Pagination,
+
+      Slide,
     },
-    methods: {},
+    data() {
+      return {
+        slide_option: {
+          timeline: {
+            pagination: {
+              el: ".swiper-pagination",
+            },
+          },
+        },
+        timeline_list: "",
+        current: "", //현재번호
+      };
+    },
+
+    methods: {
+      getDashboardTimeline(num) {
+        const obj = {
+          action: "get_dashboard_timeline",
+          current: num,
+        };
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            this.timeline_list = result.data.data;
+            this.current = num;
+          });
+      },
+    },
+    created() {
+      this.getDashboardTimeline(1);
+    },
   };
 </script>
 <style scoped lang="scss">
   section {
-    padding: 4.445%;
-    padding-bottom: 30%;
+    margin-top: 20px;
     h2 {
       font-size: 2rem;
     }

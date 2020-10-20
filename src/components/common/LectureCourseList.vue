@@ -29,6 +29,7 @@
         </div>
       </slot>
     </div>
+    <slot name="list_info"> </slot>
   </div>
 </template>
 <script>
@@ -46,15 +47,12 @@
 </script>
 <style scoped lang="scss">
   .list_wrap {
-    display: table;
-    width: 100%;
-
     .list {
       vertical-align: middle;
     }
     .list_left {
-      display: table-cell;
-      width: 48%;
+      display: inline-block;
+      width: 50%;
       position: relative;
 
       .playing_ico {
@@ -69,8 +67,8 @@
       }
     }
     .list_right {
-      display: table-cell;
-      width: 48%;
+      display: inline-block;
+      width: 50%;
       padding: 5px;
       box-sizing: border-box;
       h2 {
@@ -96,6 +94,10 @@
           height: 20px;
           line-height: 20px;
         }
+        .non_ing_ico {
+          background: #dbdbdb;
+          color: #999999;
+        }
         .star_cell {
           display: table-cell;
           width: 66%;
@@ -106,6 +108,46 @@
           display: table-cell;
           text-align: right;
           font-size: 16px;
+        }
+      }
+    }
+    .progress {
+      margin-top: 10px;
+      .compile_wrap {
+        padding: 0 4.445%;
+        position: relative;
+        background: #f8f8f8;
+        box-sizing: border-box;
+        span {
+          display: inline-block;
+          vertical-align: middle;
+          font-size: 10px;
+        }
+        ::v-deep .progress_bar {
+          progress::-webkit-progress-value {
+            background: #ecedee;
+          }
+          progress::-moz-progress-bar {
+            background: #ecedee;
+          }
+          progress::-webkit-progress-bar {
+            background: white;
+          }
+        }
+        .date {
+          color: #999999;
+          font-size: 10px;
+          position: absolute;
+          top: 0;
+          right: 4.445%;
+          color: #999999;
+          font-size: 10px;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 4.445%;
+          height: 15px;
+          margin: auto;
         }
       }
     }

@@ -1,7 +1,12 @@
 <template>
   <div>
     <router-link
-      class="tab"
+      :class="[
+        {
+          'router-link-active': $route.path.indexOf('/help/notice/read') >= 0,
+        },
+        'tab',
+      ]"
       :to="{
         path: '/help/notice',
         query: {

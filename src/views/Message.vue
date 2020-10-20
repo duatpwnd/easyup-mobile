@@ -1,7 +1,31 @@
 <template>
-  <keep-alive>
-    <router-view />
-  </keep-alive>
+  <div>
+    <div v-if="$route.name != 'newMessage'">
+      <router-link
+        class="tab"
+        :to="{
+          path: '/msg/receivedList',
+          query: {
+            pageCurrent: 1,
+            keyword: '',
+          },
+        }"
+        ><span class="active_bar"></span>수신
+      </router-link>
+      <router-link
+        class="tab"
+        :to="{
+          path: '/msg/sentList',
+          query: {
+            pageCurrent: 1,
+            keyword: '',
+          },
+        }"
+        ><span class="active_bar"></span>발신</router-link
+      >
+    </div>
+    <router-view></router-view>
+  </div>
 </template>
 <script>
   export default {
@@ -12,4 +36,31 @@
     methods: {},
   };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .tab {
+    font-size: 2rem;
+    font-weight: 600;
+    width: 50%;
+    display: inline-block;
+    text-align: center;
+    background: #f8f8f8;
+    padding: 2% 0;
+    position: relative;
+    .active_bar {
+      background: #f8f8f8;
+      height: 4px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+  .router-link-active {
+    color: black;
+    background: #ffffff;
+    .active_bar {
+      background: #114fff;
+    }
+  }
+</style>

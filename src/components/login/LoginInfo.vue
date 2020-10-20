@@ -3,7 +3,7 @@
     <div class="profile">
       <span class="profile_ico">
         <img
-          src="@/assets/images/common/profile.png"
+          :src="userStore_userinfo.info.profile_image"
           alt="프로필"
           title="프로필"
         />
@@ -125,6 +125,8 @@
       .profile_ico {
         width: 33.773%;
         display: inline-block;
+        border-radius: 100%;
+        overflow: hidden;
       }
       h2 {
         margin-top: 6%;

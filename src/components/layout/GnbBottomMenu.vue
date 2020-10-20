@@ -2,7 +2,14 @@
   <div id="gnb_bottom_menu">
     <ul class="gnb">
       <li v-for="(list, index) in menu" :key="index">
-        <router-link :to="list.path">
+        <router-link
+          :to="{ path: list.path, query: list.query }"
+          :class="[
+            {
+              'router-link-active': $route.path.indexOf(list.path) >= 0,
+            },
+          ]"
+        >
           <img
             v-if="list.path == '/' + $route.path.split('/')[1]"
             :src="list.active"
@@ -34,6 +41,11 @@
             path: "/myClass",
             name: require("@/assets/images/common/lec_course_ico.png"),
             active: require("@/assets/images/common/lec_course_active_ico.png"),
+            query: {
+              keyword: "",
+              pageCurrent: 1,
+              order: "",
+            },
           },
           // {
           //   title: "과제게시판",
@@ -58,6 +70,11 @@
             path: "/bookmarkManage",
             name: require("@/assets/images/common/bookmark_ico.png"),
             active: require("@/assets/images/common/bookmark_active_ico.png"),
+            query: {
+              keyword: "",
+              pageCurrent: 1,
+              order: "",
+            },
           },
         ],
       };

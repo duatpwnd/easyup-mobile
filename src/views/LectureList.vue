@@ -55,29 +55,35 @@
         </LecItem>
       </div>
     </div>
-    <ul class="paging">
-      <li
-        class="prev"
-        @click="getList(Number(current) - 1, order, keyword)"
-        v-if="current > 1"
-      >
-        이전페이지
-      </li>
-      <li
-        class="next"
-        v-if="category_list.total_page != current"
-        @click="getList(Number(current) + 1, order, keyword)"
-      >
-        다음페이지
-      </li>
-    </ul>
+    <Pagination>
+      <template slot="paging">
+        <li
+          class="prev"
+          @click="getList(Number(current) - 1, order, $route.query.keyword)"
+          v-if="current > 1"
+        >
+          이전페이지
+        </li>
+        <li
+          class="next"
+          v-if="category_list.total_page != current"
+          @click="getList(Number(current) + 1, order, $route.query.keyword)"
+        >
+          다음페이지
+        </li>
+      </template>
+    </Pagination>
   </div>
 </template>
 <script>
+  import Pagination from "@/components/common/Pagination.vue";
+
   import Search from "@/components/common/Search.vue";
   import LecItem from "@/components/common/LectureItem.vue";
   export default {
     components: {
+      Pagination,
+
       LecItem,
       Search,
     },
@@ -101,7 +107,6 @@
             : null,
           tag: this.$route.query.tag,
         };
-        console.log(data);
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data), {
             headers: {

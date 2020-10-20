@@ -6,39 +6,85 @@
       <fieldset>
         <div class="row">
           <label for="last_name">성</label>
-          <input type="text" id="last_name" readonly value="윤" />
+          <input
+            type="text"
+            id="last_name"
+            readonly
+            class="readonly"
+            :value="userStore_userinfo.info.lastname"
+          />
         </div>
         <div class="row">
           <label for="first_name">이름</label>
-          <input type="text" id="first_name" readonly value="계상" />
+          <input
+            type="text"
+            id="first_name"
+            readonly
+            class="readonly"
+            :value="userStore_userinfo.info.firstname"
+          />
         </div>
         <div class="row">
           <label for="email">이메일</label>
-          <input type="text" id="email" readonly value="duatpwnd1@naver.com" />
+          <input
+            type="text"
+            id="email"
+            class="readonly"
+            readonly
+            :value="userStore_userinfo.info.email"
+          />
         </div>
         <div class="row">
           <label>연락처</label>
-          <input type="tell" id="phone" placeholder="01022223333" />
+          <input
+            type="tell"
+            v-model="phone"
+            id="phone"
+            placeholder="ex) 01012345678"
+          />
+        </div>
+        <div class="row">
+          <label for="unijob_id">유니잡 ID</label>
+          <input
+            type="text"
+            class="unijob"
+            v-model="unijob_id"
+            id="unijob_id"
+          />
         </div>
         <div class="row">
           <label>이미지 추가</label>
-          <input type="file" id="upload" />
+          <input
+            type="file"
+            accept=".png,.jpg,.jpeg,.gif"
+            id="upload"
+            ref="upload"
+            @change="fileSelect()"
+          />
           <label for="upload" class="file">파일 선택</label>
+          <span class="file_name">{{ file_obj.name }}</span>
+
           <div class="noti">
             * JPG , PNG 파일로 만 등록 가능하며 파일 용량을 3MB 미만으로 설정해
             주세요.
           </div>
         </div>
         <div class="row">
+          <label for="current_pw">현재 비밀번호</label>
+          <input type="password" v-model="current_password" id="current_pw" />
+        </div>
+        <div class="row">
           <label for="pw">새 비밀번호</label>
-          <input type="password" id="pw" autocomplete="true" />
+          <input type="password" v-model="new_password" id="pw" />
         </div>
         <div class="row">
           <label for="re_pw">비밀번호 확인</label>
-          <input type="password" id="re_pw" autocomplete="true" />
+          <input type="password" v-model="new_password_confirm" id="re_pw" />
         </div>
         <BlueBtn>
-          <button slot="blue_btn">변경</button>
+          <button slot="blue_btn" type="button" @click="editProfile()">
+            변경
+          </button>
         </BlueBtn>
       </fieldset>
     </form>
@@ -46,12 +92,78 @@
 </template>
 <script>
   import BlueBtn from "@/components/common/BaseButton.vue";
+  import { mapState, mapMutations } from "vuex";
+
   export default {
     components: { BlueBtn },
-    data() {
-      return {};
+    computed: {
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
     },
-    methods: {},
+    data() {
+      return {
+        phone: "",
+        current_password: "",
+        new_password: "",
+        new_password_confirm: "",
+        file_obj: "",
+        unijob_id: "",
+      };
+    },
+    methods: {
+      validationCheck() {
+        return new Promise((resolve, reject) => {
+          if (this.new_password != this.new_password_confirm) {
+            this.$Util.default.noticeMessage("비밀 번호가 서로 다릅니다.");
+          } else {
+            resolve("success");
+          }
+        });
+      },
+      fileSelect() {
+        const selected_file = this.$refs.upload.files[0];
+        this.file_obj = selected_file;
+      },
+      editProfile() {
+        this.validationCheck().then((result) => {
+          if (result == "success") {
+            const data = {
+              action: "edit_profile",
+              phone: this.phone,
+              unijob_id: this.unijob_id,
+              password0: this.current_password,
+              new_password: this.new_password,
+              new_password_confirm: this.new_password_confirm,
+              picture: this.file_obj,
+            };
+            console.log(data);
+            this.$axios
+              .post(this.$ApiUrl.main_list, data, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: this.$cookies.get("user_info")
+                    ? "Bearer " + this.$cookies.get("user_info").access_token
+                    : null,
+                },
+              })
+              .then((result) => {
+                console.log(result);
+                if (result.data.error) {
+                  this.$Util.default.noticeMessage(result.data.message);
+                } else {
+                  this.$Util.default.noticeMessage(
+                    "새 프로필이 저장되었습니다."
+                  );
+                }
+              });
+          }
+        });
+      },
+    },
+    created() {
+      this.phone = this.userStore_userinfo.info.phone;
+    },
   };
 </script>
 <style scoped lang="scss">
@@ -63,10 +175,11 @@
     .row {
       margin-top: 2%;
       clear: both;
-      input[type="text"] {
+      .readonly {
         border: 0;
         outline: none;
       }
+
       input[type="file"] {
         display: none;
       }
@@ -102,6 +215,9 @@
         border-radius: 5px;
         font-size: 1.5rem;
         padding: 0.763% 5.946%;
+      }
+      .file_name {
+        margin-left: 10px;
       }
     }
   }

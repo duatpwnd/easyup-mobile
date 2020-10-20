@@ -1,8 +1,5 @@
 let checkEvent = {
   methods: {
-    upload() {
-      this.$router.push("/dataShare/upload");
-    },
     // 전체 체크
     all_check() {
       this.allCheck = !this.allCheck;

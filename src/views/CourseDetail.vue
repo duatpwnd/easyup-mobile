@@ -40,8 +40,19 @@
     <div id="subscribe">
       <div class="subscribe_wrap">
         <h2>무료</h2>
-        <BlueBtn>
-          <button ref="subs_btn" slot="blue_btn" @click="video()">
+        {{ is_subscribe }}
+        <BlueBtn v-if="is_subscribe">
+          <button
+            ref="subs_btn"
+            class="active_subscribe"
+            slot="blue_btn"
+            @click="video()"
+          >
+            구독중
+          </button>
+        </BlueBtn>
+        <BlueBtn v-else>
+          <button ref="subs_btn" slot="blue_btn">
             구독하기
           </button>
         </BlueBtn>
@@ -83,7 +94,10 @@
         </div>
         <span class="name">{{ detail.teachers }}</span>
       </div>
-      <button class="fixed_subs_btn" v-if="subscribe_btn">구독하기</button>
+      <button class="fixed_subs_btn" v-if="subscribe_btn">
+        <span v-if="is_subscribe" class="active_subscribe">구독중</span>
+        <span v-else>구독하기</span>
+      </button>
     </div>
     <div class="course_info">
       <h2 class="course_list">
@@ -159,14 +173,20 @@
       return {};
     },
     methods: {
-      // 강의 상세 조회
+      // 코스 상세 조회
       async getCourseDetail() {
         const data = {
           action: "get_session_info",
           session_id: this.$route.query.id,
         };
         await this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
           .then((result) => {
             console.log("코스상세:", result.data.data);
             this.detail = result.data.data;
@@ -174,9 +194,10 @@
       },
     },
     created() {
-      this.$axios
-        .all([this.isSubscribe(), this.getCourseDetail()])
-        .then(this.$axios.spread((countries, cities) => {}));
+      if (this.$cookies.get("user_info") != null) {
+        this.isSubscribe();
+      }
+      this.getCourseDetail();
     },
   };
 </script>
@@ -226,6 +247,10 @@
         line-height: 32px;
       }
     }
+    .active_subscribe {
+      background-color: #ff114a;
+      border-color: #ff114a;
+    }
     ::v-deep .vue-star-rating {
       display: unset;
       .vue-star-rating-rating-text {
@@ -260,13 +285,18 @@
       color: #ffffff;
       font-family: "NotoSansCJKkr-Medium";
       font-size: 18px;
-      height: 40px;
       width: 100%;
       max-width: 720px;
       z-index: 2;
       left: 0;
       right: 0;
       margin: auto;
+      span {
+        width: 100%;
+        display: block;
+        height: 40px;
+        line-height: 40px;
+      }
     }
   }
   .course_info {

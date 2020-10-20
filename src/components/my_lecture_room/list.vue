@@ -23,7 +23,7 @@
     margin-top: 1%;
     .td {
       display: inline-block;
-      font-size: 1.5rem;
+      font-size: 12px;
       color: #666666;
       vertical-align: middle;
     }
