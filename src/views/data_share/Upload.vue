@@ -83,7 +83,14 @@
           .then((result) => {
             console.log(result);
             if (result.data.data.length == 1) {
-              this.$router.push("/dataShare");
+              this.$router.push({
+                path: "/dataShare",
+                query: {
+                  keyword: "",
+                  pageCurrent: 1,
+                  order: "all",
+                },
+              });
             }
           });
       },

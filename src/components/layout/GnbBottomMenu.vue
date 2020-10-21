@@ -7,13 +7,13 @@
           :class="[
             {
               'router-link-active':
-                $route.path.indexOf(list.path) >= 0 &&
+                list.path.indexOf($route.path.split('/')[1]) >= 0 &&
                 $route.path.indexOf(list.path) < 0,
             },
           ]"
         >
           <img
-            v-if="list.path == '/' + $route.path.split('/')[1]"
+            v-if="list.path.indexOf($route.path.split('/')[1]) >= 0"
             :src="list.active"
             :alt="list.title"
             :title="list.title"
@@ -40,7 +40,7 @@
         menu: [
           {
             title: "내 강좌/코스",
-            path: "/myClass",
+            path: "/myClass/lecture",
             name: require("@/assets/images/common/lec_course_ico.png"),
             active: require("@/assets/images/common/lec_course_active_ico.png"),
             query: {
@@ -57,19 +57,29 @@
           // },
           {
             title: "공지사항",
-            path: "/notice",
+            path: "/notice/list",
             name: require("@/assets/images/common/notice_ico.png"),
             active: require("@/assets/images/common/notice_active_ico.png"),
+            query: {
+              keyword: "",
+              pageCurrent: 1,
+              order: "all",
+            },
           },
           {
             title: "자료공유",
-            path: "/dataShare",
+            path: "/dataShare/sent",
             name: require("@/assets/images/common/share_ico.png"),
             active: require("@/assets/images/common/share_active_ico.png"),
+            query: {
+              keyword: "",
+              pageCurrent: 1,
+              order: "all",
+            },
           },
           {
             title: "책갈피 관리",
-            path: "/bookmarkManage",
+            path: "/bookmarkManage/list",
             name: require("@/assets/images/common/bookmark_ico.png"),
             active: require("@/assets/images/common/bookmark_active_ico.png"),
             query: {

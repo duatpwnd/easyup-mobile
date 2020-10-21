@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="$route.name != 'newMessage'">
+    <div v-if="$route.name != 'newMessage' && $route.name != 'msgRead'">
       <router-link
         class="tab"
         :to="{
@@ -13,7 +13,12 @@
         ><span class="active_bar"></span>수신
       </router-link>
       <router-link
-        class="tab"
+        :class="[
+          {
+            'router-link-active': $route.path.indexOf('/msg/read') >= 0,
+          },
+          'tab',
+        ]"
         :to="{
           path: '/msg/sentList',
           query: {

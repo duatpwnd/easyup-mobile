@@ -10,8 +10,14 @@
         slot="slot_input"
         class="search_contents"
         placeholder="강의명을 검색하세요."
+        :value="keyword"
+        v-on:input="keyword = $event.target.value"
       />
-      <button slot="search_btn" class="search_btn"></button>
+      <button
+        slot="search_btn"
+        class="search_btn"
+        @click="getDropBoxList($route.meta.type, 1, order, keyword)"
+      ></button>
     </Search>
     <div class="btn_wrap">
       <BlueBtn class="left">
@@ -52,13 +58,52 @@
         </CheckBox>
         <template slot="top">
           <span class="td left_td">{{ list.course_name }}</span>
-          <span class="td right_td">{{ list.title }}</span>
+          <span
+            class="td right_td"
+            @click="fileDownload(list.id, list.course_id)"
+            >{{ list.title }}</span
+          >
         </template>
         <template slot="bottom">
           <span class="td left_td">종류 : {{ list.title.split(".")[1] }}</span>
         </template>
       </BoardList>
     </div>
+    <Pagination>
+      <template slot="paging">
+        <li
+          class="prev"
+          @click="
+            getDropBoxList(
+              $route.meta.type,
+              Number(current) - 1,
+              order,
+              $route.query.keyword
+            )
+          "
+          v-if="current > 1"
+        >
+          이전페이지
+        </li>
+        <li
+          class="next"
+          v-if="
+            datashare_list.total_page != current &&
+              datashare_list.total_page > 1
+          "
+          @click="
+            getDropBoxList(
+              $route.meta.type,
+              Number(current) + 1,
+              order,
+              $route.query.keyword
+            )
+          "
+        >
+          다음페이지
+        </li>
+      </template>
+    </Pagination>
   </div>
 </template>
 <script>
@@ -67,10 +112,11 @@
   import BoardList from "@/components/common/BoardList.vue";
   import Search from "@/components/common/Search.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import mixin from "@/components/mixins/check_event.js";
+  import Pagination from "@/components/common/Pagination.vue";
   export default {
-    mixins: [mixin],
     components: {
+      Pagination,
+
       CheckBox,
       BoardList,
       BoardTitle,
@@ -79,20 +125,65 @@
     },
     data() {
       return {
-        order: "",
+        checked_list: [],
+        allCheck: false,
         datashare_list: "",
+        current: "", //현재번호
+        order: "",
+        keyword: "",
       };
     },
     methods: {
       upload() {
         this.$router.push("/dataShare/upload");
       },
+      fileDownload(id, course_id) {
+        const data = {
+          action: "get_file_download_info",
+          id: id,
+          course_id: course_id,
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log(result);
+            // const link = document.createElement('a');
+            // const blob = new Blob(['파일객체']);
+            // const url = window.URL.createObjectURL(blob);
+            // link.href = url;
+            // link.download = "file.png";
+          });
+      },
+      all_check() {
+        this.allCheck = !this.allCheck;
+        if (this.allCheck) {
+          this.datashare_list.list.forEach((el, index) => {
+            this.checked_list.push(el.id);
+          });
+        } else {
+          this.checked_list = [];
+        }
+      },
+      // 부분체크
+      partial_check() {
+        if (this.datashare_list.list.length != this.checked_list.length) {
+          this.allCheck = false;
+        } else {
+          this.allCheck = true;
+        }
+      },
       // 공유한 파일 삭제
       deleteFile() {
-        console.log(this.checked_list);
         const data = {
           action: "delete_dropbox_file",
-          type: "sent",
+          type: this.$route.meta.type,
           id: this.checked_list,
         };
         this.$axios
@@ -106,33 +197,19 @@
           .then((result) => {
             console.log(result);
             this.$Util.default.noticeMessage(result.data.data[0]);
+            this.allCheck = false;
             this.getDropBoxList(
+              this.$route.meta.type,
               this.$route.query.pageCurrent,
               this.$route.query.order,
               this.$route.query.keyword
             );
-            // this.$router
-            //   .push({
-            //     query: {
-            //       action: this.$route.query.action,
-            //       pageCurrent: num,
-            //       order: order,
-            //       keyword: keyword,
-
-            //       category_code: this.$route.query.category_code,
-            //       tag: this.$route.query.tag,
-            //     },
-            //   })
-            //   .catch(() => {});
-            // this.order = order;
-            // this.keyword = keyword;
-            // this.current = num;
           });
       },
-      getDropBoxList(num, order, keyword) {
+      getDropBoxList(type, num, order, keyword) {
         const data = {
           action: "get_dropbox_list",
-          type: "sent",
+          type: type,
           current: num == undefined ? 1 : num,
           search_status: order == undefined ? "all" : order,
           keyword: keyword == undefined ? "" : keyword,
@@ -148,29 +225,38 @@
           })
           .then((result) => {
             console.log(result);
-            this.datashare_list = result.data.data;
-            // this.$router
-            //   .push({
-            //     query: {
-            //       action: this.$route.query.action,
-            //       pageCurrent: num,
-            //       order: order,
-            //       keyword: keyword,
-
-            //       category_code: this.$route.query.category_code,
-            //       tag: this.$route.query.tag,
-            //     },
-            //   })
-            //   .catch(() => {});
-            // this.order = order;
-            // this.keyword = keyword;
-            // this.current = num;
+            if (result.data.error != true) {
+              this.datashare_list = result.data.data;
+              this.$router
+                .push({
+                  query: {
+                    pageCurrent: num,
+                    order: order,
+                    keyword: keyword,
+                  },
+                })
+                .catch(() => {});
+              this.order = order;
+              this.keyword = keyword;
+              this.current = num;
+            }
           });
       },
     },
     mounted() {},
+    watch: {
+      $route(to, from) {
+        this.getDropBoxList(
+          to.meta.type,
+          this.$route.query.pageCurrent,
+          this.$route.query.order,
+          this.$route.query.keyword
+        );
+      },
+    },
     created() {
       this.getDropBoxList(
+        this.$route.meta.type,
         this.$route.query.pageCurrent,
         this.$route.query.order,
         this.$route.query.keyword

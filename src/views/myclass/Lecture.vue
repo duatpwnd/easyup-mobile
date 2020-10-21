@@ -81,7 +81,10 @@
           </li>
           <li
             class="next"
-            v-if="lec_course_list.total_page != current"
+            v-if="
+              lec_course_list.total_page != current &&
+                lec_course_list.total_page > 1
+            "
             @click="
               getMyCourse(
                 'get_my_course',

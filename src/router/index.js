@@ -205,8 +205,22 @@ const routes = [
   {
     path: "/dataShare",
     name: "dataShare",
+    redirect: "/dataShare/sent",
     component: () => import("../views/DataShare.vue"),
-    meta: { GnbBottomMenu: true },
+    children: [
+      {
+        path: "sent",
+        name: "dataShareSentList",
+        component: () => import("@/views/data_share/Tab.vue"),
+        meta: { GnbBottomMenu: true, type: "sent" },
+      },
+      {
+        path: "received",
+        name: "dataShareReceivedList",
+        component: () => import("@/views/data_share/Tab.vue"),
+        meta: { GnbBottomMenu: true, type: "received" },
+      },
+    ],
   },
   {
     path: "/dataShare/upload",
@@ -280,14 +294,14 @@ const routes = [
     children: [
       {
         path: "receivedList",
-        name: "receivedList",
-        component: () => import("@/views/message/Tab1.vue"),
+        name: "received",
+        component: () => import("@/views/message/Tab.vue"),
         meta: { ProfileMsgTab: true },
       },
       {
         path: "sentList",
-        name: "sentList",
-        component: () => import("@/views/message/Tab2.vue"),
+        name: "sent",
+        component: () => import("@/views/message/Tab.vue"),
         meta: { ProfileMsgTab: true },
       },
       {

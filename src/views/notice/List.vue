@@ -2,64 +2,137 @@
   <div>
     <div class="search_area">
       <Search>
+        <select slot="option" class="select" v-model="order">
+          <option value="all">전체</option>
+          <option value="course_name">강의명</option>
+          <option value="subject">제목</option>
+        </select>
         <input
           slot="slot_input"
-          type="text"
           class="search_contents"
-          placeholder="강의명을 검색하세요"
+          placeholder="강의명을 검색하세요."
+          :value="keyword"
+          v-on:input="keyword = $event.target.value"
         />
+        <button
+          slot="search_btn"
+          class="search_btn"
+          @click="getDropBoxList($route.query.type, 1, order, keyword)"
+        ></button>
       </Search>
     </div>
-    <!-- <div class="write">
-      <BlueBtn>
-        <button slot="blue_btn" @click="go_to_path()">
-          글쓰기
-        </button>
-      </BlueBtn>
-    </div> -->
+
     <BoardTitle></BoardTitle>
-    <div class="list" @click="read()">
+    <div
+      class="list"
+      @click="read(list.id, list.c_id)"
+      v-for="(list, index) in notice_list.list"
+      :key="index"
+    >
       <BoardList>
         <template slot="top">
-          <span class="td left_td">파이썬 완벽 뽀개기</span>
-          <span class="td right_td">전체 휴강 안내드립니다.</span>
+          <span class="td left_td">{{ list.course_name }}</span>
+          <span class="td right_td">{{ list.title }}</span>
         </template>
-        <span class="td" slot="bottom">2020.06.12</span>
+        <span class="td" slot="bottom">{{ list.insert_date }}</span>
       </BoardList>
     </div>
-    <div class="list" @click="read()">
-      <BoardList>
-        <template slot="top">
-          <span class="td left_td">파이썬 완벽 뽀개기</span>
-          <span class="td right_td">전체 휴강 안내드립니다.</span>
-        </template>
-        <span class="td" slot="bottom">2020.06.12</span>
-      </BoardList>
-    </div>
+    <Pagination>
+      <template slot="paging">
+        <li
+          class="prev"
+          @click="
+            getNoticeList(Number(current) - 1, order, $route.query.keyword)
+          "
+          v-if="current > 1"
+        >
+          이전페이지
+        </li>
+        <li
+          class="next"
+          v-if="notice_list.total_page != current && notice_list.total_page > 1"
+          @click="
+            getNoticeList(Number(current) + 1, order, $route.query.keyword)
+          "
+        >
+          다음페이지
+        </li>
+      </template>
+    </Pagination>
   </div>
 </template>
 <script>
   import Search from "@/components/common/Search.vue";
   import BoardTitle from "@/components/common/BoardTitle.vue";
   import BoardList from "@/components/common/BoardList.vue";
-  // import BlueBtn from "@/components/common/BaseButton.vue";
+  import Pagination from "@/components/common/Pagination.vue";
+
   export default {
     components: {
+      Pagination,
+
       BoardTitle,
-      // BlueBtn,
       BoardList,
       Search,
     },
     data() {
-      return {};
+      return {
+        current: "", //현재번호
+        order: "",
+        keyword: "",
+        notice_list: "",
+      };
     },
     methods: {
-      read() {
-        this.$router.push("/notice/read");
+      read(id, c_id) {
+        this.$router.push({
+          path: "/notice/read",
+          query: { id: id, c_id: c_id },
+        });
       },
       go_to_path() {
         this.$router.push("/notice/noticeRegister");
       },
+      getNoticeList(num, order, keyword) {
+        const data = {
+          action: "get_my_notice_list",
+          current: num == undefined ? 1 : num,
+          search_status: order == undefined ? "all" : order,
+          keyword: keyword == undefined ? "" : keyword,
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log(result);
+            this.notice_list = result.data.data;
+            this.$router
+              .push({
+                query: {
+                  pageCurrent: num,
+                  order: order,
+                  keyword: keyword,
+                },
+              })
+              .catch(() => {});
+            this.order = order;
+            this.keyword = keyword;
+            this.current = num;
+          });
+      },
+    },
+    created() {
+      this.getNoticeList(
+        this.$route.query.pageCurrent,
+        this.$route.query.order,
+        this.$route.query.keyword
+      );
     },
   };
 </script>

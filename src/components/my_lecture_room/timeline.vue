@@ -21,7 +21,9 @@
         </li>
         <li
           class="next"
-          v-if="timeline_list.total_page != current"
+          v-if="
+            timeline_list.total_page != current && timeline_list.total_page > 1
+          "
           @click="getDashboardTimeline(Number(current) + 1)"
         >
           다음페이지

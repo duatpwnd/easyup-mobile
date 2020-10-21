@@ -1,45 +1,34 @@
 <template>
   <div class="file_wrap">
     <h2>자료 공유 게시판</h2>
-    <span
+    <router-link
       class="tab"
-      v-for="(tab, index) in types"
-      :class="{ active: index == isActive }"
-      :key="index"
-      @click="toggle(tab.target, index)"
-      ><span class="active_bar"></span>{{ tab.name }}</span
+      :to="{
+        path: '/dataShare/sent',
+        query: {
+          keyword: '',
+          pageCurrent: 1,
+          order: 'all',
+        },
+      }"
+      ><span class="active_bar"></span>공유한 파일
+    </router-link>
+    <router-link
+      class="tab"
+      :to="{
+        path: '/dataShare/received',
+        query: {
+          keyword: '',
+          pageCurrent: 1,
+          order: 'all',
+        },
+      }"
+      ><span class="active_bar"></span>공유받은 파일</router-link
     >
-    <keep-alive>
-      <component v-bind:is="type"></component>
-    </keep-alive>
+    <router-view></router-view>
   </div>
 </template>
-<script>
-  import Tab1 from "@/components/data_share/Tab1.vue";
-  import Tab2 from "@/components/data_share/Tab2.vue";
-  export default {
-    components: {
-      Tab1,
-      Tab2,
-    },
-    data() {
-      return {
-        isActive: 0,
-        type: "Tab1",
-        types: [
-          { name: "공유한 파일", target: "Tab1" },
-          { name: "공유받은 파일", target: "Tab2" },
-        ],
-      };
-    },
-    methods: {
-      toggle(type, index) {
-        this.type = type;
-        this.isActive = index;
-      },
-    },
-  };
-</script>
+<script></script>
 <style scoped lang="scss">
   .file_wrap {
     margin-top: 2%;
@@ -58,17 +47,17 @@
       padding: 2% 0;
       position: relative;
       color: #999999;
+      .active_bar {
+        background: #f8f8f8;
+        height: 4px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+      }
     }
-    .active_bar {
-      background: #f8f8f8;
-      padding: 1.118%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .active {
+    .router-link-active {
       color: black;
       background: #ffffff;
       .active_bar {

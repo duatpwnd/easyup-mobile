@@ -60,7 +60,9 @@
         </li>
         <li
           class="next"
-          v-if="bookmark_list.total_page != current"
+          v-if="
+            bookmark_list.total_page != current && bookmark_list.total_page > 1
+          "
           @click="getList(Number(current) + 1, order, $route.query.keyword)"
         >
           다음페이지

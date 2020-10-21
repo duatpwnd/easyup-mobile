@@ -1,22 +1,17 @@
 <template>
   <div>
     <div class="head">
-      <span class="title">[파이선 완벽 뽀개기]</span>
-      <span>전체 휴강 안내드립니다.</span>
+      <span class="title">[{{ view.course_name }}]</span>
+      <span>{{ view.subject }}</span>
     </div>
     <div class="contents">
-      <pre>
-강동원 강사님<br><br>제가 개인적인 사정으로 휴강하게 되었습니다<br>죄송합니다.</pre>
+      <span>작성자 : {{ view.writer }}</span>
+      <div v-html="view.content"></div>
     </div>
     <div class="button_wrap">
       <BlueBtn class="btn">
-        <button slot="blue_btn">
-          수정
-        </button>
-      </BlueBtn>
-      <BlueBtn class="btn last_btn">
-        <button slot="blue_btn">
-          다음글
+        <button slot="blue_btn" @click="goToList()">
+          목록
         </button>
       </BlueBtn>
     </div>
@@ -29,9 +24,43 @@
       BlueBtn,
     },
     data() {
-      return {};
+      return {
+        view: "",
+      };
     },
-    methods: {},
+    methods: {
+      goToList() {
+        this.$router.push({
+          path: "/notice",
+          query: {
+            keyword: "",
+            pageCurrent: 1,
+            order: "all",
+          },
+        });
+      },
+      read() {
+        const data = {
+          action: "get_my_notice_info",
+          id: this.$route.query.id,
+          course_id: this.$route.query.c_id,
+        };
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            this.view = result.data.data;
+          });
+      },
+    },
+    created() {
+      this.read();
+    },
   };
 </script>
 <style scoped lang="scss">
@@ -51,21 +80,10 @@
     border-bottom: 2px solid #333333;
     padding: 2% 0;
     margin: 2% 0;
-    pre {
-      white-space: pre-wrap;
-      font-size: 1.25rem;
-      color: #666666;
-      font-family: "NotoSansCJKkr-Regular";
-    }
+    font-family: "NotoSansCJKkr-Regular";
   }
   .button_wrap {
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
-    }
     .btn {
-      float: left;
       width: 23.172%;
       button {
         border: 1px solid #114fff;
@@ -75,12 +93,6 @@
         line-height: 16px;
         font-size: 12px;
       }
-      &:not(:first-child) {
-        margin-left: 2%;
-      }
-    }
-    .last_btn {
-      float: right;
     }
   }
 </style>
