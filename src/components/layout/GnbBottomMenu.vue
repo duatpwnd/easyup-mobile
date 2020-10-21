@@ -6,7 +6,9 @@
           :to="{ path: list.path, query: list.query }"
           :class="[
             {
-              'router-link-active': $route.path.indexOf(list.path) >= 0,
+              'router-link-active':
+                $route.path.indexOf(list.path) >= 0 &&
+                $route.path.indexOf(list.path) < 0,
             },
           ]"
         >

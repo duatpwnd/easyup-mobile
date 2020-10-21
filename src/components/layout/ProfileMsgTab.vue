@@ -6,9 +6,16 @@
           path: list.path,
           query: list.query,
         }"
+        :class="[
+          {
+            'router-link-active':
+              list.path.indexOf($route.path.split('/')[1]) >= 0 &&
+              $route.path.indexOf(list.path) < 0,
+          },
+        ]"
       >
         <img
-          v-if="list.path == '/' + $route.path.split('/')[1]"
+          v-if="list.path.indexOf($route.path.split('/')[1]) >= 0"
           :src="list.active"
           :alt="list.title"
           :title="list.title"

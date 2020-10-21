@@ -83,6 +83,10 @@
               } else {
                 this.$cookies.set("user_info", result.data.data[0]);
                 this.$store.commit("userStore/loginToken", result.data.data[0]);
+                // 마지막 로그아웃 시점url이 있을경우
+                if (this.$router.currentRoute.query.referer != undefined) {
+                  this.$router.push(this.$router.currentRoute.query.referer);
+                }
               }
             })
             .catch((err) => {

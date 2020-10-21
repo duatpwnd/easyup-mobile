@@ -3,40 +3,37 @@
     <h2 class="title">메시지 발송</h2>
     <div class="row">
       <span class="left">받는 분</span>
-      <Search>
+      <div class="search_contents">
         <input
           v-on:input="keyword = $event.target.value"
-          slot="slot_input"
-          class="search_contents"
+          class="search_input"
           @keyup="search()"
-          placeholder="검색어를 입력하세요."
         />
-      </Search>
-      <!-- 선택된사람 -->
-      <div v-if="choice_list.length > 0">
-        <ul>
-          <li v-for="(list, index) in choice_list" :key="index">
-            {{ list.text }}<button @click="close(list.id)">X</button>
-          </li>
-        </ul>
+        <!-- 선택된사람 -->
+        <div class="selected_list" v-if="choice_list.length > 0">
+          <span class="list" v-for="(list, index) in choice_list" :key="index">
+            <span class="name">{{ list.text }}</span
+            ><button class="close_btn" @click="close(list.id)">X</button>
+          </span>
+        </div>
       </div>
-      <ul v-if="received_list.length > 0" style="background:gold;">
-        <li
-          v-for="(list, index) in received_list"
-          :key="index"
-          @click="choice(list)"
-        >
-          {{ list.text }}
-        </li>
-      </ul>
-
-      <p class="notice" v-if="keyword.length < 3 && keyword.length > 0">
-        3글자 이상 입력해주세요.
-      </p>
-      <p class="notice" v-if="search_result">
-        결과가 없습니다.
-      </p>
     </div>
+    <ul class="received_list_wrap" v-if="received_list.length > 0">
+      <li
+        v-for="(list, index) in received_list"
+        :key="index"
+        :class="{ active: choice_list.indexOf(list) >= 0 }"
+        @click="choice(list)"
+      >
+        {{ list.text }}
+      </li>
+    </ul>
+    <p class="notice" v-if="keyword.length < 3 && keyword.length > 0">
+      {{ 3 - keyword.length }}글자 이상 입력해주세요.
+    </p>
+    <p class="notice" v-if="search_result">
+      결과가 없습니다.
+    </p>
     <div class="row">
       <span class="left">제목</span>
       <input
@@ -69,12 +66,10 @@
   </div>
 </template>
 <script>
-  import Search from "@/components/common/Search.vue";
-
   export default {
-    components: { Search },
     data() {
       return {
+        choice_active: -1, //선택된사람 active 걸어주기
         title: "",
         choice_list: [], // 선택된사람
         received_list: [], // 받는사람 찾기
@@ -93,10 +88,8 @@
         const find_item = this.choice_list.find((item) => {
           return item.id === id;
         });
-        console.log(find_item);
         const idx = this.choice_list.indexOf(find_item);
         const result = this.choice_list.splice(idx, 1);
-        console.log(result);
       },
       // 선택된사람
       choice(list) {
@@ -107,6 +100,7 @@
       },
       search() {
         this.search_result = false;
+        this.received_list = [];
         const data = {
           action: "find_user",
           keyword: this.keyword,
@@ -187,22 +181,73 @@
     .title {
       font-size: 2rem;
     }
+    .notice {
+      margin-left: 25.5%;
+      margin-top: 2%;
+      font-size: 1.5rem;
+    }
+    .received_list_wrap {
+      margin-left: 25.5%;
+      margin-top: 2%;
+      background: #efefef;
+
+      li {
+        font-size: 1.5rem;
+        padding: 2%;
+      }
+      .active {
+        background: #114fff;
+        color: white;
+      }
+    }
     .row {
       display: table;
       width: 100%;
       margin-top: 2%;
-      .search {
-        margin-top: 0;
-        .search_contents {
-          width: 100%;
-          margin-left: 0;
-          line-height: unset;
+
+      .search_contents {
+        width: 100%;
+        margin-left: 0;
+        line-height: unset;
+        border: 1px solid #dbdbdb;
+        border-radius: 5px;
+        padding: 2.403% 4%;
+        box-sizing: border-box;
+        .search_input {
+          width: 30%;
+          padding: 0;
+          outline: none;
+        }
+        .selected_list {
+          &::after {
+            display: block;
+            content: "";
+            clear: both;
+          }
+          line-height: 30px;
+          margin-top: 5px;
+          .list {
+            float: left;
+            .name {
+              background-color: #e4e4e4;
+              border: 1px solid #aaa;
+              font-size: 10px;
+              padding: 5px;
+              border-radius: 4px;
+              vertical-align: middle;
+            }
+            .close_btn {
+              margin-left: 5px;
+              vertical-align: middle;
+            }
+          }
         }
       }
+
       .multiple {
         height: 200px;
       }
-      span {
+      .left {
         font-size: 1.5rem;
         display: table-cell;
         width: 25.5%;
@@ -235,7 +280,7 @@
         padding: 0.763% 5.946%;
       }
       .file_name {
-        width: 50%;
+        margin-left: 10px;
       }
       .save_btn {
         color: #ffffff;

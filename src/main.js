@@ -45,6 +45,12 @@ axios.interceptors.response.use(
       console.log("토큰없음");
       Util.default.noticeMessage("로그인을 해주세요.");
       Util.default.logOut();
+      router.push({
+        path: "/",
+        query: {
+          referer: router.currentRoute.fullPath,
+        },
+      });
       // router.push("/");
       // VueCookies.remove("access_token");
       // store.commit("userStore/loginToken", null);
