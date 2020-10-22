@@ -11,7 +11,7 @@
         </button>
       </BlueBtn>
 
-      <BlueBtn class="btn last_btn">
+      <BlueBtn class="btn last_btn" v-if="info.next != null">
         <button slot="blue_btn" @click="noticeView(info.next)">
           다음글
         </button>

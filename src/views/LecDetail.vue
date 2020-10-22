@@ -304,6 +304,7 @@
           action: "get_course_info",
           course_id: this.$route.query.id,
         };
+        console.log(data);
         await this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data), {
             headers: {

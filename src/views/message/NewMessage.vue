@@ -4,11 +4,16 @@
     <div class="row">
       <span class="left">받는 분</span>
       <div class="search_contents">
-        <input
-          v-on:input="keyword = $event.target.value"
-          class="search_input"
-          @keyup="search()"
-        />
+        <div class="inputcontainer">
+          <input
+            v-on:input="keyword = $event.target.value"
+            class="search_input"
+            @keyup="search()"
+          />
+          <div class="icon-container" v-show="loading">
+            <i class="loader"></i>
+          </div>
+        </div>
         <!-- 선택된사람 -->
         <div class="selected_list" v-if="choice_list.length > 0">
           <span class="list" v-for="(list, index) in choice_list" :key="index">
@@ -69,6 +74,7 @@
   export default {
     data() {
       return {
+        loading: false, //검색찾는동안 로딩
         choice_active: -1, //선택된사람 active 걸어주기
         title: "",
         choice_list: [], // 선택된사람
@@ -106,6 +112,7 @@
           keyword: this.keyword,
         };
         if (this.keyword.length > 2) {
+          this.loading = true;
           this.$axios
             .post(this.$ApiUrl.main_list, JSON.stringify(data), {
               headers: {
@@ -116,6 +123,7 @@
             })
             .then((result) => {
               console.log(result);
+              this.loading = false;
               if (result.data.data.items.length == 0) {
                 this.search_result = true;
               } else {
@@ -125,39 +133,43 @@
         }
       },
       send() {
-        const data = {
-          action: "send_message",
-          users: [],
-          title: this.title,
-          content: this.editorData,
-          attach_1: this.file_obj,
-        };
-        const map = this.choice_list.map((el, index) => {
-          return el.id;
-        });
-        data.users = map;
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.main_list, data, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
-          .then((result) => {
-            console.log(result);
-            if (result.data.data.fail == 0) {
-              this.$router.push({
-                path: "/msg/receivedList",
-                query: {
-                  pageCurrent: 1,
-                  keyword: "",
+        this.validationCheck().then((result) => {
+          if (result == "success") {
+            const data = {
+              action: "send_message",
+              users: [],
+              title: this.title,
+              content: this.editorData,
+              attach_1: this.file_obj,
+            };
+            const map = this.choice_list.map((el, index) => {
+              return el.id;
+            });
+            data.users = map;
+            console.log(data);
+            this.$axios
+              .post(this.$ApiUrl.main_list, data, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: this.$cookies.get("user_info")
+                    ? "Bearer " + this.$cookies.get("user_info").access_token
+                    : null,
                 },
+              })
+              .then((result) => {
+                console.log(result);
+                if (result.data.data.fail == 0) {
+                  this.$router.push({
+                    path: "/msg/receivedList",
+                    query: {
+                      pageCurrent: 1,
+                      keyword: "",
+                    },
+                  });
+                }
               });
-            }
-          });
+          }
+        });
       },
       fileSelect() {
         const selected_file = this.$refs.upload.files[0];
@@ -165,8 +177,10 @@
       },
       validationCheck() {
         return new Promise((resolve, reject) => {
-          if (this.new_password != this.new_password_confirm) {
-            this.$Util.default.noticeMessage("비밀 번호가 서로 다릅니다.");
+          if (this.choice_list.length == 0) {
+            this.$Util.default.noticeMessage("받는분을 입력하세요");
+          } else if (this.title.trim().length == 0) {
+            this.$Util.default.noticeMessage("제목을 입력하세요");
           } else {
             resolve("success");
           }
@@ -213,10 +227,61 @@
         border-radius: 5px;
         padding: 2.403% 4%;
         box-sizing: border-box;
-        .search_input {
+        .inputcontainer {
+          position: relative;
           width: 30%;
-          padding: 0;
-          outline: none;
+          .icon-container {
+            position: absolute;
+            right: 10px;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            height: 12px;
+          }
+          .loader {
+            position: relative;
+            height: 12px;
+            width: 12px;
+            display: inline-block;
+            animation: around 5.4s infinite;
+          }
+
+          @keyframes around {
+            0% {
+              transform: rotate(0deg);
+            }
+            100% {
+              transform: rotate(360deg);
+            }
+          }
+
+          .loader::after,
+          .loader::before {
+            content: "";
+            background: white;
+            position: absolute;
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            border-width: 2px;
+            border-color: #333 #333 transparent transparent;
+            border-style: solid;
+            border-radius: 20px;
+            box-sizing: border-box;
+            top: 0;
+            left: 0;
+            animation: around 0.7s ease-in-out infinite;
+          }
+
+          .loader::after {
+            animation: around 0.7s ease-in-out 0.1s infinite;
+            background: transparent;
+          }
+          .search_input {
+            width: 100%;
+            padding: 0;
+            outline: none;
+          }
         }
         .selected_list {
           &::after {

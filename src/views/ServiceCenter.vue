@@ -31,9 +31,7 @@
     <router-link class="tab" to="/help/qna"
       ><span class="active_bar"></span>1:1문의</router-link
     >
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+    <router-view></router-view>
   </div>
 </template>
 <script>

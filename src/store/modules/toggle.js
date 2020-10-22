@@ -12,6 +12,7 @@ const toggle = {
       score: 0, // 스코어점수
       score_contents: "", // 스코어 컨텐츠
     },
+    confirm_modal: false, // 각종 확인 모달
     notice_modal: false, // 각종 경고 모달
     notice_message: "", // 각종 경고 메세지
   },

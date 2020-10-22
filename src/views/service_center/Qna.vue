@@ -50,11 +50,7 @@
 
         <div class="row">
           <label class="dt">내용<span class="required">＊</span></label>
-          <textarea
-            rows="3"
-            v-model="contents"
-            placeholder="서비스 이용약관"
-          ></textarea>
+          <textarea rows="3" v-model="contents"></textarea>
         </div>
         <div class="row">
           <label class="dt">파일첨부</label>

@@ -40,7 +40,6 @@
     <div id="subscribe">
       <div class="subscribe_wrap">
         <h2>무료</h2>
-        {{ is_subscribe }}
         <BlueBtn v-if="is_subscribe">
           <button
             ref="subs_btn"
@@ -137,9 +136,18 @@
             </button>
           </BlueBtn>
           <BlueBtn class="right_btn">
-            <button slot="blue_btn">
+            <router-link
+              slot="blue_btn"
+              tag="button"
+              :to="{
+                path: '/lecDetail',
+                query: {
+                  id: list.id,
+                },
+              }"
+            >
               강의정보 확인
-            </button>
+            </router-link>
           </BlueBtn>
         </div>
       </div>
@@ -241,7 +249,7 @@
     padding: 4.445%;
     .blue_btn {
       ::v-deep button {
-        border-radius: 20px;
+        border-radius: 10px;
         margin: 10px 0;
         height: 40px;
         line-height: 32px;
@@ -326,14 +334,17 @@
             width: 48.782%;
           }
         }
-        ::v-deep .star {
-          width: 3.7%;
-        }
-        ::v-deep .score {
-          width: 7.3%;
+        .evaluate {
+          .score {
+            width: 7%;
+          }
+          .free {
+            width: calc(100% - 7% - 12px);
+          }
         }
       }
       .btn_wrap {
+        margin-top: 5px;
         &:after {
           display: block;
           content: "";

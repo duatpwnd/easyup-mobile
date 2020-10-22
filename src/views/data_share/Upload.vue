@@ -14,7 +14,7 @@
       </select>
     </div>
     <div class="row" v-if="selected != null">
-      <label class="dt">구독회원 파일 공유(중복가능)</label>
+      <label class="dt">구독회원 파일 공유</label>
       <select class="share_list" v-model="shared_recipients" multiple>
         <option
           :value="value"

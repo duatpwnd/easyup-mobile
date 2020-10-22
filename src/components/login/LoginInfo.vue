@@ -16,6 +16,7 @@
       <button class="lnb" @click="goToLecture()">강의</button>
       <router-link
         class="lnb"
+        tag="button"
         :to="{
           path: '/course',
           query: {
@@ -27,32 +28,39 @@
         }"
         >코스</router-link
       >
-      <button
-        class="lnb"
-        @click="
-          goToPath('/techBlog', {
-            login_modal: !toggleStore_loginModal,
-          })
-        "
-      >
+      <router-link tag="button" class="lnb" to="/techBlog">
         기술블로그
-      </button>
-      <router-link to="/studentClaasRoom" class="lnb">내강의실</router-link>
-      <button
-        class="lnb"
-        @click="
-          goToPath('/profileModify', {
-            login_modal: !toggleStore_loginModal,
-          })
-        "
+      </router-link>
+      <router-link to="/studentClaasRoom" class="lnb" tag="button"
+        >내강의실</router-link
       >
+      <router-link class="lnb" to="/profileModify" tag="button">
         개인정보 확인/수정
-      </button>
+      </router-link>
     </div>
     <div class="support">
-      <router-link to="/">공지사항</router-link>
-      <router-link to="/">FAQ</router-link>
-      <router-link to="/">1:1문의</router-link>
+      <router-link
+        :to="{
+          path: '/help/notice',
+          query: {
+            pageCurrent: 1,
+            keyword: '',
+          },
+        }"
+        >공지사항</router-link
+      >
+      <router-link
+        :to="{
+          name: 'helpFaq',
+          query: {
+            category: 'all',
+            current: 1,
+            keyword: '',
+          },
+        }"
+        >FAQ</router-link
+      >
+      <router-link to="/help/qna">1:1문의</router-link>
     </div>
     <div class="logout">
       <BlueBtn>

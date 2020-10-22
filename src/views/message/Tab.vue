@@ -1,5 +1,9 @@
 <template>
   <div class="tab1">
+    <ConfirmModal
+      @ok="deleteMessage($route.name)"
+      v-if="toggleStore_confirmModal"
+    ></ConfirmModal>
     <Search>
       <input
         v-model="keyword"
@@ -20,7 +24,7 @@
         </button>
       </BlueBtn>
       <BlueBtn class="right">
-        <button slot="blue_btn" @click="deleteMessage($route.name)">
+        <button slot="blue_btn" @click="confirm()">
           삭제
         </button>
       </BlueBtn>
@@ -50,7 +54,12 @@
           />
         </CheckBox>
         <template slot="top">
-          <span class="td" @click="goToPath(li.id)">{{ li.title }}</span>
+          <span
+            class="td not_read"
+            @click="goToPath(li.id)"
+            :class="[{ read: li.msg_status == 1 }]"
+            >{{ li.title }}</span
+          >
         </template>
         <template slot="bottom">
           <span class="td " @click="goToPath(li.id)"
@@ -81,21 +90,28 @@
 </template>
 <script>
   import Pagination from "@/components/common/Pagination.vue";
-
   import CheckBox from "@/components/common/BaseCheckBox.vue";
   import BoardTitle from "@/components/common/BoardTitle.vue";
   import BoardList from "@/components/common/BoardList.vue";
   import Search from "@/components/common/Search.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import { mapState, mapMutations } from "vuex";
+
   export default {
     components: {
       Pagination,
-
+      ConfirmModal,
       CheckBox,
       BoardList,
       BoardTitle,
       BlueBtn,
       Search,
+    },
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_confirmModal: "confirm_modal",
+      }),
     },
     data() {
       return {
@@ -136,6 +152,13 @@
           })
           .catch(() => {});
       },
+      confirm() {
+        if (this.checked_list.length == 0) {
+          this.$Util.default.noticeMessage("삭제할 메시지를 선택해주세요.");
+        } else {
+          this.$Util.default.confirmMessage("삭제하시겠습니까?");
+        }
+      },
       deleteMessage(type) {
         const data = {
           action: "delete_message",
@@ -155,7 +178,6 @@
             console.log("메시지", result);
             this.getList(type, 1, "");
             this.allCheck = false;
-            //   this.$Util.default.noticeMessage(result.data.data[0]);
           });
       },
       getList(type, num, keyword) {
@@ -251,6 +273,12 @@
       .td {
         padding-left: 9%;
         width: 100%;
+      }
+      .not_read {
+        font-weight: 100;
+      }
+      .read {
+        font-weight: bold;
       }
     }
   }

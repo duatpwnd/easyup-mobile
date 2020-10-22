@@ -33,29 +33,33 @@
         <span class="right">{{ li.created_at }}</span>
       </li>
     </ul>
-    <ul class="paging">
-      <li
-        class="prev"
-        @click="getList(Number(current) - 1, keyword)"
-        v-if="current > 1"
-      >
-        이전페이지
-      </li>
-      <li
-        class="next"
-        v-if="list.total_page != current && list.total_page != 0"
-        @click="getList(Number(current) + 1, keyword)"
-      >
-        다음페이지
-      </li>
-    </ul>
+    <Pagination>
+      <template slot="paging">
+        <li
+          class="prev"
+          @click="getList(Number(current) - 1, keyword)"
+          v-if="current > 1"
+        >
+          이전페이지
+        </li>
+        <li
+          class="next"
+          v-if="list.total_page != current && list.total_page > 1"
+          @click="getList(Number(current) + 1, keyword)"
+        >
+          다음페이지
+        </li>
+      </template>
+    </Pagination>
   </div>
 </template>
 <script>
+  import Pagination from "@/components/common/Pagination.vue";
+
   import BoardTitle from "@/components/common/BoardTitle.vue";
   import Search from "@/components/common/Search.vue";
   export default {
-    components: { BoardTitle, Search },
+    components: { BoardTitle, Search, Pagination },
     data() {
       return {
         list: "",
@@ -151,26 +155,6 @@
         .right {
           float: right;
         }
-      }
-    }
-    .paging {
-      margin-top: 30px;
-      &:after {
-        display: block;
-        clear: both;
-        content: "";
-      }
-      li {
-        border: 1px solid #dbdbdb;
-        color: #363636;
-        padding: 9px;
-        border-radius: 4px;
-      }
-      .prev {
-        float: left;
-      }
-      .next {
-        float: right;
       }
     }
   }

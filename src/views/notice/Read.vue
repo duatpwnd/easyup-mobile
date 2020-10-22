@@ -81,6 +81,7 @@
     padding: 2% 0;
     margin: 2% 0;
     font-family: "NotoSansCJKkr-Regular";
+    font-size: 10px;
   }
   .button_wrap {
     .btn {

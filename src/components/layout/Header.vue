@@ -9,17 +9,34 @@
     <div class="right_menu">
       <!-- 학생인지 강사인지  -->
       <router-link
-        to="/studentClaasRoom"
+        :to="{
+          path: '/bookmarkManage/list',
+          query: {
+            keyword: '',
+            pageCurrent: 1,
+            order: '',
+          },
+        }"
         class="myclass"
         v-if="userStore_userinfo.access_token"
       >
         <img
           src="@/assets/images/common/myclass_ico.png"
-          alt="내강의실"
-          title="내강의실"
+          alt="책갈피"
+          title="책갈피"
         />
       </router-link>
-      <router-link to="/" class="msg" v-if="userStore_userinfo.access_token">
+      <router-link
+        :to="{
+          path: '/msg/receivedList',
+          query: {
+            pageCurrent: 1,
+            keyword: '',
+          },
+        }"
+        class="msg"
+        v-if="userStore_userinfo.access_token"
+      >
         <img
           src="@/assets/images/common/message_ico.png"
           alt="메세지 수신함"
