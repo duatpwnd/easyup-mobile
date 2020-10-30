@@ -32,9 +32,30 @@
       <button class="course">코스</button>
     </div>
     <div class="support">
-      <span>공지사항</span>
-      <span>FAQ</span>
-      <span>1:1문의</span>
+      <router-link
+        tag="span"
+        :to="{
+          path: '/help/notice',
+          query: {
+            pageCurrent: 1,
+            keyword: '',
+          },
+        }"
+        >공지사항</router-link
+      >
+      <router-link
+        tag="span"
+        :to="{
+          name: 'helpFaq',
+          query: {
+            category: 'all',
+            current: 1,
+            keyword: '',
+          },
+        }"
+        >FAQ</router-link
+      >
+      <router-link tag="span" to="/help/qna">1:1문의</router-link>
     </div>
   </div>
 </template>

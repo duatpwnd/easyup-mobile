@@ -1,5 +1,5 @@
 <template>
-  <div class="list">
+  <div>
     <slot name="contents">
       <img src="@/assets/images/common/thumbnail1.png" alt="" />
       <h2 class="title">DB분산처리를 위한 Sharding</h2>
@@ -18,23 +18,18 @@
   };
 </script>
 <style scoped lang="scss">
-  .list {
-    border-bottom: 4px solid #f8f8f8;
-    padding: 10px 4.445%;
-
-    .title {
-      font-size: 1.6875rem;
-      color: #333333;
-      margin-top: 10px;
-    }
-    .brief {
-      color: #666666;
-      font-size: 1.25rem;
-      margin: 5px 0;
-    }
-    .date {
-      color: #999999;
-      font-size: 1.125rem;
-    }
+  .title {
+    font-size: 1.6875rem;
+    color: #333333;
+    margin-top: 10px;
+  }
+  .brief {
+    color: #666666;
+    font-size: 1.25rem;
+    margin: 5px 0;
+  }
+  .date {
+    color: #999999;
+    font-size: 1.125rem;
   }
 </style>

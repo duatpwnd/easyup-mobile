@@ -1,30 +1,31 @@
 <template>
-  <div class="read">
+  <div class="read" v-if="list">
     <div class="contents_wrap">
       <div class="head">
-        <h2>DB분산처리를 위한 Sharding</h2>
+        <h2>{{ list.info.title }}</h2>
       </div>
-      <span class="date">2020.07.20</span>
-      <div class="contents">
-        <br />파이썬을 이제 막 시작한 여러분 안녕하세요.<br />첫번째
-        과제입니다.<br />공부 열심히 하세요. 첨부파일 꼭 읽어보시고 이번주
-        수요일까지 제출 부탁드립니다. 그럼 이만.<br /><br />
-      </div>
+      <span class="date">{{ list.info.wdate }}</span>
+      <div class="contents" v-html="list.info.contents"></div>
     </div>
+    <h2 class="comment_title">댓글</h2>
+
+    <CommentWrap
+      v-if="list.comment.length > 0"
+      :comment="list.comment"
+    ></CommentWrap>
     <div class="comment_wrap">
-      <h2>댓글</h2>
-      <!-- <CommentList></CommentList> -->
-      <h3>게시물에 등록된 댓글이 없습니다. 댓글을 작성해주세요.</h3>
+      <h3 v-if="list.comment.length == 0">
+        게시물에 등록된 댓글이 없습니다. 댓글을 작성해주세요.
+      </h3>
       <div class="edit_wrap" v-show="editor">
         <textarea
           placeholder="내용을 입력해주세요.(300자)"
           class="edit"
-          name=""
-          id=""
+          v-model="contents"
         ></textarea>
         <div class="btn_wrap">
           <BlueBtn class="left">
-            <button slot="blue_btn" @click="enter()">입력</button>
+            <button slot="blue_btn" @click="comment_add()">입력</button>
           </BlueBtn>
           <BlueBtn class="right">
             <button slot="blue_btn" @click="write_cancel()">취소</button>
@@ -38,12 +39,17 @@
       </BlueBtn>
     </div>
     <div class="button_wrap">
-      <BlueBtn class="left_btn">
-        <button slot="blue_btn">
+      <BlueBtn class="btn" v-if="list.info.neiborLink.prevInfo != false">
+        <button slot="blue_btn" @click="view(list.info.neiborLink.prevInfo.id)">
           이전글
-        </button> </BlueBtn
-      ><BlueBtn class="right_btn">
-        <button slot="blue_btn">
+        </button>
+      </BlueBtn>
+
+      <BlueBtn
+        class="btn last_btn"
+        v-if="list.info.neiborLink.nextInfo != false"
+      >
+        <button slot="blue_btn" @click="view(list.info.neiborLink.nextInfo.id)">
           다음글
         </button>
       </BlueBtn>
@@ -51,23 +57,22 @@
   </div>
 </template>
 <script>
-  // import CommentList from "@/components/common/CommentList.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
+  import CommentWrap from "@/components/techblog/CommentWrap.vue";
   export default {
     components: {
-      // CommentList,
+      CommentWrap,
       BlueBtn,
     },
     data() {
       return {
         editor: false,
         write_btn: true,
+        list: "",
+        contents: "",
       };
     },
     methods: {
-      enter() {
-        this.write_cancel();
-      },
       write() {
         this.editor = true;
         this.write_btn = false;
@@ -75,14 +80,73 @@
       write_cancel() {
         this.editor = false;
         this.write_btn = true;
+        this.contents = "";
       },
+      comment_add() {
+        const data = {
+          action: "add_blog_comment",
+          id: this.list.info.id,
+          contents: this.contents.trim(),
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log("댓글등록", result);
+            if (result.data.error != true) {
+              this.view(this.$route.query.id);
+              this.write_cancel();
+            } else {
+              console.log("토큰없당");
+              this.$Util.default.logOut();
+            }
+          });
+      },
+      view(id) {
+        const data = {
+          action: "get_blog_info",
+          id: id,
+        };
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log("기술블로그읽기", result.data.data);
+            this.list = result.data.data;
+            this.$router
+              .push({
+                query: {
+                  id: id,
+                },
+              })
+              .catch(() => {});
+          });
+      },
+    },
+    created() {
+      this.view(this.$route.query.id);
+      this.$EventBus.$on("techblog_list_reload", () => {
+        this.view(this.$route.query.id);
+      });
     },
   };
 </script>
 <style scoped lang="scss">
   .read {
     .contents_wrap {
-      padding: 4.445%;
+      border-bottom: 4px solid #f8f8f8;
+      padding: 4.445% 0;
       .head {
         border-bottom: 2px solid #333333;
         padding-bottom: 10px;
@@ -97,15 +161,16 @@
         color: #999999;
       }
       .contents {
-        white-space: pre-wrap;
+        margin-top: 10px;
         font-size: 1.25rem;
         color: #666666;
-        font-family: "NotoSansCJKkr-Regular";
       }
     }
+    .comment_title {
+      margin-top: 10px;
+    }
     .comment_wrap {
-      border-top: 4px solid #f8f8f8;
-      padding: 4.445%;
+      padding: 4.445% 0;
       h2 {
         font-size: 1.5rem;
         font-weight: 500;
@@ -165,28 +230,26 @@
       }
     }
     .button_wrap {
-      padding: 4.445%;
-      padding-top: 0;
-      button {
-        border: 1px solid #114fff;
-        background: white;
-        color: #114fff;
-        height: 24px;
-        line-height: 16px;
-        font-size: 12px;
-      }
+      margin-top: 30px;
       &:after {
         display: block;
         content: "";
         clear: both;
       }
-      .left_btn {
+      .btn {
         float: left;
         width: 23.172%;
+        button {
+          border: 1px solid #114fff;
+          background: white;
+          color: #114fff;
+          height: 24px;
+          line-height: 16px;
+          font-size: 12px;
+        }
       }
-      .right_btn {
+      .last_btn {
         float: right;
-        width: 23.172%;
       }
     }
   }

@@ -15,10 +15,18 @@ const toggle = {
     confirm_modal: false, // 각종 확인 모달
     notice_modal: false, // 각종 경고 모달
     notice_message: "", // 각종 경고 메세지
+    bookmark_modal: false, // 책갈피 모달
+    bookmark_list_info: {
+      current_id: "",
+      bookmark_list_modal: false, // 책갈피 리스트 모달
+    },
   },
   mutations: {
     noticeMessage(state, param) {
       state.notice_message = param;
+    },
+    bookmarkListToggle(state, obj) {
+      state.bookmark_list_info = obj;
     },
     scoreToggle(state, obj) {
       state.score_info = obj;

@@ -145,7 +145,7 @@
         };
         console.log(data);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+          .post(this.$ApiUrl.main_list, data, {
             headers: {
               Authorization: this.$cookies.get("user_info")
                 ? "Bearer " + this.$cookies.get("user_info").access_token
@@ -154,6 +154,7 @@
           })
           .then((result) => {
             console.log(result);
+            console.log(new Blob(["ico03_on.png"]));
             // const link = document.createElement('a');
             // const blob = new Blob(['파일객체']);
             // const url = window.URL.createObjectURL(blob);

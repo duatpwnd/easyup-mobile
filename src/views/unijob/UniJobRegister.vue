@@ -1,58 +1,13 @@
 <template>
   <div class="msg_send">
-    <h2 class="title">메시지 발송</h2>
-    <div class="row">
-      <span class="left">받는 분</span>
-      <input
-        type="text"
-        readonly
-        class="readonly"
-        v-if="$route.query.id"
-        :value="view.send_name"
-      />
-      <div class="search_contents" v-else>
-        <div class="inputcontainer">
-          <input
-            v-on:input="keyword = $event.target.value"
-            class="search_input"
-            @keyup="search()"
-          />
-          <div class="icon-container" v-show="loading">
-            <i class="loader"></i>
-          </div>
-        </div>
-        <!-- 선택된사람 -->
-        <div class="selected_list" v-if="choice_list.length > 0">
-          <span class="list" v-for="(list, index) in choice_list" :key="index">
-            <span class="name">{{ list.text }}</span
-            ><button class="close_btn" @click="close(list.id)">X</button>
-          </span>
-        </div>
-      </div>
-    </div>
-    <ul class="received_list_wrap" v-if="received_list.length > 0">
-      <li
-        v-for="(list, index) in received_list"
-        :key="index"
-        :class="{ active: choice_list.indexOf(list) >= 0 }"
-        @click="choice(list)"
-      >
-        {{ list.text }}
-      </li>
-    </ul>
-    <p class="notice" v-if="keyword.length < 3 && keyword.length > 0">
-      {{ 3 - keyword.length }}글자 이상 입력해주세요.
-    </p>
-    <p class="notice" v-if="search_result">
-      결과가 없습니다.
-    </p>
+    <h2 class="title" v-if="$route.query.type == 'notice'">공지사항 등록</h2>
+    <h2 class="title" v-else-if="$route.query.type == 'normal'">
+      협력기업 등록
+    </h2>
+    <h2 class="title" v-else>이력서 등록</h2>
     <div class="row">
       <span class="left">제목</span>
-      <input
-        type="text"
-        v-model="title"
-        placeholder="30자 이내 작성해 주세요."
-      />
+      <input type="text" v-model="title" />
     </div>
     <div class="row">
       <span class="left contents">내용</span>
@@ -61,46 +16,95 @@
 
     <div class="row">
       <span class="left">파일 첨부</span>
-      <input
-        type="file"
-        accept=".png,.jpg,.jpeg,.gif"
-        id="upload"
-        ref="upload"
-        @change="fileSelect()"
-      />
+      <input type="file" id="upload" ref="upload" @change="fileSelect()" />
       <label for="upload" class="file">파일 선택</label>
       <span class="file_name">{{ file_obj.name }}</span>
     </div>
+    <div class="row" v-if="file_list != false">
+      <div class="file_wrap" v-for="(list, index) in file_list" :key="index">
+        <span class="oname">
+          {{ list.oname }}
+        </span>
+        <span class="file_del" @click="fileDelete(list.oname)">X</span>
+      </div>
+    </div>
     <div class="row">
       <span class="left"></span>
-      <button class="save_btn" @click="send()">발송</button>
+      <button class="save_btn" @click="send()">등록</button>
     </div>
   </div>
 </template>
 <script>
+  import mixin from "./unijob_mixin.js";
+  import { mapState, mapMutations } from "vuex";
   export default {
+    mixins: [mixin],
     data() {
       return {
-        view: "", // 답장정보
-        loading: false, //검색찾는동안 로딩
-        choice_active: -1, //선택된사람 active 걸어주기
-        title: "",
-        choice_list: [], // 선택된사람
-        received_list: [], // 받는사람 찾기
-        keyword: "", // 검색부분 v-model
-        file_obj: "", // 파일객체
-        search_result: false,
-        editorData: "", // 에디터 v-model
+        file_obj: "",
         editorConfig: {
           // The configuration of the editor.
         },
       };
     },
+    computed: {
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
+    },
     methods: {
-      read() {
+      send() {
+        this.validationCheck().then((result) => {
+          if (result == "success") {
+            console.log(this.$route.query.is_notice);
+            const formData = new FormData();
+            const data = {
+              action: "add_unijob",
+              type: this.$route.query.type,
+              is_notice: this.$route.query.is_notice == "true" ? "on" : "off",
+              subject: this.title,
+              id: this.$route.query.id ? this.$route.query.id : "",
+              contents: this.editorData,
+              add_file: this.file_obj,
+              mode:
+                this.$route.query.action == "reply"
+                  ? "reply"
+                  : this.$route.query.action == "write"
+                  ? "modify"
+                  : "write",
+            };
+            for (var key in data) {
+              formData.append(key, data[key]);
+            }
+            this.$axios
+              .post(this.$ApiUrl.main_list, formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: this.$cookies.get("user_info")
+                    ? "Bearer " + this.$cookies.get("user_info").access_token
+                    : null,
+                },
+              })
+              .then((result) => {
+                console.log(result);
+                // normal은 협력 기업페이지
+                this.$router.push({
+                  path: `/uniJob/${this.$route.query.type}`,
+                  query: {
+                    pageCurrent: 1,
+                    keyword: "",
+                  },
+                });
+              });
+          }
+        });
+      },
+      fileDelete(filename) {
         const data = {
-          action: "get_message_info",
+          action: "delete_attached_file",
+          type: this.$route.query.type,
           id: this.$route.query.id,
+          filename: filename,
         };
         console.log(data);
         this.$axios
@@ -113,94 +117,8 @@
           })
           .then((result) => {
             console.log(result);
-            this.view = result.data.data.info;
-            this.title = "답 : " + result.data.data.info.title;
-            this.choice_list = [{ id: result.data.data.info.user_sender_id }];
-            this.editorData =
-              result.data.data.info.send_name +
-              " : " +
-              result.data.data.info.content;
+            this.read(this.$route.query.id);
           });
-      },
-      // 선택된사람 다시 빼기
-      close(id) {
-        const find_item = this.choice_list.find((item) => {
-          return item.id === id;
-        });
-        const idx = this.choice_list.indexOf(find_item);
-        const result = this.choice_list.splice(idx, 1);
-      },
-      // 선택된사람
-      choice(list) {
-        this.choice_list.push(list);
-        this.choice_list = Array.from(new Set(this.choice_list));
-      },
-      search() {
-        this.search_result = false;
-        this.received_list = [];
-        const data = {
-          action: "find_user",
-          keyword: this.keyword,
-        };
-        if (this.keyword.length > 2) {
-          this.loading = true;
-          this.$axios
-            .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-              headers: {
-                Authorization: this.$cookies.get("user_info")
-                  ? "Bearer " + this.$cookies.get("user_info").access_token
-                  : null,
-              },
-            })
-            .then((result) => {
-              console.log(result);
-              this.loading = false;
-              if (result.data.data.items.length == 0) {
-                this.search_result = true;
-              } else {
-                this.received_list = result.data.data.items;
-              }
-            });
-        }
-      },
-      send() {
-        this.validationCheck().then((result) => {
-          if (result == "success") {
-            const data = {
-              action: "send_message",
-              users: [],
-              title: this.title,
-              content: this.editorData,
-              attach_1: this.file_obj,
-            };
-            const map = this.choice_list.map((el, index) => {
-              return el.id;
-            });
-            data.users = map;
-            console.log(data);
-            this.$axios
-              .post(this.$ApiUrl.main_list, data, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                  Authorization: this.$cookies.get("user_info")
-                    ? "Bearer " + this.$cookies.get("user_info").access_token
-                    : null,
-                },
-              })
-              .then((result) => {
-                console.log(result);
-                if (result.data.data.fail == 0) {
-                  this.$router.push({
-                    path: "/msg/receivedList",
-                    query: {
-                      pageCurrent: 1,
-                      keyword: "",
-                    },
-                  });
-                }
-              });
-          }
-        });
       },
       fileSelect() {
         const selected_file = this.$refs.upload.files[0];
@@ -208,20 +126,23 @@
       },
       validationCheck() {
         return new Promise((resolve, reject) => {
-          if (this.choice_list.length == 0) {
-            this.$Util.default.noticeMessage("받는분을 입력하세요");
-          } else if (this.title.trim().length == 0) {
+          if (this.title.trim().length == 0) {
             this.$Util.default.noticeMessage("제목을 입력하세요");
+          } else if (this.editorData.trim().length == 0) {
+            this.$Util.default.noticeMessage("내용을 입력하세요");
           } else {
             resolve("success");
           }
         });
       },
     },
+
     created() {
-      console.log(this.$route.query.id);
-      if (this.$route.query.id != undefined) {
-        this.read();
+      if (
+        this.$route.query.action == "write" ||
+        this.$route.query.action == "reply"
+      ) {
+        this.read(this.$route.query.id);
       }
     },
   };
@@ -255,6 +176,15 @@
       display: table;
       width: 100%;
       margin-top: 2%;
+      .file_wrap {
+        margin-left: 25.5%;
+        color: #999999;
+        font-size: 1rem;
+        .oname,
+        .file_del {
+          vertical-align: middle;
+        }
+      }
       .readonly {
         border: 0;
         padding-left: 0;

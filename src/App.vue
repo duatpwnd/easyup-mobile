@@ -116,7 +116,7 @@
   }
   .router-view {
     position: relative;
-    padding-bottom: 50%;
+    padding-bottom: 25%;
     min-height: 100%;
   }
   @media all and (max-width: 700px) {

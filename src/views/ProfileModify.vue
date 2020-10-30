@@ -128,6 +128,7 @@
       editProfile() {
         this.validationCheck().then((result) => {
           if (result == "success") {
+            const formData = new FormData();
             const data = {
               action: "edit_profile",
               phone: this.phone,
@@ -137,9 +138,12 @@
               new_password_confirm: this.new_password_confirm,
               picture: this.file_obj,
             };
-            console.log(data);
+            for (var key in data) {
+              formData.append(key, data[key]);
+            }
+
             this.$axios
-              .post(this.$ApiUrl.main_list, data, {
+              .post(this.$ApiUrl.main_list, formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                   Authorization: this.$cookies.get("user_info")
@@ -152,6 +156,11 @@
                 if (result.data.error) {
                   this.$Util.default.noticeMessage(result.data.message);
                 } else {
+                  // this.$cookies.set("user_info", result.data.data[0]);
+                  // this.$store.commit(
+                  //   "userStore/loginToken",
+                  //   result.data.data[0]
+                  // );
                   this.$Util.default.noticeMessage(
                     "새 프로필이 저장되었습니다."
                   );
@@ -162,6 +171,8 @@
       },
     },
     created() {
+      console.log(this.userStore_userinfo.info);
+      this.unijob_id = this.userStore_userinfo.info.unijob_id;
       this.phone = this.userStore_userinfo.info.phone;
     },
   };

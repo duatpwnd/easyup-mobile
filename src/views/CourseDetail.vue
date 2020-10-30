@@ -45,13 +45,13 @@
             ref="subs_btn"
             class="active_subscribe"
             slot="blue_btn"
-            @click="video()"
+            @click="video($route.query.id, detail.lp_id)"
           >
             구독중
           </button>
         </BlueBtn>
         <BlueBtn v-else>
-          <button ref="subs_btn" slot="blue_btn">
+          <button ref="subs_btn" slot="blue_btn" @click="subscribe()">
             구독하기
           </button>
         </BlueBtn>
@@ -95,7 +95,7 @@
       </div>
       <button class="fixed_subs_btn" v-if="subscribe_btn">
         <span v-if="is_subscribe" class="active_subscribe">구독중</span>
-        <span v-else>구독하기</span>
+        <span v-else @click="subscribe()">구독하기</span>
       </button>
     </div>
     <div class="course_info">
@@ -151,11 +151,79 @@
           </BlueBtn>
         </div>
       </div>
+      <div id="lec_eval">
+        <h2>강의평가</h2>
+        <div class="section_wrap">
+          <!-- 강의평가 LEFT SECTION -->
+          <div class="left_sec">
+            <h3>{{ detail.ranking }}</h3>
+            <StarRating
+              :rating="detail.ranking"
+              :star-size="17"
+              :read-only="true"
+              :increment="0.01"
+              :star-points="[
+                23,
+                2,
+                14,
+                17,
+                0,
+                19,
+                10,
+                34,
+                7,
+                50,
+                23,
+                43,
+                38,
+                50,
+                36,
+                34,
+                46,
+                19,
+                31,
+                17,
+              ]"
+            ></StarRating>
+            <button
+              class="eval_btn"
+              v-if="isPossibleReview && userStore_userinfo.access_token"
+              @click="scoreModal()"
+            >
+              강의 평가
+            </button>
+          </div>
+          <!-- 강의평가 RIGHT SECTION -->
+          <div class="right_sec">
+            <div
+              class="line"
+              v-for="(list, index) in score_info.score_list"
+              :key="index"
+            >
+              <span class="left_star_wrap">
+                <span class="left_star">
+                  <img
+                    src="@/assets/images/common/small_star.png"
+                    alt=""
+                    class="star"
+                  />
+                  <span class="star_count">{{ list.title }}</span>
+                </span>
+              </span>
+              <ProgressBar
+                :max="score_info.total"
+                :value="list.count"
+              ></ProgressBar>
+            </div>
+          </div>
+        </div>
+      </div>
       <CommentWrap
         :action="{
           action: 'get_session_review',
           session_id: $route.query.id,
         }"
+        :isSubscribe="is_subscribe"
         @emitScoreCount="scoreCount"
       ></CommentWrap>
     </div>
@@ -164,23 +232,42 @@
 <script>
   import StarRating from "vue-star-rating";
   import CommentWrap from "@/components/lecture_detail/CommentWrap";
-
+  import ProgressBar from "@/components/common/ProgressBar.vue";
   import CourseIem from "@/components/common/LectureItem.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import mixin from "@/components/mixins/lec_course_detail.js";
-
+  import { mapState, mapMutations } from "vuex";
   export default {
     mixins: [mixin],
     components: {
+      ProgressBar,
+
       StarRating,
       CommentWrap,
       BlueBtn,
       CourseIem,
     },
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_score_info: "score_info",
+      }),
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
+    },
     data() {
       return {};
     },
     methods: {
+      video(course_id, lp_id) {
+        this.$router.push({
+          path: "/play",
+          query: {
+            course_id: course_id,
+            lp_id: lp_id,
+          },
+        });
+      },
       // 코스 상세 조회
       async getCourseDetail() {
         const data = {
@@ -359,6 +446,78 @@
           ::v-deep button {
             background: white;
             color: #114fff;
+          }
+        }
+      }
+    }
+  }
+  #lec_eval {
+    margin-top: 30px;
+    padding: 0 4.445%;
+    h2 {
+      font-size: 2rem;
+    }
+    .section_wrap {
+      margin-top: 10px;
+
+      .left_sec {
+        width: 41%;
+        text-align: center;
+        vertical-align: middle;
+        display: inline-block;
+        h3 {
+          font-size: 15px;
+        }
+        ::v-deep .vue-star-rating {
+          margin: 5px 0;
+          display: block;
+          .vue-star-rating-rating-text {
+            display: none;
+          }
+        }
+        .eval_btn {
+          background: #114fff;
+          color: white;
+          border-radius: 5px;
+          font-size: 11px;
+          padding: 3px 26.95%;
+        }
+      }
+      .right_sec {
+        width: 59%;
+        display: inline-block;
+        vertical-align: middle;
+        span {
+          display: inline-block;
+          vertical-align: middle;
+          img {
+            vertical-align: middle;
+            width: 50%;
+          }
+        }
+        .line {
+          &:not(:first-child) {
+            margin-top: 1%;
+          }
+          .left_star_wrap {
+            width: 15%;
+            .left_star {
+              width: 100%;
+              .star {
+                width: 10px;
+                height: 10px;
+              }
+              .star_count {
+                font-size: 12px;
+                margin-left: 4px;
+              }
+            }
+          }
+          ::v-deep .progress_bar {
+            height: 8px;
+            position: relative;
+            width: 85%;
+            margin: 0;
           }
         }
       }

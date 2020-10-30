@@ -1,5 +1,29 @@
 let detail = {
   methods: {
+    // 구독하기
+    subscribe() {
+      const data = {};
+      if (this.$route.name == "lecDetail") {
+        data["action"] = "subscribe_course";
+        data["course_id"] = this.$route.query.id;
+      } else {
+        data["action"] = "subscribe_session";
+        data["session_id"] = this.$route.query.id;
+      }
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+          headers: {
+            Authorization: this.$cookies.get("user_info")
+              ? "Bearer " + this.$cookies.get("user_info").access_token
+              : null,
+          },
+        })
+        .then((result) => {
+          console.log("구독하기 성공 실패?", result);
+          this.isSubscribe();
+        });
+    },
     // 구독 여부 조회
     async isSubscribe() {
       const data = {};

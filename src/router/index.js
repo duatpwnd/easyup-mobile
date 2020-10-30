@@ -281,6 +281,38 @@ const routes = [
     meta: { isFooter: false },
   },
   {
+    path: "/uniJob",
+    name: "uniJob",
+    component: () => import("../views/UniJob.vue"),
+    redirect: "/uniJob/resume",
+    children: [
+      {
+        path: "resume",
+        name: "resume",
+        component: () => import("@/views/unijob/Tab.vue"),
+        meta: { isFooter: true },
+      },
+      {
+        path: "jobmatching",
+        name: "jobmatching",
+        component: () => import("@/views/unijob/Tab.vue"),
+        meta: { isFooter: true },
+      },
+      {
+        path: "read",
+        name: "uniJobRead",
+        component: () => import("@/views/unijob/UniJobRead.vue"),
+        meta: { isFooter: true },
+      },
+      {
+        path: "register",
+        name: "uniJobRegister",
+        component: () => import("@/views/unijob/UniJobRegister.vue"),
+        meta: { isFooter: true },
+      },
+    ],
+  },
+  {
     path: "/profileModify",
     name: "profileModify",
     component: () => import("../views/ProfileModify.vue"),

@@ -19,6 +19,12 @@ class App {
     });
     store.commit("toggleStore/noticeMessage", msg);
   }
+  // hh.mm.ss to ss
+  static hms_to_s(hms) {
+    const a = hms.split(":"); // split it at the colons
+    const seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2];
+    return seconds;
+  }
   // hh mm ss
   static getTimeStringSeconds(seconds) {
     let hour, min, sec;
@@ -36,6 +42,12 @@ class App {
     store.commit("userStore/loginToken", {
       access_token: null,
       info: "",
+    });
+    router.push({
+      path: "/",
+      query: {
+        referer: router.currentRoute.fullPath,
+      },
     });
   }
 }

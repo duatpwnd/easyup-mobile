@@ -147,6 +147,7 @@
           .push({
             path: "/msg/read",
             query: {
+              type: this.$route.name,
               id: id,
             },
           })

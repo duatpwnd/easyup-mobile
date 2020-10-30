@@ -3,52 +3,36 @@
     <CommentList v-for="(list, index) in comment" :key="index">
       <template slot="comment">
         <div class="comment_header">
-          <img
-            src="@/assets/images/common/mid_star.png"
-            alt=""
-            v-for="(score, index) in Number(Math.floor(list.reviews.score))"
-            :key="'full' + index"
-          />
-
-          <img
-            src="@/assets/images/common/mid_empty_star.png"
-            alt=""
-            v-for="(score, index) in Number(5 - Math.round(list.reviews.score))"
-            :key="'empty' + index"
-          />
-          <span class="name">{{ list.reviews.user_name }}</span>
-          <span class="date">{{ list.reviews.timeAgo }}</span>
+          <span class="name">{{ list.writer }}</span>
+          <span class="date">{{ list.timeAgo }}</span>
           <span class="btn_wrap">
             <span
               class="modify_btn"
-              v-if="userStore_info.info.user_id == list.reviews.user_id"
+              v-if="userStore_info.info.user_id == list.user_id"
               @click="
-                scoreModal(
-                  list.reviews.id,
-                  list.reviews.score,
-                  list.reviews.contents
-                )
+                toggle();
+                comment_mode = 'modify';
               "
               >수정</span
             >
             <span
               class="remove_btn"
-              @click="comment_del(list.reviews.id)"
-              v-if="userStore_info.info.user_id == list.reviews.user_id"
+              @click="reply_comment_del(list.id)"
+              v-if="userStore_info.info.user_id == list.user_id"
               >삭제</span
             >
             <span
-              v-if="userStore_info.access_token && isSubscribe"
+              v-if="userStore_info.access_token"
               @click="
-                id = list.reviews.id;
                 toggle();
+                comment_mode = 'comment';
               "
               >댓글</span
             >
           </span>
         </div>
         <p class="contents">
-          {{ list.reviews.contents }}
+          {{ list.contents }}
         </p>
         <div class="edit_wrap" ref="edit" v-show="active">
           <textarea
@@ -60,7 +44,18 @@
           ></textarea>
           <div class="btn_wrap">
             <BlueBtn class="left">
-              <button slot="blue_btn" @click="reply_comment_add()">
+              <button
+                v-if="comment_mode == 'modify'"
+                slot="blue_btn"
+                @click="reply_comment_modify(list.id, index)"
+              >
+                수정
+              </button>
+              <button
+                v-else
+                slot="blue_btn"
+                @click="reply_comment_add(list.blog_id, list.id)"
+              >
                 입력
               </button>
             </BlueBtn>
@@ -73,12 +68,12 @@
         </div>
         <CommentList
           class="reply_list"
-          v-for="(reply, index) in list.reviews_comment"
-          :key="'reply' + index"
+          v-for="(reply, reply_index) in list.child_comment"
+          :key="'reply' + reply_index"
         >
           <template slot="comment">
             <div class="comment_header">
-              <span class="name">{{ reply.user_name }}</span>
+              <span class="name">{{ reply.writer }}</span>
               <span class="date">{{ reply.timeAgo }}</span>
               <span class="btn_wrap">
                 <span
@@ -111,9 +106,9 @@
                 <BlueBtn class="left">
                   <button
                     slot="blue_btn"
-                    @click="reply_comment_modify(reply.id, index)"
+                    @click="reply_comment_modify(reply.id, reply_index)"
                   >
-                    입력
+                    수정
                   </button>
                 </BlueBtn>
                 <BlueBtn class="right">
@@ -127,10 +122,10 @@
         </CommentList>
       </template>
     </CommentList>
-    <p class="noti" v-if="comment.length === 0">등록된 강의평가가 없습니다.</p>
+    <!-- <p class="noti" v-if="comment.length === 0">등록된 강의평가가 없습니다.</p>
     <button class="more_view_btn" v-else-if="comment.length > 4">
       더 많은 평가 보기
-    </button>
+    </button> -->
   </div>
 </template>
 <script>
@@ -140,12 +135,8 @@
 
   export default {
     props: {
-      action: {
-        type: Object,
-        required: true,
-      },
-      isSubscribe: {
-        type: Boolean,
+      comment: {
+        type: Array,
         required: true,
       },
     },
@@ -162,13 +153,11 @@
       return {
         active: false,
         contents: "",
-        id: "", // 리뷰아이디
-        comment: "",
+        comment_mode: "",
       };
     },
     methods: {
       // 토글
-
       toggle() {
         if (
           event.path[2].nextElementSibling.nextElementSibling.style.display ==
@@ -190,6 +179,7 @@
           event.path[3].style.display = "none";
         }
       },
+      // 토글 전체취소
       toggleOff() {
         this.$refs.edit.forEach((el, index) => {
           el.style.display = "none";
@@ -197,50 +187,17 @@
         this.$refs.reply_edit.forEach((el, index) => {
           el.style.display = "none";
         });
+        this.contents = "";
       },
-      scoreModal(id, score, contents) {
-        this.$store.commit("toggleStore/scoreToggle", {
-          review_id: id,
-          score_modal: true,
-          score: score,
-          score_contents: contents,
-        });
-      },
-      // 댓글 삭제
-      comment_del(index) {
-        const obj = {
-          action: "delete_review",
-          review_id: index,
-        };
-        console.log("삭제:", obj);
-        this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
-          .then((result) => {
-            console.log("댓글삭제", result);
-            if (result.data.error != true) {
-              this.$Util.default.noticeMessage(result.data.data.msg);
-
-              this.$EventBus.$emit("commentReload", true);
-            } else {
-              console.log("토큰없당");
-              this.$Util.default.logOut();
-            }
-          });
-      },
-
       // 답글 추가
-      reply_comment_add() {
+      reply_comment_add(blog_id, list_id) {
         const data = {
-          action: "add_comment",
-          review_id: this.id,
+          action: "add_blog_comment",
+          id: blog_id,
+          parent_id: list_id, // 대댓글인 경우에만 필수
           contents: this.contents.trim(),
         };
+        console.log(data);
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data), {
             headers: {
@@ -252,28 +209,23 @@
           .then((result) => {
             console.log("답글등록", result);
             if (result.data.error != true) {
-              this.$Util.default.noticeMessage(result.data.data.msg);
-
               this.toggleOff();
-              this.getCommentList();
+              this.$EventBus.$emit("techblog_list_reload", true);
             } else {
               console.log("토큰없당");
               this.$Util.default.logOut();
             }
           });
-
-        this.write_cancel();
       },
       // 답글 수정
-      reply_comment_modify(index, num) {
-        const obj = {
-          action: "modify_comment",
-          review_comment_id: index,
+      reply_comment_modify(id, index) {
+        const data = {
+          action: "modify_blog_comment",
+          id: id,
           contents: event.path[3].children[0].value.trim(),
         };
-        console.log("수정:", obj);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
             headers: {
               Authorization: this.$cookies.get("user_info")
                 ? "Bearer " + this.$cookies.get("user_info").access_token
@@ -283,9 +235,8 @@
           .then((result) => {
             console.log("수정등록", result);
             if (result.data.error != true) {
-              this.$Util.default.noticeMessage(result.data.data.msg);
+              this.$EventBus.$emit("techblog_list_reload", true);
               this.toggleOff();
-              this.getCommentList();
             } else {
               console.log("토큰없당");
               this.$Util.default.logOut();
@@ -293,15 +244,14 @@
           });
       },
       // 답글 삭제
-      reply_comment_del(index) {
-        console.log(index);
-        const obj = {
-          action: "delete_comment",
-          review_comment_id: index,
+      reply_comment_del(id) {
+        const data = {
+          action: "delete_blog_comment",
+          id: id,
         };
-        console.log("삭제:", obj);
+        console.log("삭제:", data);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
             headers: {
               Authorization: this.$cookies.get("user_info")
                 ? "Bearer " + this.$cookies.get("user_info").access_token
@@ -310,58 +260,25 @@
           })
           .then((result) => {
             console.log("삭제완료", result);
-            this.getCommentList();
-          });
-      },
-      write_cancel() {
-        this.editor = -1;
-        // this.write_btn = true;
-      },
-      // 각별점 개수 필터링
-      scoreCount(result) {
-        const filter = this.comment.filter((el, index) => {
-          return el.reviews.score == result;
-        });
-        return filter.length;
-      },
-      // 강의평가 조회
-      getCommentList() {
-        const data = this.action;
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
-          .then((result) => {
-            console.log("댓글조회", result.data.data);
-            this.comment = result.data.data;
-            const score = {
-              total: result.data.data.length,
-              score_list: [
-                { title: 5, count: this.scoreCount(5) },
-                { title: 4, count: this.scoreCount(4) },
-                { title: 3, count: this.scoreCount(3) },
-                { title: 2, count: this.scoreCount(2) },
-                { title: 1, count: this.scoreCount(1) },
-              ],
-            };
-            this.$emit("emitScoreCount", score);
+            this.$EventBus.$emit("techblog_list_reload", true);
+            this.toggleOff();
           });
       },
     },
-    mounted() {
-      this.$EventBus.$on("commentReload", () => {
-        console.log("리로드 왔다");
-        this.getCommentList();
-      });
-    },
-    created() {
-      this.getCommentList();
-    },
+    mounted() {},
+    created() {},
   };
 </script>
 <style scoped lang="scss">
   #comment_wrap {
-    margin-top: 30px;
-    padding: 0 4.445%;
+    padding: 30px 0;
+    ::v-deep .comment_list {
+      .comment_header {
+        .name {
+          margin-left: 0;
+        }
+      }
+    }
     .edit_wrap {
       .edit {
         border: 1px solid #dbdbdb;

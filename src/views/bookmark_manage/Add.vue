@@ -1,5 +1,5 @@
 <template>
-  <div class="bookmark_add">
+  <div class="bookmark_add" v-if="info">
     <div class="row">
       <span class="left contents">
         책갈피
@@ -15,7 +15,14 @@
         타임라인
       </span>
       <BlueBtn>
-        <button slot="blue_btn">{{ info.check_point }}</button>
+        <button
+          @click="
+            linkChange(info.iframe_src, info.c_id, info.lp_id, info.check_point)
+          "
+          slot="blue_btn"
+        >
+          {{ info.check_point }}
+        </button>
       </BlueBtn>
     </div>
     <div class="row">
@@ -47,6 +54,21 @@
       };
     },
     methods: {
+      linkChange(link, c_id, lp_id, check_point) {
+        console.log(link);
+        this.$store.commit("playerStore/playerState", {
+          current_link: link,
+        });
+        this.$router.push({
+          path: "/play",
+          query: {
+            course_id: c_id,
+            lp_id: lp_id,
+            linkType: "bookmark",
+            start: this.$Util.default.hms_to_s(check_point),
+          },
+        });
+      },
       bookmarkRead() {
         const data = {
           action: "get_bookmark_info",

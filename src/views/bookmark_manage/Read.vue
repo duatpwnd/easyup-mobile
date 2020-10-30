@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="info">
     <div class="head">
       <span class="title">[{{ info.course_name }}]</span>
       <span>{{ info.section_name }} {{ info.title }}</span>
@@ -7,7 +7,19 @@
     <div class="contents_wrap">
       <BlueBtn>
         <template slot="blue_btn">
-          <button>타임라인 {{ info.check_point }}</button>
+          <button
+            @click="
+              linkChange(
+                info.iframe_src,
+                info.c_id,
+                info.lp_id,
+                info.check_point
+              )
+            "
+            slot="blue_btn"
+          >
+            타임라인 {{ info.check_point }}
+          </button>
           <span class="date">{{ info.created_at }}</span>
         </template>
       </BlueBtn>
@@ -44,6 +56,21 @@
     },
 
     methods: {
+      linkChange(link, c_id, lp_id, check_point) {
+        console.log(link);
+        this.$store.commit("playerStore/playerState", {
+          current_link: link,
+        });
+        this.$router.push({
+          path: "play",
+          query: {
+            course_id: c_id,
+            lp_id: lp_id,
+            linkType: "bookmark",
+            start: this.$Util.default.hms_to_s(check_point),
+          },
+        });
+      },
       go_to_path(url, id) {
         this.$router
           .push({

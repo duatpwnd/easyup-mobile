@@ -8,6 +8,11 @@ module.exports = {
     parser: "babel-eslint",
   },
   rules: {
+    "no-prototype-builtins": "off",
+    "no-undef": "off",
+    "no-redeclare": "off",
+    "no-useless-escape": "off",
+    "no-unsafe-negation": "off",
     "no-irregular-whitespace": "off",
     "no-unused-vars": "off",
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",

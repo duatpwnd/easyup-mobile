@@ -28,11 +28,34 @@
         }"
         >코스</router-link
       >
-      <router-link tag="button" class="lnb" to="/techBlog">
+      <router-link
+        tag="button"
+        class="lnb"
+        :to="{
+          path: '/techBlog',
+          query: {
+            pageCurrent: 1,
+            keyword: '',
+          },
+        }"
+      >
         기술블로그
       </router-link>
       <router-link to="/studentClaasRoom" class="lnb" tag="button"
         >내강의실</router-link
+      >
+      <router-link
+        v-if="userStore_userinfo.info.is_unijob_possible"
+        :to="{
+          path: '/uniJob',
+          query: {
+            pageCurrent: 1,
+            keyword: '',
+          },
+        }"
+        class="lnb"
+        tag="button"
+        >유니잡</router-link
       >
       <router-link class="lnb" to="/profileModify" tag="button">
         개인정보 확인/수정
@@ -96,9 +119,6 @@
       logout() {
         console.log("로그아웃호출");
         this.$Util.default.logOut();
-        // this.$cookies.remove("access_token");
-        // this.$store.commit("userStore/loginToken", null);
-        // this.$router.push("/").catch(() => {});
       },
       goToPath(url, obj) {
         this.$router.push(url).catch(() => {});

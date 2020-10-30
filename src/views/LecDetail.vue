@@ -50,13 +50,13 @@
             ref="subs_btn"
             class="active_subscribe"
             slot="blue_btn"
-            @click="video()"
+            @click="video($route.query.id, detail.lp_id)"
           >
             구독중
           </button>
         </BlueBtn>
         <BlueBtn v-else>
-          <button ref="subs_btn" slot="blue_btn">
+          <button ref="subs_btn" slot="blue_btn" @click="subscribe()">
             구독하기
           </button>
         </BlueBtn>
@@ -100,8 +100,13 @@
       </div>
 
       <button class="fixed_subs_btn" v-if="subscribe_btn">
-        <span v-if="is_subscribe" class="active_subscribe">구독중</span>
-        <span v-else>구독하기</span>
+        <span
+          v-if="is_subscribe"
+          class="active_subscribe"
+          @click="video($route.query.id, detail.lp_id)"
+          >구독중</span
+        >
+        <span v-else @click="subscribe()">구독하기</span>
       </button>
     </div>
     <div id="intro">
@@ -251,6 +256,7 @@
         action: 'get_course_review',
         course_id: $route.query.id,
       }"
+      :isSubscribe="is_subscribe"
       @emitScoreCount="scoreCount"
     ></CommentWrap>
   </div>
@@ -286,8 +292,14 @@
       return {};
     },
     methods: {
-      video() {
-        this.$router.push("/play");
+      video(course_id, lp_id) {
+        this.$router.push({
+          path: "/play",
+          query: {
+            course_id: course_id,
+            lp_id: lp_id,
+          },
+        });
       },
       // 강의평가 모달
       scoreModal() {
@@ -613,14 +625,6 @@
             width: 85%;
             margin: 0;
           }
-
-          // progress {
-          //   width: 85%;
-          //   background: #dbdbdb;
-          //   height: 8px;
-          //   border-radius: 4px;
-
-          // }
         }
       }
     }

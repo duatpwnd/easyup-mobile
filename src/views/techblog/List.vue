@@ -1,54 +1,125 @@
 <template>
   <div>
-    <input type="text" class="search_contents" />
-    <TechBlogList>
-      <template slot="contents">
-        <img src="@/assets/images/common/thumbnail1.png" alt="" />
-        <h2 @click="goToPath()" class="title">DB분산처리를 위한 Sharding</h2>
-        <p class="brief">DB 분산 처리를 위한 샤딩 적용 경험을 공유합니다.</p>
-        <span class="date">2020.07.20 테스트</span>
+    <Search>
+      <input
+        v-model="keyword"
+        slot="slot_input"
+        class="search_contents"
+        placeholder="검색어를 입력하세요."
+      />
+      <button
+        slot="search_btn"
+        class="search_btn"
+        @click="getList(1, keyword)"
+      ></button>
+    </Search>
+    <div
+      class="list"
+      @click="goToPath(li.id)"
+      v-for="(li, index) in list.list"
+      :key="index"
+    >
+      <TechBlogList>
+        <template slot="contents">
+          <img :src="li.thumbnail" :alt="li.title" :title="li.title" />
+          <h2 class="title">{{ li.title }}</h2>
+          <p class="brief">{{ li.intro_txt }}</p>
+          <span class="date">{{ li.wdate }}</span>
+        </template>
+      </TechBlogList>
+    </div>
+    <Pagination>
+      <template slot="paging">
+        <li
+          class="prev"
+          @click="getList(Number(current) - 1, keyword)"
+          v-if="current > 1"
+        >
+          이전페이지
+        </li>
+        <li
+          class="next"
+          v-if="list.total_page != current && list.total_page > 1"
+          @click="getList(Number(current) + 1, keyword)"
+        >
+          다음페이지
+        </li>
       </template>
-    </TechBlogList>
-    <TechBlogList>
-      <template slot="contents">
-        <img src="@/assets/images/common/thumbnail1.png" alt="" />
-        <h2 @click="goToPath()" class="title">DB분산처리를 위한 Sharding</h2>
-        <p class="brief">DB 분산 처리를 위한 샤딩 적용 경험을 공유합니다.</p>
-        <span class="date">2020.07.20 테스트</span>
-      </template>
-    </TechBlogList>
+    </Pagination>
   </div>
 </template>
 <script>
+  import Pagination from "@/components/common/Pagination.vue";
+  import Search from "@/components/common/Search.vue";
   import TechBlogList from "@/components/techblog/List.vue";
   export default {
     components: {
+      Pagination,
       TechBlogList,
+      Search,
     },
     data() {
-      return {};
+      return {
+        list: "",
+        keyword: "",
+        current: "",
+      };
     },
     methods: {
-      goToPath() {
-        this.$router.push("/techBlog/read");
+      goToPath(id) {
+        this.$router.push({
+          path: "/techBlog/read",
+          query: {
+            id: id,
+          },
+        });
       },
+      getList(num, keyword) {
+        const data = {
+          action: "get_blog_list", //필수
+          current: num, //필수
+          keyword: keyword, //옵션
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log("기술블로그", result);
+            this.$router
+              .push({
+                query: {
+                  pageCurrent: num,
+                  keyword: keyword,
+                },
+              })
+              .catch(() => {});
+            this.list = result.data.data;
+            this.keyword = keyword;
+            this.current = num;
+          });
+      },
+    },
+    created() {
+      this.getList(this.$route.query.pageCurrent, this.$route.query.keyword);
     },
   };
 </script>
 <style scoped lang="scss">
-  .search_contents {
-    margin: 18px 4.445% 10px;
-    border: 1px solid #333333;
-    color: black;
-    font-size: 1.25rem;
-    width: 91.11%;
-    line-height: 2.3;
-    padding: 0 1.755%;
-    padding-right: 10%;
-    box-sizing: border-box;
-    background: url("~@/assets/images/lec_list/search_btn.png") no-repeat 95%
-      center / 5%;
+  .search {
+    margin: 2% 0;
+    .search_contents {
+      width: 100%;
+      margin-left: 0;
+    }
   }
-  .blog_list {
+  .list {
+    border-bottom: 4px solid #f8f8f8;
+    padding: 10px 0;
   }
 </style>

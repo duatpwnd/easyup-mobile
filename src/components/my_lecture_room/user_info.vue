@@ -3,7 +3,7 @@
     <div class="user_info">
       <span class="profile">
         <img
-          src="@/assets/images/mylecture_room/profile.png"
+          :src="userStore_userinfo.info.profile_image"
           alt="프로필"
           title="프로필"
         />
@@ -45,7 +45,14 @@
   </div>
 </template>
 <script>
+  import { mapState, mapMutations } from "vuex";
+
   export default {
+    computed: {
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
+    },
     components: {},
     data() {
       return {};
@@ -64,10 +71,13 @@
     width: 100%;
     padding: 4.167% 8.333%;
     box-sizing: border-box;
+
     .profile {
       width: 26.6%;
       display: table-cell;
       vertical-align: middle;
+      border-radius: 50%;
+      overflow: hidden;
     }
     .info {
       display: table-cell;

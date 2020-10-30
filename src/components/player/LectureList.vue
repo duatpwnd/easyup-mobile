@@ -16,96 +16,82 @@
       <h2 v-if="isActive">강의 목록 전체 펼치기</h2>
       <h2 v-else>강의 목록 전체 접기</h2>
     </div>
-    <div class="item_section">
-      <Item class="no_items"></Item>
+    <div class="list_wrapper" v-if="list.not_parents.length == 0">
+      <Item
+        :li="li"
+        :allToggle="isActive"
+        v-for="(li, index) in list.are_parents"
+        :key="index"
+      >
+      </Item>
     </div>
-    <div class="item_section">
-      <Item class="items">
-        <template slot="contents">
-          <img
-            src="@/assets/images/player/reduce_ico.png"
-            alt="접기"
-            title="접기"
-          />
-          <span>2강. 강의제목</span>
-        </template>
+    <div class="list_wrapper" v-else-if="list.are_parents.length == 0">
+      <Item
+        :li="li"
+        :allToggle="isActive"
+        v-for="(li, index) in list.not_parents"
+        :key="index"
+      >
       </Item>
-      <Item class="child_items">
-        <template slot="contents">
-          <img
-            src="@/assets/images/player/complete_ico.png"
-            alt="접기"
-            title="접기"
-          />
-          <span>섹션 1. 이러지도 저러지도 못하는 초보 개발자</span>
-          <img
-            src="@/assets/images/player/active_bookmark_ico.png"
-            alt="북마크 활성화"
-            title="북마크 활성화"
-            class="bookmark"
-          />
-        </template>
+    </div>
+    <div class="list_wrapper" v-else>
+      <Item
+        :li="li"
+        :allToggle="isActive"
+        v-for="(li, index) in list.not_parents"
+        :key="'a' + index"
+      >
       </Item>
-      <Item class="child_items">
-        <template slot="contents">
-          <img
-            src="@/assets/images/player/complete_ico.png"
-            alt="접기"
-            title="접기"
-          />
-          <span>섹션 1. 이러지도 저러지도 못하는 초보 개발자</span>
-          <img
-            src="@/assets/images/player/active_bookmark_ico.png"
-            alt="북마크 활성화"
-            title="북마크 활성화"
-            class="bookmark"
-          />
-        </template>
+      <Item
+        :li="li"
+        :allToggle="isActive"
+        v-for="(li, index) in list.are_parents"
+        :key="'b' + index"
+      >
       </Item>
     </div>
   </div>
 </template>
 <script>
   import Item from "@/components/player/Item.vue";
+  import { mapState, mapMutations } from "vuex";
+
   export default {
+    data() {
+      return {
+        isActive: true, // 강의 전체 토글
+        current_index: "",
+      };
+    },
+    props: {
+      list: {
+        type: Object,
+        required: true,
+      },
+    },
+    computed: {
+      ...mapState("playerStore", {
+        playerStore_current_item_id: "current_item_id",
+      }),
+    },
     components: {
       Item,
     },
-    data() {
-      return {
-        isActive: true,
-      };
-    },
+
     methods: {
       all() {
         this.isActive = !this.isActive;
       },
     },
+    mounted() {
+      if (this.list.are_parents.length != 0) {
+        this.all();
+      }
+    },
   };
 </script>
 <style scoped lang="scss">
   .list {
-    .item_section {
-      border-bottom: 3px solid #f8f8f8;
-      .items {
-        border-bottom: 3px solid #f8f8f8;
-        padding: 2% 4.445%;
-      }
-      .no_items {
-        padding: 2% 4.445%;
-      }
-      .child_items {
-        position: relative;
-        padding: 2% 4.445%;
-        .bookmark {
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          margin: auto;
-        }
-      }
-    }
     .toggle_btn {
       text-align: center;
       padding: 2% 0;
@@ -125,6 +111,8 @@
         color: #999999;
         font-weight: 400;
       }
+    }
+    .list_wrapper {
     }
   }
 </style>
