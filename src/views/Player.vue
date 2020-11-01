@@ -1,5 +1,5 @@
 <template>
-  <div v-if="info">
+  <div id="youtube_player" v-if="info">
     <BookmarkListModal
       @bookmark_move="getPlayInfo"
       v-if="toggleStore_bookmark_list_modal.bookmark_list_modal"
@@ -120,7 +120,11 @@
       },
     },
     created() {
-      this.getPlayInfo();
+      if (this.$route.query.linkType != undefined) {
+        this.getPlayInfo(this.$route.query.iid, "bookmark");
+      } else {
+        this.getPlayInfo();
+      }
       this.$EventBus.$on("switch_item", (result) => {
         this.getPlayInfo();
       });
@@ -128,46 +132,50 @@
   };
 </script>
 <style scoped lang="scss">
-  .tab {
-    font-size: 2rem;
-    font-weight: 600;
-    width: 50%;
-    display: inline-block;
-    text-align: center;
-    background: #f8f8f8;
-    padding: 2% 0;
-    position: relative;
-  }
-  .active_bar {
-    background: #f8f8f8;
-    height: 4px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  .active {
-    background: #ffffff;
-    .active_bar {
-      background: #114fff;
+  #youtube_player {
+    height: 100%;
+    overflow: hidden;
+    .tab {
+      font-size: 2rem;
+      font-weight: 600;
+      width: 50%;
+      display: inline-block;
+      text-align: center;
+      background: #f8f8f8;
+      padding: 2% 0;
+      position: relative;
+      .active_bar {
+        background: #f8f8f8;
+        height: 4px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .active {
+        background: #ffffff;
+        .active_bar {
+          background: #114fff;
+        }
+      }
     }
-  }
-  .link {
-    background-color: #d9edf7;
-    border-color: #bce8f1;
-    text-align: center;
-    padding: 10px;
-  }
-  .video {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%;
-
-    iframe {
-      position: absolute;
+    .link {
+      background-color: #d9edf7;
+      border-color: #bce8f1;
+      text-align: center;
+      padding: 10px;
+    }
+    .video {
+      position: relative;
       width: 100%;
-      height: 100%;
+      padding-bottom: 56.25%;
+
+      iframe {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 </style>

@@ -17,7 +17,16 @@
       <BlueBtn>
         <button
           @click="
-            linkChange(info.iframe_src, info.c_id, info.lp_id, info.check_point)
+            $router.push({
+              path: 'play',
+              query: {
+                course_id: info.c_id,
+                lp_id: inof.lp_id,
+                iid: '',
+                linkType: 'bookmark',
+                start: $Util.default.hms_to_s(check_point),
+              },
+            })
           "
           slot="blue_btn"
         >
@@ -54,21 +63,6 @@
       };
     },
     methods: {
-      linkChange(link, c_id, lp_id, check_point) {
-        console.log(link);
-        this.$store.commit("playerStore/playerState", {
-          current_link: link,
-        });
-        this.$router.push({
-          path: "/play",
-          query: {
-            course_id: c_id,
-            lp_id: lp_id,
-            linkType: "bookmark",
-            start: this.$Util.default.hms_to_s(check_point),
-          },
-        });
-      },
       bookmarkRead() {
         const data = {
           action: "get_bookmark_info",

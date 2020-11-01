@@ -53,8 +53,16 @@
     data() {
       return {};
     },
-    methods: {},
+    methods: {
+      test() {
+        console.log("test");
+      },
+    },
     mounted() {
+      this.$emit("asd", true);
+      this.$once("asd", () => {
+        this.test();
+      });
       // 가로모드 세로모드 감지
       window.addEventListener("resize", function() {
         if (window.matchMedia("(orientation: portrait)").matches) {
