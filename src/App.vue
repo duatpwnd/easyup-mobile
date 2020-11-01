@@ -4,7 +4,10 @@
     <Header></Header>
     <transition name="fade" mode="out-in">
       <keep-alive>
-        <div class="router-view">
+        <div
+          class="router-view"
+          :style="[{ background: $route.meta.isFooter ? '' : '' }]"
+        >
           <div v-if="toggleStore_loginModal">
             <LoginLnb v-if="userStore_userinfo.access_token"></LoginLnb>
             <LoginModal v-else></LoginModal>
@@ -124,7 +127,7 @@
   }
   .router-view {
     position: relative;
-    padding-bottom: 25%;
+    // padding-bottom: 25%;
     min-height: 100%;
   }
   @media all and (max-width: 700px) {
