@@ -23,6 +23,9 @@ let player_common = {
   methods: {
     // 강의 변경
     async switchItem(item_id) {
+      this.$store.commit("playerStore/playerState", {
+        check_time: "",
+      });
       const data = {
         action: "switch_item",
         course_id: this.$route.query.course_id,

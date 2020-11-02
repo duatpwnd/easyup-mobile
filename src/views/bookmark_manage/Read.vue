@@ -9,16 +9,21 @@
         <template slot="blue_btn">
           <button
             @click="
+              $store.commit('playerStore/playerState', {
+                check_time:
+                  $Util.default.hms_to_s(info.check_point) == 0
+                    ? 1
+                    : $Util.default.hms_to_s(info.check_point),
+              });
               $router.push({
-                path: 'play',
+                path: '/play',
                 query: {
                   course_id: info.c_id,
-                  lp_id: inof.lp_id,
-                  iid: '',
+                  lp_id: info.lp_id,
+                  iid: info.iid,
                   linkType: 'bookmark',
-                  start: $Util.default.hms_to_s(check_point),
                 },
-              })
+              });
             "
             slot="blue_btn"
           >

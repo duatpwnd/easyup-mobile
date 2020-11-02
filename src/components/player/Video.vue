@@ -54,30 +54,18 @@
     methods: {
       validationCheck() {
         const link = this.playerStore_current_link;
-        console.log(link);
-        // 책갈피 관리에서 들어오는 페이지
-        if (
-          this.$route.query.linkType != undefined &&
-          this.playerStore_isBookmarkLink
-        ) {
-          console.log(this.$route.query.linkType, this.$route.query.start);
-
-          const bookmark_time = this.$route.query.start;
-          this.$store.commit("playerStore/playerState", {
-            current_link:
-              link +
-              `?cc_load_policy=3&html5=1&playsinline=1&fs=0&autoplay=1&mute=1&start=${bookmark_time}`,
-            isBookmarkLink: false,
-          });
-        }
         // 북마크 시간 있는지 없는지
         if (this.playerStore_checkTime != "") {
-          console.log(link, "시간:", this.playerStore_checkTime);
+          console.log(link, this.playerStore_checkTime);
+          // 스타트 옵션
           this.$store.commit("playerStore/playerState", {
             current_link:
-              link +
-              `?cc_load_policy=3&html5=1&playsinline=1&fs=0&autoplay=1&mute=1&start=${this.playerStore_checkTime}`,
+              link.replace(
+                `start=${link.split("start=")[1]}`,
+                `start=${this.playerStore_checkTime}`
+              ) + `&autoplay=1&mute=1`,
           });
+          console.log(this.playerStore_current_link);
         }
       },
       // 자막파일 파싱
@@ -116,7 +104,6 @@
           lp_id: this.$route.query.lp_id,
           idx: this.$store.state.playerStore.current_index,
         };
-        console.log(this.$store.state.playerStore.current_index);
         this.$axios
           .post(this.$ApiUrl.main_list, data, {
             headers: {
@@ -126,7 +113,7 @@
             },
           })
           .then((result) => {
-            if (result.data.error != true) {
+            if (result.data != "") {
               // 자막파일이 있는경우
               console.log("자막있다", result);
               this.srtParsing(result.data);

@@ -87,6 +87,7 @@
           linkType: linkType == undefined ? null : linkType,
           iid: id == undefined ? null : id,
         };
+        console.log(data);
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data), {
             headers: {
@@ -96,12 +97,23 @@
             },
           })
           .then((result) => {
-            console.log("플레이어 정보", result);
+            console.log("플레이어 정보", result, this.playerStore_checkTime);
             this.info = result.data.data;
+            console.log(
+              this.info.current_item[0].link,
+              this.info.current_item[0].link.split("?")[1]
+            );
+            let current_link;
+            // 스타트 옵션때문에 분기 처리해줘야함
+            if (this.info.current_item[0].link.split("?")[1] == undefined) {
+              current_link =
+                this.info.current_item[0].link +
+                "?cc_load_policy=3&html5=1&playsinline=1&fs=0";
+            }
             this.$store.commit("playerStore/playerState", {
               current_index: this.info.current_item[0].idx,
               current_item_id: this.info.current_item[0].item_id,
-              current_link: this.info.current_item[0].link,
+              current_link: current_link,
               list: this.info.list[0],
               custom_type: this.info.current_item[0].custom_type,
               lp_type: this.info.current_item[0].lp_type,
@@ -120,6 +132,7 @@
       },
     },
     created() {
+      console.log(this.$route.query.linkType);
       if (this.$route.query.linkType != undefined) {
         this.getPlayInfo(this.$route.query.iid, "bookmark");
       } else {
