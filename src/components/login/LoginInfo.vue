@@ -14,76 +14,130 @@
 
     <div class="lnb_menu">
       <button class="lnb" @click="goToLecture()">강의</button>
-      <router-link
+      <button
         class="lnb"
-        tag="button"
-        :to="{
-          path: '/course',
-          query: {
-            action: 'get_session_list',
-            pageCurrent: 1,
-            order: 'type_date',
-            keyword: '',
-          },
-        }"
-        >코스</router-link
+        @click="
+          $router.push({
+            path: '/course',
+            query: {
+              action: 'get_session_list',
+              pageCurrent: 1,
+              order: 'type_date',
+              keyword: '',
+            },
+          });
+          $store.commit('toggleStore/Toggle', {
+            login_modal: false,
+          });
+        "
       >
-      <router-link
-        tag="button"
+        코스
+      </button>
+      <button
         class="lnb"
-        :to="{
-          path: '/techBlog',
-          query: {
-            pageCurrent: 1,
-            keyword: '',
-          },
-        }"
+        @click="
+          $router.push({
+            path: '/techBlog',
+            query: {
+              pageCurrent: 1,
+              keyword: '',
+            },
+          });
+          $store.commit('toggleStore/Toggle', {
+            login_modal: false,
+          });
+        "
       >
         기술블로그
-      </router-link>
-      <router-link to="/studentClaasRoom" class="lnb" tag="button"
-        >내강의실</router-link
-      >
-      <router-link
-        v-if="userStore_userinfo.info.is_unijob_possible"
-        :to="{
-          path: '/uniJob',
-          query: {
-            pageCurrent: 1,
-            keyword: '',
-          },
-        }"
+      </button>
+      <button
+        @click="
+          $router.push('/studentClaasRoom');
+          $store.commit('toggleStore/Toggle', {
+            login_modal: false,
+          });
+        "
         class="lnb"
         tag="button"
-        >유니잡</router-link
       >
-      <router-link class="lnb" to="/profileModify" tag="button">
+        내강의실
+      </button>
+      <button
+        v-if="userStore_userinfo.info.is_unijob_possible"
+        @click="
+          $router.push({
+            path: '/uniJob',
+            query: {
+              pageCurrent: 1,
+              keyword: '',
+            },
+          });
+          $store.commit('toggleStore/Toggle', {
+            login_modal: false,
+          });
+        "
+        class="lnb"
+      >
+        유니잡
+      </button>
+      <button
+        class="lnb"
+        @click="
+          $router.push({
+            path: '/profileModify',
+          });
+          $store.commit('toggleStore/Toggle', {
+            login_modal: false,
+          });
+        "
+      >
         개인정보 확인/수정
-      </router-link>
+      </button>
     </div>
     <div class="support">
-      <router-link
-        :to="{
-          path: '/help/notice',
-          query: {
-            pageCurrent: 1,
-            keyword: '',
-          },
-        }"
-        >공지사항</router-link
+      <button
+        @click="
+          $router.push({
+            path: '/help/notice',
+            query: {
+              pageCurrent: 1,
+              keyword: '',
+            },
+          });
+          $store.commit('toggleStore/Toggle', {
+            login_modal: false,
+          });
+        "
       >
-      <router-link
-        :to="{
-          name: 'helpFaq',
-          query: {
-            category: 'all',
-            current: 1,
-            keyword: '',
-          },
-        }"
-        >FAQ</router-link
+        공지사항
+      </button>
+      <button
+        @click="
+          $router.push({
+            name: 'helpFaq',
+            query: {
+              category: 'all',
+              current: 1,
+              keyword: '',
+            },
+          });
+          $store.commit('toggleStore/Toggle', {
+            login_modal: false,
+          });
+        "
       >
-      <router-link to="/help/qna">1:1문의</router-link>
+        FAQ
+      </button>
+      <button
+        @click="
+          $router.push('/help/qna');
+          $store.commit('toggleStore/Toggle', {
+            login_modal: false,
+          });
+        "
+      >
+        1:1문의
+      </button>
     </div>
     <div class="logout">
       <BlueBtn>
@@ -135,7 +189,9 @@
 <style scoped lang="scss">
   .blue_btn {
     ::v-deep button {
-      font-size: 12px;
+      font-size: 1.5rem;
+      height: 40px;
+      line-height: 32px;
     }
   }
   .menu_modal {
@@ -172,6 +228,7 @@
       .lnb {
         text-align: left;
         width: 100%;
+        margin-top: 5px;
         font-size: 1.5rem;
         font-family: "NotoSansCJKkr-Regular";
         background: url("~@/assets/images/common/right_arrow.png") no-repeat
@@ -187,7 +244,7 @@
       background: white;
       margin-top: 2%;
       padding: 4.445%;
-      a {
+      button {
         font-size: 1.5rem;
         display: inline-block;
         width: 33.333%;

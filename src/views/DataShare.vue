@@ -32,6 +32,7 @@
 <style scoped lang="scss">
   .file_wrap {
     margin-top: 2%;
+    padding-bottom: 65px;
     h2 {
       font-size: 2rem;
       padding: 0 4.445%;

@@ -152,6 +152,7 @@
 <style scoped lang="scss">
   .qna {
     padding: 4.445%;
+
     h2 {
       font-size: 1.375rem;
       margin-top: 2.5%;
@@ -181,7 +182,7 @@
         textarea,
         select {
           font-family: "NotoSansCJKkr-Regular";
-          font-size: 9px;
+          font-size: 12px;
           width: calc(100% - 35%);
           border: 1px solid #ccc;
           border-radius: 5px;
@@ -193,7 +194,7 @@
         }
         select {
           background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat
-            90% center / 7px 5px;
+            95% center / 7px 5px;
         }
         textarea {
           vertical-align: top;

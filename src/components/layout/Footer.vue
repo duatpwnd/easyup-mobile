@@ -51,18 +51,25 @@
 </script>
 <style scoped lang="scss">
   footer {
-    padding: 4.445%;
+    padding: 14px 4.445% 14px 4.445%;
     background: #333333;
+    position: absolute;
+    bottom: -116px;
+    max-width: 720px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 116px;
+
     h1 {
       color: #dadada;
-      font-size: 1.5rem;
+      font-size: 13px;
       font-weight: bold;
     }
     .gnb {
-      margin: 10px 0;
+      margin: 2.5px 0;
       span {
         color: #7a7a7a;
-        font-size: 1.125rem;
+        font-size: 10px;
       }
       .bar {
         margin: 0 15px;
@@ -74,8 +81,7 @@
       color: #7a7a7a;
       pre {
         font-family: "NotoSansCJKkr-Regular";
-        line-height: 162%;
-        font-size: 1rem;
+        font-size: 9px;
       }
     }
   }

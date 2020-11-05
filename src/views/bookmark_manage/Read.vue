@@ -154,9 +154,9 @@
       position: relative;
       button {
         width: 40%;
-        font-size: 10px;
-        height: 20px;
-        line-height: 18px;
+        font-size: 12px;
+        height: 22px;
+        line-height: 20px;
         padding: 0;
       }
       .date {
@@ -176,6 +176,7 @@
       color: #666666;
       font-family: "NotoSansCJKkr-Regular";
       margin-top: 10px;
+      word-break: break-all;
     }
   }
   .button_wrap {

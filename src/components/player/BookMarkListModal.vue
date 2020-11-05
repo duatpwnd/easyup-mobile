@@ -125,10 +125,14 @@
       color: #999999;
       cursor: pointer;
       float: right;
-      font-size: 16px;
+      font-size: 18px;
     }
     .bookmark-ul {
+      max-height: 288px;
+      overflow: auto;
+      padding-right: 10px;
       .clearfix {
+        font-size: 18px;
         &:after {
           display: block;
           content: "";
@@ -141,12 +145,17 @@
           overflow: hidden;
         }
         .time {
-          width: 37%;
+          width: 34%;
           text-align: right;
         }
         .pull-right {
           text-align: right;
           float: right;
+          width: 3%;
+          img {
+            width: 10px;
+            height: 10px;
+          }
         }
       }
     }

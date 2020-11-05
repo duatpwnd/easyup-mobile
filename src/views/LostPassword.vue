@@ -6,7 +6,7 @@
       <fieldset>
         <div class="row">
           <label class="dt" for="email">가입 이메일 주소</label>
-          <input type="email" id="email" />
+          <input type="email" id="email" v-model="email" />
         </div>
         <div class="row last_row">
           <span
@@ -15,7 +15,9 @@
           >
         </div>
         <BlueBtn>
-          <button type="button" slot="blue_btn">메일 요청</button>
+          <button type="button" slot="blue_btn" @click="send()">
+            메일 요청
+          </button>
         </BlueBtn>
       </fieldset>
     </form>
@@ -27,9 +29,35 @@
   export default {
     components: { BlueBtn },
     data() {
-      return {};
+      return {
+        email: "",
+      };
     },
-    methods: {},
+    methods: {
+      send() {
+        const data = {
+          action: "reset_password_send_mail",
+          email: this.email,
+        };
+        if (this.email.trim().length == 0) {
+          this.$Util.default.noticeMessage("이메일 주소를 입력해주세요.");
+        } else {
+          this.$axios
+            .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+              headers: {
+                Authorization: this.$cookies.get("user_info")
+                  ? "Bearer " + this.$cookies.get("user_info").access_token
+                  : null,
+              },
+            })
+            .then((result) => {
+              console.log("이메일", result);
+              this.$Util.default.noticeMessage(result.data.data.msg);
+              this.$router.push("/");
+            });
+        }
+      },
+    },
   };
 </script>
 <style scoped lang="scss">

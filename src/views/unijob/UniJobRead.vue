@@ -105,17 +105,6 @@
       };
     },
     methods: {
-      getFileName(contentDisposition) {
-        let fileName = contentDisposition
-          .split(";")
-          .filter((ele) => {
-            return ele.indexOf("fileName") > -1;
-          })
-          .map((ele) => {
-            return ele.replace(/"/g, "").split("=")[1];
-          });
-        return fileName[0] ? fileName[0] : null;
-      },
       download(filename) {
         const data = {
           action: "download_attach_file",
@@ -125,7 +114,7 @@
         };
         this.$axios
           .post(this.$ApiUrl.main_list, data, {
-            responseType: "arraybuffer",
+            responseType: "blob",
             headers: {
               Authorization: this.$cookies.get("user_info")
                 ? "Bearer " + this.$cookies.get("user_info").access_token
@@ -133,16 +122,22 @@
             },
           })
           .then((result) => {
-            let fileName = this.getFileName(
-              result.headers["content-disposition"]
-            );
-            console.log(filename);
-            console.log(result);
-            const link = document.createElement("a");
-            const url = window.URL.createObjectURL(result.data);
-            link.href = url;
-            link.download = fileName;
-            link.click();
+            console.log(result.data);
+            // 로컬서버에서는 작동하지 않음
+            if (window.navigator.msSaveOrOpenBlob) {
+              // IE 10+
+              window.navigator.msSaveOrOpenBlob(
+                result.data,
+                filename.split(".")[0]
+              );
+            } else {
+              // not IE
+              let link = document.createElement("a");
+              link.href = window.URL.createObjectURL(result.data);
+              link.target = "_self";
+              if (filename) link.download = filename.split(".")[0];
+              link.click();
+            }
           });
       },
       confirm() {
@@ -208,9 +203,13 @@
           clear: both;
         }
         .writer {
+          font-size: 1.25rem;
+
           float: left;
         }
         .wdate {
+          font-size: 1.25rem;
+
           float: right;
         }
       }
@@ -218,7 +217,7 @@
     .file {
       .file_list {
         color: #999999;
-        font-size: 1rem;
+        font-size: 1.25rem;
       }
     }
     .button_wrap {

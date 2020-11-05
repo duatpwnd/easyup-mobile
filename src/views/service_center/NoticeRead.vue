@@ -72,12 +72,11 @@
       border-bottom: 2px solid #333333;
       padding: 2% 0;
       margin: 2% 0;
-      pre {
-        white-space: pre-wrap;
-        font-size: 1.25rem;
-        color: #666666;
-        font-family: "NotoSansCJKkr-Regular";
-      }
+      white-space: pre-wrap;
+      font-size: 1.25rem;
+      color: #666666;
+      font-family: "NotoSansCJKkr-Regular";
+      word-break: break-all;
     }
     .button_wrap {
       &:after {

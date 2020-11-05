@@ -39,10 +39,7 @@
           <label class="dt">연락처</label>
           <input v-model="phone" type="tell" id="phone" />
         </div>
-        <div class="row">
-          <label class="dt">유니잡ID</label>
-          <input v-model="unijob_id" type="text" />
-        </div>
+
         <div class="row">
           <label class="dt">서비스 이용약관</label>
           <textarea
@@ -321,7 +318,6 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
         pw1: "",
         pw2: "",
         phone: "",
-        unijob_id: "",
         agree: "",
       };
     },
@@ -358,7 +354,6 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
               password: this.pw1, //필수
               password_confirm: this.pw2, //필수, 비밀번호란과 동일여부 체크
               phone: this.phone, //옵션, 입력할 경우 숫자만 입력
-              unijob_id: this.unijob_id, // 아는사람만
             };
             this.$axios
               .post(this.$ApiUrl.main_list, JSON.stringify(data))
@@ -453,11 +448,25 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
         content: "";
         clear: both;
       }
-      .container-checkbox {
-        width: 7.7%;
+      ::v-deep .container-checkbox {
+        width: 15px;
+        height: 15px;
+        position: unset;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 10px;
+        input[type="checkbox"] + .checkmark {
+          width: 15px;
+          height: 15px;
+          display: inline-block;
+          padding: 0;
+          position: unset;
+        }
       }
       label[for="check"] {
-        margin-left: 10%;
+        display: inline-block;
+        font-size: 0.8em;
+        vertical-align: middle;
       }
     }
   }

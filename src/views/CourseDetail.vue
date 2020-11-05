@@ -31,11 +31,7 @@
       </slot>
     </div>
     <div class="update_noti">
-      <span
-        >{{ detail.creation_date }}(업데이트 일자:{{
-          detail.update_date
-        }})</span
-      >
+      <span>{{ detail.creation_date }}</span>
     </div>
     <div id="subscribe">
       <div class="subscribe_wrap">
@@ -57,7 +53,7 @@
         </BlueBtn>
         <div>
           <span class="total_lec"
-            >총<span class="color"> {{ detail.course_list.length }}</span
+            >총<span class="color">{{ detail.course_list.length }}</span
             >강</span
           >
         </div>
@@ -101,7 +97,9 @@
     <div class="course_info">
       <h2 class="course_list">
         코스 별 강좌 안내
-        <span class="all_lecture_num">총{{ detail.course_list.length }}강</span>
+        <span class="all_lecture_num"
+          >총 {{ detail.course_list.length }}강</span
+        >
       </h2>
       <div
         class="ol_list"
@@ -109,7 +107,7 @@
         :key="index"
       >
         <h2 class="title">{{ index + 1 }}강.</h2>
-        <CourseIem>
+        <CourseItem>
           <router-link
             class="lec_list"
             slot="router"
@@ -128,14 +126,14 @@
           <h1 class="free" slot="free" v-if="list.is_free == 'Y'">
             FREE
           </h1>
-        </CourseIem>
+        </CourseItem>
         <div class="btn_wrap">
-          <BlueBtn>
+          <BlueBtn v-if="index > 0">
             <button slot="blue_btn">
               선행과정 필수
             </button>
           </BlueBtn>
-          <BlueBtn class="right_btn">
+          <BlueBtn :class="[index == 0 ? 'confirm_btn' : 'right_btn']">
             <router-link
               slot="blue_btn"
               tag="button"
@@ -233,7 +231,7 @@
   import StarRating from "vue-star-rating";
   import CommentWrap from "@/components/lecture_detail/CommentWrap";
   import ProgressBar from "@/components/common/ProgressBar.vue";
-  import CourseIem from "@/components/common/LectureItem.vue";
+  import CourseItem from "@/components/common/LectureItem.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import mixin from "@/components/mixins/lec_course_detail.js";
   import { mapState, mapMutations } from "vuex";
@@ -245,7 +243,7 @@
       StarRating,
       CommentWrap,
       BlueBtn,
-      CourseIem,
+      CourseItem,
     },
     computed: {
       ...mapState("toggleStore", {
@@ -310,7 +308,7 @@
     .tag_list {
       margin-top: 5px;
       line-height: 35px;
-      span {
+      .tag {
         color: #a4a4a4;
         border: 2px solid #757575;
         border-radius: 20px;
@@ -340,6 +338,7 @@
         margin: 10px 0;
         height: 40px;
         line-height: 32px;
+        font-size: 18px;
       }
     }
     .active_subscribe {
@@ -400,7 +399,7 @@
       font-size: 2rem;
       position: relative;
       .all_lecture_num {
-        font-size: 10px;
+        font-size: 11px;
         position: absolute;
         top: 0;
         right: 0;
@@ -415,11 +414,18 @@
       .title {
         font-size: 1.6875rem;
       }
-      .item {
-        ::v-deep .lec_list {
+      ::v-deep .item {
+        .lec_list {
           img {
             width: 48.782%;
           }
+        }
+        h4 {
+          font-size: 10px;
+          margin-top: 5px;
+        }
+        .subtitle {
+          font-size: 12px;
         }
         .evaluate {
           .score {
@@ -443,6 +449,12 @@
         }
         .right_btn {
           float: right;
+          ::v-deep button {
+            background: white;
+            color: #114fff;
+          }
+        }
+        .confirm_btn {
           ::v-deep button {
             background: white;
             color: #114fff;

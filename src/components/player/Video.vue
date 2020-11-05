@@ -1,7 +1,6 @@
 <template>
-  <div class="video" ref="video">
+  <div class="video" ref="video" v-if="playerStore_custom_type == 'youtube'">
     <iframe
-      v-if="playerStore_custom_type == 'youtube'"
       @load.once="isSrtFile()"
       width="100%"
       ref="content_id"
@@ -12,14 +11,26 @@
       mozallowfullscreen="true"
     ></iframe>
   </div>
+  <div class="download" v-else-if="playerStore_custom_type == 'download'">
+    <h3>강의 자료입니다.</h3>
+    <h3>다운로드 하여 확인하세요.</h3>
+    <BaseBtn>
+      <button slot="blue_btn" @click="download(playerStore_current_item_id)">
+        다운로드
+      </button>
+    </BaseBtn>
+  </div>
 </template>
 <script>
   import parser from "@/assets/js/youtube/subtitles.parser.js";
   import external_subtitle from "@/assets/js/youtube/youtube_external_subtitle.js";
   import { mapState, mapMutations } from "vuex";
+  import BaseBtn from "@/components/common/BaseButton.vue";
 
   export default {
-    components: {},
+    components: {
+      BaseBtn,
+    },
 
     data() {
       return {
@@ -36,6 +47,7 @@
         playerStore_current_link: "current_link",
         playerStore_custom_type: "custom_type",
         playerStore_isBookmarkLink: "isBookmarkLink",
+        playerStore_current_item_id: "current_item_id",
       }),
     },
     watch: {
@@ -52,6 +64,32 @@
       });
     },
     methods: {
+      download(item_id) {
+        const data = {
+          action: "download_lecture_data",
+          course_id: this.$route.query.course_id,
+          lp_id: this.$route.query.lp_id,
+          item_id: item_id,
+        };
+        console.log(item_id);
+        this.$axios
+          .post(this.$ApiUrl.main_list, data, {
+            responseType: "blob",
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log(result);
+            const link = document.createElement("a");
+            const url = window.URL.createObjectURL(result.data);
+            link.href = url;
+            link.download = "download";
+            link.click();
+          });
+      },
       validationCheck() {
         const link = this.playerStore_current_link;
         // 북마크 시간 있는지 없는지
@@ -140,6 +178,25 @@
       position: absolute;
       width: 100%;
       height: 100%;
+    }
+  }
+  .download {
+    background: #f8f8f8;
+    padding: 22px;
+    h3 {
+      text-align: center;
+      font-size: 14px;
+    }
+    ::v-deep .blue_btn {
+      text-align: center;
+      button {
+        background: white;
+        color: #114fff;
+        width: 21%;
+        height: 24px;
+        line-height: 15px;
+        margin-top: 12px;
+      }
     }
   }
 </style>

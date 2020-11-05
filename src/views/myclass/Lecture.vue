@@ -32,7 +32,15 @@
           <img
             src="@/assets/images/common/playing_ico.png"
             class="playing_ico"
-            alt=""
+            @click="
+              $router.push({
+                path: '/play',
+                query: {
+                  lp_id: list.lp_id,
+                  course_id: list.id,
+                },
+              })
+            "
           />
         </template>
         <template slot="info">
@@ -145,16 +153,6 @@
     }
     ::v-deep .progress_bar {
       border: 1px solid #cacaca;
-      progress::-webkit-progress-value {
-        background: #ecedee;
-      }
-
-      progress::-moz-progress-bar {
-        background: #ecedee;
-      }
-      progress::-webkit-progress-bar {
-        background: white;
-      }
     }
   }
 </style>

@@ -18,14 +18,14 @@
       <span class="left">파일 첨부</span>
       <input type="file" id="upload" ref="upload" @change="fileSelect()" />
       <label for="upload" class="file">파일 선택</label>
-      <span class="file_name">{{ file_obj.name }}</span>
+      <div class="file_name" v-if="file_obj != ''">{{ file_obj.name }}</div>
     </div>
-    <div class="row" v-if="file_list != false">
+    <div v-if="file_list != false">
       <div class="file_wrap" v-for="(list, index) in file_list" :key="index">
         <span class="oname">
           {{ list.oname }}
         </span>
-        <span class="file_del" @click="fileDelete(list.oname)">X</span>
+        <span class="file_del" @click="fileDelete(list.oname)">x</span>
       </div>
     </div>
     <div class="row">
@@ -175,16 +175,8 @@
     .row {
       display: table;
       width: 100%;
-      margin-top: 2%;
-      .file_wrap {
-        margin-left: 25.5%;
-        color: #999999;
-        font-size: 1rem;
-        .oname,
-        .file_del {
-          vertical-align: middle;
-        }
-      }
+      margin-top: 3%;
+
       .readonly {
         border: 0;
         padding-left: 0;
@@ -315,7 +307,8 @@
         padding: 0.763% 5.946%;
       }
       .file_name {
-        margin-left: 10px;
+        margin-top: 10px;
+        font-size: 12px;
       }
       .save_btn {
         color: #ffffff;
@@ -325,6 +318,26 @@
         width: 60%;
         padding: 1.5% 0;
         margin-top: 3%;
+      }
+    }
+    .file_wrap {
+      margin-left: 25.5%;
+      color: #999999;
+      font-size: 1rem;
+      .oname,
+      .file_del {
+        font-size: 10px;
+        vertical-align: middle;
+      }
+      .file_del {
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        border: 1px solid black;
+        margin-left: 2px;
+        font-size: 10px;
+        line-height: 11px;
+        text-align: center;
       }
     }
   }

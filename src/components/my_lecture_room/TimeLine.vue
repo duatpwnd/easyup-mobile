@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="timeLine">
     <h2>타임라인</h2>
     <Slide :swiper_option="slide_option.timeline">
       <swiper-slide
@@ -8,7 +8,7 @@
         :key="index"
         ><h2>{{ list.login_date }}</h2>
         <img :src="list.course_image"/>
-        <p v-html="list.showTxt"></p></swiper-slide
+        <p class="timeline_txt" v-html="list.showTxt"></p></swiper-slide
     ></Slide>
     <Pagination>
       <template slot="paging">
@@ -82,10 +82,14 @@
   };
 </script>
 <style scoped lang="scss">
-  section {
+  .timeLine {
     margin-top: 20px;
     h2 {
       font-size: 2rem;
+    }
+    .timeline_txt {
+      font-size: 15px;
+      margin-top: 5px;
     }
     .table {
       display: table;

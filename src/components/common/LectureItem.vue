@@ -43,7 +43,7 @@
       color: #999999;
     }
     .subtitle {
-      font-size: 10.5px;
+      font-size: 1.3125rem;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
@@ -53,7 +53,7 @@
       width: 100%;
     }
     .evaluate {
-      margin-top: 4.5px;
+      margin-top: 5px;
 
       .star {
         width: 12px;
@@ -62,7 +62,7 @@
       }
       .score {
         vertical-align: middle;
-        font-size: 12px;
+        font-size: 1.5rem;
         display: inline-block;
         width: 15%;
         text-align: center;
@@ -70,7 +70,7 @@
       .free {
         vertical-align: middle;
         display: inline-block;
-        font-size: 12px;
+        font-size: 1.5rem;
         color: #114fff;
         font-weight: bold;
         width: calc(100% - 15% - 12px);

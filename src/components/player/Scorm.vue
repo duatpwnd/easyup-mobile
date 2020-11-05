@@ -79,7 +79,12 @@
           강의평가
         </button>
       </BlueBtn>
-      <BlueBtn class="btn bookmark" v-if="playerStore_lp_type != 'link'">
+      <BlueBtn
+        class="btn bookmark"
+        v-if="
+          playerStore_lp_type != 'link' && playerStore_custom_type != 'download'
+        "
+      >
         <button slot="blue_btn" @click="bookmarkAddModal()">
           책갈피 +
         </button>
@@ -169,7 +174,7 @@
     padding: 4.445%;
     padding-bottom: 3%;
     h2 {
-      font-size: 1.6875rem;
+      font-size: 18px;
       color: #333333;
     }
     ::v-deep .progress_bar {
@@ -178,6 +183,7 @@
       width: 100%;
       margin: 0;
       border-radius: 5px;
+      margin: 10px 0;
     }
     .progress {
       width: 100%;
@@ -199,7 +205,7 @@
     }
     .process {
       span {
-        font-size: 1.5rem;
+        font-size: 16px;
         font-weight: 500;
         color: #333333;
       }

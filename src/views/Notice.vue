@@ -36,6 +36,7 @@
 <style scoped lang="scss">
   #notice {
     padding: 4.445%;
+    padding-bottom: 65px;
     .title {
       font-size: 2rem;
     }

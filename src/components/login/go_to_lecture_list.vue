@@ -2,19 +2,46 @@
   <div class="menu_modal">
     <h3 @click="back()"><button class="back"></button>이전 메뉴로 돌아가기</h3>
     <ul class="list">
+      <li>
+        <span
+          @click="
+            $router.push({
+              path: '/category',
+              query: {
+                title: '전체',
+                category_code: 'ALL',
+                action: 'get_course_list',
+                keyword: '',
+                pageCurrent: 1,
+                order: 'type_date',
+              },
+            });
+            $store.commit('toggleStore/Toggle', {
+              login_modal: false,
+            });
+          "
+          >전체보기</span
+        >
+      </li>
       <li v-for="(list, index) in category_list" :key="index">
-        <router-link
-          :to="{
-            path: '/category',
-            query: {
-              category_code: index,
-              action: 'get_course_list',
-              keyword: '',
-              pageCurrent: 1,
-              order: 'type_date',
-            },
-          }"
-          >{{ list }}</router-link
+        <span
+          @click="
+            $router.push({
+              path: '/category',
+              query: {
+                title: list,
+                category_code: index,
+                action: 'get_course_list',
+                keyword: '',
+                pageCurrent: 1,
+                order: 'type_date',
+              },
+            });
+            $store.commit('toggleStore/Toggle', {
+              login_modal: false,
+            });
+          "
+          >{{ list }}</span
         >
       </li>
     </ul>
@@ -42,6 +69,7 @@
       },
       back() {
         this.$EventBus.$emit("LoginInfo", true);
+        this.$EventBus.$emit("LoginForm", true);
       },
     },
     mounted() {},
@@ -60,7 +88,8 @@
     box-sizing: border-box;
     background: #f8f8f8;
     h3 {
-      font-size: 12px;
+      font-size: 1.5rem;
+
       color: #999999;
       text-align: center;
       font-weight: 500;
@@ -85,8 +114,8 @@
         &:not(:first-child) {
           margin-top: 10px;
         }
-        a {
-          font-size: 12px;
+        span {
+          font-size: 1.5rem;
           display: block;
           background: url("~@/assets/images/common/right_arrow.png") no-repeat
             right center / 7px 12.5px;

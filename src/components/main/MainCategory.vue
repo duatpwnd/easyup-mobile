@@ -1,6 +1,6 @@
 <template>
   <div id="category_lec">
-    <h2>카테고리별 강의<button class="more_view">더보기</button></h2>
+    <h2>카테고리별 강의</h2>
     <p>관심 있는 분야의 강의를 한눈에 확인하세요</p>
 
     <div class="category_list">
@@ -8,6 +8,7 @@
         :to="{
           path: '/category',
           query: {
+            title: '프로그래밍',
             category_code: 'PROGRAMMING',
             action: 'get_course_list',
             keyword: '',
@@ -30,6 +31,7 @@
         :to="{
           path: '/category',
           query: {
+            title: '머신러닝/딥러닝',
             category_code: 'AI',
             action: 'get_course_list',
             keyword: '',
@@ -52,6 +54,7 @@
         :to="{
           path: '/category',
           query: {
+            title: '전산이론',
             category_code: 'BASIC',
             action: 'get_course_list',
             pageCurrent: 1,
@@ -74,6 +77,7 @@
         :to="{
           path: '/category',
           query: {
+            title: '알고리즘',
             category_code: 'ALGORITHM',
             action: 'get_course_list',
             keyword: '',
@@ -105,31 +109,17 @@
     h2 {
       font-size: 2rem;
       position: relative;
-      .more_view {
-        font-family: "NotoSansCJKkr-Medium";
-        position: absolute;
-        font-size: 9px;
-        color: #114fff;
-        border: 1px solid #114fff;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        height: 16px;
-        padding: 1px 10px;
-        border-radius: 4px;
-        margin: auto;
-        line-height: 14px;
-      }
     }
     h3 {
-      font-size: 7px;
+      font-size: 10px;
       color: #333333;
-      white-space: nowrap;
+      white-space: pre-wrap;
       position: absolute;
-      top: 30px;
+      top: 35px;
       left: 0;
       right: 0;
       margin: auto;
+      letter-spacing: -1px;
     }
     p {
       margin-top: 5px;
@@ -145,7 +135,7 @@
         text-align: center;
         display: inline-block;
         width: 23.17%;
-        height: 48px;
+        height: 60px;
         position: relative;
         box-sizing: border-box;
         &:not(:last-child) {
@@ -155,7 +145,7 @@
         img {
           position: absolute;
           width: unset;
-          top: 10px;
+          top: 15px;
           left: 0;
           right: 0;
           margin: auto;

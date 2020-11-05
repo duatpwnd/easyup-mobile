@@ -229,6 +229,8 @@
 <style scoped lang="scss">
   .msg_send {
     padding: 4.445%;
+    padding-bottom: 96px;
+
     .title {
       font-size: 2rem;
     }

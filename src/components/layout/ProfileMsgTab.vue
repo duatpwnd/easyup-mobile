@@ -64,12 +64,12 @@
 </script>
 <style scoped lang="scss">
   .gnb {
-    background: white;
     position: fixed;
     bottom: 0;
     max-width: 720px;
     width: 100%;
     z-index: 2;
+    background: white;
     &:after {
       display: block;
       content: "";
@@ -82,18 +82,23 @@
       a {
         display: inline-block;
         width: 100%;
-        padding: 10% 0;
+        height: 48px;
+        box-sizing: border-box;
         .ico_1 {
-          width: 8.333%; /* 30px/360px */
+          width: 15px; /* 30px/360px */
+          height: 17px;
+          margin-top: 10px;
         }
         .ico_2 {
-          width: 9.167%; /* 33px/360px */
+          margin-top: 10px;
+          width: 16px; /* 33px/360px */
+          height: 16px;
         }
         h3 {
           color: #999999;
-          font-size: 1.125rem;
+          font-size: 9px;
           font-weight: 500;
-          margin-top: 5%;
+          margin-top: 2.5px;
         }
       }
       .router-link-active {

@@ -37,6 +37,7 @@
 </script>
 <style scoped lang="scss">
   .my_lec_course {
+    padding-bottom: 65px;
     .tab {
       font-size: 2rem;
       font-weight: 600;

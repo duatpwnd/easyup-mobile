@@ -28,11 +28,6 @@
       >
         <template slot="thumbnail">
           <img :src="list.thumbnail" class="thumb" alt="" />
-          <img
-            src="@/assets/images/common/playing_ico.png"
-            class="playing_ico"
-            alt=""
-          />
         </template>
         <template slot="info">
           <span class="name">{{ list.teacher }}</span>
@@ -60,7 +55,20 @@
             >
             <div class="video_wrap" v-if="list.status == 'ing'">
               <VideoList v-for="(list, index) in list.courses" :key="index">
-                <span class="center" slot="title">{{ list.title }}</span>
+                <span
+                  class="center"
+                  slot="title"
+                  @click="
+                    $router.push({
+                      path: '/play',
+                      query: {
+                        lp_id: list.lp_id,
+                        course_id: list.id,
+                      },
+                    })
+                  "
+                  >{{ list.title }}</span
+                >
               </VideoList>
             </div>
           </div>
@@ -153,6 +161,7 @@
       margin-top: 10px;
     }
     .compile_wrap {
+      margin: 10px 0;
       padding: 4px 4.445%;
       position: relative;
       background: #f8f8f8;
@@ -160,17 +169,17 @@
       span {
         display: inline-block;
         vertical-align: middle;
-        font-size: 10px;
+        font-size: 12px;
       }
       .btn {
-        width: 13.334%;
+        width: 17%;
         border: 1px solid #114fff;
         color: #114fff;
-        font-size: 10px;
+        font-size: 14px;
         border-radius: 4px;
         text-align: center;
-        height: 20px;
-        line-height: 20px;
+        height: 24px;
+        line-height: 23px;
         box-sizing: border-box;
       }
 

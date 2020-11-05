@@ -30,7 +30,7 @@
   input[type="checkbox"] + .checkmark {
     padding: 30.5%;
     background-color: white;
-    border-radius: 4px;
+    border-radius: 3px;
     border: 1px solid #d1d1d1;
     height: 0;
     position: absolute;

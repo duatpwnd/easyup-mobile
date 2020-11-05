@@ -16,7 +16,7 @@
 <style scoped lang="scss">
   .manage {
     padding: 4.445%;
-    padding-bottom: 0;
+    padding-bottom: 65px;
     h2 {
       font-size: 2rem;
     }

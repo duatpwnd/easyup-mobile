@@ -125,7 +125,7 @@
           }
           h3 {
             color: #999999;
-            font-size: 9px;
+            font-size: 11px;
             font-weight: 500;
             margin-top: 2.3px;
           }

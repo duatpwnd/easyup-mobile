@@ -60,7 +60,7 @@
           <span class="td left_td">{{ list.course_name }}</span>
           <span
             class="td right_td"
-            @click="fileDownload(list.id, list.course_id)"
+            @click="fileDownload(list.id, list.course_id, list.title)"
             >{{ list.title }}</span
           >
         </template>
@@ -137,15 +137,15 @@
       upload() {
         this.$router.push("/dataShare/upload");
       },
-      fileDownload(id, course_id) {
+      fileDownload(id, course_id, file_name) {
         const data = {
           action: "get_file_download_info",
           id: id,
           course_id: course_id,
         };
-        console.log(data);
         this.$axios
           .post(this.$ApiUrl.main_list, data, {
+            responseType: "blob",
             headers: {
               Authorization: this.$cookies.get("user_info")
                 ? "Bearer " + this.$cookies.get("user_info").access_token
@@ -153,13 +153,11 @@
             },
           })
           .then((result) => {
-            console.log(result);
-            console.log(new Blob(["ico03_on.png"]));
-            // const link = document.createElement('a');
-            // const blob = new Blob(['파일객체']);
-            // const url = window.URL.createObjectURL(blob);
-            // link.href = url;
-            // link.download = "file.png";
+            const link = document.createElement("a");
+            const url = window.URL.createObjectURL(result.data);
+            link.href = url;
+            link.download = file_name.split(".")[0];
+            link.click();
           });
       },
       all_check() {

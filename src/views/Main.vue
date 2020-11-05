@@ -111,7 +111,23 @@
 
     <!-- 번역강의 :: S -->
     <div class="section swiper_section">
-      <h2 class="title">번역 강의</h2>
+      <h2 class="title">
+        번역 강의<router-link
+          tag="button"
+          :to="{
+            path: '/course',
+            query: {
+              action: 'get_course_list',
+              pageCurrent: 1,
+              order: 'type_date',
+              keyword: '',
+              tag: '번역',
+            },
+          }"
+          class="more_view"
+          >더보기</router-link
+        >
+      </h2>
       <p class="suggest">
         한글 자막이 제공되는 외국 우수 강의를 구독하세요
       </p>
@@ -152,7 +168,17 @@
       <CategoryLec></CategoryLec>
       <div class="notice_wrap">
         <span class="notice_title">공지사항</span>
-        <span class="notice_contents">{{ list.recent_notice.title }}</span>
+        <router-link
+          class="notice_contents"
+          tag="span"
+          :to="{
+            path: '/help/notice/read',
+            query: {
+              id: list.recent_notice.id,
+            },
+          }"
+          >{{ list.recent_notice.title }}</router-link
+        >
         <!-- {{recent_notice}} -->
       </div>
     </div>
@@ -228,10 +254,26 @@
     .section {
       padding: 4.445%;
       .title {
+        position: relative;
         font-size: 2rem;
         margin-top: 24px;
         &:first-child {
           margin-top: 0;
+        }
+        .more_view {
+          font-family: "NotoSansCJKkr-Medium";
+          position: absolute;
+          font-size: 12px;
+          color: #114fff;
+          border: 1px solid #114fff;
+          top: 0;
+          right: 4.445%;
+          bottom: 0;
+          height: 22px;
+          padding: 1px 10px;
+          border-radius: 4px;
+          margin: auto;
+          line-height: 20px;
         }
       }
       .suggest {
@@ -265,25 +307,25 @@
         padding: 4px 4.88%;
         margin-top: 24px;
         position: relative;
-        height: 24px;
+        height: 30px;
         box-sizing: border-box;
         .notice_title {
           color: #114fff;
-          font-size: 10px;
+          font-size: 12px;
           font-weight: 600;
           position: absolute;
           top: 0;
-          line-height: 24px;
+          line-height: 30px;
         }
         .notice_contents {
           color: #787878;
-          font-size: 10px;
+          font-size: 12px;
           position: absolute;
           left: 0;
           top: 0;
           text-align: center;
           width: 100%;
-          line-height: 24px;
+          line-height: 30px;
         }
       }
     }
@@ -293,7 +335,7 @@
     }
     .category_section {
       padding-top: 0;
-      padding-bottom: 0;
+      padding-bottom: 15px;
     }
     ::v-deep .vue-star-rating {
       display: unset;

@@ -35,7 +35,9 @@
           },
         ]"
       >
-        <span class="title" @click="switchItem(li.id)">{{ li.title }}</span>
+        <span class="title" @click="switchItem(li.id, li.current_id)">{{
+          li.title
+        }}</span>
         <img
           v-if="li.bookmark == 'active'"
           src="@/assets/images/player/active_bookmark_ico.png"
@@ -45,7 +47,11 @@
           @click="bookmarkListModal(li.id)"
         />
         <img
-          v-else-if="li.bookmark == 'on'"
+          v-else-if="
+            li.bookmark == 'on' &&
+              playerStore_lp_type != 'link' &&
+              playerStore_custom_type != 'download'
+          "
           @click="bookmarkAddModal()"
           src="@/assets/images/player/inactive_bookmark_ico.png"
           alt="북마크 비활성화"
@@ -76,7 +82,7 @@
                 non_completed: childrenli.status != 'completed',
               },
             ]"
-            @click="switchItem(childrenli.id)"
+            @click="switchItem(childrenli.id, childrenli.current_id)"
           >
             <span class="child_title">{{ childrenli.title }}</span>
             <img
@@ -217,9 +223,9 @@
     .non_completed {
       padding: 0 5%;
     }
-    .child_title {
-      margin-left: 0;
-    }
+    // .child_title {
+    //   margin-left: 0;
+    // }
   }
 
   .slide-enter-active {

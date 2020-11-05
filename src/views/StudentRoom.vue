@@ -77,7 +77,7 @@
         >
         <template slot="right">
           <span class="td td2">{{ list.expires_on }}</span>
-          <span class="td td3">{{ list.sent_date }}</span>
+          <span class="td td3">{{ list.sent_date.split(" ")[0] }}</span>
         </template>
       </List>
 
@@ -89,7 +89,9 @@
         <span class="td td1" slot="td1">
           [{{ list.course_name }}]{{ list.title }}
         </span>
-        <span slot="right" class="td td2">{{ list.insert_date }}</span>
+        <span slot="right" class="td td2">{{
+          list.insert_date.split(" ")[0]
+        }}</span>
       </List>
       <TimeLine></TimeLine>
     </div>
@@ -148,6 +150,9 @@
   };
 </script>
 <style scoped lang="scss">
+  #my_lecture {
+    padding-bottom: 65px;
+  }
   .contents {
     padding: 4.445%;
     h2 {
@@ -202,14 +207,14 @@
     }
     .board_list {
       ::v-deep .td1 {
-        width: 62%;
+        width: 50%;
       }
       .td2 {
-        width: 23%;
+        width: 20%;
       }
       .td3 {
         font-weight: bold;
-        width: 15%;
+        width: 30%;
         text-align: right;
         color: #333333;
       }

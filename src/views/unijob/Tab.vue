@@ -204,6 +204,7 @@
   .wrap {
     padding: 4.445%;
     padding-top: 0;
+
     .search {
       margin: 2% 0;
       .search_contents {
@@ -240,7 +241,7 @@
 
         .left {
           float: left;
-          width: 60%;
+          width: 55%;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;

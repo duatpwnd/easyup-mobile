@@ -1,7 +1,7 @@
 <template>
   <div class="bookmark_add" v-if="info">
     <div class="row">
-      <span class="left contents">
+      <span class="left ">
         책갈피
       </span>
       <span class="right">
@@ -11,7 +11,7 @@
       </span>
     </div>
     <div class="row">
-      <span class="left contents">
+      <span class="left">
         타임라인
       </span>
       <BlueBtn>

@@ -147,7 +147,7 @@
         }
         .left {
           float: left;
-          width: 60%;
+          width: 55%;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;

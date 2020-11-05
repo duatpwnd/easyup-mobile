@@ -71,6 +71,7 @@
             console.log("책갈피 정보", result);
             this.$Util.default.noticeMessage(result.data.data.msg);
             this.bookmarkModalClose();
+            this.$emit("bookmark_add");
           });
       },
 

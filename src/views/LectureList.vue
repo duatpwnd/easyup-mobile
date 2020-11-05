@@ -1,7 +1,10 @@
 <template>
   <div id="lec_list">
     <div class="breadcrumb">
-      <span>강의 > 전체</span>
+      <span v-if="$route.query.title || $route.query.tag"
+        >강의 >{{ $route.query.title }}{{ $route.query.tag }}</span
+      >
+      <span v-else>강의 > 전체</span>
     </div>
     <Search>
       <select
@@ -48,7 +51,7 @@
           </router-link>
           <h4 slot="teacher">{{ list.teacher }}</h4>
           <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
-          <span slot="grade" class="score">{{ list.ranking }}</span>
+          <span slot="grade" class="score">{{ list.rating }}</span>
           <h1 class="free" slot="free" v-if="list.is_free == 'Y'">
             FREE
           </h1>
@@ -109,6 +112,7 @@
             : null,
           tag: this.$route.query.tag,
         };
+        console.log(data);
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data), {
             headers: {
@@ -142,7 +146,6 @@
     watch: {
       $route(to, from) {
         console.log(to, from);
-
         if (to.query.category_code != from.query.category_code) {
           this.getList(
             this.$route.query.pageCurrent,
@@ -167,16 +170,16 @@
     padding-bottom: 8.89%;
     .breadcrumb {
       background: #f8f8f8;
-      height: 20px;
-      font-size: 10px;
-      line-height: 14px;
+      height: 26px;
+      font-size: 14px;
+      line-height: 20px;
       padding: 3px 10px;
       box-sizing: border-box;
       color: #999999;
     }
     .total {
       display: inline-block;
-      font-size: 11px;
+      font-size: 13px;
       margin-top: 11px;
       .count {
         display: inline-block;
@@ -193,8 +196,20 @@
       .li {
         float: left;
         width: 48.782%;
+        margin-top: 8px;
         &:nth-child(odd) {
           margin-right: 2.436%;
+        }
+        ::v-deep .item {
+          h4 {
+            font-size: 12px;
+          }
+          .subtitle {
+            font-size: 14px;
+          }
+          .evaluate {
+            margin-top: 3px;
+          }
         }
       }
     }

@@ -362,6 +362,7 @@
   #comment_wrap {
     margin-top: 30px;
     padding: 0 4.445%;
+    padding-bottom: 30px;
     .edit_wrap {
       .edit {
         border: 1px solid #dbdbdb;

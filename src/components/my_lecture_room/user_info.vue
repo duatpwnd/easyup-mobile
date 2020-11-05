@@ -147,7 +147,7 @@
       box-sizing: border-box;
       h3,
       span {
-        font-size: 1.25rem;
+        font-size: 10px;
         font-weight: 500;
         color: #dbdbdb;
       }

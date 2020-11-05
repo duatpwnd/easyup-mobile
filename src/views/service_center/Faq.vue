@@ -163,7 +163,7 @@
       line-height: 1;
       li {
         span {
-          font-size: 1.25rem;
+          font-size: 10px;
           color: #999999;
           vertical-align: middle;
         }

@@ -149,7 +149,9 @@
     <div class="curriculum">
       <div class="curriculum_header">
         <h2 class="curriculum_title">커리큘럼</h2>
-        <button class="subscribe_btn">강의 구독</button>
+        <button class="subscribe_btn" v-if="is_subscribe">PLAY ▶</button>
+        <button class="subscribe_btn" v-else>강의 구독</button>
+
         <span class="total_lec">총 {{ detail.curriculum_list.count }}강</span>
       </div>
       <ul
@@ -369,7 +371,7 @@
         margin-right: 0.763%;
         font-size: 12px;
         text-align: center;
-        line-height: 24px;
+        line-height: 25px;
       }
     }
   }
@@ -390,6 +392,7 @@
         margin: 10px 0;
         height: 40px;
         line-height: 32px;
+        font-size: 18px;
       }
     }
     .active_subscribe {
@@ -485,15 +488,17 @@
       .curriculum_title {
         display: inline-block;
         vertical-align: middle;
+        font-size: 2rem;
       }
       .subscribe_btn {
+        vertical-align: middle;
+
         border-radius: 5px;
         margin-left: 3%;
-        width: 54px;
-        height: 16px;
-        vertical-align: middle;
+        width: 23%;
+        height: 22px;
         font-family: inherit;
-        font-size: 9px;
+        font-size: 12px;
         color: #114fff;
         border: 1px solid #114fff;
       }
@@ -517,9 +522,9 @@
           font-size: 1.25rem;
           color: #333333;
           background: #f8f8f8;
-          padding: 1% 2%;
+          padding: 10px 15px;
           box-sizing: border-box;
-          border-radius: 12px;
+          border-radius: 100px;
         }
         .lec_title {
           display: inline-block;
@@ -529,7 +534,7 @@
         }
         .else_lec_title {
           width: 100%;
-          border-radius: 12px;
+          border-radius: 100px;
         }
         .lec_num {
           width: 13%;

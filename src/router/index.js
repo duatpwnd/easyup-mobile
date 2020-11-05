@@ -350,6 +350,12 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/ReissuePw",
+    name: "ReissuePw",
+    component: () => import("../views/ReissuePw.vue"),
+    meta: { isFooter: false },
+  },
 ];
 
 const router = new VueRouter({
@@ -357,24 +363,17 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   duplicateNavigationPolicy: "ignore",
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    // 원하는 위치로 돌아가기
+    console.log(window);
+    window.scrollTo(0, 0);
+  },
 });
 
 router.beforeEach(async (to, from, next) => {
-  // VueCookies.set("user_info", {
-  //   access_token: "fasd",
-  //   info: {
-  //     userid: 20,
-  //   },
-  // });
   if (VueCookies.get("user_info")) {
     store.commit("userStore/loginToken", VueCookies.get("user_info"));
   }
-  // if (
-  //   VueCookies.get("access_token") === null &&
-  //   VueCookies.get("refresh_token") !== null
-  // ) {
-  //   // 엑세스 토큰 발급로직
-  // }
   const arr = ["GnbBottomMenu", "isFooter", "ProfileMsgTab"];
   const result = arr.reduce((acc, el) => {
     if (el == Object.keys(to.meta)[0]) {

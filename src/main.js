@@ -7,12 +7,15 @@ import "swiper/swiper-bundle.css";
 import VueMq from "vue-mq";
 import CKEditor from "ckeditor4-vue";
 import VueCookies from "vue-cookies";
+import ApiUrl from "@/assets/js/api_url.js";
+
 Vue.use(VueCookies);
 import axios from "axios";
 // NODE_ENV = '앱실행모드'
 console.log("앱실행모드:", process.env.NODE_ENV);
 if (process.env.NODE_ENV == "development") {
   axios.defaults.baseURL = "http://develop.hell0world.net";
+  ApiUrl.main_list = "http://develop.hell0world.net/main/mobileAPI/v1.php";
 }
 axios.interceptors.request.use(
   (config) => {
@@ -65,7 +68,6 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-import ApiUrl from "@/assets/js/api_url.js";
 import Fragment from "vue-fragment";
 import * as Util from "@/assets/js/util.js";
 Vue.use(Fragment.Plugin);

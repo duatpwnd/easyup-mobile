@@ -42,6 +42,6 @@ h. 위 항에서 정의되지 않은 약관 상의 용어의 의미는 일반적
     font-family: "NotoSansCJKkr-DemiLight";
     white-space: pre-wrap;
     color: #666666;
-    font-size: 9px;
+    font-size: 1.125rem;
   }
 </style>

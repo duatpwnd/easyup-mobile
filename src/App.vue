@@ -3,18 +3,13 @@
     <NoticeModal v-if="toggleStore_noticeModal"></NoticeModal>
     <Header></Header>
     <transition name="fade" mode="out-in">
-      <keep-alive>
-        <div
-          class="router-view"
-          :style="[{ background: $route.meta.isFooter ? '' : '' }]"
-        >
-          <div v-if="toggleStore_loginModal">
-            <LoginLnb v-if="userStore_userinfo.access_token"></LoginLnb>
-            <LoginModal v-else></LoginModal>
-          </div>
-          <router-view />
+      <div class="router-view">
+        <div v-if="toggleStore_loginModal">
+          <LoginLnb v-if="userStore_userinfo.access_token"></LoginLnb>
+          <LoginModal v-else></LoginModal>
         </div>
-      </keep-alive>
+        <router-view />
+      </div>
     </transition>
     <GnbBottomMenu v-if="toggleStore_gnbBottomMenu"></GnbBottomMenu>
     <Footer v-if="toggleStore_isFooter"></Footer>
@@ -56,16 +51,8 @@
     data() {
       return {};
     },
-    methods: {
-      test() {
-        console.log("test");
-      },
-    },
+    methods: {},
     mounted() {
-      this.$emit("asd", true);
-      this.$once("asd", () => {
-        this.test();
-      });
       // 가로모드 세로모드 감지
       window.addEventListener("resize", function() {
         if (window.matchMedia("(orientation: portrait)").matches) {
@@ -122,13 +109,11 @@
   #app {
     max-width: 720px;
     margin: 0 auto;
-    height: 100%;
     position: relative;
+    min-height: 100%;
   }
   .router-view {
     position: relative;
-    // padding-bottom: 25%;
-    min-height: 100%;
   }
   @media all and (max-width: 700px) {
     html {
@@ -142,19 +127,19 @@
   }
   @media all and (max-width: 600px) {
     html {
-      font-size: 11px;
+      font-size: 12px;
     }
   }
   // 갤럭시 s9+ (세로:412,가로:798),
   // 아이폰8 (세로: 320) 아이폰은 플러스계열만 가로모드 지원
   @media all and (max-width: 420px) {
     html {
-      font-size: 9px;
+      font-size: 12px;
     }
   }
   @media all and (max-width: 360px) {
     html {
-      font-size: 8px;
+      font-size: 10px;
     }
   }
 </style>

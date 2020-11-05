@@ -52,7 +52,7 @@
         right: 0;
         span {
           color: #114fff;
-          font-size: 9px;
+          font-size: 12px;
         }
         .remove_btn,
         .modify_btn {

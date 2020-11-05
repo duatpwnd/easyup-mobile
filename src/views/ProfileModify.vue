@@ -43,15 +43,7 @@
             placeholder="ex) 01012345678"
           />
         </div>
-        <div class="row">
-          <label for="unijob_id">유니잡 ID</label>
-          <input
-            type="text"
-            class="unijob"
-            v-model="unijob_id"
-            id="unijob_id"
-          />
-        </div>
+
         <div class="row">
           <label>이미지 추가</label>
           <input
@@ -108,7 +100,6 @@
         new_password: "",
         new_password_confirm: "",
         file_obj: "",
-        unijob_id: "",
       };
     },
     methods: {
@@ -132,7 +123,6 @@
             const data = {
               action: "edit_profile",
               phone: this.phone,
-              unijob_id: this.unijob_id,
               password0: this.current_password,
               new_password: this.new_password,
               new_password_confirm: this.new_password_confirm,
@@ -180,6 +170,7 @@
 <style scoped lang="scss">
   #profile_modify {
     padding: 4.445%;
+    padding-bottom: 150px;
     .blue_btn {
       margin-top: 5%;
     }

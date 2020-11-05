@@ -236,6 +236,7 @@
   .tab1 {
     padding: 4.445%;
     padding-top: 0;
+    padding-bottom: 96px;
     .search {
       .search_contents {
         width: 100%;
@@ -267,6 +268,7 @@
         }
       }
     }
+
     .search {
       margin: 2% 0;
     }

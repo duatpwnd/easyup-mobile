@@ -128,6 +128,7 @@
 <style scoped lang="scss">
   .read {
     padding: 4.445%;
+    padding-bottom: 96px;
     h2 {
       font-size: 2rem;
     }
@@ -140,11 +141,13 @@
     .contents {
       border-top: 2px solid #333333;
       border-bottom: 2px solid #333333;
+      white-space: pre-wrap;
       padding: 2% 0;
       margin: 2% 0;
       font-size: 1.25rem;
       color: #666666;
       font-family: "NotoSansCJKkr-Regular";
+      word-break: break-all;
     }
     .button_wrap {
       button {
@@ -162,11 +165,11 @@
       }
       .left_btn {
         float: left;
-        width: 23.172%;
+        width: 30%;
       }
       .right_btn {
         float: right;
-        width: 23.172%;
+        width: 30%;
       }
     }
   }

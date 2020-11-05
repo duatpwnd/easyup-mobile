@@ -153,16 +153,16 @@
       margin-top: 5px;
       select {
         font-family: "NotoSansCJKkr-Regular";
-        font-size: 12px;
+        font-size: 14px;
         width: calc(100% - 35%);
         border: 1px solid #ccc;
         border-radius: 5px;
         outline: none;
         padding: 5px 6px;
-        height: 28px;
-        line-height: 13px;
+        height: 32px;
+        line-height: 15px;
         box-sizing: border-box;
-        background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
+        background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 95%
           center / 7px 5px;
       }
       .share_list {
@@ -171,7 +171,7 @@
       .dt {
         width: 35%;
         display: inline-block;
-        font-size: 12px;
+        font-size: 14px;
         font-family: "NotoSansCJKkr-Regular";
         .required {
           color: #114fff;
@@ -185,11 +185,11 @@
         color: #114fff;
         border: 1px solid #114fff;
         border-radius: 5px;
-        font-size: 11px;
+        font-size: 13px;
         width: 76px;
         display: inline-block;
         text-align: center;
-        line-height: 24px;
+        line-height: 26px;
       }
       .file_name {
         margin-left: 10px;

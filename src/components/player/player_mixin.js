@@ -12,6 +12,7 @@ let player_common = {
     ...mapState("playerStore", {
       playerStore_list: "list",
       playerStore_current_item_id: "current_item_id",
+      playerStore_custom_type: "custom_type",
       playerStore_lp_type: "lp_type",
       playerStore_nextBtn: "nextBtn",
       playerStore_nextItem: "nextItem",
@@ -22,7 +23,10 @@ let player_common = {
   },
   methods: {
     // 강의 변경
-    async switchItem(item_id) {
+    async switchItem(item_id, current_id) {
+      if (item_id == current_id) {
+        return;
+      }
       this.$store.commit("playerStore/playerState", {
         check_time: "",
       });

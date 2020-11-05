@@ -72,27 +72,31 @@
       padding: 5px;
       box-sizing: border-box;
       h2 {
-        font-size: 14px;
+        font-size: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
       .name {
         color: #999999;
-        font-size: 10px;
+        font-size: 12px;
       }
       .list_right_bottom {
         display: table;
         width: 100%;
 
         .ing_ico {
-          width: 30.5%;
+          width: 32%;
           vertical-align: middle;
           display: table-cell;
           background: #114fff;
-          font-size: 10px;
+          font-size: 12px;
           color: white;
           border-radius: 4px;
           text-align: center;
           height: 20px;
-          line-height: 20px;
         }
         .non_ing_ico {
           background: #dbdbdb;
@@ -121,7 +125,7 @@
         span {
           display: inline-block;
           vertical-align: middle;
-          font-size: 10px;
+          font-size: 12px;
         }
         ::v-deep .progress_bar {
           progress::-webkit-progress-value {
@@ -136,12 +140,11 @@
         }
         .date {
           color: #999999;
-          font-size: 10px;
+          font-size: 12px;
           position: absolute;
           top: 0;
           right: 4.445%;
           color: #999999;
-          font-size: 10px;
           position: absolute;
           top: 0;
           bottom: 0;
