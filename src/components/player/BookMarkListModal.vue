@@ -71,7 +71,6 @@
           action: "get_player_bookmark",
           current_id: this.toggleStore_bookmark_list_info.current_id,
         };
-        console.log(data);
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data), {
             headers: {
@@ -81,7 +80,6 @@
             },
           })
           .then((result) => {
-            console.log("책갈피리스트", result);
             this.list = result.data.data;
             this.list.sort(function(a, b) {
               return a.check_point - b.check_point;
@@ -91,7 +89,6 @@
                 el.check_point
               );
             });
-            console.log(this.list);
           });
       },
     },

@@ -38,16 +38,16 @@ class App {
   }
   // 로그아웃
   static logOut() {
-    VueCookies.remove("user_info");
-    store.commit("userStore/loginToken", {
-      access_token: null,
-      info: "",
-    });
     router.push({
       path: "/",
       query: {
         referer: router.currentRoute.fullPath,
       },
+    });
+    VueCookies.remove("user_info");
+    store.commit("userStore/loginToken", {
+      access_token: null,
+      info: "",
     });
   }
 }

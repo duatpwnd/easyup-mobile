@@ -23,6 +23,7 @@ let unijob_common = {
           },
         })
         .then((result) => {
+          console.log(result);
           this.view = result.data.data.info;
           // 답글 수정일때는 re:를 치환하지 않아도 되기때문에 나누어줌
 

@@ -149,10 +149,10 @@
                 // 마지막 로그아웃 시점url이 있을경우
                 console.log(
                   "★★★★★★★★★★마지막 URL:★★★★★★★★★★★★★",
-                  this.$router.currentRoute.query.referer
+                  this.$route.query.referer
                 );
-                if (this.$router.currentRoute.query.referer != undefined) {
-                  this.$router.push(this.$router.currentRoute.query.referer);
+                if (this.$route.query.referer != undefined) {
+                  this.$router.push(this.$route.query.referer);
                 }
               }
             })

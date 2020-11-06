@@ -98,16 +98,11 @@
             },
           })
           .then((result) => {
-            console.log("플레이어 정보", result, this.playerStore_checkTime);
+            console.log("플레이어 정보", result);
             this.info = result.data.data;
-            console.log(
-              this.info.current_item[0].link,
-              this.info.current_item[0].link.split("?")[1]
-            );
             let current_link;
             // 스타트 옵션때문에 분기 처리해줘야함
             if (this.info.current_item[0].link.split("?")[1] == undefined) {
-              console.log("언디다");
               current_link =
                 this.info.current_item[0].link +
                 "?cc_load_policy=3&html5=1&playsinline=1&fs=0&start=1";
@@ -116,7 +111,6 @@
                 this.info.current_item[0].link +
                 `&cc_load_policy=3&html5=1&playsinline=1&fs=0&`;
             }
-            console.log("최종:", current_link);
             this.$store.commit("playerStore/playerState", {
               current_index: this.info.current_item[0].idx,
               current_item_id: this.info.current_item[0].item_id,
