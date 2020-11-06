@@ -1,8 +1,8 @@
 <template>
   <div id="comment_wrap">
-    <CommentList v-for="(list, index) in comment" :key="index">
+    <CommentList v-for="(list, parent_index) in comment" :key="parent_index">
       <template slot="comment">
-        <div class="comment_header">
+        <div class="comment_header" v-if="parent_index < view">
           <img
             src="@/assets/images/common/mid_star.png"
             alt=""
@@ -47,7 +47,7 @@
             >
           </span>
         </div>
-        <p class="contents">
+        <p class="contents" v-if="parent_index < view">
           {{ list.reviews.contents }}
         </p>
         <div class="edit_wrap" ref="edit" v-show="active">
@@ -77,13 +77,13 @@
           :key="'reply' + index"
         >
           <template slot="comment">
-            <div class="comment_header">
+            <div class="comment_header" v-if="parent_index < view">
               <span class="name">{{ reply.user_name }}</span>
               <span class="date">{{ reply.timeAgo }}</span>
               <span class="btn_wrap">
                 <span
                   class="modify_btn"
-                  @click="toggle()"
+                  @click="toggle('modify')"
                   v-if="userStore_info.info.user_id == reply.user_id"
                   >수정</span
                 >
@@ -94,7 +94,9 @@
                 >
               </span>
             </div>
-            <p class="contents">{{ reply.contents }}</p>
+            <p class="contents" v-if="parent_index < view">
+              {{ reply.contents }}
+            </p>
             <div
               class="edit_wrap"
               ref="reply_edit"
@@ -128,7 +130,11 @@
       </template>
     </CommentList>
     <p class="noti" v-if="comment.length === 0">등록된 강의평가가 없습니다.</p>
-    <button class="more_view_btn" v-else-if="comment.length > 4">
+    <button
+      class="more_view_btn"
+      @click="moreView()"
+      v-else-if="comment.length > 4 && comment.length != view"
+    >
       더 많은 평가 보기
     </button>
   </div>
@@ -164,18 +170,23 @@
         contents: "",
         id: "", // 리뷰아이디
         comment: "",
+        view: 4,
       };
     },
     methods: {
       // 토글
 
-      toggle() {
+      toggle(modify) {
         if (
           event.path[2].nextElementSibling.nextElementSibling.style.display ==
           "none"
         ) {
           event.path[2].nextElementSibling.nextElementSibling.style.display =
             "block";
+          if (modify != undefined) {
+            event.path[2].nextElementSibling.nextElementSibling.children[0].value =
+              event.path[2].nextElementSibling.innerText;
+          }
         } else {
           event.path[2].nextElementSibling.nextElementSibling.style.display =
             "none";
@@ -324,6 +335,20 @@
         });
         return filter.length;
       },
+      // 더많은 평가 보기
+      moreView() {
+        this.view = this.comment.length;
+        // const data = {
+        //   action: "list_more",
+        //   type: "course",
+        //   course_id: this.$route.query.id,
+        // };
+        // this.$axios
+        //   .post(this.$ApiUrl.main_list, JSON.stringify(data))
+        //   .then((result) => {
+        //     console.log("댓글조회", result);
+        //   });
+      },
       // 강의평가 조회
       getCommentList() {
         const data = this.action;
@@ -364,6 +389,8 @@
     padding: 0 4.445%;
     padding-bottom: 30px;
     .edit_wrap {
+      margin-top: 5px;
+
       .edit {
         border: 1px solid #dbdbdb;
         font-size: 1.375rem;

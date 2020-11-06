@@ -10,7 +10,7 @@
               class="modify_btn"
               v-if="userStore_info.info.user_id == list.user_id"
               @click="
-                toggle();
+                toggle('modify');
                 comment_mode = 'modify';
               "
               >수정</span
@@ -78,7 +78,7 @@
               <span class="btn_wrap">
                 <span
                   class="modify_btn"
-                  @click="toggle()"
+                  @click="toggle('modify')"
                   v-if="userStore_info.info.user_id == reply.user_id"
                   >수정</span
                 >
@@ -158,13 +158,20 @@
     },
     methods: {
       // 토글
-      toggle() {
+      toggle(modify) {
         if (
           event.path[2].nextElementSibling.nextElementSibling.style.display ==
           "none"
         ) {
           event.path[2].nextElementSibling.nextElementSibling.style.display =
             "block";
+          if (modify != undefined) {
+            event.path[2].nextElementSibling.nextElementSibling.children[0].value =
+              event.path[2].nextElementSibling.innerText;
+          } else {
+            event.path[2].nextElementSibling.nextElementSibling.children[0].value =
+              "";
+          }
         } else {
           event.path[2].nextElementSibling.nextElementSibling.style.display =
             "none";
@@ -184,9 +191,12 @@
         this.$refs.edit.forEach((el, index) => {
           el.style.display = "none";
         });
-        this.$refs.reply_edit.forEach((el, index) => {
-          el.style.display = "none";
-        });
+        console.log(this.$refs.reply_edit);
+        if (this.$refs.reply_edit != undefined) {
+          this.$refs.reply_edit.forEach((el, index) => {
+            el.style.display = "none";
+          });
+        }
         this.contents = "";
       },
       // 답글 추가
@@ -280,6 +290,8 @@
       }
     }
     .edit_wrap {
+      margin-top: 5px;
+
       .edit {
         border: 1px solid #dbdbdb;
         font-size: 1.375rem;

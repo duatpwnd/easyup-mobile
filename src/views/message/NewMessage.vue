@@ -271,7 +271,7 @@
         box-sizing: border-box;
         .inputcontainer {
           position: relative;
-          width: 30%;
+          width: 70%;
           .icon-container {
             position: absolute;
             right: 10px;
@@ -320,7 +320,7 @@
             background: transparent;
           }
           .search_input {
-            width: 100%;
+            width: 80%;
             padding: 0;
             outline: none;
           }

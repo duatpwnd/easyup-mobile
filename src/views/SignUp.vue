@@ -393,20 +393,20 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
       }
     }
     .row {
-      margin-top: 5px;
+      margin-top: 10px;
       clear: both;
 
       input,
       textarea,
       select {
         font-family: "NotoSansCJKkr-Regular";
-        font-size: 9px;
+        font-size: 14px;
         width: calc(100% - 35%);
         border: 1px solid #ccc;
         border-radius: 5px;
         outline: none;
         padding: 5px 6px;
-        height: 28px;
+        height: 32px;
         line-height: 13px;
         box-sizing: border-box;
       }
@@ -421,14 +421,14 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
         height: 60px;
         &::placeholder {
           color: #666666;
-          font-size: 9px;
+          font-size: 12px;
         }
       }
 
       .dt {
         width: 35%;
         display: inline-block;
-        font-size: 12px;
+        font-size: 14px;
         font-family: "NotoSansCJKkr-Regular";
         .required {
           color: #114fff;

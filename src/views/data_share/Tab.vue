@@ -153,11 +153,20 @@
             },
           })
           .then((result) => {
-            const link = document.createElement("a");
-            const url = window.URL.createObjectURL(result.data);
-            link.href = url;
-            link.download = file_name.split(".")[0];
-            link.click();
+            console.log(result);
+            console.log(file_name);
+            if (window.navigator.msSaveOrOpenBlob) {
+              // IE 10+
+              window.navigator.msSaveOrOpenBlob(result.data, filename);
+            } else {
+              // not IE
+              let link = document.createElement("a");
+              link.href = window.URL.createObjectURL(result.data);
+              link.target = "_self";
+              link.download = file_name;
+              link.click();
+              window.URL.revokeObjectURL(result.data);
+            }
           });
       },
       all_check() {

@@ -122,21 +122,18 @@
             },
           })
           .then((result) => {
-            console.log(result.data);
             // 로컬서버에서는 작동하지 않음
             if (window.navigator.msSaveOrOpenBlob) {
               // IE 10+
-              window.navigator.msSaveOrOpenBlob(
-                result.data,
-                filename.split(".")[0]
-              );
+              window.navigator.msSaveOrOpenBlob(result.data, filename);
             } else {
               // not IE
               let link = document.createElement("a");
               link.href = window.URL.createObjectURL(result.data);
               link.target = "_self";
-              if (filename) link.download = filename.split(".")[0];
+              if (filename) link.download = filename;
               link.click();
+              window.URL.revokeObjectURL(result.data);
             }
           });
       },

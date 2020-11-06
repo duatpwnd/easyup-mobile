@@ -1,5 +1,9 @@
 <template>
-  <div class="video" ref="video" v-if="playerStore_custom_type == 'youtube'">
+  <div
+    class="video"
+    :style="[{ 'margin-bottom': is_srt ? '75px' : '0' }]"
+    v-if="playerStore_custom_type == 'youtube'"
+  >
     <iframe
       @load.once="isSrtFile()"
       width="100%"
@@ -35,6 +39,7 @@
     data() {
       return {
         youtubeExternalSubtitle: null,
+        is_srt: false,
       };
     },
     computed: {
@@ -64,6 +69,19 @@
       });
     },
     methods: {
+      getFileName(contentDisposition) {
+        let fileName = contentDisposition
+          .split(";")
+          .filter((ele) => {
+            console.log(ele);
+            return ele.indexOf("filename") > -1;
+          })
+          .map((ele) => {
+            console.log(ele);
+            return ele.replace(/"/g, "").split("=")[1];
+          });
+        return fileName[0] ? fileName[0] : null;
+      },
       download(item_id) {
         const data = {
           action: "download_lecture_data",
@@ -71,7 +89,6 @@
           lp_id: this.$route.query.lp_id,
           item_id: item_id,
         };
-        console.log(item_id);
         this.$axios
           .post(this.$ApiUrl.main_list, data, {
             responseType: "blob",
@@ -82,12 +99,23 @@
             },
           })
           .then((result) => {
-            console.log(result);
-            const link = document.createElement("a");
-            const url = window.URL.createObjectURL(result.data);
-            link.href = url;
-            link.download = "download";
-            link.click();
+            if (window.navigator.msSaveOrOpenBlob) {
+              // IE 10+
+              window.navigator.msSaveOrOpenBlob(
+                result.data,
+                this.getFileName(result.headers["content-disposition"])
+              );
+            } else {
+              // not IE
+              let link = document.createElement("a");
+              link.href = window.URL.createObjectURL(result.data);
+              link.target = "_self";
+              link.download = this.getFileName(
+                result.headers["content-disposition"]
+              );
+              link.click();
+              window.URL.revokeObjectURL(result.data);
+            }
           });
       },
       validationCheck() {
@@ -153,14 +181,12 @@
           .then((result) => {
             if (result.data != "") {
               // 자막파일이 있는경우
-              console.log("자막있다", result);
               this.srtParsing(result.data);
-              this.$refs.video.style.marginBottom = "75px";
+              this.is_srt = true;
             } else {
               // 자막파일이 없는경우
-              console.log("자막없다", result);
               this.srtParsing([]);
-              this.$refs.video.style.marginBottom = "0";
+              this.is_srt = false;
             }
           });
       },
