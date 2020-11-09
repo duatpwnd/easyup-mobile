@@ -264,17 +264,15 @@
   </div>
 </template>
 <script>
-  import StarScoreModal from "@/components/common/StarScoreModal.vue";
+  import StarScoreModal from "@/components/lecture_detail/StarScoreModal.vue";
   import CommentWrap from "@/components/lecture_detail/CommentWrap";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import StarRating from "vue-star-rating";
   import ProgressBar from "@/components/common/ProgressBar.vue";
-  import mixin from "@/components/mixins/lec_course_detail.js";
+  import mixin from "@/views/mixins/lec_course_detail.js";
   import { mapState, mapMutations } from "vuex";
-
   export default {
     mixins: [mixin],
-
     components: {
       StarScoreModal,
       BlueBtn,
@@ -318,24 +316,15 @@
           action: "get_course_info",
           course_id: this.$route.query.id,
         };
-        console.log(data);
         await this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
-            console.log("강의상세:", result.data.data);
             this.detail = result.data.data;
           });
       },
     },
     mounted() {
       this.$EventBus.$on("commentReload", () => {
-        console.log("리로드 왔다");
         this.getLectureDetail();
       });
     },

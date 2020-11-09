@@ -1,6 +1,6 @@
 <template>
   <section class="timeLine">
-    <h2>타임라인</h2>
+    <h2 class="title">타임라인</h2>
     <Slide :swiper_option="slide_option.timeline">
       <swiper-slide
         slot="list"
@@ -63,13 +63,7 @@
           current: num,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(obj))
           .then((result) => {
             this.timeline_list = result.data.data;
             this.current = num;
@@ -84,7 +78,7 @@
 <style scoped lang="scss">
   .timeLine {
     margin-top: 20px;
-    h2 {
+    .title {
       font-size: 2rem;
     }
     .timeline_txt {

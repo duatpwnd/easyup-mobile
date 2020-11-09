@@ -223,24 +223,13 @@
           action: "delete_review",
           review_id: index,
         };
-        console.log("삭제:", obj);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(obj))
           .then((result) => {
             console.log("댓글삭제", result);
             if (result.data.error != true) {
               this.$noticeMessage(result.data.data.msg);
-
               this.$EventBus.$emit("commentReload", true);
-            } else {
-              console.log("토큰없당");
-              this.$logOut();
             }
           });
       },
@@ -253,13 +242,7 @@
           contents: this.contents.trim(),
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
             console.log("답글등록", result);
             if (result.data.error != true) {
@@ -267,9 +250,6 @@
 
               this.toggleOff();
               this.getCommentList();
-            } else {
-              console.log("토큰없당");
-              this.$logOut();
             }
           });
 
@@ -284,49 +264,29 @@
         };
         console.log("수정:", obj);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(obj))
           .then((result) => {
-            console.log("수정등록", result);
             if (result.data.error != true) {
               this.$noticeMessage(result.data.data.msg);
               this.toggleOff();
               this.getCommentList();
-            } else {
-              console.log("토큰없당");
-              this.$logOut();
             }
           });
       },
       // 답글 삭제
       reply_comment_del(index) {
-        console.log(index);
         const obj = {
           action: "delete_comment",
           review_comment_id: index,
         };
-        console.log("삭제:", obj);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(obj))
           .then((result) => {
-            console.log("삭제완료", result);
             this.getCommentList();
           });
       },
       write_cancel() {
         this.editor = -1;
-        // this.write_btn = true;
       },
       // 각별점 개수 필터링
       scoreCount(result) {
@@ -352,11 +312,9 @@
       // 강의평가 조회
       getCommentList() {
         const data = this.action;
-        console.log(data);
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
-            console.log("댓글조회", result.data.data);
             this.comment = result.data.data;
             const score = {
               total: result.data.data.length,
@@ -374,7 +332,6 @@
     },
     mounted() {
       this.$EventBus.$on("commentReload", () => {
-        console.log("리로드 왔다");
         this.getCommentList();
       });
     },

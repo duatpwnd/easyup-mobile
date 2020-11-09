@@ -170,25 +170,17 @@
           lp_id: this.$route.query.lp_id,
           idx: this.$store.state.playerStore.current_index,
         };
-        this.$axios
-          .post(this.$ApiUrl.main_list, data, {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
-          .then((result) => {
-            if (result.data != "") {
-              // 자막파일이 있는경우
-              this.srtParsing(result.data);
-              this.is_srt = true;
-            } else {
-              // 자막파일이 없는경우
-              this.srtParsing([]);
-              this.is_srt = false;
-            }
-          });
+        this.$axios.post(this.$ApiUrl.main_list, data).then((result) => {
+          if (result.data != "") {
+            // 자막파일이 있는경우
+            this.srtParsing(result.data);
+            this.is_srt = true;
+          } else {
+            // 자막파일이 없는경우
+            this.srtParsing([]);
+            this.is_srt = false;
+          }
+        });
       },
     },
     mounted() {},

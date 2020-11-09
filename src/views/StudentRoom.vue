@@ -1,7 +1,15 @@
 <template>
   <div id="my_lecture" v-if="dashboard_list">
     <UserInfo v-if="top_count">
-      <span slot="isTeacher" class="class">님의강의실</span>
+      <span slot="user_name" class="name"
+        >{{ userStore_userinfo.info.username }}
+      </span>
+      <p slot="user_email" class="email">
+        {{ userStore_userinfo.info.email }}
+      </p>
+      <p class="update_date" slot="update_date">
+        최근 접속일: {{ userStore_userinfo.info.last_login }}
+      </p>
       <template slot="info">
         <li>
           <h3>진행중인 강의</h3>
@@ -27,8 +35,9 @@
         </li>
       </template>
 
-      <span slot="convert" @click="convert()" class="convert">강사전환</span>
+      <!-- <span slot="convert" @click="convert()" class="convert">강사전환</span> -->
     </UserInfo>
+
     <div class="contents">
       <h2>현재 구독중인 강의</h2>
       <List
@@ -66,7 +75,7 @@
         </span>
         <span slot="right" class="td td2">{{ list.expired_on }}</span>
       </List>
-      <h2>과제 게시판</h2>
+      <!-- <h2>과제 게시판</h2>
       <List
         class="board_list"
         v-for="(list, index) in dashboard_list.publication"
@@ -79,7 +88,7 @@
           <span class="td td2">{{ list.expires_on }}</span>
           <span class="td td3">{{ list.sent_date.split(" ")[0] }}</span>
         </template>
-      </List>
+      </List> -->
 
       <h2>공지사항</h2>
       <List
@@ -102,12 +111,19 @@
   import List from "@/components/my_lecture_room/list.vue";
   import UserInfo from "@/components/my_lecture_room/user_info.vue";
   import ProgressBar from "@/components/common/ProgressBar.vue";
+  import { mapState, mapMutations } from "vuex";
+
   export default {
     components: {
       TimeLine,
       ProgressBar,
       List,
       UserInfo,
+    },
+    computed: {
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
     },
     data() {
       return {
@@ -125,13 +141,7 @@
           action: action,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(obj))
           .then((result) => {
             console.log(result);
             if (action == "get_top_count") {

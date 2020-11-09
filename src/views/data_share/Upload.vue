@@ -72,27 +72,19 @@
         formData.append("recipients", this.shared_recipients);
         formData.append("file", this.file_obj);
 
-        this.$axios
-          .post(this.$ApiUrl.main_list, formData, {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
-          .then((result) => {
-            console.log(result);
-            if (result.data.data.length == 1) {
-              this.$router.push({
-                path: "/dataShare",
-                query: {
-                  keyword: "",
-                  pageCurrent: 1,
-                  order: "all",
-                },
-              });
-            }
-          });
+        this.$axios.post(this.$ApiUrl.main_list, formData).then((result) => {
+          console.log(result);
+          if (result.data.data.length == 1) {
+            this.$router.push({
+              path: "/dataShare",
+              query: {
+                keyword: "",
+                pageCurrent: 1,
+                order: "all",
+              },
+            });
+          }
+        });
       },
       targetSelect() {
         const data = {
@@ -100,13 +92,7 @@
           code: this.selected,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
             console.log("공유받은사람:", result);
             this.share_list = result.data.data;
@@ -117,13 +103,7 @@
           action: "get_dropbox_course_select",
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
             console.log(result);
             this.select_list = result.data.data;

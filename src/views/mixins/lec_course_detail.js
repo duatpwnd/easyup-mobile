@@ -12,13 +12,7 @@ let detail = {
       }
       console.log(data);
       this.$axios
-        .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-          headers: {
-            Authorization: this.$cookies.get("user_info")
-              ? "Bearer " + this.$cookies.get("user_info").access_token
-              : null,
-          },
-        })
+        .post(this.$ApiUrl.main_list, JSON.stringify(data))
         .then((result) => {
           console.log("구독하기 성공 실패?", result);
           this.isSubscribe();
@@ -36,13 +30,7 @@ let detail = {
       }
       console.log(data);
       await this.$axios
-        .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-          headers: {
-            Authorization: this.$cookies.get("user_info")
-              ? "Bearer " + this.$cookies.get("user_info").access_token
-              : null,
-          },
-        })
+        .post(this.$ApiUrl.main_list, JSON.stringify(data))
         .then((result) => {
           console.log("구독여부", result);
           if (result.data.error != true) {

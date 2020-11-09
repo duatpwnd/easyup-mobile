@@ -69,7 +69,6 @@
     },
     methods: {
       getList(num, keyword) {
-        console.log(num, keyword);
         const data = {
           action: "get_cs_list", //필수
           current: num, //필수
@@ -77,9 +76,8 @@
           keyword: keyword, //옵션
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {})
+          .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
-            console.log("공지사항", result.data.data);
             this.$router
               .push({
                 query: {

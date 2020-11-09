@@ -46,13 +46,7 @@
           course_id: this.$route.query.c_id,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
             this.view = result.data.data;
           });

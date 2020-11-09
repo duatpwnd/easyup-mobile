@@ -138,7 +138,6 @@
           this.$axios
             .post(this.$ApiUrl.main_list, JSON.stringify(data))
             .then((result) => {
-              console.log(result);
               if (result.data.error) {
                 this.$noticeMessage(result.data.message);
               } else {

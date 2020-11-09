@@ -90,13 +90,7 @@
         };
         console.log(data);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
             console.log("댓글등록", result);
             if (result.data.error != true) {
@@ -114,13 +108,7 @@
           id: id,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
             console.log("기술블로그읽기", result.data.data);
             this.list = result.data.data;

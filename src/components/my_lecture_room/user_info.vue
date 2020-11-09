@@ -9,17 +9,22 @@
         />
       </span>
       <div class="info">
-        <span class="name">강동원</span>
-        <slot name="isTeacher">
-          <span class="class">강사님의 강의실</span>
+        <slot name="user_name">
+          <span class="name">강동원</span>
         </slot>
-        <p class="email">duatpwnd1@naver.com</p>
-
-        <slot name="convert">
+        <span class="class">님의 강의실</span>
+        <slot name="user_email">
+          <p class="email">duatpwnd1@naver.com</p>
+        </slot>
+        <!-- <slot name="convert">
           <span class="report">리포트</span>
           <span class="convert" @click="convert()">학생전환</span>
+        </slot> -->
+        <slot name="update_date">
+          <p class="update_date">
+            2019년 8월 29일(업데이트일자:2019년 9월 1일)
+          </p>
         </slot>
-        <p class="update_date">2019년 8월 29일(업데이트일자:2019년 9월 1일)</p>
       </div>
     </div>
     <ul class="course_info">

@@ -34,6 +34,7 @@
         코스
       </button>
       <button
+        v-if="env == 'development'"
         class="lnb"
         @click="
           $router.push({
@@ -159,6 +160,7 @@
       return {
         userid: "",
         userpw: "",
+        env: "",
       };
     },
     computed: {
@@ -183,7 +185,9 @@
         this.$EventBus.$emit("GoToLecture", true);
       },
     },
-    mounted() {},
+    mounted() {
+      this.env = process.env.NODE_ENV;
+    },
   };
 </script>
 <style scoped lang="scss">

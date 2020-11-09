@@ -138,13 +138,7 @@
         };
         console.log(data);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
             console.log("유니잡", result);
             this.$router
@@ -187,11 +181,6 @@
       },
     },
     created() {
-      console.log(
-        this.$route.name,
-        this.$route.query.pageCurrent,
-        this.$route.query.keyword
-      );
       this.getList(
         this.$route.name,
         this.$route.query.pageCurrent,

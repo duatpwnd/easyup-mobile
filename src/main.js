@@ -9,6 +9,7 @@ import CKEditor from "ckeditor4-vue";
 import VueCookies from "vue-cookies";
 import ApiUrl from "@/assets/js/api_url.js";
 import GlobalPlugin from "@/plugin/global_plugin.js";
+Vue.prototype.$EventBus = new Vue();
 Vue.use(VueCookies);
 Vue.use(GlobalPlugin);
 import axios from "axios";
@@ -18,35 +19,24 @@ if (process.env.NODE_ENV == "development") {
   axios.defaults.baseURL = "http://develop.hell0world.net";
   ApiUrl.main_list = "http://develop.hell0world.net/main/mobileAPI/v1.php";
 }
-axios.interceptors.request.use(
-  (config) => {
-    return config;
-  },
-  (error) => {
-    console.log(error);
+axios.interceptors.request.use((config) => {
+  if ($cookies.get("user_info") != null) {
+    config.headers.Authorization =
+      "Bearer " + $cookies.get("user_info").access_token;
   }
-);
-
-let error_queue = false;
-axios.interceptors.response.use(
-  (response) => {
-    if (response.data.type == "token") {
-      if (error_queue) {
-        console.log("토큰없음★", router.currentRoute.fullPath);
-        Vue.noticeMessage("로그인을 해주세요.");
-        Vue.logOut();
-      }
-      error_queue = true;
-    }
-    return response;
-  },
-  (error) => {
-    return Promise.reject(error);
+  return config;
+});
+axios.interceptors.response.use((response) => {
+  if (response.data.type == "token") {
+    // 토큰이없을경우 마지막 url 기억
+    store.commit("userStore/referer", router.currentRoute.fullPath);
+    Vue.noticeMessage("로그인을 해주세요.");
+    Vue.logOut();
   }
-);
+  return response;
+});
 import Fragment from "vue-fragment";
 Vue.use(Fragment.Plugin);
-Vue.prototype.$EventBus = new Vue();
 Vue.prototype.$ApiUrl = ApiUrl;
 Vue.prototype.$axios = axios;
 Vue.use(CKEditor);

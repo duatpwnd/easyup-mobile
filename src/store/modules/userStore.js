@@ -5,6 +5,7 @@ const userStore = {
       access_token: null,
       info: "",
     },
+    referer: "",
   },
   getters: {
     isToken(state) {
@@ -14,6 +15,9 @@ const userStore = {
   mutations: {
     loginToken(state, param) {
       state.userinfo = param;
+    },
+    referer(state, param) {
+      state.referer = param;
     },
   },
 };

@@ -233,7 +233,7 @@
   import ProgressBar from "@/components/common/ProgressBar.vue";
   import CourseItem from "@/components/common/LectureItem.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import mixin from "@/components/mixins/lec_course_detail.js";
+  import mixin from "@/views/mixins/lec_course_detail.js";
   import { mapState, mapMutations } from "vuex";
   export default {
     mixins: [mixin],
@@ -273,13 +273,7 @@
           session_id: this.$route.query.id,
         };
         await this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
+          .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
             console.log("코스상세:", result.data.data);
             this.detail = result.data.data;

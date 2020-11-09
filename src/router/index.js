@@ -363,11 +363,6 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   duplicateNavigationPolicy: "ignore",
   routes,
-  scrollBehavior(to, from, savedPosition) {
-    // 원하는 위치로 돌아가기
-    console.log(window);
-    window.scrollTo(0, 0);
-  },
 });
 
 router.beforeEach(async (to, from, next) => {

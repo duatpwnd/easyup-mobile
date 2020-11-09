@@ -3,18 +3,18 @@ import store from "@/store/index.js";
 import { router } from "@/router/index.js";
 export default {
   install(Vue, options) {
-    // 1. 전역 메소드 또는 속성 추가
     Vue.noticeMessage = (msg) => {
       store.commit("toggleStore/Toggle", {
         notice_modal: true,
       });
       store.commit("toggleStore/noticeMessage", msg);
     };
-    Vue.logOut = (msg) => {
+    // 전역수준의 로그아웃 (토큰이없을경우 인터셉터로 마지막 url 기억해주고 로그아웃시키기)
+    Vue.logOut = () => {
       router.push({
         path: "/",
         query: {
-          referer: router.currentRoute.fullPath,
+          referer: store.state.userStore.referer,
         },
       });
       VueCookies.remove("user_info");
@@ -26,15 +26,12 @@ export default {
 
     Vue.directive("my-directive", {
       bind(el, binding, vnode, oldVnode) {
-        console.log(el, binding, vnode, oldVnode);
         el.style.color = "red";
       },
     });
-
     Vue.mixin({
       created: function() {},
     });
-
     // 경고 메시지
     Vue.prototype.$noticeMessage = (msg) => {
       store.commit("toggleStore/Toggle", {

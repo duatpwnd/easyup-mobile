@@ -32,7 +32,6 @@ const toggle = {
       state.score_info = obj;
     },
     Toggle(state, obj) {
-      console.log(obj);
       Object.keys(obj).forEach((el, index) => {
         state[el] = Object.values(obj)[index];
       });
