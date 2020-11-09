@@ -8,8 +8,9 @@ import VueMq from "vue-mq";
 import CKEditor from "ckeditor4-vue";
 import VueCookies from "vue-cookies";
 import ApiUrl from "@/assets/js/api_url.js";
-
+import GlobalPlugin from "@/plugin/global_plugin.js";
 Vue.use(VueCookies);
+Vue.use(GlobalPlugin);
 import axios from "axios";
 // NODE_ENV = '앱실행모드'
 console.log("앱실행모드:", process.env.NODE_ENV);
@@ -32,22 +33,19 @@ axios.interceptors.response.use(
     if (response.data.type == "token") {
       if (error_queue) {
         console.log("토큰없음★", router.currentRoute.fullPath);
-        Util.default.noticeMessage("로그인을 해주세요.");
-        Util.default.logOut();
+        Vue.noticeMessage("로그인을 해주세요.");
+        Vue.logOut();
       }
       error_queue = true;
     }
     return response;
   },
   (error) => {
-    console.log("에러일 경우", error.config);
     return Promise.reject(error);
   }
 );
 import Fragment from "vue-fragment";
-import * as Util from "@/assets/js/util.js";
 Vue.use(Fragment.Plugin);
-Vue.prototype.$Util = Util;
 Vue.prototype.$EventBus = new Vue();
 Vue.prototype.$ApiUrl = ApiUrl;
 Vue.prototype.$axios = axios;

@@ -133,16 +133,14 @@
           userpw: this.userpw,
         };
         if (this.userid.trim().length == 0 || this.userpw.trim().length == 0) {
-          this.$Util.default.noticeMessage(
-            "아이디 또는 비밀번호를 입력해주세요"
-          );
+          this.$noticeMessage("아이디 또는 비밀번호를 입력해주세요");
         } else {
           this.$axios
             .post(this.$ApiUrl.main_list, JSON.stringify(data))
             .then((result) => {
               console.log(result);
               if (result.data.error) {
-                this.$Util.default.noticeMessage(result.data.message);
+                this.$noticeMessage(result.data.message);
               } else {
                 this.$cookies.set("user_info", result.data.data[0]);
                 this.$store.commit("userStore/loginToken", result.data.data[0]);

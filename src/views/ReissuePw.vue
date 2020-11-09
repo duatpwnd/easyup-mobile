@@ -76,11 +76,11 @@
         };
         console.log(data);
         if (this.pw1.trim().length == 0) {
-          this.$Util.default.noticeMessage("비밀번호를 입력해주세요.");
+          this.$noticeMessage("비밀번호를 입력해주세요.");
         } else if (this.pw2.trim().length == 0) {
-          this.$Util.default.noticeMessage("비밀번호 확인을 입력해주세요.");
+          this.$noticeMessage("비밀번호 확인을 입력해주세요.");
         } else if (this.pw1 != this.pw2) {
-          this.$Util.default.noticeMessage("비밀번호가 일치하지 않습니다.");
+          this.$noticeMessage("비밀번호가 일치하지 않습니다.");
         } else {
           this.$axios
             .post(this.$ApiUrl.main_list, JSON.stringify(data), {
@@ -92,9 +92,7 @@
             })
             .then((result) => {
               console.log("비밀번호 변경", result);
-              this.$Util.default.noticeMessage(
-                "비밀번호 변경이 완료 되었습니다."
-              );
+              this.$noticeMessage("비밀번호 변경이 완료 되었습니다.");
               this.$router.push("/");
             });
         }
@@ -115,7 +113,7 @@
           .then((result) => {
             console.log("토큰", result);
             if (result.data.error) {
-              this.$Util.default.noticeMessage(result.data.message);
+              this.$noticeMessage(result.data.message);
               this.$router.push("/lostPassword");
             } else {
               this.time = result.data.data.remain_time;

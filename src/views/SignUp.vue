@@ -325,19 +325,19 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
       validationCheck() {
         return new Promise((resolve, reject) => {
           if (this.lastname.trim().length == 0) {
-            this.$Util.default.noticeMessage("성을 입력하세요");
+            this.$noticeMessage("성을 입력하세요");
           } else if (this.firstname.trim().length == 0) {
-            this.$Util.default.noticeMessage("이름을 입력하세요");
+            this.$noticeMessage("이름을 입력하세요");
           } else if (this.email.trim().length == 0) {
-            this.$Util.default.noticeMessage("이메일을 입력하세요");
+            this.$noticeMessage("이메일을 입력하세요");
           } else if (this.pw1.trim().length == 0) {
-            this.$Util.default.noticeMessage("비밀번호를 입력하세요");
+            this.$noticeMessage("비밀번호를 입력하세요");
           } else if (this.pw2.trim().length == 0) {
-            this.$Util.default.noticeMessage("비밀번호확인을 입력하세요");
+            this.$noticeMessage("비밀번호확인을 입력하세요");
           } else if (this.pw1.trim() != this.pw2.trim()) {
-            this.$Util.default.noticeMessage("비밀번호가 서로 다릅니다");
+            this.$noticeMessage("비밀번호가 서로 다릅니다");
           } else if (this.agree == false) {
-            this.$Util.default.noticeMessage("약관 내용에 동의 해주세요");
+            this.$noticeMessage("약관 내용에 동의 해주세요");
           } else {
             resolve("success");
           }
@@ -360,7 +360,7 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
               .then((result) => {
                 console.log(result);
                 if (result.data.error) {
-                  this.$Util.default.noticeMessage(result.data.message);
+                  this.$noticeMessage(result.data.message);
                 } else {
                   this.$router.push("/signupComplete").catch(() => {});
                 }

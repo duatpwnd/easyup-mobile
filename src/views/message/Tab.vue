@@ -155,9 +155,9 @@
       },
       confirm() {
         if (this.checked_list.length == 0) {
-          this.$Util.default.noticeMessage("삭제할 메시지를 선택해주세요.");
+          this.$noticeMessage("삭제할 메시지를 선택해주세요.");
         } else {
-          this.$Util.default.confirmMessage("삭제하시겠습니까?");
+          this.$confirmMessage("삭제하시겠습니까?");
         }
       },
       deleteMessage(type) {

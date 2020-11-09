@@ -172,7 +172,7 @@
     methods: {
       logout() {
         console.log("로그아웃호출");
-        this.$Util.default.logOut();
+        this.$logOut();
       },
       goToPath(url, obj) {
         this.$router.push(url).catch(() => {});

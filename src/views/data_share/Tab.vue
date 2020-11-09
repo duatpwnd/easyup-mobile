@@ -204,7 +204,7 @@
           })
           .then((result) => {
             console.log(result);
-            this.$Util.default.noticeMessage(result.data.data[0]);
+            this.$noticeMessage(result.data.data[0]);
             this.allCheck = false;
             this.getDropBoxList(
               this.$route.meta.type,

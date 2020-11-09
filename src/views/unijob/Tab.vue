@@ -173,7 +173,7 @@
             })
             .catch(() => {});
         } else {
-          this.$Util.default.noticeMessage("해당 글을 조회 할 수 없습니다.");
+          this.$noticeMessage("해당 글을 조회 할 수 없습니다.");
         }
       },
     },

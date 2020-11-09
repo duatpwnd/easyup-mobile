@@ -11,9 +11,9 @@
             @click="
               $store.commit('playerStore/playerState', {
                 check_time:
-                  $Util.default.hms_to_s(info.check_point) == 0
+                  $hms_to_s(info.check_point) == 0
                     ? 1
-                    : $Util.default.hms_to_s(info.check_point),
+                    : $hms_to_s(info.check_point),
               });
               $router.push({
                 path: '/play',
@@ -122,7 +122,7 @@
           .then((result) => {
             console.log(result.data);
             this.info = result.data.data.info;
-            this.info.check_point = this.$Util.default.getTimeStringSeconds(
+            this.info.check_point = this.$getTimeStringSeconds(
               this.info.check_point
             );
           });

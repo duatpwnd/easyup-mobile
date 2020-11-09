@@ -36,7 +36,7 @@
 
     methods: {
       goToPlayer(id, check_point) {
-        const check = this.$Util.default.hms_to_s(check_point);
+        const check = this.$hms_to_s(check_point);
         this.$store.commit("playerStore/playerState", {
           check_time: check == 0 ? 1 : check,
         });
@@ -85,9 +85,7 @@
               return a.check_point - b.check_point;
             });
             this.list.map((el, index) => {
-              el.check_point = this.$Util.default.getTimeStringSeconds(
-                el.check_point
-              );
+              el.check_point = this.$getTimeStringSeconds(el.check_point);
             });
           });
       },

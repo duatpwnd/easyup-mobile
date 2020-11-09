@@ -138,7 +138,7 @@
           });
       },
       confirm() {
-        this.$Util.default.confirmMessage("삭제하시겠습니까?");
+        this.$confirmMessage("삭제하시겠습니까?");
       },
       deleteUnijob() {
         const data = {

@@ -106,7 +106,7 @@
       validationCheck() {
         return new Promise((resolve, reject) => {
           if (this.new_password != this.new_password_confirm) {
-            this.$Util.default.noticeMessage("비밀 번호가 서로 다릅니다.");
+            this.$noticeMessage("비밀 번호가 서로 다릅니다.");
           } else {
             resolve("success");
           }
@@ -144,16 +144,14 @@
               .then((result) => {
                 console.log(result);
                 if (result.data.error) {
-                  this.$Util.default.noticeMessage(result.data.message);
+                  this.$noticeMessage(result.data.message);
                 } else {
                   // this.$cookies.set("user_info", result.data.data[0]);
                   // this.$store.commit(
                   //   "userStore/loginToken",
                   //   result.data.data[0]
                   // );
-                  this.$Util.default.noticeMessage(
-                    "새 프로필이 저장되었습니다."
-                  );
+                  this.$noticeMessage("새 프로필이 저장되었습니다.");
                 }
               });
           }

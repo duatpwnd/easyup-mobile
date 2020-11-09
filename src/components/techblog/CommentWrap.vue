@@ -223,7 +223,7 @@
               this.$EventBus.$emit("techblog_list_reload", true);
             } else {
               console.log("토큰없당");
-              this.$Util.default.logOut();
+              this.$logOut();
             }
           });
       },
@@ -249,7 +249,7 @@
               this.toggleOff();
             } else {
               console.log("토큰없당");
-              this.$Util.default.logOut();
+              this.$logOut();
             }
           });
       },

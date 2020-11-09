@@ -104,7 +104,7 @@
               this.write_cancel();
             } else {
               console.log("토큰없당");
-              this.$Util.default.logOut();
+              this.$logOut();
             }
           });
       },

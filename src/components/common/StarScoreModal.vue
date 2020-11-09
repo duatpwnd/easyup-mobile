@@ -122,7 +122,7 @@
           .then((result) => {
             console.log("수정완료", result);
             if (result.data.error != true) {
-              this.$Util.default.noticeMessage(result.data.data.msg);
+              this.$noticeMessage(result.data.data.msg);
               this.$EventBus.$emit("commentReload", true);
               this.cancel();
             }
@@ -138,7 +138,7 @@
           type: "course",
         };
         if (data.star == 0) {
-          this.$Util.default.noticeMessage("점수를 선택해주세요.");
+          this.$noticeMessage("점수를 선택해주세요.");
         } else {
           this.$axios
             .post(this.$ApiUrl.main_list, JSON.stringify(data), {
@@ -151,7 +151,7 @@
             .then((result) => {
               console.log("댓글등록", result);
               if (result.data.error != true) {
-                this.$Util.default.noticeMessage(result.data.data.msg);
+                this.$noticeMessage(result.data.data.msg);
 
                 this.$EventBus.$emit("commentReload", true);
                 this.cancel();

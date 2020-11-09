@@ -102,9 +102,9 @@
       validationCheck() {
         return new Promise((resolve, reject) => {
           if (this.name.trim().length == 0) {
-            this.$Util.default.noticeMessage("이름을 입력하세요");
+            this.$noticeMessage("이름을 입력하세요");
           } else if (this.email.trim().length == 0) {
-            this.$Util.default.noticeMessage("이메일을 입력하세요");
+            this.$noticeMessage("이메일을 입력하세요");
           } else {
             resolve("success");
           }
@@ -141,7 +141,7 @@
               })
               .then((result) => {
                 console.log(result);
-                this.$Util.default.noticeMessage(result.data.data[0]);
+                this.$noticeMessage(result.data.data[0]);
               });
           }
         });

@@ -235,12 +235,12 @@
           .then((result) => {
             console.log("댓글삭제", result);
             if (result.data.error != true) {
-              this.$Util.default.noticeMessage(result.data.data.msg);
+              this.$noticeMessage(result.data.data.msg);
 
               this.$EventBus.$emit("commentReload", true);
             } else {
               console.log("토큰없당");
-              this.$Util.default.logOut();
+              this.$logOut();
             }
           });
       },
@@ -263,13 +263,13 @@
           .then((result) => {
             console.log("답글등록", result);
             if (result.data.error != true) {
-              this.$Util.default.noticeMessage(result.data.data.msg);
+              this.$noticeMessage(result.data.data.msg);
 
               this.toggleOff();
               this.getCommentList();
             } else {
               console.log("토큰없당");
-              this.$Util.default.logOut();
+              this.$logOut();
             }
           });
 
@@ -294,12 +294,12 @@
           .then((result) => {
             console.log("수정등록", result);
             if (result.data.error != true) {
-              this.$Util.default.noticeMessage(result.data.data.msg);
+              this.$noticeMessage(result.data.data.msg);
               this.toggleOff();
               this.getCommentList();
             } else {
               console.log("토큰없당");
-              this.$Util.default.logOut();
+              this.$logOut();
             }
           });
       },

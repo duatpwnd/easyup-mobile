@@ -40,7 +40,7 @@
           email: this.email,
         };
         if (this.email.trim().length == 0) {
-          this.$Util.default.noticeMessage("이메일 주소를 입력해주세요.");
+          this.$noticeMessage("이메일 주소를 입력해주세요.");
         } else {
           this.$axios
             .post(this.$ApiUrl.main_list, JSON.stringify(data), {
@@ -52,7 +52,7 @@
             })
             .then((result) => {
               console.log("이메일", result);
-              this.$Util.default.noticeMessage(result.data.data.msg);
+              this.$noticeMessage(result.data.data.msg);
               this.$router.push("/");
             });
         }

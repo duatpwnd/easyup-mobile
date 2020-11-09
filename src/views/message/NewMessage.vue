@@ -209,9 +209,9 @@
       validationCheck() {
         return new Promise((resolve, reject) => {
           if (this.choice_list.length == 0) {
-            this.$Util.default.noticeMessage("받는분을 입력하세요");
+            this.$noticeMessage("받는분을 입력하세요");
           } else if (this.title.trim().length == 0) {
-            this.$Util.default.noticeMessage("제목을 입력하세요");
+            this.$noticeMessage("제목을 입력하세요");
           } else {
             resolve("success");
           }
