@@ -8,6 +8,7 @@ module.exports = {
     parser: "babel-eslint",
   },
   rules: {
+    "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-prototype-builtins": "off",
     "no-undef": "off",
     "no-redeclare": "off",
@@ -15,8 +16,7 @@ module.exports = {
     "no-unsafe-negation": "off",
     "no-irregular-whitespace": "off",
     "no-unused-vars": "off",
-    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "no-debugger": "off",
   },
   overrides: [
     {

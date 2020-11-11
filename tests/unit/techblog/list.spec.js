@@ -11,7 +11,7 @@ localVue.use(VueRouter);
 localVue.use(Vuex);
 localVue.use(VueAwesomeSwiper);
 
-describe("App", () => {
+describe.skip("App", () => {
   test("router push", async () => {
     const router = new VueRouter({
       base: process.env.BASE_URL,

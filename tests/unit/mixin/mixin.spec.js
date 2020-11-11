@@ -1,10 +1,8 @@
 import { shallowMount, mount, createLocalVue } from "@vue/test-utils";
 import mixin from "@/components/mixins/check_event.js";
-import TestComponent from "@/components/data_share/tab1.vue";
-// const localVue = createLocalVue();
-// localVue.use(mixin);
-describe("mixin", () => {
-  const wrapper = shallowMount(TestComponent, {
+import Tab from "@/views/data_share/Tab.vue";
+describe.skip("mixin", () => {
+  const wrapper = shallowMount(Tab, {
     mixins: [mixin],
   });
   test("all check event", () => {
@@ -12,7 +10,7 @@ describe("mixin", () => {
     wrapper.vm.all_check();
     expect(wrapper.vm.all_check).toHaveBeenCalled();
     if (wrapper.vm.allCheck) {
-      expect(wrapper.vm.checked_list).toBe(wrapper.vm.arr);
+      expect(wrapper.vm.checked_list).toBe(wrapper.vm.dataShare_list);
     } else {
       expect(wrapper.vm.checked_list).toStrictEqual([]);
     }
@@ -21,7 +19,7 @@ describe("mixin", () => {
     jest.spyOn(wrapper.vm, "partial_check");
     wrapper.vm.partial_check();
     expect(wrapper.vm.partial_check).toHaveBeenCalled();
-    if (wrapper.vm.arr.length != wrapper.vm.checked_list.length) {
+    if (wrapper.vm.dataShare_list.length != wrapper.vm.checked_list.length) {
       expect(wrapper.vm.allCheck).toBeFalsy();
     } else {
       expect(wrapper.vm.allCheck).toBeTruthy();
