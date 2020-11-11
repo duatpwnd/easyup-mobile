@@ -88,7 +88,6 @@
           linkType: linkType == undefined ? null : linkType,
           iid: id == undefined ? null : id,
         };
-        console.log(data);
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
@@ -127,7 +126,6 @@
       },
     },
     created() {
-      console.log(this.$route.query.linkType);
       if (this.$route.query.linkType != undefined) {
         this.getPlayInfo(this.$route.query.iid, "bookmark");
       } else {

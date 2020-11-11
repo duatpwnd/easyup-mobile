@@ -12,7 +12,7 @@ localVue.use(Vuex);
 localVue.use(VueAwesomeSwiper);
 
 describe.skip("App", () => {
-  test("router push", async () => {
+  test("router push", () => {
     const router = new VueRouter({
       base: process.env.BASE_URL,
       routes,
@@ -27,7 +27,7 @@ describe.skip("App", () => {
       router,
       store,
     });
-    await wrapper.vm.$nextTick();
+    wrapper.vm.$nextTick();
     expect(router.currentRoute.path).toBe("/techBlog/read");
   });
 });

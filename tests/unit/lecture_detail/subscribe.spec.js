@@ -1,7 +1,7 @@
 import { shallowMount, mount } from "@vue/test-utils";
 import SubsCribe from "@/components/lecture_detail/Subscribe.vue";
 
-describe("SubsCribe.vue", () => {
+describe.skip("SubsCribe.vue", () => {
   test("스크롤시 구독하기 버튼 나타나기", () => {
     const wrapper = shallowMount(SubsCribe);
     jest.spyOn(wrapper.vm, "subscribe_btn_toggle");
