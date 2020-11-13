@@ -12,7 +12,7 @@
     <div id="tag_wrap">
       <slot name="title_wrap">
         <h3 class="sub_title">{{ detail.category }}</h3>
-        <h2 class="title">{{ detail.title }}!</h2>
+        <h2 class="title">{{ detail.title }}</h2>
         <div class="tag_list">
           <router-link
             class="tag"
@@ -152,7 +152,9 @@
         <button class="subscribe_btn" v-if="is_subscribe">PLAY ▶</button>
         <button class="subscribe_btn" v-else>강의 구독</button>
 
-        <span class="total_lec">총 {{ detail.curriculum_list.count }}강</span>
+        <span class="total_lec"
+          >총 {{ detail.curriculum_list.count_detail }} 강</span
+        >
       </div>
       <ul
         class="curriculum_list"
@@ -160,17 +162,11 @@
         :key="index"
       >
         <li v-if="list.children_count != null">
-          <span class="lec_title">
-            {{ list.title }}
-          </span>
-          <span class="lec_num">
-            {{ list.children_count }}
-          </span>
+          <span class="lec_title" v-html="list.title"> </span>
+          <span class="lec_num"> {{ list.children_count }}강</span>
         </li>
         <li v-else>
-          <span class="lec_title else_lec_title">
-            {{ list.title }}
-          </span>
+          <span class="lec_title else_lec_title" v-html="list.title"> </span>
         </li>
       </ul>
     </div>
@@ -319,6 +315,7 @@
         await this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
+            console.log(result);
             this.detail = result.data.data;
           });
       },
