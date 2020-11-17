@@ -1,19 +1,28 @@
 <template>
   <div id="app" :class="$mq">
     <NoticeModal v-if="toggleStore_noticeModal"></NoticeModal>
-    <Header></Header>
+    <Header @click.native="$loginModalClose()"></Header>
     <transition name="fade" mode="out-in">
       <div class="router-view">
         <div v-if="toggleStore_loginModal">
           <LoginLnb v-if="userStore_userinfo.access_token"></LoginLnb>
           <LoginModal v-else></LoginModal>
         </div>
-        <router-view />
+        <router-view @click.native="$loginModalClose()" />
       </div>
     </transition>
-    <GnbBottomMenu v-if="toggleStore_gnbBottomMenu"></GnbBottomMenu>
-    <Footer v-if="toggleStore_isFooter"></Footer>
-    <ProfileMsgTab v-if="toggleStore_profileMsgTab"></ProfileMsgTab>
+    <GnbBottomMenu
+      @click.native="$loginModalClose()"
+      v-if="toggleStore_gnbBottomMenu"
+    ></GnbBottomMenu>
+    <Footer
+      @click.native="$loginModalClose()"
+      v-if="toggleStore_isFooter"
+    ></Footer>
+    <ProfileMsgTab
+      @click.native="$loginModalClose()"
+      v-if="toggleStore_profileMsgTab"
+    ></ProfileMsgTab>
   </div>
 </template>
 <script>
@@ -24,7 +33,6 @@
   import GnbBottomMenu from "@/components/layout/GnbBottomMenu.vue";
   import ProfileMsgTab from "@/components/layout/ProfileMsgTab.vue";
   import NoticeModal from "@/components/common/NoticeModal.vue";
-
   import { mapState, mapMutations } from "vuex";
   export default {
     components: {
@@ -50,6 +58,9 @@
     },
     data() {
       return {};
+    },
+    activated() {
+      console.log("acti");
     },
     methods: {},
     mounted() {

@@ -45,7 +45,19 @@
         v-for="(list, index) in dashboard_list.ing_course"
         :key="'lec' + index"
       >
-        <span class="td td1" slot="td1">
+        <span
+          class="td td1"
+          slot="td1"
+          @click="
+            $router.push({
+              path: '/play',
+              query: {
+                course_id: list.id,
+                lp_id: list.lp_id,
+              },
+            })
+          "
+        >
           {{ list.title }}
         </span>
         <template slot="right">
@@ -70,10 +82,29 @@
         v-for="(list, index) in dashboard_list.ing_session"
         :key="'course' + index"
       >
-        <span class="td td1" slot="td1">
+        <span
+          class="td td1"
+          slot="td1"
+          @click="
+            $router.push({
+              path: '/courseDetail',
+              query: { id: list.session_id },
+            })
+          "
+        >
           {{ list.session_name }}
         </span>
-        <span slot="right" class="td td2">{{ list.expired_on }}</span>
+        <span
+          slot="right"
+          class="td td2"
+          @click="
+            $router.push({
+              path: '/courseDetail',
+              query: { id: list.session_id },
+            })
+          "
+          >{{ list.expired_on }}</span
+        >
       </List>
       <!-- <h2>과제 게시판</h2>
       <List
@@ -95,12 +126,29 @@
         v-for="(list, index) in dashboard_list.announcement"
         :key="'notice' + index"
       >
-        <span class="td td1" slot="td1">
+        <span
+          class="td td1"
+          slot="td1"
+          @click="
+            $router.push({
+              path: '/notice/read',
+              query: { id: list.id, c_id: list.c_id },
+            })
+          "
+        >
           [{{ list.course_name }}]{{ list.title }}
         </span>
-        <span slot="right" class="td td2">{{
-          list.insert_date.split(" ")[0]
-        }}</span>
+        <span
+          slot="right"
+          @click="
+            $router.push({
+              path: '/notice/read',
+              query: { id: list.id, c_id: list.c_id },
+            })
+          "
+          class="td td2"
+          >{{ list.insert_date.split(" ")[0] }}</span
+        >
       </List>
       <TimeLine></TimeLine>
     </div>

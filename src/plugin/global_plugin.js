@@ -11,12 +11,14 @@ export default {
     };
     // 전역수준의 로그아웃 (토큰이없을경우 인터셉터로 마지막 url 기억해주고 로그아웃시키기)
     Vue.logOut = () => {
-      router.push({
-        path: "/",
-        query: {
-          referer: store.state.userStore.referer,
-        },
-      });
+      router
+        .push({
+          path: "/",
+          query: {
+            referer: store.state.userStore.referer,
+          },
+        })
+        .catch(() => {});
       VueCookies.remove("user_info");
       store.commit("userStore/loginToken", {
         access_token: null,
@@ -32,6 +34,12 @@ export default {
     Vue.mixin({
       created: function() {},
     });
+    // 로그인 모달 닫기
+    Vue.prototype.$loginModalClose = () => {
+      store.commit("toggleStore/Toggle", {
+        login_modal: false,
+      });
+    };
     // 경고 메시지
     Vue.prototype.$noticeMessage = (msg) => {
       store.commit("toggleStore/Toggle", {
@@ -65,12 +73,14 @@ export default {
     };
     // 로그아웃
     Vue.prototype.$logOut = () => {
-      router.push({
-        path: "/",
-        query: {
-          referer: router.currentRoute.fullPath,
-        },
-      });
+      router
+        .push({
+          path: "/",
+          query: {
+            referer: router.currentRoute.fullPath,
+          },
+        })
+        .catch(() => {});
       VueCookies.remove("user_info");
       store.commit("userStore/loginToken", {
         access_token: null,

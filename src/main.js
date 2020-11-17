@@ -32,13 +32,16 @@ if (process.env.NODE_ENV == "development") {
   axios.defaults.baseURL = "https://www.easyupclass.com";
   ApiUrl.main_list = "https://www.easyupclass.com/main/mobileAPI/v1.php";
 }
-axios.interceptors.request.use((config) => {
-  if ($cookies.get("user_info") != null) {
-    config.headers.Authorization =
-      "Bearer " + $cookies.get("user_info").access_token;
-  }
-  return config;
-});
+axios.interceptors.request.use(
+  (config) => {
+    if ($cookies.get("user_info") != null) {
+      config.headers.Authorization =
+        "Bearer " + $cookies.get("user_info").access_token;
+    }
+    return config;
+  },
+  (err) => {}
+);
 axios.interceptors.response.use((response) => {
   if (response.data.type == "token") {
     // 토큰이없을경우 마지막 url 기억

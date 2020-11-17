@@ -315,6 +315,7 @@
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
+            console.log(result.data.data);
             this.comment = result.data.data;
             const score = {
               total: result.data.data.length,

@@ -381,10 +381,10 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
               this.$axios
                 .post(this.$ApiUrl.main_list, JSON.stringify(data))
                 .then((result) => {
-                  console.log(result);
                   if (result.data.error) {
                     this.$noticeMessage(result.data.message);
                   } else {
+                    this.$EventBus.$emit("login from signUpComplete", data);
                     this.$router.push("/signupComplete").catch(() => {});
                   }
                 })

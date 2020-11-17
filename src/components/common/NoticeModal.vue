@@ -48,16 +48,12 @@
       background: white;
       max-width: 720px;
       width: 80%;
-      margin: 0 auto;
       padding: 10px;
       box-sizing: border-box;
-      height: 92px;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: auto;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       .contents {
         font-size: 16px;
         text-align: center;

@@ -1,6 +1,6 @@
 <template>
   <div id="nav">
-    <button class="easyup_menu_btn" @click="menu_toggle()">
+    <button class="easyup_menu_btn" @click.stop="menu_toggle()">
       <img src="@/assets/images/main/menu_btn.png" alt="메뉴" title="메뉴" />
     </button>
     <router-link to="/" class="easyup_logo">

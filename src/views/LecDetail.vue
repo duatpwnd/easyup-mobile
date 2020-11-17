@@ -149,7 +149,13 @@
     <div class="curriculum">
       <div class="curriculum_header">
         <h2 class="curriculum_title">커리큘럼</h2>
-        <button class="subscribe_btn" v-if="is_subscribe">PLAY ▶</button>
+        <button
+          class="subscribe_btn"
+          v-if="is_subscribe"
+          @click="video($route.query.id, detail.lp_id)"
+        >
+          PLAY ▶
+        </button>
         <button class="subscribe_btn" v-else>강의 구독</button>
 
         <span class="total_lec"
@@ -514,7 +520,7 @@
         }
         .lec_title {
           display: inline-block;
-          width: 85%;
+          width: 80%;
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;
         }
@@ -523,7 +529,7 @@
           border-radius: 100px;
         }
         .lec_num {
-          width: 13%;
+          width: 18%;
           border-top-left-radius: 0;
           border-bottom-left-radius: 0;
           margin-left: 2%;

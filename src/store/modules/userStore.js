@@ -17,7 +17,10 @@ const userStore = {
       state.userinfo = param;
     },
     referer(state, param) {
-      state.referer = param;
+      if (param.indexOf("referer") <= 0) {
+        console.log("마지막url:", param);
+        state.referer = param;
+      }
     },
   },
 };

@@ -153,17 +153,18 @@
                 }
               }
             })
-            .catch((err) => {
-              // console.log("에러");
-            });
+            .catch((err) => {});
         }
-
-        // this.$cookies.set("access_token", "111");
-        // this.$store.commit("userStore/loginToken", "111");
-        // this.$router.push("/").catch(() => {});
       },
     },
     mounted() {},
+    created() {
+      this.$EventBus.$on("login from signUpComplete", (result) => {
+        this.userid = result.email;
+        this.userpw = result.password;
+        this.login();
+      });
+    },
   };
 </script>
 <style scoped lang="scss">

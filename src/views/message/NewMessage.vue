@@ -320,15 +320,12 @@
           }
         }
         .selected_list {
-          &::after {
-            display: block;
-            content: "";
-            clear: both;
-          }
-          line-height: 30px;
           margin-top: 5px;
           .list {
-            float: left;
+            &:not(:first-child) {
+              margin-top: 5px;
+            }
+            display: block;
             .name {
               background-color: #e4e4e4;
               border: 1px solid #aaa;
@@ -336,6 +333,8 @@
               padding: 5px;
               border-radius: 4px;
               vertical-align: middle;
+              display: inline-block;
+              width: 85%;
             }
             .close_btn {
               margin-left: 5px;

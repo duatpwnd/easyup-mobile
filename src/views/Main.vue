@@ -6,7 +6,7 @@
         slot="list"
         v-for="(list, index) in list.banner"
         :key="index"
-        ><img :src="list.image_url"
+        ><img :src="list.image_url" @click="noticeRead(list.id)"
       /></swiper-slide>
     </Slide>
     <!-- 배너 :: E -->
@@ -32,7 +32,11 @@
                 },
               }"
             >
-              <img :src="list.image_url" alt="이지업" title="이지업" />
+              <img
+                :src="list.image_url"
+                :alt="list.title"
+                :title="list.title"
+              />
             </router-link>
             <h4 slot="teacher">{{ list.teachers }}</h4>
             <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
@@ -68,7 +72,6 @@
         ></swiper-slide>
       </Slide>
     </div>
-    <!-- <Test></Test> -->
     <!-- 인기코스 :: E -->
 
     <!-- 최신강의 ::  S -->
@@ -179,7 +182,6 @@
           }"
           >{{ list.recent_notice.title }}</router-link
         >
-        <!-- {{recent_notice}} -->
       </div>
     </div>
   </div>
@@ -188,11 +190,8 @@
   import LecItem from "@/components/common/LectureItem.vue";
   import CategoryLec from "@/components/main/MainCategory.vue";
   import Slide from "@/components/common/Slide.vue";
-
-  // import Test from "@/components/main/PopularCourse.vue";
   export default {
     components: {
-      // Test,
       Slide,
       LecItem,
       CategoryLec,
@@ -230,11 +229,21 @@
       };
     },
     methods: {
+      noticeRead(id) {
+        if (id != null) {
+          this.$router.push({
+            path: "/help/notice/read",
+            query: {
+              id: id,
+            },
+          });
+        }
+      },
       async getLectureList() {
         const data = {
           action: "main_page_list",
         };
-        this.$axios
+        await this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
             console.log(result);

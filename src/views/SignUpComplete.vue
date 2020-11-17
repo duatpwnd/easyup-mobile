@@ -2,7 +2,10 @@
   <div class="complete_msg">
     <h2 class="big_title">회원 가입 완료</h2>
     <div class="row2">
-      <h2><span class="name">윤계상</span> 님,</h2>
+      <h2>
+        <span class="name"> {{ userStore_userinfo.info.complete_name }} </span>
+        님,
+      </h2>
       <h2>회원 가입이 정상적으로 완료되었습니다.</h2>
     </div>
     <p class="row3">
@@ -10,23 +13,27 @@
       지금 바로 EASYUP 강좌를 시작해보세요!
     </p>
     <BlueBtn>
-      <button slot="blue_btn" @click="login()">로그인 하기</button>
+      <button slot="blue_btn" @click="goToPath()">메인으로 이동</button>
     </BlueBtn>
   </div>
 </template>
 <script>
   import BlueBtn from "@/components/common/BaseButton.vue";
+  import { mapState, mapMutations } from "vuex";
 
   export default {
     components: { BlueBtn },
+    computed: {
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
+    },
     data() {
       return {};
     },
     methods: {
-      login() {
-        this.$store.commit("toggleStore/Toggle", {
-          login_modal: !this.toggleStore_loginModal,
-        });
+      goToPath() {
+        this.$router.push("/");
       },
     },
   };

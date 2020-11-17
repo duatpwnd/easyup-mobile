@@ -26,13 +26,14 @@
         </div>
         <div class="row">
           <label for="email">이메일</label>
-          <input
+          <span class="email_column">{{ userStore_userinfo.info.email }}</span>
+          <!-- <input
             type="text"
             id="email"
             class="readonly"
             readonly
             :value="userStore_userinfo.info.email"
-          />
+          /> -->
         </div>
         <div class="row">
           <label>연락처</label>
@@ -179,11 +180,20 @@
         border: 0;
         outline: none;
       }
-
+      .email_column {
+        font-family: "NotoSansCJKkr-Regular";
+        font-size: 1.5rem;
+        white-space: pre-wrap;
+        display: inline-block;
+        width: 65%;
+        word-break: break-all;
+        vertical-align: middle;
+      }
       input[type="file"] {
         display: none;
       }
       input {
+        vertical-align: middle;
         font-size: 1.5rem;
         font-family: "NotoSansCJKkr-Regular";
         width: calc(100% - 35%);
@@ -204,6 +214,7 @@
 
       label {
         width: 35%;
+        vertical-align: middle;
         display: inline-block;
         font-size: 1.5rem;
         font-family: "NotoSansCJKkr-Regular";
