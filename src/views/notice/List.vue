@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="notice_list">
     <div class="search_area">
       <Search>
         <select slot="option" class="select" v-model="order">
@@ -23,7 +23,11 @@
     </div>
 
     <BoardTitle></BoardTitle>
+    <p v-if="notice_list.list.length == 0" class="no_result">
+      검색된 공지사항이 없습니다.
+    </p>
     <div
+      v-else
       class="list"
       @click="read(list.id, list.c_id)"
       v-for="(list, index) in notice_list.list"
@@ -138,5 +142,10 @@
     &:nth-child(even) {
       background: #f8f8f8;
     }
+  }
+  .no_result {
+    text-align: center;
+    font-size: 16px;
+    padding: 15px;
   }
 </style>

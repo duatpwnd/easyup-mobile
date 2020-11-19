@@ -40,7 +40,11 @@
 
     <div class="contents">
       <h2>현재 구독중인 강의</h2>
+      <span class="no_register" v-if="dashboard_list.ing_course.length == 0"
+        >진행중인 강의가 없습니다.</span
+      >
       <List
+        v-else
         class="subscribed_lec"
         v-for="(list, index) in dashboard_list.ing_course"
         :key="'lec' + index"
@@ -78,7 +82,11 @@
       </List>
 
       <h2>현재 구독중인 코스</h2>
+      <span class="no_register" v-if="dashboard_list.ing_session.length == 0"
+        >진행중인 코스가 없습니다.</span
+      >
       <List
+        v-else
         v-for="(list, index) in dashboard_list.ing_session"
         :key="'course' + index"
       >
@@ -122,7 +130,11 @@
       </List> -->
 
       <h2>공지사항</h2>
+      <span class="no_register" v-if="dashboard_list.announcement.length == 0"
+        >등록된 공지사항이 없습니다.</span
+      >
       <List
+        v-else
         v-for="(list, index) in dashboard_list.announcement"
         :key="'notice' + index"
       >
@@ -218,6 +230,11 @@
       &:not(:first-child) {
         margin-top: 20px;
       }
+    }
+    .no_register {
+      font-size: 14px;
+      margin-top: 3px;
+      display: inline-block;
     }
     .subscribed_lec {
       .td_wrap {

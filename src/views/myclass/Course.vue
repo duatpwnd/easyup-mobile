@@ -21,7 +21,10 @@
         ></button>
       </Search>
     </div>
-    <div class="section">
+    <div class="section" v-if="lec_course_list.list">
+      <p class="no_result" v-if="lec_course_list.list.length == 0">
+        진행중인 코스가 없습니다.
+      </p>
       <LectureCourseList
         v-for="(list, index) in lec_course_list.list"
         :key="index"
@@ -156,7 +159,11 @@
     padding: 4.445%;
     padding-bottom: 0;
     padding-top: 0;
-
+    .no_result {
+      text-align: center;
+      font-size: 16px;
+      padding-bottom: 15px;
+    }
     .video_wrap {
       margin-top: 10px;
     }

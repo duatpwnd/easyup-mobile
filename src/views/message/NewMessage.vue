@@ -160,6 +160,7 @@
       send() {
         this.validationCheck().then((result) => {
           if (result == "success") {
+            const formData = new FormData();
             const data = {
               action: "send_message",
               users: [],
@@ -171,9 +172,12 @@
               return el.id;
             });
             data.users = map;
+            for (var key in data) {
+              formData.append(key, data[key]);
+            }
             console.log(data);
             this.$axios
-              .post(this.$ApiUrl.main_list, data, {
+              .post(this.$ApiUrl.main_list, formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                   Authorization: this.$cookies.get("user_info")
@@ -183,14 +187,18 @@
               })
               .then((result) => {
                 console.log(result);
-                if (result.data.data.fail == 0) {
-                  this.$router.push({
-                    path: "/msg/receivedList",
-                    query: {
-                      pageCurrent: 1,
-                      keyword: "",
-                    },
-                  });
+                if (result.data.error != true) {
+                  if (result.data.data.fail == 0) {
+                    this.$router.push({
+                      path: "/msg/receivedList",
+                      query: {
+                        pageCurrent: 1,
+                        keyword: "",
+                      },
+                    });
+                  }
+                } else {
+                  this.$noticeMessage(result.data.message);
                 }
               });
           }

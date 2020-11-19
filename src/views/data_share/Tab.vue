@@ -1,5 +1,5 @@
 <template>
-  <div class="tab1">
+  <div class="tab1" v-if="datashare_list">
     <Search>
       <select slot="option" class="select" v-model="order">
         <option value="all">전체</option>
@@ -41,7 +41,11 @@
         <span>파일명</span>
       </template>
     </BoardTitle>
+    <p class="no_result" v-if="datashare_list.list.length == 0">
+      검색된 자료가 없습니다.
+    </p>
     <div
+      v-else
       class="file_list"
       v-for="(list, index) in datashare_list.list"
       :key="index"
@@ -264,6 +268,11 @@
   .tab1 {
     padding: 4.445%;
     padding-top: 0;
+    .no_result {
+      text-align: center;
+      padding: 15px;
+      font-size: 16px;
+    }
     .btn_wrap {
       &:after {
         display: block;

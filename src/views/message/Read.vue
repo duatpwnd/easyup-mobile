@@ -1,5 +1,5 @@
 <template>
-  <div class="read">
+  <div class="read" v-if="view">
     <ConfirmModal
       @ok="deleteMessage($route.name)"
       v-if="toggleStore_confirmModal"
@@ -9,9 +9,27 @@
       <span>{{ view.title }}</span>
     </div>
     <div class="contents">
-      {{ view.send_name }} to {{ view.receive_name }}
-      <div v-html="view.content"></div>
+      <span v-html="view.send_name" class="send"></span>
+      <span v-html="view.receive_name" class="receive"></span>
+      <div class="view" v-html="view.content.trim()"></div>
+      <div class="file" v-if="view.attachments.length > 0">
+        <ul v-for="(list, index) in view.attachments" :key="index">
+          <li class="file_list" @click="download(list.filename, list.id)">
+            <span class="attach"
+              ><span>{{ list.filename }}</span
+              ><span v-if="list.size >= 1073741824"
+                >({{ (list.size / 1073741824).toFixed(2) }}GB)</span
+              ><span v-else-if="list.size >= 1048576"
+                >({{ (list.size / 1048576).toFixed(2) }}MB)</span
+              ><span v-else-if="list.size >= 1024"
+                >({{ (list.size / 1024).toFixed(2) }}KB)</span
+              ><span v-else>({{ list.size }}B)</span></span
+            >
+          </li>
+        </ul>
+      </div>
     </div>
+
     <div class="button_wrap">
       <BlueBtn class="left_btn" v-if="$route.query.type == 'sent'">
         <button
@@ -73,6 +91,39 @@
       };
     },
     methods: {
+      download(filename, file_id) {
+        const data = {
+          action: "download_message_attach",
+          type: this.$route.query.type,
+          file_id: file_id,
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.main_list, data, {
+            responseType: "blob",
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log(result, filename);
+            // 로컬서버에서는 작동하지 않음
+            if (window.navigator.msSaveOrOpenBlob) {
+              // IE 10+
+              window.navigator.msSaveOrOpenBlob(result.data, filename);
+            } else {
+              // not IE
+              let link = document.createElement("a");
+              link.href = window.URL.createObjectURL(result.data);
+              link.target = "_self";
+              if (filename) link.download = filename;
+              link.click();
+              window.URL.revokeObjectURL(result.data);
+            }
+          });
+      },
       confirm() {
         this.$confirmMessage("삭제하시겠습니까?");
       },
@@ -98,6 +149,7 @@
         const data = {
           action: "get_message_info",
           id: this.$route.query.id,
+          type: this.$route.query.type,
         };
         console.log(data);
         this.$axios
@@ -136,6 +188,31 @@
       color: #666666;
       font-family: "NotoSansCJKkr-Regular";
       word-break: break-all;
+      .view {
+        margin: 5px 0;
+      }
+      .send,
+      .receive {
+        font-size: 14px;
+      }
+      .send {
+        &:after {
+          content: "to";
+          font-size: 14px;
+          margin: 0 4px;
+        }
+      }
+      .file {
+        .file_list {
+          .attach {
+            background: url("~@/assets/images/common/attach_file_ico.png")
+              no-repeat left / 19px 18px;
+            padding-left: 30px;
+            display: inline-block;
+            font-size: 14px;
+          }
+        }
+      }
     }
     .button_wrap {
       button {

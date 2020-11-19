@@ -32,10 +32,13 @@ if (process.env.NODE_ENV == "development") {
   axios.defaults.baseURL = "https://www.easyupclass.com";
   ApiUrl.main_list = "https://www.easyupclass.com/main/mobileAPI/v1.php";
 }
+// 개발서버인경우 Authorization 으로 들어가는데 실서버인경우 authorization으로 들어가있음.
 axios.interceptors.request.use(
   (config) => {
     if ($cookies.get("user_info") != null) {
       config.headers.Authorization =
+        "Bearer " + $cookies.get("user_info").access_token;
+      config.headers.common["Authorization"] =
         "Bearer " + $cookies.get("user_info").access_token;
     }
     return config;

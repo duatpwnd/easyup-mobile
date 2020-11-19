@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="bookmark_list">
     <div class="search_area">
       <Search>
         <select slot="option" class="select" v-model="order">
@@ -22,8 +22,13 @@
         ></button>
       </Search>
     </div>
+
     <BoardTitle></BoardTitle>
-    <div class="list">
+    <p class="no_result" v-if="bookmark_list.list.length == 0">
+      검색된 책갈피가 없습니다. 책갈피는 각 강의별 영상 화면에서 등록하실 수
+      있습니다.
+    </p>
+    <div class="list" v-else>
       <BoardList v-for="(list, index) in bookmark_list.list" :key="index">
         <template slot="top">
           <span class="td left_td">{{ list.course_name }}</span>
@@ -143,6 +148,11 @@
 <style scoped lang="scss">
   .search_area {
     margin: 3.5% 0;
+  }
+  .no_result {
+    text-align: center;
+    font-size: 16px;
+    padding: 15px;
   }
   .list {
     &:nth-child(even) {

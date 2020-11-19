@@ -12,11 +12,11 @@
         <span class="writer">{{ view.writer }}</span>
         <span class="wdate">{{ view.wdate }}</span>
       </div>
-      <div v-html="view.content"></div>
+      <div class="view" v-html="view.content.trim()"></div>
       <div class="file" v-if="view.attach != false">
         <ul v-for="(list, index) in view.attach" :key="index">
           <li class="file_list" @click="download(list.oname)">
-            {{ list.oname }}
+            <span class="attach">{{ list.oname }}</span>
           </li>
         </ul>
       </div>
@@ -122,6 +122,7 @@
             },
           })
           .then((result) => {
+            console.log(result);
             // 로컬서버에서는 작동하지 않음
             if (window.navigator.msSaveOrOpenBlob) {
               // IE 10+
@@ -204,11 +205,20 @@
           float: right;
         }
       }
+      .view {
+        margin: 5px 0;
+      }
     }
     .file {
       .file_list {
-        color: #999999;
-        font-size: 1.25rem;
+        .attach {
+          background: url("~@/assets/images/common/attach_file_ico.png")
+            no-repeat left / 17px 16px;
+          padding-left: 25px;
+          display: inline-block;
+          font-size: 14px;
+          color: #999999;
+        }
       }
     }
     .button_wrap {

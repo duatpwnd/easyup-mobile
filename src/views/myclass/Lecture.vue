@@ -22,8 +22,12 @@
       </Search>
     </div>
 
-    <div class="section">
+    <div class="section" v-if="lec_course_list.list">
+      <p class="no_result" v-if="lec_course_list.list.length == 0">
+        진행중인 강의가 없습니다.
+      </p>
       <LectureCourseList
+        v-else
         v-for="(list, index) in lec_course_list.list"
         :key="index"
       >
@@ -153,6 +157,11 @@
     }
     ::v-deep .progress_bar {
       border: 1px solid #cacaca;
+    }
+    .no_result {
+      text-align: center;
+      font-size: 16px;
+      padding-bottom: 15px;
     }
   }
 </style>

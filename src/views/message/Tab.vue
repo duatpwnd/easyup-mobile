@@ -1,5 +1,5 @@
 <template>
-  <div class="tab1">
+  <div class="tab1" v-if="list">
     <ConfirmModal
       @ok="deleteMessage($route.name)"
       v-if="toggleStore_confirmModal"
@@ -42,7 +42,10 @@
         <span>메시지</span>
       </template>
     </BoardTitle>
-    <div class="row" v-for="(li, index) in list.list" :key="index">
+    <p class="no_result" v-if="list.list.length == 0">
+      검색된 내용이 없습니다.
+    </p>
+    <div v-else class="row" v-for="(li, index) in list.list" :key="index">
       <BoardList>
         <CheckBox slot="checkbox">
           <input
@@ -225,6 +228,11 @@
     padding: 4.445%;
     padding-top: 0;
     padding-bottom: 96px;
+    .no_result {
+      text-align: center;
+      font-size: 16px;
+      padding: 15px;
+    }
     .search {
       .search_contents {
         width: 100%;
