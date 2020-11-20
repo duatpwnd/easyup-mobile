@@ -14,9 +14,6 @@ export default {
       router
         .push({
           path: "/",
-          query: {
-            referer: store.state.userStore.referer,
-          },
         })
         .catch(() => {});
       VueCookies.remove("user_info");
@@ -76,12 +73,10 @@ export default {
       router
         .push({
           path: "/",
-          query: {
-            referer: router.currentRoute.fullPath,
-          },
         })
         .catch(() => {});
       VueCookies.remove("user_info");
+      store.commit("userStore/referer", "");
       store.commit("userStore/loginToken", {
         access_token: null,
         info: "",

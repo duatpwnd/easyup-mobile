@@ -78,6 +78,7 @@
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+        margin-bottom: 4px;
       }
       .name {
         color: #999999;

@@ -115,6 +115,9 @@
       ...mapState("toggleStore", {
         toggleStore_loginModal: "login_modal",
       }),
+      ...mapState("userStore", {
+        userStore_referer: "referer",
+      }),
     },
     methods: {
       goToLecture() {
@@ -146,10 +149,10 @@
                 // 마지막 로그아웃 시점url이 있을경우
                 console.log(
                   "★★★★★★★★★★마지막 URL:★★★★★★★★★★★★★",
-                  this.$route.query.referer
+                  this.userStore_referer
                 );
-                if (this.$route.query.referer != undefined) {
-                  this.$router.push(this.$route.query.referer);
+                if (this.userStore_referer != "") {
+                  this.$router.push(this.userStore_referer).catch(() => {});
                 }
               }
             })

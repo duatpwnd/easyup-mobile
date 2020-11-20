@@ -41,7 +41,12 @@
     </div>
     <div class="row">
       <span class="left contents">메모</span>
-      <ckeditor v-model="editorData" :config="editorConfig"></ckeditor>
+      <div
+        contenteditable="true"
+        v-html="editorData"
+        class="textarea"
+        ref="textarea"
+      ></div>
     </div>
 
     <div class="row">
@@ -52,18 +57,13 @@
 </template>
 <script>
   import BlueBtn from "@/components/common/BaseButton.vue";
-  // import CkEditor from "@/components/common/CkEditor.vue";
   export default {
     components: {
       BlueBtn,
-      // CkEditor,
     },
     data() {
       return {
         editorData: "",
-        editorConfig: {
-          // The configuration of the editor.
-        },
         info: "",
       };
     },
@@ -91,7 +91,7 @@
         const data = {
           action: "edit_bookmark",
           id: this.$route.query.id,
-          contents: this.editorData,
+          contents: this.$refs.textarea.innerText.trim(),
         };
         console.log(data);
         this.$axios
@@ -121,7 +121,7 @@
     .row {
       display: table;
       width: 100%;
-      margin-top: 2%;
+      margin-top: 10px;
 
       .left {
         font-size: 1.5rem;
@@ -141,7 +141,8 @@
       .contents {
         vertical-align: top;
       }
-      input {
+      input,
+      .textarea {
         width: 100%;
         font-size: 1.5rem;
         color: black;
@@ -153,7 +154,10 @@
           color: #dbdbdb;
         }
       }
-
+      .textarea {
+        height: 300px;
+        overflow: auto;
+      }
       .save_btn {
         color: #ffffff;
         font-size: 1.75rem;

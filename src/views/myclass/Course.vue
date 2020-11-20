@@ -30,11 +30,35 @@
         :key="index"
       >
         <template slot="thumbnail">
-          <img :src="list.thumbnail" class="thumb" alt="" />
+          <img
+            :src="list.thumbnail"
+            class="thumb"
+            :alt="list.name"
+            :title="list.name"
+            @click="
+              $router.push({
+                path: '/courseDetail',
+                query: {
+                  id: list.id,
+                },
+              })
+            "
+          />
         </template>
         <template slot="info">
           <span class="name">{{ list.teacher }}</span>
-          <h2>{{ list.name }}</h2>
+          <h2
+            @click="
+              $router.push({
+                path: '/courseDetail',
+                query: {
+                  id: list.id,
+                },
+              })
+            "
+          >
+            {{ list.name }}
+          </h2>
           <div class="list_right_bottom">
             <span class="ing_ico" v-if="list.status == 'ing'">진행중</span>
             <span class="ing_ico non_ing_ico" v-else>비활성</span>
@@ -45,34 +69,8 @@
         </template>
         <template slot="list_info">
           <div class="compile_wrap">
-            <router-link
-              class="btn"
-              tag="span"
-              :to="{
-                path: '/courseDetail',
-                query: {
-                  id: list.id,
-                },
-              }"
-              >상세</router-link
-            >
-            <div class="video_wrap" v-if="list.status == 'ing'">
-              <VideoList v-for="(list, index) in list.courses" :key="index">
-                <span
-                  class="center"
-                  slot="title"
-                  @click="
-                    $router.push({
-                      path: '/play',
-                      query: {
-                        lp_id: list.lp_id,
-                        course_id: list.id,
-                      },
-                    })
-                  "
-                  >{{ list.title }}</span
-                >
-              </VideoList>
+            <div class="video_wrap">
+              <VideoList :list="list.courses"></VideoList>
             </div>
           </div>
         </template>
@@ -164,12 +162,9 @@
       font-size: 16px;
       padding-bottom: 15px;
     }
-    .video_wrap {
-      margin-top: 10px;
-    }
     .compile_wrap {
       margin: 10px 0;
-      padding: 4px 4.445%;
+      padding: 8px 4.445%;
       position: relative;
       background: #f8f8f8;
       box-sizing: border-box;
@@ -177,17 +172,6 @@
         display: inline-block;
         vertical-align: middle;
         font-size: 12px;
-      }
-      .btn {
-        width: 17%;
-        border: 1px solid #114fff;
-        color: #114fff;
-        font-size: 14px;
-        border-radius: 4px;
-        text-align: center;
-        height: 24px;
-        line-height: 23px;
-        box-sizing: border-box;
       }
 
       .date {

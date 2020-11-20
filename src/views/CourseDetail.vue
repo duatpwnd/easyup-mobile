@@ -60,7 +60,7 @@
         <div>
           <StarRating
             :rating="detail.ranking"
-            :star-size="10"
+            :star-size="16"
             :read-only="true"
             :increment="0.01"
             :star-points="[
@@ -342,9 +342,11 @@
     ::v-deep .vue-star-rating {
       display: unset;
       .vue-star-rating-rating-text {
-        font-size: 12px;
+        font-size: 15px;
         color: #333333;
-        margin-left: 10px;
+        margin-left: 4px;
+        display: inline-block;
+        vertical-align: 1.5px;
       }
     }
     .subscribe_wrap {
@@ -372,7 +374,7 @@
       background: #114fff;
       color: #ffffff;
       font-family: "NotoSansCJKkr-Medium";
-      font-size: 18px;
+      font-size: 20px;
       width: 100%;
       max-width: 720px;
       z-index: 2;
@@ -382,8 +384,8 @@
       span {
         width: 100%;
         display: block;
-        height: 40px;
-        line-height: 40px;
+        height: 60px;
+        line-height: 60px;
       }
     }
   }

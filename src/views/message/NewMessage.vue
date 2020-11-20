@@ -56,11 +56,16 @@
     </div>
     <div class="row">
       <span class="left contents">내용</span>
-      <ckeditor v-model="editorData" :config="editorConfig"></ckeditor>
+      <div
+        contenteditable="true"
+        v-html="editorData"
+        class="textarea"
+        ref="textarea"
+      ></div>
     </div>
 
     <div class="row">
-      <span class="left">파일 첨부</span>
+      <label class="left">파일 첨부</label>
       <input
         type="file"
         accept=".png,.jpg,.jpeg,.gif"
@@ -91,9 +96,9 @@
         file_obj: "", // 파일객체
         search_result: false,
         editorData: "", // 에디터 v-model
-        editorConfig: {
-          // The configuration of the editor.
-        },
+        // editorConfig: {
+        //   // The configuration of the editor.
+        // },
       };
     },
     methods: {
@@ -101,6 +106,7 @@
         const data = {
           action: "get_message_info",
           id: this.$route.query.id,
+          type: "received",
         };
         console.log(data);
         this.$axios
@@ -160,24 +166,20 @@
       send() {
         this.validationCheck().then((result) => {
           if (result == "success") {
-            const formData = new FormData();
             const data = {
               action: "send_message",
               users: [],
               title: this.title,
-              content: this.editorData,
+              content: this.$refs.textarea.innerText.trim(),
               attach_1: this.file_obj,
             };
             const map = this.choice_list.map((el, index) => {
               return el.id;
             });
             data.users = map;
-            for (var key in data) {
-              formData.append(key, data[key]);
-            }
             console.log(data);
             this.$axios
-              .post(this.$ApiUrl.main_list, formData, {
+              .post(this.$ApiUrl.main_list, data, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                   Authorization: this.$cookies.get("user_info")
@@ -258,7 +260,7 @@
     .row {
       display: table;
       width: 100%;
-      margin-top: 2%;
+      margin-top: 10px;
       .readonly {
         border: 0;
         padding-left: 0;
@@ -364,7 +366,8 @@
       .contents {
         vertical-align: top;
       }
-      input {
+      input,
+      .textarea {
         width: 100%;
         font-size: 1.5rem;
         color: black;
@@ -375,6 +378,10 @@
         &::placeholder {
           color: #dbdbdb;
         }
+      }
+      .textarea {
+        height: 300px;
+        overflow: auto;
       }
       input[type="file"] {
         display: none;

@@ -11,11 +11,16 @@
     </div>
     <div class="row">
       <span class="left contents">내용</span>
-      <ckeditor v-model="editorData" :config="editorConfig"></ckeditor>
+      <div
+        contenteditable="true"
+        v-html="editorData"
+        class="textarea"
+        ref="textarea"
+      ></div>
     </div>
 
     <div class="row">
-      <span class="left">파일 첨부</span>
+      <label class="left">파일 첨부</label>
       <input type="file" id="upload" ref="upload" @change="fileSelect()" />
       <label for="upload" class="file">파일 선택</label>
       <div class="file_name" v-if="file_obj != ''">{{ file_obj.name }}</div>
@@ -64,7 +69,7 @@
               is_notice: this.$route.query.is_notice == "true" ? "on" : "off",
               subject: this.title,
               id: this.$route.query.id ? this.$route.query.id : "",
-              contents: this.editorData,
+              contents: this.$refs.textarea.innerText.trim(),
               add_file: this.file_obj,
               mode:
                 this.$route.query.action == "reply"
@@ -122,7 +127,7 @@
         return new Promise((resolve, reject) => {
           if (this.title.trim().length == 0) {
             this.$noticeMessage("제목을 입력하세요");
-          } else if (this.editorData.trim().length == 0) {
+          } else if (this.$refs.textarea.innerText.trim().length == 0) {
             this.$noticeMessage("내용을 입력하세요");
           } else {
             resolve("success");
@@ -169,7 +174,7 @@
     .row {
       display: table;
       width: 100%;
-      margin-top: 3%;
+      margin-top: 10px;
 
       .readonly {
         border: 0;
@@ -277,7 +282,8 @@
       .contents {
         vertical-align: top;
       }
-      input {
+      input,
+      .textarea {
         width: 100%;
         font-size: 1.5rem;
         color: black;
@@ -288,6 +294,10 @@
         &::placeholder {
           color: #dbdbdb;
         }
+      }
+      .textarea {
+        height: 300px;
+        overflow: auto;
       }
       input[type="file"] {
         display: none;

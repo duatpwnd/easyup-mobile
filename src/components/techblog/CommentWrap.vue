@@ -215,9 +215,6 @@
             if (result.data.error != true) {
               this.toggleOff();
               this.$EventBus.$emit("techblog_list_reload", true);
-            } else {
-              console.log("토큰없당");
-              this.$logOut();
             }
           });
       },
@@ -235,9 +232,6 @@
             if (result.data.error != true) {
               this.$EventBus.$emit("techblog_list_reload", true);
               this.toggleOff();
-            } else {
-              console.log("토큰없당");
-              this.$logOut();
             }
           });
       },

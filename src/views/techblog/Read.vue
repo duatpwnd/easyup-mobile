@@ -96,9 +96,6 @@
             if (result.data.error != true) {
               this.view(this.$route.query.id);
               this.write_cancel();
-            } else {
-              console.log("토큰없당");
-              this.$logOut();
             }
           });
       },

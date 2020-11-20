@@ -14,7 +14,7 @@
       ></button>
     </Search>
 
-    <BlueBtn class="left" v-if="list.buttonType == 'notice'">
+    <BlueBtn class="left reg_btn" v-if="list.buttonType == 'notice'">
       <button
         slot="blue_btn"
         @click="
@@ -30,7 +30,7 @@
         공지사항 등록
       </button>
     </BlueBtn>
-    <BlueBtn class="left" v-else-if="list.buttonType == 'normal'">
+    <BlueBtn class="left reg_btn" v-else-if="list.buttonType == 'normal'">
       <button
         slot="blue_btn"
         @click="
@@ -47,7 +47,7 @@
       </button>
     </BlueBtn>
     <BlueBtn
-      class="left"
+      class="left reg_btn"
       v-if="list.buttonType == 'upload' && $route.name == 'resume'"
     >
       <button slot="blue_btn" @click="$router.push('/uniJob/register')">
@@ -201,7 +201,13 @@
         margin-left: 0;
       }
     }
-
+    ::v-deep .reg_btn {
+      button {
+        height: 32px;
+        line-height: 23px;
+        font-size: 16px;
+      }
+    }
     .title_wrap {
       span {
         text-align: right;

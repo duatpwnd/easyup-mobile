@@ -1,22 +1,49 @@
 <template>
   <div class="video_list">
-    <span class="left"
-      ><img
-        src="@/assets/images/my_lecture_course/play2.png"
-        alt="플레이"
-        title="플레이"
-    /></span>
-    <slot name="title">
-      <span class="center">1.파이썬 코딩 기본편 -6시간 뒤면 여러분도 개발</span>
-    </slot>
-    <!-- <span class="right">11:00</span> -->
+    <div class="btn" @click="toggle = !toggle">강의목록</div>
+    <div
+      class="list"
+      v-show="toggle"
+      v-for="(list, index) in list"
+      :key="index"
+    >
+      <span class="left"
+        ><img
+          src="@/assets/images/my_lecture_course/play2.png"
+          alt="플레이"
+          title="플레이"
+      /></span>
+      <span
+        class="center"
+        slot="title"
+        @click="
+          $router.push({
+            path: '/play',
+            query: {
+              lp_id: list.lp_id,
+              course_id: list.id,
+            },
+          })
+        "
+        >{{ list.title }}</span
+      >
+      <!-- <span class="right">11:00</span> -->
+    </div>
   </div>
 </template>
 <script>
   export default {
+    props: {
+      list: {
+        type: Array,
+        required: true,
+      },
+    },
     components: {},
     data() {
-      return {};
+      return {
+        toggle: false,
+      };
     },
     methods: {},
   };
@@ -30,9 +57,20 @@
     span {
       display: inline-block;
       color: #666666;
-      font-size: 10px;
+      font-size: 14px;
       vertical-align: middle;
       padding: 1.296% 0;
+      box-sizing: border-box;
+    }
+    .btn {
+      width: 70px;
+      border: 1px solid #114fff;
+      color: #114fff;
+      font-size: 14px;
+      border-radius: 4px;
+      text-align: center;
+      height: 24px;
+      line-height: 23px;
       box-sizing: border-box;
     }
     .left {
@@ -55,6 +93,9 @@
       padding: 1.296% 4%;
       border-top-right-radius: 15px;
       border-bottom-right-radius: 15px;
+    }
+    .list {
+      margin-top: 6px;
     }
   }
 </style>

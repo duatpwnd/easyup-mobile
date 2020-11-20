@@ -239,12 +239,12 @@
         const data = {
           action: "add_comment",
           review_id: this.id,
-          contents: this.contents.trim(),
+          contents: this.contents,
         };
         this.$axios
           .post(this.$ApiUrl.main_list, JSON.stringify(data))
           .then((result) => {
-            console.log("답글등록", result);
+            console.log("답글등록ddd", result);
             if (result.data.error != true) {
               this.$noticeMessage(result.data.data.msg);
 
