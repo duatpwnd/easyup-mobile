@@ -15,7 +15,7 @@
             :to="{
               path: '/course',
               query: {
-                action: 'get_course_list',
+                action: 'get_session_list',
                 pageCurrent: 1,
                 order: 'type_date',
                 keyword: '',
@@ -96,7 +96,7 @@
     </div>
     <div class="course_info">
       <h2 class="course_list">
-        코스 별 강좌 안내
+        <span>코스 별 강좌 안내</span>
         <span class="all_lecture_num"
           >총 {{ detail.course_list.length }}강</span
         >
@@ -313,6 +313,7 @@
         font-size: 12px;
         text-align: center;
         line-height: 24px;
+        font-family: unset;
       }
     }
   }
@@ -395,12 +396,12 @@
       font-size: 2rem;
       position: relative;
       .all_lecture_num {
-        font-size: 11px;
+        font-size: 14px;
         position: absolute;
         top: 0;
         right: 0;
         bottom: 0;
-        height: 15px;
+        height: 21px;
         margin: auto;
       }
     }
@@ -417,11 +418,11 @@
           }
         }
         h4 {
-          font-size: 10px;
+          font-size: 14px;
           margin-top: 5px;
         }
         .subtitle {
-          font-size: 12px;
+          font-size: 16px;
         }
         .evaluate {
           .score {

@@ -17,7 +17,7 @@
           <router-link
             class="tag"
             :to="{
-              path: '/course',
+              path: '/category',
               query: {
                 action: 'get_course_list',
                 pageCurrent: 1,
@@ -363,7 +363,8 @@
         margin-right: 0.763%;
         font-size: 12px;
         text-align: center;
-        line-height: 25px;
+        line-height: 24px;
+        font-family: unset;
       }
     }
   }

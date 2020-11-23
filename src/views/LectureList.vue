@@ -30,6 +30,7 @@
         @click="getList(1, 'type_date', keyword)"
       ></button>
     </Search>
+
     <h2 class="total">
       전체 검색 총<span class="count">{{ category_list.total_count }}</span
       >건
