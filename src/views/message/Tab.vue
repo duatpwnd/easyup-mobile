@@ -227,7 +227,6 @@
   .tab1 {
     padding: 4.445%;
     padding-top: 0;
-    padding-bottom: 96px;
     .no_result {
       text-align: center;
       font-size: 16px;

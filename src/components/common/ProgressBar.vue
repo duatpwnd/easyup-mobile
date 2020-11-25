@@ -34,9 +34,10 @@
 
     .percent {
       color: #757575;
-      height: 13px;
-      width: 18px;
-      font-size: 9px;
+      height: 12px;
+      line-height: 13px;
+      text-align: center;
+      font-size: 12px;
       position: absolute;
       left: 0;
       right: 0;
@@ -53,6 +54,10 @@
       border-radius: 1px;
       overflow: hidden;
       height: 100%;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border: none;
     }
     progress::-webkit-progress-value {
       background: #114fff;

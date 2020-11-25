@@ -363,6 +363,9 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   duplicateNavigationPolicy: "ignore",
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { x: 0, y: 0 };
+  },
 });
 
 router.beforeEach(async (to, from, next) => {

@@ -32,7 +32,20 @@
         :key="index"
       >
         <template slot="thumbnail">
-          <img :src="list.thumbnail" class="thumb" alt="" />
+          <img
+            :src="list.thumbnail"
+            class="thumb"
+            alt=""
+            @click="
+              $router.push({
+                path: '/play',
+                query: {
+                  lp_id: list.lp_id,
+                  course_id: list.id,
+                },
+              })
+            "
+          />
           <img
             src="@/assets/images/common/playing_ico.png"
             class="playing_ico"

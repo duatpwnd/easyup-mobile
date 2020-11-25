@@ -41,7 +41,7 @@
             ref="subs_btn"
             class="active_subscribe"
             slot="blue_btn"
-            @click="video($route.query.id, detail.lp_id)"
+            @click="goToPath()"
           >
             구독중
           </button>
@@ -90,7 +90,9 @@
         <span class="name">{{ detail.teachers }}</span>
       </div>
       <button class="fixed_subs_btn" v-if="subscribe_btn">
-        <span v-if="is_subscribe" class="active_subscribe">구독중</span>
+        <span v-if="is_subscribe" class="active_subscribe" @click="goToPath()"
+          >구독중</span
+        >
         <span v-else @click="subscribe()">구독하기</span>
       </button>
     </div>
@@ -108,18 +110,9 @@
       >
         <h2 class="title">{{ index + 1 }}강.</h2>
         <CourseItem>
-          <router-link
-            class="lec_list"
-            slot="router"
-            :to="{
-              path: '/',
-              query: {
-                id: list.id,
-              },
-            }"
-          >
+          <span class="lec_list" slot="router">
             <img :src="list.thumbnail" alt="이지업" title="이지업" />
-          </router-link>
+          </span>
           <h4 slot="teacher">{{ list.teacher }}</h4>
           <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
           <span slot="grade" class="score">{{ list.ranking }}</span>
@@ -257,12 +250,13 @@
       return {};
     },
     methods: {
-      video(course_id, lp_id) {
+      goToPath() {
         this.$router.push({
-          path: "/play",
+          path: "/myClass/course",
           query: {
-            course_id: course_id,
-            lp_id: lp_id,
+            keyword: "",
+            pageCurrent: 1,
+            order: "",
           },
         });
       },

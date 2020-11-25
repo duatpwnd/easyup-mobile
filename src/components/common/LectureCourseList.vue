@@ -52,7 +52,7 @@
     }
     .list_left {
       display: inline-block;
-      width: 50%;
+      width: 35%;
       position: relative;
 
       .playing_ico {
@@ -62,13 +62,13 @@
         right: 0;
         bottom: 0;
         margin: auto;
-        width: 48px;
-        height: 48px;
+        width: 30px;
+        height: 30px;
       }
     }
     .list_right {
       display: inline-block;
-      width: 50%;
+      width: 65%;
       padding: 5px;
       box-sizing: border-box;
       h2 {
@@ -79,6 +79,7 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         margin-bottom: 4px;
+        word-break: keep-all;
       }
       .name {
         color: #999999;

@@ -65,6 +65,8 @@
       color: #666666;
       font-size: 11px;
       margin-top: 2%;
+      white-space: pre-wrap;
+      word-break: break-all;
     }
   }
 </style>

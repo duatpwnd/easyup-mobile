@@ -166,6 +166,7 @@
       send() {
         this.validationCheck().then((result) => {
           if (result == "success") {
+            const formData = new FormData();
             const data = {
               action: "send_message",
               users: [],
@@ -177,9 +178,12 @@
               return el.id;
             });
             data.users = map;
-            console.log(data);
+            // 배열값이 배열이 빠진 문자만 들어가는현상 발생
+            for (var key in data) {
+              formData.append(key, data[key]);
+            }
             this.$axios
-              .post(this.$ApiUrl.main_list, data, {
+              .post(this.$ApiUrl.main_list, formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                   Authorization: this.$cookies.get("user_info")

@@ -64,9 +64,7 @@
       <template slot="category">
         <span @click="slide(index)">[{{ li.category }}]{{ li.title }}</span>
       </template>
-      <dd slot="dd" ref="dd" v-show="active">
-        {{ li.contents }}
-      </dd>
+      <dd slot="dd" ref="dd" v-show="active" v-html="li.contents"></dd>
     </List>
   </div>
 </template>

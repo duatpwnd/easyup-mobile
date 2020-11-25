@@ -18,8 +18,10 @@ const userStore = {
     },
     referer(state, param) {
       if (param.indexOf("referer") <= 0) {
-        console.log("마지막url:", param);
-        state.referer = param;
+        if (param != "/") {
+          console.log("마지막url:", param);
+          state.referer = param;
+        }
       }
     },
   },

@@ -35,9 +35,11 @@
           },
         ]"
       >
-        <span class="title" @click="switchItem(li.id, li.current_id)">{{
-          li.title
-        }}</span>
+        <span
+          class="title"
+          @click="switchItem(li.id, li.current_id)"
+          v-html="li.title"
+        ></span>
         <img
           v-if="li.bookmark == 'active'"
           src="@/assets/images/player/active_bookmark_ico.png"

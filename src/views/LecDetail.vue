@@ -526,6 +526,10 @@
           width: 80%;
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          vertical-align: middle;
         }
         .else_lec_title {
           width: 100%;
@@ -538,6 +542,7 @@
           margin-left: 2%;
           display: inline-block;
           text-align: center;
+          vertical-align: middle;
         }
       }
     }

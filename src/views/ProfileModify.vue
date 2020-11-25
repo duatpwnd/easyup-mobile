@@ -169,7 +169,6 @@
 <style scoped lang="scss">
   #profile_modify {
     padding: 4.445%;
-    padding-bottom: 150px;
     .blue_btn {
       margin-top: 5%;
     }

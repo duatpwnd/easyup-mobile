@@ -6,6 +6,7 @@
     <router-link to="/" class="easyup_logo">
       <img src="@/assets/images/main/logo.png" alt="이지업" title="이지업" />
     </router-link>
+
     <div class="right_menu">
       <!-- 학생인지 강사인지  -->
       <router-link
@@ -76,6 +77,14 @@
     /* height: 80px; */
     text-align: center;
     padding: 5.556% 0px;
+    .back_btn {
+      position: absolute;
+      top: 0;
+      left: 13.445%;
+      bottom: 0;
+      height: 30%;
+      margin: auto;
+    }
     .easyup_logo {
       width: 24.445%;
       height: 37.5%;

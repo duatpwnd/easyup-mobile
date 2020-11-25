@@ -19,10 +19,10 @@
       @click.native="$loginModalClose()"
       v-if="toggleStore_isFooter"
     ></Footer>
-    <ProfileMsgTab
+    <!-- <ProfileMsgTab
       @click.native="$loginModalClose()"
       v-if="toggleStore_profileMsgTab"
-    ></ProfileMsgTab>
+    ></ProfileMsgTab> -->
   </div>
 </template>
 <script>
@@ -31,13 +31,13 @@
   import LoginModal from "@/components/login/LoginModal.vue";
   import LoginLnb from "@/components/login/LoginLnb.vue";
   import GnbBottomMenu from "@/components/layout/GnbBottomMenu.vue";
-  import ProfileMsgTab from "@/components/layout/ProfileMsgTab.vue";
+  // import ProfileMsgTab from "@/components/layout/ProfileMsgTab.vue";
   import NoticeModal from "@/components/common/NoticeModal.vue";
   import { mapState, mapMutations } from "vuex";
   export default {
     components: {
       NoticeModal,
-      ProfileMsgTab,
+      // ProfileMsgTab,
       GnbBottomMenu,
       LoginModal,
       LoginLnb,
