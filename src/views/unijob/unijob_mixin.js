@@ -31,6 +31,14 @@ let unijob_common = {
             // 수정일때만 파일리스트
             this.file_list = this.view.attach;
           } else {
+            this.$router
+              .push({
+                query: {
+                  type: this.$route.query.type,
+                  id: id,
+                },
+              })
+              .catch(() => {});
             const re = this.view.title.match(/re:/);
             /* 답글 처음다는글은 re가 없기때문에 re가 있는지 없는지 체크
                처음이면 [re]를 강제로 붙여주기

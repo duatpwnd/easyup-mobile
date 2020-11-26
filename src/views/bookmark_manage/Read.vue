@@ -2,7 +2,7 @@
   <div v-if="info">
     <div class="head">
       <span class="title">[{{ info.course_name }}]</span>
-      <span>{{ info.section_name }} {{ info.title }}</span>
+      <span v-html="info.section_name"></span> <span v-html="info.title"></span>
     </div>
     <div class="contents_wrap">
       <BlueBtn>
