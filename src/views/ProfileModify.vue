@@ -134,7 +134,7 @@
             }
 
             this.$axios
-              .post(this.$ApiUrl.main_list, formData, {
+              .post(this.$ApiUrl.mobileAPI_v1, formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                   Authorization: this.$cookies.get("user_info")

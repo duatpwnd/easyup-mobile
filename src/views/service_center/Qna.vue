@@ -134,7 +134,7 @@
             };
             console.log(data);
             this.$axios
-              .post(this.$ApiUrl.main_list, data, {
+              .post(this.$ApiUrl.mobileAPI_v1, data, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },

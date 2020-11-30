@@ -29,10 +29,12 @@ Vue.config.productionTip = true;
 // NODE_ENV = '앱실행모드'
 if (process.env.NODE_ENV == "development") {
   axios.defaults.baseURL = "http://develop.hell0world.net";
-  ApiUrl.main_list = "http://develop.hell0world.net/main/mobileAPI/v1.php";
+  ApiUrl.mobileAPI_v1 = "http://develop.hell0world.net/main/mobileAPI/v1.php";
+  ApiUrl.mobileAPI_v2 = "http://develop.hell0world.net/main/mobileAPI/v2.php";
 } else if (process.env.NODE_ENV == "production") {
   axios.defaults.baseURL = "https://www.easyupclass.com";
-  ApiUrl.main_list = "https://www.easyupclass.com/main/mobileAPI/v1.php";
+  ApiUrl.mobileAPI_v1 = "https://www.easyupclass.com/main/mobileAPI/v1.php";
+  ApiUrl.mobileAPI_v2 = "https://www.easyupclass.com/main/mobileAPI/v2.php";
 }
 // 개발서버인경우 Authorization 으로 들어가는데 실서버인경우 authorization으로 들어가있음.
 axios.interceptors.request.use(

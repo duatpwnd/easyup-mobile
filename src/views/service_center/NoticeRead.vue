@@ -1,7 +1,7 @@
 <template>
   <div class="read" v-if="info">
     <div class="head">
-      <span>[서비스 중단 안내] 서비스 개선 작업에 의한 중단</span>
+      <span v-html="info.info.title"></span>
     </div>
     <div class="contents" v-html="info.info.contents"></div>
     <div class="button_wrap">
@@ -39,7 +39,7 @@
         };
         console.log(data);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data), {})
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {})
           .then((result) => {
             console.log(result.data.data);
             this.info = result.data.data;

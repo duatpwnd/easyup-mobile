@@ -139,7 +139,7 @@
           this.$noticeMessage("아이디 또는 비밀번호를 입력해주세요");
         } else {
           this.$axios
-            .post(this.$ApiUrl.main_list, JSON.stringify(data))
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {
               if (result.data.error) {
                 this.$noticeMessage(result.data.message);

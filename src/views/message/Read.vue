@@ -99,7 +99,7 @@
         };
         console.log(data);
         this.$axios
-          .post(this.$ApiUrl.main_list, data, {
+          .post(this.$ApiUrl.mobileAPI_v1, data, {
             responseType: "blob",
             headers: {
               Authorization: this.$cookies.get("user_info")
@@ -134,7 +134,7 @@
           id: [this.$route.query.id],
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             this.$router.push({
               path: "/msg/receivedList",
@@ -153,7 +153,7 @@
         };
         console.log(data);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result);
             this.view = result.data.data.info;

@@ -90,7 +90,7 @@
         };
         console.log(data);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log("댓글등록", result);
             if (result.data.error != true) {
@@ -105,7 +105,7 @@
           id: id,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log("기술블로그읽기", result.data.data);
             this.list = result.data.data;

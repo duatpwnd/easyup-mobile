@@ -63,7 +63,7 @@
           current: num,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {
             this.timeline_list = result.data.data;
             this.current = num;

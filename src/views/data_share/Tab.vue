@@ -148,7 +148,7 @@
           course_id: course_id,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, data, {
+          .post(this.$ApiUrl.mobileAPI_v1, data, {
             responseType: "blob",
             headers: {
               Authorization: this.$cookies.get("user_info")
@@ -199,7 +199,7 @@
           id: this.checked_list,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result);
             this.$noticeMessage(result.data.data[0]);
@@ -222,7 +222,7 @@
         };
         console.log(data);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result);
             if (result.data.error != true) {

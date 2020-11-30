@@ -15,7 +15,7 @@ let unijob_common = {
         id: id,
       };
       this.$axios
-        .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
           headers: {
             Authorization: this.$cookies.get("user_info")
               ? "Bearer " + this.$cookies.get("user_info").access_token

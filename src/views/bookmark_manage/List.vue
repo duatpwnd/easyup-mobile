@@ -116,7 +116,7 @@
           keyword: keyword,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             if (result.data.error != true) {
               this.bookmark_list = result.data.data;

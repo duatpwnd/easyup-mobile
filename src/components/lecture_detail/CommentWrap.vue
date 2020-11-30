@@ -224,7 +224,7 @@
           review_id: index,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {
             console.log("댓글삭제", result);
             if (result.data.error != true) {
@@ -242,7 +242,7 @@
           contents: this.contents,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log("답글등록ddd", result);
             if (result.data.error != true) {
@@ -264,7 +264,7 @@
         };
         console.log("수정:", obj);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {
             if (result.data.error != true) {
               this.$noticeMessage(result.data.data.msg);
@@ -280,7 +280,7 @@
           review_comment_id: index,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {
             this.getCommentList();
           });
@@ -304,7 +304,7 @@
         //   course_id: this.$route.query.id,
         // };
         // this.$axios
-        //   .post(this.$ApiUrl.main_list, JSON.stringify(data))
+        //   .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         //   .then((result) => {
         //     console.log("댓글조회", result);
         //   });
@@ -313,7 +313,7 @@
       getCommentList() {
         const data = this.action;
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result.data.data);
             this.comment = result.data.data;

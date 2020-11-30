@@ -83,7 +83,7 @@
           this.$noticeMessage("비밀번호가 일치하지 않습니다.");
         } else {
           this.$axios
-            .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
               headers: {
                 Authorization: this.$cookies.get("user_info")
                   ? "Bearer " + this.$cookies.get("user_info").access_token
@@ -103,7 +103,7 @@
           token: this.$route.query.token,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log("토큰", result);
             if (result.data.error) {

@@ -82,7 +82,7 @@
               formData.append(key, data[key]);
             }
             this.$axios
-              .post(this.$ApiUrl.main_list, formData, {
+              .post(this.$ApiUrl.mobileAPI_v1, formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                   Authorization: this.$cookies.get("user_info")
@@ -113,7 +113,7 @@
         };
         console.log(data);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result);
             this.read(this.$route.query.id);

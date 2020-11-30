@@ -1,5 +1,22 @@
 <template>
   <div id="gnb_bottom_menu">
+    <ul class="more_view" v-if="more_view">
+      <li>
+        <router-link to="">
+          공지사항
+        </router-link>
+      </li>
+      <li>
+        <router-link to="">
+          자료공유
+        </router-link>
+      </li>
+      <li>
+        <router-link to="">
+          과제게시판
+        </router-link>
+      </li>
+    </ul>
     <ul class="gnb">
       <li v-for="(list, index) in menu" :key="index">
         <router-link
@@ -37,6 +54,7 @@
     components: {},
     data() {
       return {
+        more_view: false,
         menu: [
           {
             title: "내 강좌/코스",
@@ -103,6 +121,18 @@
     max-width: 720px;
     width: 100%;
     z-index: 2;
+    .more_view {
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
+      }
+      li {
+        width: 33.333%;
+        float: left;
+        text-align: center;
+      }
+    }
     .gnb {
       &:after {
         display: block;

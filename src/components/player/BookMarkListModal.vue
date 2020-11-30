@@ -55,7 +55,7 @@
           id: id,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             this.getList();
           });
@@ -66,7 +66,7 @@
           current_id: this.toggleStore_bookmark_list_info.current_id,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             this.list = result.data.data;
             this.list.sort(function(a, b) {

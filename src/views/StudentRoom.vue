@@ -201,7 +201,7 @@
           action: action,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {
             console.log(result);
             if (action == "get_top_count") {

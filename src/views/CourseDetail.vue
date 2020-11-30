@@ -267,7 +267,7 @@
           session_id: this.$route.query.id,
         };
         await this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log("코스상세:", result.data.data);
             this.detail = result.data.data;

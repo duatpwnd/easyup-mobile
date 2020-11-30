@@ -61,7 +61,7 @@
           action: "get_category_list",
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result);
             this.category_list = result.data.data;

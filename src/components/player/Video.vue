@@ -90,7 +90,7 @@
           item_id: item_id,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, data, {
+          .post(this.$ApiUrl.mobileAPI_v1, data, {
             responseType: "blob",
             headers: {
               Authorization: this.$cookies.get("user_info")
@@ -170,7 +170,7 @@
           lp_id: this.$route.query.lp_id,
           idx: this.$store.state.playerStore.current_index,
         };
-        this.$axios.post(this.$ApiUrl.main_list, data).then((result) => {
+        this.$axios.post(this.$ApiUrl.mobileAPI_v1, data).then((result) => {
           if (result.data != "") {
             // 자막파일이 있는경우
             this.srtParsing(result.data);

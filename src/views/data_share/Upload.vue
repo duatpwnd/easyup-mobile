@@ -72,7 +72,7 @@
         formData.append("recipients", this.shared_recipients);
         formData.append("file", this.file_obj);
 
-        this.$axios.post(this.$ApiUrl.main_list, formData).then((result) => {
+        this.$axios.post(this.$ApiUrl.mobileAPI_v1, formData).then((result) => {
           console.log(result);
           if (result.data.data.length == 1) {
             this.$router.push({
@@ -92,7 +92,7 @@
           code: this.selected,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log("공유받은사람:", result);
             this.share_list = result.data.data;
@@ -103,7 +103,7 @@
           action: "get_dropbox_course_select",
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result);
             this.select_list = result.data.data;

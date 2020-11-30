@@ -112,7 +112,7 @@
           contents: this.contents,
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(obj))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {
             console.log("수정완료", result);
             if (result.data.error != true) {
@@ -135,7 +135,7 @@
           this.$noticeMessage("점수를 선택해주세요.");
         } else {
           this.$axios
-            .post(this.$ApiUrl.main_list, JSON.stringify(data), {
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
               headers: {
                 Authorization: this.$cookies.get("user_info")
                   ? "Bearer " + this.$cookies.get("user_info").access_token

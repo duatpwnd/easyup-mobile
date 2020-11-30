@@ -6,8 +6,8 @@
       </span>
       <span class="right">
         <span class="unique">[{{ info.course_name }}]</span>
-        {{ info.section_name }}
-        {{ info.title }}
+        <span v-html="info.section_name"></span>
+        <span v-html="info.title"></span>
       </span>
     </div>
     <div class="row">
@@ -75,7 +75,7 @@
         };
         console.log(data);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result.data);
             this.info = result.data.data.info;
@@ -95,7 +95,7 @@
         };
         console.log(data);
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result);
             if (result.data.data.result == 1) {
@@ -133,6 +133,9 @@
         width: 76.5%;
         .unique {
           color: #114fff;
+        }
+        span {
+          display: inline-block;
         }
       }
       .blue_btn {

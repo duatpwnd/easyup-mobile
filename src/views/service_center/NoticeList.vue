@@ -76,7 +76,7 @@
           keyword: keyword, //옵션
         };
         this.$axios
-          .post(this.$ApiUrl.main_list, JSON.stringify(data))
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             this.$router
               .push({
