@@ -71,11 +71,11 @@ describe.skip("getPlayInfo", () => {
       router,
     });
     const mock = new MockAdapter(axios);
-    await mock.onPost(ApiUrl.main_list).reply(200, data);
+    await mock.onPost(ApiUrl.mobileAPI_v1).reply(200, data);
     jest.spyOn(wrapper.vm, "getPlayInfo");
     await wrapper.vm.getPlayInfo();
   });
-  test("getPlayInfo call", async () => {
+  it("getPlayInfo call", async () => {
     expect(wrapper.vm.info).toBeDefined();
     expect(wrapper.vm.info.player_info.course_id).toBe(
       data.data.player_info.course_id

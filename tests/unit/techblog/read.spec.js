@@ -91,7 +91,7 @@ describe.skip("read.vue", () => {
       store,
       router,
     });
-    await mock.onPost(ApiUrl.main_list).reply(200, data);
+    await mock.onPost(ApiUrl.mobileAPI_v1).reply(200, data);
     jest.spyOn(wrapper.vm, "write");
     jest.spyOn(wrapper.vm, "write_cancel");
     jest.spyOn(wrapper.vm, "view");
