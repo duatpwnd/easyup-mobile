@@ -140,7 +140,7 @@
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
-            console.log("유니잡", result);
+            console.log("유니잡", result.data.data);
             this.$router
               .push({
                 query: {
