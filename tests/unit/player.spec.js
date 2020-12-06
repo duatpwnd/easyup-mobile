@@ -7,7 +7,7 @@ import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import store from "@/store";
 
-describe.skip("getPlayInfo", () => {
+describe.skip("Player.vue", () => {
   let wrapper;
   const data = {
     data: {

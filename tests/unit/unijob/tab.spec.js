@@ -6,7 +6,7 @@ import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import ApiUrl from "@/assets/js/api_url.js";
 
-describe("유니잡 페이지 들어올때", () => {
+describe("Tab.vue", () => {
   // beforAll은 describe 전후로 호출
   beforeAll(async () => {
     console.log("beforeall 호출");

@@ -5,7 +5,7 @@ import VueRouter from "vue-router";
 import axios from "axios";
 import ApiUrl from "@/assets/js/api_url.js";
 import GlobalUrl from "@/plugin/global_plugin.js";
-describe("비밀번호 찾기", () => {
+describe("LostPassword.vue", () => {
   let wrapper;
   // 이메일 정규식
   const regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
