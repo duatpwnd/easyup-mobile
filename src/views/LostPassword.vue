@@ -43,13 +43,7 @@
           this.$noticeMessage("이메일 주소를 입력해주세요.");
         } else {
           this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
-              headers: {
-                Authorization: this.$cookies.get("user_info")
-                  ? "Bearer " + this.$cookies.get("user_info").access_token
-                  : null,
-              },
-            })
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {
               console.log("이메일", result);
               this.$noticeMessage(result.data.data.msg);
