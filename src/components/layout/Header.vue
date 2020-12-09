@@ -74,9 +74,8 @@
 <style scoped lang="scss">
   #nav {
     position: relative;
-    /* height: 80px; */
     text-align: center;
-    padding: 5.556% 0px;
+    height: 50px;
     .back_btn {
       position: absolute;
       top: 0;
@@ -86,20 +85,24 @@
       margin: auto;
     }
     .easyup_logo {
-      width: 24.445%;
-      height: 37.5%;
+      height: 19px;
+      width: 114px;
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
       margin: auto;
+      img {
+        vertical-align: unset;
+      }
     }
     .easyup_menu_btn {
-      width: 5.556%;
+      width: 24px;
+      height: 19px;
       position: absolute;
       top: 0;
-      left: 4.445%;
+      left: 16px;
       bottom: 0;
       margin: auto;
     }
@@ -107,20 +110,26 @@
       .myclass {
         position: absolute;
         top: 0;
-        right: 15%;
+        right: 48px;
         bottom: 0;
         margin: auto;
-        height: 37.5%;
-        width: 5.417%;
+        width: 24px;
+        height: 19px;
+        img {
+          vertical-align: unset;
+        }
       }
       .msg {
-        width: 4.584%;
         position: absolute;
         top: 0;
-        right: 4.445%;
+        right: 16px;
         bottom: 0;
         margin: auto;
-        height: 40%;
+        width: 24px;
+        height: 19px;
+        img {
+          vertical-align: unset;
+        }
       }
     }
   }

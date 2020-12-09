@@ -68,6 +68,11 @@ export default {
       if (sec.toString().length == 1) sec = "0" + sec;
       return hour + ":" + min + ":" + sec;
     };
+    // Number comma
+    Vue.prototype.$numberWithCommas = (x) => {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
     // 로그아웃
     Vue.prototype.$logOut = () => {
       router

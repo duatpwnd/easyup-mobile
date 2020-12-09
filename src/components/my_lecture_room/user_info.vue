@@ -16,10 +16,7 @@
         <slot name="user_email">
           <p class="email">duatpwnd1@naver.com</p>
         </slot>
-        <!-- <slot name="convert">
-          <span class="report">리포트</span>
-          <span class="convert" @click="convert()">학생전환</span>
-        </slot> -->
+        <slot name="convert"> </slot>
         <slot name="update_date">
           <p class="update_date">
             2019년 8월 29일(업데이트일자:2019년 9월 1일)
@@ -104,19 +101,19 @@
         margin-bottom: 3%;
       }
       .report {
-        font-size: 10px;
+        font-size: 12px;
         font-weight: 600;
         color: #114fff;
         border-radius: 4px;
         margin-right: 5%;
-        width: 68px;
-        padding: 0 7.5px;
-        height: 20px;
-        line-height: 21px;
+        width: 38%;
+        padding: 0 10px;
+        height: 25px;
+        line-height: 27px;
         display: inline-block;
         box-sizing: border-box;
-        background: url("~@/assets/images/mylecture_room/report_ico.png")
-          no-repeat 100%-7.5 center/ 11.5px 11.5px;
+        background: url("~@/assets/images/common/profile_active_ico.png")
+          no-repeat 100%-10 center/ 12px 12px;
         background-color: white;
         span {
           font-weight: 600;
@@ -124,9 +121,9 @@
       }
       .convert {
         @extend .report;
-
+        padding: 0 4.5px;
         background: url("~@/assets/images/mylecture_room/convert_ico.png")
-          no-repeat 100%-7.5 center / 10.5px 8px;
+          no-repeat 100%-4.5 center / 11.5px 9px;
         background-color: white;
       }
       .update_date {

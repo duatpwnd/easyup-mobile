@@ -141,6 +141,7 @@
           this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {
+              console.log(result);
               if (result.data.error) {
                 this.$noticeMessage(result.data.message);
               } else {

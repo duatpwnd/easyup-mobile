@@ -356,6 +356,12 @@ const routes = [
     component: () => import("../views/ReissuePw.vue"),
     meta: { isFooter: false },
   },
+  {
+    path: "/SettlementAndPayment",
+    name: "SettlementAndPayment",
+    component: () => import("../views/SettlementAndPayment.vue"),
+    meta: { GnbBottomMenu: true },
+  },
 ];
 
 const router = new VueRouter({

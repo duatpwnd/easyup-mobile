@@ -15,7 +15,6 @@ let myLectureCourse = {
         search_status: order == undefined ? "" : order,
         keyword: keyword == undefined ? "" : keyword,
       };
-      console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
           headers: {

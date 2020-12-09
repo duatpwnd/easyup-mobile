@@ -7,6 +7,18 @@
       <p slot="user_email" class="email">
         {{ userStore_userinfo.info.email }}
       </p>
+      <template slot="convert"> </template>
+      <span
+        slot="convert"
+        v-if="userStore_userinfo.info.status == 5"
+        @click="convert()"
+        class="convert"
+        >강사전환</span
+      >
+      <template v-else slot="convert">
+        <span class="report">프로필</span>
+        <span class="convert" @click="convert()">학생전환</span>
+      </template>
       <p class="update_date" slot="update_date">
         최근 접속일: {{ userStore_userinfo.info.last_login }}
       </p>
@@ -34,8 +46,6 @@
           <span>{{ top_count.session.end_count }}건</span>
         </li>
       </template>
-
-      <!-- <span slot="convert" @click="convert()" class="convert">강사전환</span> -->
     </UserInfo>
 
     <div class="contents">
@@ -211,8 +221,20 @@
             }
           });
       },
+      // 강사 프로필 조회
+      getTeacherProfile() {
+        const data = {
+          action: "get_teacher_profile",
+        };
+        this.$axios
+          .post(this.$ApiUrl.get_teacher_profile, JSON.stringify(data))
+          .then((result) => {
+            console.log(result);
+          });
+      },
     },
     created() {
+      this.getTeacherProfile();
       this.getMyLecture("get_top_count");
 
       this.getMyLecture("get_dashboard_list");
