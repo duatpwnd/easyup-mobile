@@ -24,8 +24,11 @@
       </Search>
     </div>
     <div class="btn_wrap">
-      <BlueBtn class="left">
-        <button slot="blue_btn" @click="$router.push('/msg/newMessage')">
+      <BlueBtn
+        class="left"
+        @click.native="$router.push('/couponManageTeacher/register')"
+      >
+        <button slot="blue_btn">
           쿠폰 생성
         </button>
       </BlueBtn>

@@ -396,10 +396,18 @@ const routes = [
     component: () => import("@/views/couponManageTeacherList.vue"),
     meta: { GnbBottomMenu: true },
   },
+  // 쿠폰 내역
   {
     path: "/couponManageTeacher/detail",
     name: "couponManageTeacherDetail",
     component: () => import("@/views/couponManageTeacherDetail.vue"),
+    meta: { GnbBottomMenu: true },
+  },
+  // 쿠폰 등록
+  {
+    path: "/couponManageTeacher/register",
+    name: "couponManageTeacherRegister",
+    component: () => import("@/views/couponManageTeacherRegister.vue"),
     meta: { GnbBottomMenu: true },
   },
 ];
