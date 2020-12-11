@@ -87,5 +87,22 @@ export default {
         info: "",
       });
     };
+    // 데이트 포맷
+    Vue.prototype.$dateFormat = (a) => {
+      let date = new Date(a);
+      if (a == undefined) {
+        date = new Date();
+      }
+      const year = date.getFullYear();
+      let month = new String(date.getMonth() + 1);
+      let day = new String(date.getDate());
+      if (month.length == 1) {
+        month = "0" + month;
+      }
+      if (day.length == 1) {
+        day = "0" + day;
+      }
+      return year + "-" + month + "-" + day;
+    };
   },
 };

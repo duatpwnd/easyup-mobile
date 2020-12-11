@@ -155,7 +155,11 @@
           },
           {
             title: "쿠폰관리",
-            path: "/couponeManagement",
+            path: "/couponManage/student",
+            query: {
+              type: "available",
+              pageCurrent: 1,
+            },
             name: require("@/assets/images/common/coupon_ico.png"),
             active: require("@/assets/images/common/coupon_active_ico.png"),
           },
@@ -182,10 +186,17 @@
         this.bottom_menu.push(
           {
             title: "구매내역",
-            path: "/purchageDetail",
+            path: "/purchase/list",
             name: require("@/assets/images/common/purchase_ico.png"),
             active: require("@/assets/images/common/purchase_active_ico.png"),
             status: 5,
+            query: {
+              keyword: "",
+              pageCurrent: 1,
+              order: "",
+              start_date: this.$dateFormat(),
+              end_date: this.$dateFormat(),
+            },
           },
           {
             title: "책갈피 관리",
@@ -201,6 +212,12 @@
           }
         );
       } else {
+        this.bottom_menu[2].path = "/couponManageTeacher/list";
+        this.bottom_menu[2].query = {
+          order: "",
+          pageCurrent: 1,
+          keyword: "",
+        };
         this.bottom_menu.push({
           title: "정산/결제",
           path: "/bookmarkManage/list",

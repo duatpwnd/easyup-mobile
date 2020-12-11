@@ -357,9 +357,49 @@ const routes = [
     meta: { isFooter: false },
   },
   {
-    path: "/SettlementAndPayment",
-    name: "SettlementAndPayment",
+    path: "/settlementAndPayment",
+    name: "settlementAndPayment",
     component: () => import("../views/SettlementAndPayment.vue"),
+    meta: { GnbBottomMenu: true },
+  },
+  {
+    path: "/purchase",
+    name: "purchase",
+    redirect: "/purchase/list",
+    component: () => import("@/views/PurchaseDetail.vue"),
+    children: [
+      {
+        path: "list",
+        name: "purchaseDetailList",
+        component: () => import("@/views/purchase_detail/List.vue"),
+        meta: { GnbBottomMenu: true },
+      },
+      {
+        path: "detail",
+        name: "purchaseDetail",
+        component: () => import("@/views/purchase_detail/Detail.vue"),
+        meta: { GnbBottomMenu: true },
+      },
+    ],
+  },
+  // 쿠폰관리 학생
+  {
+    path: "/couponManage/student",
+    name: "couponManageStudent",
+    component: () => import("@/views/CouponManageStudent.vue"),
+    meta: { GnbBottomMenu: true },
+  },
+  // 쿠폰관리 강사
+  {
+    path: "/couponManageTeacher/list",
+    name: "couponManageTeacherList",
+    component: () => import("@/views/couponManageTeacherList.vue"),
+    meta: { GnbBottomMenu: true },
+  },
+  {
+    path: "/couponManageTeacher/detail",
+    name: "couponManageTeacherDetail",
+    component: () => import("@/views/couponManageTeacherDetail.vue"),
     meta: { GnbBottomMenu: true },
   },
 ];

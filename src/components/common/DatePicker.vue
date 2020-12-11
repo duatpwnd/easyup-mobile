@@ -7,6 +7,7 @@
         type="date"
         range
         :clearable="false"
+        @change="set()"
         @focus="blur()"
         placeholder="날짜를 선택해주세요."
       ></date-picker>
@@ -27,25 +28,24 @@
       };
     },
     methods: {
+      set() {
+        console.log(this.value1);
+        this.$emit("emitDatePick", this.value1);
+      },
       // 모바일에서 키보드 안나오게
       blur() {
         this.$refs.date_picker.$refs.input.blur();
       },
 
       getToday() {
-        const date = new Date();
-        const year = date.getFullYear();
-        let month = new String(date.getMonth());
-        let day = new String(date.getDate());
-        // 한자리수일 경우 0을 채워준다.
-        if (month.length == 1) {
-          month = "0" + month;
-        }
-        if (day.length == 1) {
-          day = "0" + day;
-        }
-        this.value1.push(new Date(Number(year), Number(month), Number(day)));
-        this.value1.push(new Date(Number(year), Number(month), Number(day)));
+        const s_date = this.$route.query.start_date.split("-");
+        const e_date = this.$route.query.end_date.split("-");
+        this.value1.push(
+          new Date(Number(s_date[0]), Number(s_date[1] - 1), Number(s_date[2]))
+        );
+        this.value1.push(
+          new Date(Number(e_date[0]), Number(e_date[1] - 1), Number(e_date[2]))
+        );
       },
     },
     mounted() {

@@ -28,7 +28,7 @@
         "
         >{{ list.title }}</span
       >
-      <span class="right">{{ list.limit_date }}</span>
+      <span class="right">{{ list.limit }}</span>
     </div>
   </div>
 </template>
