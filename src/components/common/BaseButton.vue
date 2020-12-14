@@ -27,5 +27,8 @@
     padding: 4px 0;
     box-sizing: border-box;
     font-family: "NotoSansCJKkr-Medium";
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 </style>

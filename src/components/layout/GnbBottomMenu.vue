@@ -220,14 +220,14 @@
         };
         this.bottom_menu.push({
           title: "정산/결제",
-          path: "/bookmarkManage/list",
+          path: "/settlementAndPayment/settlelList",
           name: require("@/assets/images/common/payment_ico.png"),
           active: require("@/assets/images/common/payment_active_ico.png"),
           status: 1,
           query: {
-            keyword: "",
             pageCurrent: 1,
-            order: "",
+            start_date: this.$dateFormat(),
+            end_date: this.$dateFormat(),
           },
         });
       }

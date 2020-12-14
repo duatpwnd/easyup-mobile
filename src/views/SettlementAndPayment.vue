@@ -1,75 +1,99 @@
 <template>
-  <div>
-    <span
+  <div class="settlement_payment">
+    <router-link
+      v-if="$route.name != 'paymentDetail'"
       class="tab"
-      v-for="(tab, index) in types"
-      :class="{ active: index == isActive }"
-      :key="index"
-      @click="toggle(tab.target, index)"
-      ><span class="active_bar"></span>{{ tab.name }}</span
+      :to="{
+        path: '/settlementAndPayment',
+        query: {
+          start_date: this.$dateFormat(),
+          end_date: this.$dateFormat(),
+          pageCurrent: 1,
+        },
+      }"
+      ><span class="active_bar"></span>정산
+    </router-link>
+    <router-link
+      v-if="$route.name != 'paymentDetail'"
+      class="tab"
+      :to="{
+        path: '/settlementAndPayment/payList',
+        query: {
+          start_date: this.$dateFormat(),
+          end_date: this.$dateFormat(),
+          keyword: '',
+          pageCurrent: 1,
+          order: '',
+        },
+      }"
+      ><span class="active_bar"></span>결제</router-link
     >
-    <Date></Date>
-    <keep-alive>
-      <component v-bind:is="type"></component>
-    </keep-alive>
+    <div class="date_section" v-if="$route.name != 'paymentDetail'">
+      <DatePicker @emitDatePick="datePick"></DatePicker>
+    </div>
+    <router-view></router-view>
   </div>
 </template>
 <script>
-  import Tab1 from "@/components/SettlementAndPayment/Settlement.vue";
-  import Tab2 from "@/components/SettlementAndPayment/Payment.vue";
-  import Date from "@/components/common/DatePicker.vue";
+  import DatePicker from "@/components/common/DatePicker.vue";
+
   export default {
-    components: { Tab1, Tab2, Date },
+    components: { DatePicker },
     data() {
-      return {
-        isActive: this.$route.query.type == "Tab1" ? 0 : 1,
-        type: this.$route.query.type == "Tab1" ? Tab1 : Tab2,
-        types: [
-          { name: "정산", target: "Tab1" },
-          { name: "결제", target: "Tab2" },
-        ],
-      };
+      return {};
     },
     methods: {
-      toggle(type, index) {
-        this.type = type;
-        this.isActive = index;
+      datePick(result) {
         this.$router
           .push({
             query: {
-              type: type,
+              pageCurrent: 1,
+              start_date: this.$dateFormat(result[0]),
+              end_date: this.$dateFormat(result[1]),
             },
           })
           .catch(() => {});
+        // this.getList(1);
       },
     },
     mounted() {},
   };
 </script>
 <style scoped lang="scss">
-  .tab {
-    font-size: 2rem;
-    font-weight: 600;
-    width: 50%;
-    display: inline-block;
-    text-align: center;
-    background: #f8f8f8;
-    padding: 2% 0;
-    position: relative;
-    .active_bar {
+  .settlement_payment {
+    padding-bottom: 65px;
+    .tab {
+      font-size: 2rem;
+      font-weight: 600;
+      width: 50%;
+      display: inline-block;
+      text-align: center;
       background: #f8f8f8;
-      height: 4px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      box-sizing: border-box;
+      padding: 2% 0;
+      position: relative;
+      .active_bar {
+        background: #f8f8f8;
+        height: 4px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+      }
     }
-  }
-  .active {
-    background: #ffffff;
-    .active_bar {
-      background: #114fff;
+    .router-link-active {
+      color: black;
+      background: #ffffff;
+      .active_bar {
+        background: #114fff;
+      }
+    }
+    .date_section {
+      padding: 0 4.445%;
+      margin-top: 10px;
+      .box {
+        margin-top: 0;
+      }
     }
   }
 </style>

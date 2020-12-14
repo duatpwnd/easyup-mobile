@@ -20,7 +20,7 @@
           </select>
         </div>
         <div class="row">
-          <label class="dt benefit_title">쿠폰 혜택</label>
+          <label class="dt row_title">쿠폰 혜택</label>
           <div class="dd">
             <div class="dd_line">
               <BaseRadioBox>
@@ -52,12 +52,100 @@
             </div>
           </div>
         </div>
-
         <div class="row">
-          <label class="dt">휴대폰</label>
-          <input type="tell" id="phone" />
+          <label class="dt row_title">유효 기간</label>
+          <div class="dd">
+            <div class="dd_line">
+              <BaseRadioBox>
+                <input
+                  type="radio"
+                  v-model="issue_date"
+                  slot="radio"
+                  name="validity"
+                  value="1"
+                />
+              </BaseRadioBox>
+              <DatePicker></DatePicker>
+            </div>
+            <div class="dd_line">
+              <BaseRadioBox>
+                <input
+                  type="radio"
+                  slot="radio"
+                  value="2"
+                  name="validity"
+                  id="issue_date"
+                  v-model="issue_date"
+                />
+              </BaseRadioBox>
+              <label for="issue_date" class="common_label">발급일</label>
+              <input type="text" /><span class="unit">일</span>
+            </div>
+          </div>
         </div>
-
+        <div class="row">
+          <label class="dt row_title">수량</label>
+          <div class="dd">
+            <div class="dd_line quantity_line">
+              <BaseRadioBox>
+                <input
+                  type="radio"
+                  slot="radio"
+                  name="quantity_limit"
+                  value="1"
+                  v-model="quantity_limit"
+                  id="discount_percent"
+                />
+              </BaseRadioBox>
+              <label class="common_label infinite_label" for="infinite"
+                >무제한</label
+              >
+            </div>
+            <div class="dd_line ">
+              <BaseRadioBox>
+                <input
+                  type="radio"
+                  slot="radio"
+                  value="2"
+                  name="quantity_limit"
+                  v-model="quantity_limit"
+                  id="quantity_limit"
+                />
+              </BaseRadioBox>
+              <label for="quantity_limit" class="common_label">수량제한</label>
+              <input type="text" /><span class="unit">개</span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="dt row_title">발급 상태</label>
+          <div class="dd">
+            <div class="dd_line">
+              <BaseRadioBox>
+                <input
+                  type="radio"
+                  slot="radio"
+                  name="issue_status"
+                  value="1"
+                  v-model="issue_status"
+                  id="issuing"
+                />
+              </BaseRadioBox>
+              <label class="common_label " for="issuing">발급중</label>
+              <BaseRadioBox>
+                <input
+                  type="radio"
+                  slot="radio"
+                  name="issue_status"
+                  value="2"
+                  v-model="issue_status"
+                  id="end"
+                />
+              </BaseRadioBox>
+              <label class="common_label " for="end">종료</label>
+            </div>
+          </div>
+        </div>
         <div class="btn_wrap">
           <BlueBtn class="left">
             <button slot="blue_btn">
@@ -77,14 +165,23 @@
 <script>
   import BlueBtn from "@/components/common/BaseButton.vue";
   import BaseRadioBox from "@/components/common/BaseRadioBox.vue";
+  import DatePicker from "@/components/common/DatePicker.vue";
+
   export default {
-    components: { BlueBtn, BaseRadioBox },
+    components: { BlueBtn, DatePicker, BaseRadioBox },
     data() {
       return {
         coupon_benefit: "1",
+        issue_date: "1",
+        quantity_limit: "1",
+        issue_status: "1",
       };
     },
-    methods: {},
+    methods: {
+      datePick(result) {
+        console.log(result);
+      },
+    },
   };
 </script>
 <style scoped lang="scss">
@@ -102,14 +199,15 @@
         select {
           font-family: "NotoSansCJKkr-Regular";
           font-size: 14px;
-          width: calc(100% - 35%);
+          width: calc(100% - 30%);
           border: 1px solid #ccc;
           border-radius: 5px;
           outline: none;
           padding: 5px 6px;
-          height: 28px;
-          line-height: 13px;
+          height: 40px;
+          line-height: 28px;
           box-sizing: border-box;
+          vertical-align: middle;
         }
         select {
           background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat
@@ -117,45 +215,75 @@
         }
 
         .dt {
-          width: 35%;
+          width: 30%;
           display: inline-block;
           font-size: 14px;
           font-family: "NotoSansCJKkr-Regular";
+          vertical-align: middle;
         }
-        .benefit_title {
+        .row_title {
           vertical-align: top;
         }
         .dd {
           font-size: 14px;
-          width: calc(100% - 35%);
+          width: calc(100% - 30%);
           display: inline-block;
           vertical-align: middle;
 
           .dd_line {
-            display: flex;
-            line-height: 29px;
-            justify-content: space-between;
             &:not(:first-child) {
               margin-top: 5px;
             }
             .container-radiobox {
-              width: 5%;
+              width: 15%;
             }
             .common_label {
-              margin-left: 5px;
-              width: 20%;
+              width: 25%;
+              line-height: 29px;
+              display: inline-block;
             }
+
             input {
-              vertical-align: middle;
               width: 50%;
             }
             .unit {
               vertical-align: middle;
+              line-height: 29px;
+              width: 10%;
+              text-align: center;
+              display: inline-block;
+            }
+            ::v-deep .box {
+              margin-top: 0;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+              overflow: hidden;
+              width: 85%;
+              box-sizing: border-box;
+              vertical-align: middle;
+              display: inline-block;
+              .mx-input-wrapper {
+                .mx-input {
+                  height: 28px;
+                  line-height: 13px;
+                  width: 85%;
+                  font-size: 12px;
+                  border-right: 1px solid #ccc;
+                  color: #333333;
+                  &::placeholder {
+                    color: #333333;
+                  }
+                }
+                .mx-icon-calendar {
+                  width: 15%;
+                }
+              }
             }
           }
         }
       }
       .btn_wrap {
+        margin-top: 25px;
         &:after {
           display: block;
           content: "";
@@ -163,6 +291,12 @@
         }
         .blue_btn {
           width: 48%;
+          button {
+            height: 40px;
+            font-family: unset;
+            line-height: 28px;
+            font-size: 18px;
+          }
         }
         .left {
           float: left;

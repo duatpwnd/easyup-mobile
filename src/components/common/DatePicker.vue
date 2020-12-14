@@ -38,18 +38,47 @@
       },
 
       getToday() {
-        const s_date = this.$route.query.start_date.split("-");
-        const e_date = this.$route.query.end_date.split("-");
-        this.value1.push(
-          new Date(Number(s_date[0]), Number(s_date[1] - 1), Number(s_date[2]))
-        );
-        this.value1.push(
-          new Date(Number(e_date[0]), Number(e_date[1] - 1), Number(e_date[2]))
-        );
+        let s_date = "";
+        let e_date = "";
+        if (this.$route.query.start_date == undefined) {
+          s_date = this.$dateFormat().split("-");
+          this.value1.push(
+            new Date(
+              Number(s_date[0]),
+              Number(s_date[1] - 1),
+              Number(s_date[2])
+            )
+          );
+          this.value1.push(
+            new Date(
+              Number(s_date[0]),
+              Number(s_date[1] - 1),
+              Number(s_date[2])
+            )
+          );
+        } else {
+          s_date = this.$route.query.start_date.split("-");
+          e_date = this.$route.query.end_date.split("-");
+          this.value1.push(
+            new Date(
+              Number(s_date[0]),
+              Number(s_date[1] - 1),
+              Number(s_date[2])
+            )
+          );
+          this.value1.push(
+            new Date(
+              Number(e_date[0]),
+              Number(e_date[1] - 1),
+              Number(e_date[2])
+            )
+          );
+        }
       },
     },
     mounted() {
       this.getToday();
+      this.set();
     },
   };
 </script>
@@ -60,7 +89,7 @@
     ::v-deep .mx-datepicker {
       width: 100%;
       .mx-input-wrapper {
-        input {
+        .mx-input {
           padding: 0;
           height: 40px;
           font-size: 14px;

@@ -359,8 +359,34 @@ const routes = [
   {
     path: "/settlementAndPayment",
     name: "settlementAndPayment",
+    redirect: "/settlementAndPayment/settlelList",
     component: () => import("../views/SettlementAndPayment.vue"),
-    meta: { GnbBottomMenu: true },
+    children: [
+      {
+        path: "settlelList",
+        name: "settlelList",
+        component: () => import("@/views/settlement_payment/SettleList.vue"),
+        meta: { GnbBottomMenu: true },
+      },
+      {
+        path: "detail", //상세내역
+        name: "detail",
+        component: () => import("@/views/settlement_payment/Detail.vue"),
+        meta: { GnbBottomMenu: true },
+      },
+      {
+        path: "paymentDetail", //결제내역
+        name: "paymentDetail",
+        component: () => import("@/views/settlement_payment/PaymentDetail.vue"),
+        meta: { GnbBottomMenu: true },
+      },
+      {
+        path: "payList",
+        name: "payList",
+        component: () => import("@/views/settlement_payment/PayList.vue"),
+        meta: { GnbBottomMenu: true },
+      },
+    ],
   },
   {
     path: "/purchase",

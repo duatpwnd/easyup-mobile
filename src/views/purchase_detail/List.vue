@@ -28,7 +28,7 @@
     <DatePicker @emitDatePick="datePick"></DatePicker>
     <Row v-for="(li, index) in list.list" :key="index">
       <template slot="row">
-        <div class="row">
+        <div class="row contain_btn">
           <h2 class="date">
             {{ li.payment_date.split(" ")[0] }}
           </h2>
@@ -40,7 +40,7 @@
               })
             "
           >
-            <button class="trans_id" slot="blue_btn">{{ li.trans_id }}</button>
+            <button class="btn_id" slot="blue_btn">{{ li.trans_id }}</button>
           </BaseButton>
         </div>
         <div class="row">

@@ -28,10 +28,11 @@
       }
 
       ::v-deep .blue_btn {
-        .trans_id {
-          float: right;
+        float: right;
+        width: 30%;
+        height: 30px;
+        .btn_id {
           font-size: 16px;
-          width: 95px;
           height: 30px;
           line-height: 21px;
         }
@@ -58,6 +59,9 @@
       .course {
         color: #999999;
       }
+    }
+    .contain_btn {
+      line-height: 30px;
     }
   }
 </style>
