@@ -2,9 +2,14 @@
   <div class="settlement_payment">
     <router-link
       v-if="$route.name != 'paymentDetail'"
-      class="tab"
+      :class="[
+        'tab',
+        {
+          'router-link-active': $route.name == 'detail',
+        },
+      ]"
       :to="{
-        path: '/settlementAndPayment',
+        path: '/settlementAndPayment/settlelList',
         query: {
           start_date: this.$dateFormat(),
           end_date: this.$dateFormat(),
@@ -28,34 +33,17 @@
       }"
       ><span class="active_bar"></span>결제</router-link
     >
-    <div class="date_section" v-if="$route.name != 'paymentDetail'">
-      <DatePicker @emitDatePick="datePick"></DatePicker>
-    </div>
+
     <router-view></router-view>
   </div>
 </template>
 <script>
-  import DatePicker from "@/components/common/DatePicker.vue";
-
   export default {
-    components: { DatePicker },
+    components: {},
     data() {
       return {};
     },
-    methods: {
-      datePick(result) {
-        this.$router
-          .push({
-            query: {
-              pageCurrent: 1,
-              start_date: this.$dateFormat(result[0]),
-              end_date: this.$dateFormat(result[1]),
-            },
-          })
-          .catch(() => {});
-        // this.getList(1);
-      },
-    },
+    methods: {},
     mounted() {},
   };
 </script>

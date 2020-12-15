@@ -19,9 +19,9 @@
           </BaseButton>
         </div>
         <div class="row">
-          <span class="dt" v-if="li.type == 'course'">강의</span>
-          <span class="dt" v-else>코스</span>
-          <span class="dd">{{ li.title }}</span>
+          <span class="dt lec" v-if="li.type == 'course'">강의</span>
+          <span class="dt course" v-else>코스</span>
+          <span class="dt">{{ li.title }}</span>
         </div>
         <div class="row">
           <span class="dt">구매자</span>

@@ -436,6 +436,20 @@ const routes = [
     component: () => import("@/views/couponManageTeacherRegister.vue"),
     meta: { GnbBottomMenu: true },
   },
+  // 강의 바구니
+  {
+    path: "/cart",
+    name: "cart",
+    component: () => import("@/views/Cart.vue"),
+    meta: { isFooter: true, unauthorized: true },
+  },
+  // 강의 바구니 에서 결제하기
+  {
+    path: "/order",
+    name: "order",
+    component: () => import("@/views/Order.vue"),
+    meta: { isFooter: true, unauthorized: true },
+  },
 ];
 
 const router = new VueRouter({

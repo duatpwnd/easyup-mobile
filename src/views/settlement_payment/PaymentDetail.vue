@@ -201,10 +201,7 @@
       .trans_id {
         margin-top: 16px;
       }
-      .lec,
-      .course {
-        margin-right: 10px;
-      }
+
       .price_line {
         line-height: 20px;
         .final_price {

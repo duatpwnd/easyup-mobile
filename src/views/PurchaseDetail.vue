@@ -21,10 +21,10 @@
 </script>
 <style scoped lang="scss">
   .purchase_warp {
-    padding: 4.445%;
-
+    padding-bottom: 65px;
     .title {
-      font-size: 2rem;
+      font-size: 18px;
+      padding: 0 4.445%;
     }
   }
 </style>

@@ -122,11 +122,12 @@
     min-height: 100%;
     .mask {
       position: fixed;
+      max-width: 720px;
       top: 0;
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.5);
-      z-index: 2;
+      z-index: 5;
     }
   }
   .router-view {

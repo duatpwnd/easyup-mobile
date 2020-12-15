@@ -18,7 +18,7 @@
 <style scoped lang="scss">
   .li {
     .title {
-      font-size: 14px;
+      font-size: 16px;
     }
     .row {
       &::after {
@@ -58,6 +58,7 @@
       .lec,
       .course {
         color: #999999;
+        margin-right: 10px;
       }
     }
     .contain_btn {

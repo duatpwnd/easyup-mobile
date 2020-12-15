@@ -11,20 +11,15 @@
       <!-- 학생인지 강사인지  -->
       <router-link
         :to="{
-          path: '/bookmarkManage/list',
-          query: {
-            keyword: '',
-            pageCurrent: 1,
-            order: '',
-          },
+          path: '/cart',
         }"
         class="myclass"
         v-if="userStore_userinfo.access_token"
       >
         <img
-          src="@/assets/images/common/myclass_ico.png"
-          alt="책갈피"
-          title="책갈피"
+          src="@/assets/images/common/cart_ico.png"
+          alt="장바구니"
+          title="장바구니"
         />
       </router-link>
       <router-link

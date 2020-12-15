@@ -1,31 +1,33 @@
 <template>
   <div>
-    <Search>
-      <select
-        slot="option"
-        class="select"
-        v-model="order"
-        @change="getList(1, order, keyword)"
-      >
-        <option value="">전체</option>
-        <option value="success">결제완료</option>
-        <option value="refund">환불완료</option>
-        <option value="cancel">취소신청</option>
-      </select>
-      <input
-        slot="slot_input"
-        class="search_contents"
-        placeholder="강의명을 검색하세요."
-        :value="keyword"
-        v-on:input="keyword = $event.target.value"
-      />
-      <button
-        slot="search_btn"
-        class="search_btn"
-        @click="getList(1, '', keyword)"
-      ></button>
-    </Search>
-    <DatePicker @emitDatePick="datePick"></DatePicker>
+    <div class="filter">
+      <Search>
+        <select
+          slot="option"
+          class="select"
+          v-model="order"
+          @change="getList(1, order, keyword)"
+        >
+          <option value="">전체</option>
+          <option value="success">결제완료</option>
+          <option value="refund">환불완료</option>
+          <option value="cancel">취소신청</option>
+        </select>
+        <input
+          slot="slot_input"
+          class="search_contents"
+          placeholder="강의명을 검색하세요."
+          :value="keyword"
+          v-on:input="keyword = $event.target.value"
+        />
+        <button
+          slot="search_btn"
+          class="search_btn"
+          @click="getList(1, '', keyword)"
+        ></button>
+      </Search>
+      <DatePicker @emitDatePick="datePick"></DatePicker>
+    </div>
     <Row v-for="(li, index) in list.list" :key="index">
       <template slot="row">
         <div class="row contain_btn">
@@ -184,4 +186,12 @@
     },
   };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .filter {
+    padding: 0 4.445%;
+  }
+  .li {
+    padding: 4.445%;
+    border-bottom: 4px solid #f8f8f8;
+  }
+</style>

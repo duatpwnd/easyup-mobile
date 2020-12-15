@@ -240,7 +240,7 @@
     bottom: 0;
     max-width: 720px;
     width: 100%;
-    z-index: 2;
+    z-index: 6;
     .more_view {
       &:after {
         display: block;

@@ -1,5 +1,6 @@
 <template>
   <div class="list_wrap">
+    <slot name="title"></slot>
     <div class="list list_left">
       <slot name="thumbnail">
         <img
