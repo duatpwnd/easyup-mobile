@@ -1,12 +1,13 @@
 <template>
   <div class="register">
+    <ConfirmModal @ok="register" v-if="toggleStore_confirmModal"></ConfirmModal>
     <h2 class="h2_tutle">쿠폰 등록</h2>
     <form class="form">
       <legend>회원가입</legend>
       <fieldset>
         <div class="row">
           <label class="dt" for="coupon_name">쿠폰명</label>
-          <input type="text" id="coupon_name" />
+          <input type="text" id="coupon_name" v-model="name" />
         </div>
         <div class="row">
           <label class="dt">강의</label>
@@ -28,27 +29,32 @@
                   type="radio"
                   slot="radio"
                   name="coupon_benefit"
-                  value="1"
-                  v-model="coupon_benefit"
+                  value="percent"
+                  v-model="discount_type"
                   id="discount_percent"
                 />
               </BaseRadioBox>
               <label class="common_label" for="discount_percent">할인률</label>
-              <input type="text" /><span class="unit">%</span>
+              <input type="number" max="98" v-model="percent_enter" /><span
+                class="unit"
+                >%</span
+              >
             </div>
             <div class="dd_line">
               <BaseRadioBox>
                 <input
                   type="radio"
                   slot="radio"
-                  value="2"
+                  value="price"
                   name="coupon_benefit"
-                  v-model="coupon_benefit"
+                  v-model="discount_type"
                   id="price"
                 />
               </BaseRadioBox>
               <label for="price" class="common_label">금액</label>
-              <input type="text" /><span class="unit">원</span>
+              <input type="number" v-model="price_enter" /><span class="unit"
+                >원</span
+              >
             </div>
           </div>
         </div>
@@ -59,27 +65,29 @@
               <BaseRadioBox>
                 <input
                   type="radio"
-                  v-model="issue_date"
+                  v-model="limit_type"
                   slot="radio"
                   name="validity"
-                  value="1"
+                  value="date"
                 />
               </BaseRadioBox>
-              <DatePicker></DatePicker>
+              <DatePicker @emitDatePick="datePick"></DatePicker>
             </div>
             <div class="dd_line">
               <BaseRadioBox>
                 <input
                   type="radio"
                   slot="radio"
-                  value="2"
+                  value="days"
                   name="validity"
                   id="issue_date"
-                  v-model="issue_date"
+                  v-model="limit_type"
                 />
               </BaseRadioBox>
               <label for="issue_date" class="common_label">발급일</label>
-              <input type="text" /><span class="unit">일</span>
+              <input type="text" v-model="limit_date" /><span class="unit"
+                >일</span
+              >
             </div>
           </div>
         </div>
@@ -92,8 +100,8 @@
                   type="radio"
                   slot="radio"
                   name="quantity_limit"
-                  value="1"
-                  v-model="quantity_limit"
+                  value=""
+                  v-model="quantity"
                   id="discount_percent"
                 />
               </BaseRadioBox>
@@ -106,14 +114,15 @@
                 <input
                   type="radio"
                   slot="radio"
-                  value="2"
                   name="quantity_limit"
-                  v-model="quantity_limit"
+                  v-model="quantity"
                   id="quantity_limit"
                 />
               </BaseRadioBox>
               <label for="quantity_limit" class="common_label">수량제한</label>
-              <input type="text" /><span class="unit">개</span>
+              <input type="text" v-model="quantity_count" /><span class="unit"
+                >개</span
+              >
             </div>
           </div>
         </div>
@@ -126,8 +135,8 @@
                   type="radio"
                   slot="radio"
                   name="issue_status"
-                  value="1"
-                  v-model="issue_status"
+                  value="ing"
+                  v-model="state"
                   id="issuing"
                 />
               </BaseRadioBox>
@@ -137,8 +146,8 @@
                   type="radio"
                   slot="radio"
                   name="issue_status"
-                  value="2"
-                  v-model="issue_status"
+                  value="end"
+                  v-model="state"
                   id="end"
                 />
               </BaseRadioBox>
@@ -147,13 +156,25 @@
           </div>
         </div>
         <div class="btn_wrap">
-          <BlueBtn class="left">
-            <button slot="blue_btn">
+          <BlueBtn class="left" @click.native="isRegister()">
+            <button slot="blue_btn" type="button">
               등록
             </button>
           </BlueBtn>
-          <BlueBtn class="right">
-            <button slot="blue_btn">
+          <BlueBtn
+            class="right"
+            @click.native="
+              $router.push({
+                path: '/couponManageTeacher/list',
+                query: {
+                  order: '',
+                  pageCurrent: 1,
+                  keyword: '',
+                },
+              })
+            "
+          >
+            <button slot="blue_btn" type="button">
               취소
             </button>
           </BlueBtn>
@@ -166,21 +187,91 @@
   import BlueBtn from "@/components/common/BaseButton.vue";
   import BaseRadioBox from "@/components/common/BaseRadioBox.vue";
   import DatePicker from "@/components/common/DatePicker.vue";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import { mapState, mapMutations } from "vuex";
 
   export default {
-    components: { BlueBtn, DatePicker, BaseRadioBox },
+    components: { BlueBtn, DatePicker, BaseRadioBox, ConfirmModal },
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_confirmModal: "confirm_modal",
+      }),
+    },
     data() {
       return {
-        coupon_benefit: "1",
+        name: "", // 쿠폰명
+        discount_type: "percent", // 할인률인지 금액인지
+        percent_enter: "", // 퍼센트금액
+        price_enter: "", // 금액
+        limit_type: "date", // 유효기간
+        limit_date: "",
+        limit_start_date: "",
+        limit_end_date: "",
         issue_date: "1",
-        quantity_limit: "1",
-        issue_status: "1",
+        quantity: "",
+        quantity_count: "",
+        state: "ing",
       };
     },
     methods: {
       datePick(result) {
-        console.log(result);
+        console.log(this.$dateFormat(result[0]));
+        this.limit_start_date = this.$dateFormat(result[0]);
+        this.limit_end_date = this.$dateFormat(result[1]);
       },
+      isRegister() {
+        this.$confirmMessage("쿠폰을 발급 하시겠습니까?");
+      },
+      register() {
+        const data = {
+          action: "add_coupon",
+          name: this.name,
+          c_id: 61,
+          discount_type: this.discount_type,
+          discount_price:
+            this.discount_type == "percent"
+              ? this.percent_enter
+              : this.price_enter,
+          limit_type: this.limit_type,
+          quantity: this.quantity == "" ? "" : this.quantity_count,
+          state: this.state,
+        };
+        if (this.limit_type == "days") {
+          data["limit_date"] = this.limit_date;
+        } else {
+          data["limit_start_date"] = this.limit_start_date;
+          data["limit_end_date"] = this.limit_end_date;
+        }
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log(result);
+            this.$noticeMessage("쿠폰이 발급 되었습니다.");
+          });
+      },
+      getMyCourse() {
+        const data = {
+          action: "get_my_course_teacher",
+          search_status: "active",
+          keyword: "",
+          return_type: "simple",
+        };
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log(result);
+          });
+      },
+    },
+    created() {
+      this.getMyCourse();
     },
   };
 </script>

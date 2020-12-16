@@ -1,5 +1,9 @@
 <template>
   <div id="my_lecture" v-if="dashboard_list">
+    <Profile
+      v-if="profile_modal"
+      @profileModalClose="profile_modal = false"
+    ></Profile>
     <UserInfo v-if="top_count">
       <span slot="user_name" class="name"
         >{{ userStore_userinfo.info.username }}
@@ -16,7 +20,7 @@
         >강사전환</span
       >
       <template v-else slot="convert">
-        <span class="report">프로필</span>
+        <span class="report" @click="profile_modal = true">프로필</span>
         <span class="convert" @click="convert()">학생전환</span>
       </template>
       <p class="update_date" slot="update_date">
@@ -181,10 +185,11 @@
   import List from "@/components/my_lecture_room/list.vue";
   import UserInfo from "@/components/my_lecture_room/user_info.vue";
   import ProgressBar from "@/components/common/ProgressBar.vue";
+  import Profile from "@/components/modal/Profile.vue";
   import { mapState, mapMutations } from "vuex";
-
   export default {
     components: {
+      Profile,
       TimeLine,
       ProgressBar,
       List,
@@ -197,6 +202,7 @@
     },
     data() {
       return {
+        profile_modal: false,
         top_count: "",
         dashboard_list: "",
       };

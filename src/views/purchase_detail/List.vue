@@ -193,5 +193,8 @@
   .li {
     padding: 4.445%;
     border-bottom: 4px solid #f8f8f8;
+    .contain_btn {
+      margin-bottom: 10px;
+    }
   }
 </style>

@@ -5,9 +5,10 @@
         <input
           type="text"
           class="register_btn"
+          v-model="couponNumber"
           placeholder="쿠혼 번호를 입력해 주세요."
         />
-        <BaseButton>
+        <BaseButton @click.native="register()">
           <button slot="blue_btn">쿠폰 등록</button>
         </BaseButton>
       </div>
@@ -56,9 +57,26 @@
   export default {
     components: { BaseButton, Tab },
     data() {
-      return { list: "" };
+      return { list: "", couponNumber: "" };
     },
     methods: {
+      register() {
+        if (this.couponNumber.trim().length == 0) {
+          this.$noticeMessage("쿠폰번호를 입력해주세요.");
+        } else {
+          const data = {
+            action: "coupon_regedit",
+            coupon_number: this.couponNumber,
+          };
+          console.log(data);
+          this.$axios
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+            .then((result) => {
+              console.log(result);
+              this.getList();
+            });
+        }
+      },
       getList() {
         const data = {
           action: "my_coupon_list",

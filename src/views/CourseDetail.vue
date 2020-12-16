@@ -5,97 +5,150 @@
       alt="파이썬 코딩 기본편"
       title="파이썬 코딩 기본편"
     />
-    <div id="tag_wrap">
-      <slot name="title_wrap">
-        <h3 class="sub_title">{{ detail.category }}</h3>
-        <h2 class="title">{{ detail.title }}!</h2>
-        <div class="tag_list">
-          <router-link
-            class="tag"
-            :to="{
-              path: '/course',
-              query: {
-                action: 'get_session_list',
-                pageCurrent: 1,
-                order: 'type_date',
-                keyword: '',
-                tag: list.tag.replace('#', ''),
-              },
-            }"
-            v-for="(list, index) in detail.tags"
-            :key="index"
-          >
-            {{ list.tag }}</router-link
-          >
-        </div>
-      </slot>
-    </div>
     <div class="update_noti">
       <span>{{ detail.creation_date }}</span>
     </div>
-    <div id="subscribe">
-      <div class="subscribe_wrap">
-        <h2>무료</h2>
-        <BlueBtn v-if="is_subscribe">
-          <button
-            ref="subs_btn"
-            class="active_subscribe"
-            slot="blue_btn"
-            @click="goToPath()"
-          >
-            구독중
-          </button>
-        </BlueBtn>
-        <BlueBtn v-else>
-          <button ref="subs_btn" slot="blue_btn" @click="subscribe()">
-            구독하기
-          </button>
-        </BlueBtn>
-        <div>
-          <span class="total_lec"
-            >총<span class="color">{{ detail.course_list.length }}</span
-            >강</span
-          >
-        </div>
-        <div>
-          <StarRating
-            :rating="detail.ranking"
-            :star-size="16"
-            :read-only="true"
-            :increment="0.01"
-            :star-points="[
-              23,
-              2,
-              14,
-              17,
-              0,
-              19,
-              10,
-              34,
-              7,
-              50,
-              23,
-              43,
-              38,
-              50,
-              36,
-              34,
-              46,
-              19,
-              31,
-              17,
-            ]"
-          ></StarRating>
-        </div>
-        <span class="name">{{ detail.teachers }}</span>
+    <section class="section1">
+      <div class="lecture_title">
+        <h3 class="sub_title">{{ detail.category }}</h3>
+        <h2 class="title">{{ detail.title }}</h2>
       </div>
-      <button class="fixed_subs_btn" v-if="subscribe_btn">
-        <span v-if="is_subscribe" class="active_subscribe" @click="goToPath()"
-          >구독중</span
+      <div class="star_rating">
+        <StarRating
+          :rating="detail.ranking"
+          :star-size="16"
+          :read-only="true"
+          :increment="0.01"
+          :star-points="[
+            23,
+            2,
+            14,
+            17,
+            0,
+            19,
+            10,
+            34,
+            7,
+            50,
+            23,
+            43,
+            38,
+            50,
+            36,
+            34,
+            46,
+            19,
+            31,
+            17,
+          ]"
+        ></StarRating>
+      </div>
+      <div class="price">
+        <del class="original">{{ detail.price.original }}</del>
+        <span class="final">{{ detail.price.final }}원</span>
+      </div>
+      <div id="tag_wrap">
+        <slot name="title_wrap">
+          <div class="tag_list">
+            <router-link
+              class="tag"
+              :to="{
+                path: '/course',
+                query: {
+                  action: 'get_session_list',
+                  pageCurrent: 1,
+                  order: 'type_date',
+                  keyword: '',
+                  tag: list.tag.replace('#', ''),
+                },
+              }"
+              v-for="(list, index) in detail.tags"
+              :key="index"
+            >
+              {{ list.tag }}</router-link
+            >
+          </div>
+        </slot>
+      </div>
+      <div id="subscribe">
+        <div>
+          <div class="subscribe_wrap">
+            <BlueBtn v-if="is_subscribe">
+              <button
+                ref="subs_btn"
+                class="active_subscribe"
+                slot="blue_btn"
+                @click="goToPath()"
+              >
+                구독중
+              </button>
+            </BlueBtn>
+            <BlueBtn v-else>
+              <button
+                ref="subs_btn"
+                slot="blue_btn"
+                @click="
+                  $router.push({
+                    path: 'order',
+                    query: {
+                      cart_id: [$route.query.id].toString(),
+                    },
+                  })
+                "
+              >
+                구매하기
+              </button>
+            </BlueBtn>
+          </div>
+        </div>
+        <button class="fixed_subs_btn" v-if="subscribe_btn">
+          <span v-if="is_subscribe" class="active_subscribe" @click="goToPath()"
+            >구독중</span
+          >
+          <span
+            v-else
+            @click="
+              $router.push({
+                path: 'order',
+                query: {
+                  cart_id: [$route.query.id].toString(),
+                },
+              })
+            "
+            >구매하기</span
+          >
+        </button>
+      </div>
+      <div class="add_share">
+        <BlueBtn class="add" @click.native="cartAdd()">
+          <button slot="blue_btn">
+            코스담기
+          </button>
+        </BlueBtn>
+        <BlueBtn class="share">
+          <button slot="blue_btn" v-clipboard="url" v-clipboard:success="share">
+            공유하기
+          </button>
+        </BlueBtn>
+      </div>
+    </section>
+    <section class="section2">
+      <div class="user_intro">
+        <span class="total_lec"
+          >총<span class="color">{{ detail.course_list.length }}</span
+          >강</span
         >
-        <span v-else @click="subscribe()">구독하기</span>
-      </button>
-    </div>
+        <div
+          class="ol_list"
+          v-for="(list, index) in detail.course_list"
+          :key="index"
+        >
+          <span class="title">{{ index + 1 }}강</span>
+          <span> {{ list.title }}</span>
+        </div>
+      </div>
+      <span class="name">{{ detail.teachers }}</span>
+    </section>
     <div class="course_info">
       <h2 class="course_list">
         <span>코스 별 강좌 안내</span>
@@ -247,9 +300,26 @@
       }),
     },
     data() {
-      return {};
+      return { url: window.document.location.href };
     },
     methods: {
+      share() {
+        this.$noticeMessage("현재 페이지 주소가 복사되었습니다.");
+      },
+      cartAdd() {
+        const data = {
+          action: "add_cart",
+          type: this.$route.name == "lecDetail" ? "course" : "session",
+          id: this.$route.query.id,
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log(result);
+            this.$noticeMessage("강의바구니에 담았습니다.");
+          });
+      },
       goToPath() {
         this.$router.push({
           path: "/myClass/course",
@@ -283,46 +353,154 @@
   };
 </script>
 <style scoped lang="scss">
-  #tag_wrap {
-    padding: 4.445%;
-    .sub_title {
-      font-size: 1.375rem;
-      color: #999999;
-    }
-    .title {
-      font-size: 2rem;
-      color: #333333;
-    }
-    .tag_list {
-      margin-top: 5px;
-      line-height: 35px;
-      .tag {
-        color: #a4a4a4;
-        border: 2px solid #757575;
-        border-radius: 20px;
-        height: 24px;
-        padding: 0 10px;
-        display: inline-block;
-        margin-right: 0.763%;
-        font-size: 12px;
-        text-align: center;
-        line-height: 24px;
-        font-family: unset;
-      }
-    }
-  }
   .update_noti {
     padding: 15px 4.445%;
     background: #f8f8f8;
     span {
       color: #999999;
-      font-size: 1.25rem;
+      font-size: 14px;
     }
   }
-  #subscribe {
+  .section1 {
     padding: 4.445%;
+    padding-bottom: 0;
+    border-bottom: 4px solid #f8f8f8;
+    .lecture_title {
+      .sub_title {
+        font-size: 12px;
+        color: #999999;
+      }
+      .title {
+        font-size: 16px;
+        color: #333333;
+      }
+    }
+    .star_rating {
+      margin: 5px 0;
+      ::v-deep .vue-star-rating {
+        display: unset;
+        .vue-star-rating-rating-text {
+          font-size: 16px;
+          color: #333333;
+          margin-left: 4px;
+          display: inline-block;
+          vertical-align: 1.5px;
+        }
+      }
+    }
+    .price {
+      span {
+        font-weight: bold;
+      }
+      .original {
+        font-size: 14px;
+        color: #bdbdbd;
+      }
+      .final {
+        margin-left: 5px;
+        font-size: 18px;
+        color: #114fff;
+      }
+    }
+    #tag_wrap {
+      .tag_list {
+        margin-top: 5px;
+        line-height: 35px;
+        .tag {
+          color: #a4a4a4;
+          border: 2px solid #757575;
+          border-radius: 20px;
+          height: 24px;
+          padding: 0 10px;
+          display: inline-block;
+          margin-right: 0.763%;
+          font-size: 12px;
+          text-align: center;
+          line-height: 24px;
+          font-family: unset;
+        }
+      }
+    }
+    #subscribe {
+      .subscribe_wrap {
+        .blue_btn {
+          ::v-deep button {
+            border-radius: 10px;
+            margin: 10px 0;
+            height: 40px;
+            line-height: 32px;
+            font-size: 18px;
+          }
+        }
+        .active_subscribe {
+          background-color: #ff114a;
+          border-color: #ff114a;
+        }
+
+        .total_lec {
+          font-size: 1.375rem;
+          .color {
+            color: #114fff;
+          }
+        }
+        .name {
+          font-size: 1.375rem;
+          color: #666666;
+        }
+
+        .score {
+          font-size: 1.375rem;
+          color: #333333;
+          vertical-align: middle;
+          margin-left: 2%;
+        }
+
+        .fixed_subs_btn {
+          position: fixed;
+          bottom: 0;
+          background: #114fff;
+          color: #ffffff;
+          font-family: "NotoSansCJKkr-Medium";
+          font-size: 20px;
+          width: 100%;
+          max-width: 720px;
+          z-index: 2;
+          left: 0;
+          right: 0;
+          margin: auto;
+          span {
+            width: 100%;
+            display: block;
+            height: 60px;
+            line-height: 60px;
+          }
+        }
+      }
+    }
+  }
+  .section2 {
+    padding: 4.445%;
+    border-bottom: 4px solid #f8f8f8;
+    .user_intro {
+      .total_lec {
+        margin-bottom: 7px;
+        display: block;
+      }
+    }
+    .name {
+      font-size: 14px;
+    }
+  }
+  .add_share {
     .blue_btn {
+      display: inline-block;
+      width: 49%;
+
       ::v-deep button {
+        padding-left: 20px;
+        background: white;
+        border: 2px solid black;
+        color: black;
         border-radius: 10px;
         margin: 10px 0;
         height: 40px;
@@ -330,57 +508,17 @@
         font-size: 18px;
       }
     }
-    .active_subscribe {
-      background-color: #ff114a;
-      border-color: #ff114a;
-    }
-    ::v-deep .vue-star-rating {
-      display: unset;
-      .vue-star-rating-rating-text {
-        font-size: 15px;
-        color: #333333;
-        margin-left: 4px;
-        display: inline-block;
-        vertical-align: 1.5px;
+    .add {
+      ::v-deep button {
+        background: url("~@/assets/images/lec_detail/lecture_add_ico.png")
+          no-repeat 14px center / 28px 27px;
       }
     }
-    .subscribe_wrap {
-      .total_lec {
-        font-size: 1.375rem;
-        .color {
-          color: #114fff;
-        }
-      }
-      .name {
-        font-size: 1.375rem;
-        color: #666666;
-      }
-
-      .score {
-        font-size: 1.375rem;
-        color: #333333;
-        vertical-align: middle;
-        margin-left: 2%;
-      }
-    }
-    .fixed_subs_btn {
-      position: fixed;
-      bottom: 0;
-      background: #114fff;
-      color: #ffffff;
-      font-family: "NotoSansCJKkr-Medium";
-      font-size: 20px;
-      width: 100%;
-      max-width: 720px;
-      z-index: 2;
-      left: 0;
-      right: 0;
-      margin: auto;
-      span {
-        width: 100%;
-        display: block;
-        height: 60px;
-        line-height: 60px;
+    .share {
+      margin-left: 2%;
+      ::v-deep button {
+        background: url("~@/assets/images/lec_detail/share_ico.png") no-repeat
+          no-repeat 14px center / 28px 27px;
       }
     }
   }

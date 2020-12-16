@@ -11,6 +11,8 @@ import ApiUrl from "@/assets/js/api_url.js";
 import GlobalPlugin from "@/plugin/global_plugin.js";
 import axios from "axios";
 import VueRouterBackButton from "vue-router-back-button";
+import Clipboard from "v-clipboard";
+Vue.use(Clipboard);
 Vue.prototype.$EventBus = new Vue();
 Vue.prototype.$ApiUrl = ApiUrl;
 Vue.prototype.$axios = axios;

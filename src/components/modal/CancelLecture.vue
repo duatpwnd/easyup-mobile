@@ -1,25 +1,20 @@
 <template>
   <div class="mask">
-    <div class="coupon_modal">
-      <h2 class="h2_title">내 쿠폰</h2>
-      <input
-        type="text"
-        placeholder="쿠폰번호를 입력해 주세요."
-        class="register"
-      />
-      <BaseButton>
-        <button slot="blue_btn">
-          쿠폰 등록
-        </button>
-      </BaseButton>
-      <div class="coupon_wrap">
-        <div class="coupon" v-for="(li, index) in list.list" :key="index">
+    <div class="cancel_lecture">
+      <h2 class="h2_title">취소 강의</h2>
+      <select slot="option" class="select" v-model="select">
+        <option value="">전체 취소</option>
+        <option value="course_name">강의명</option>
+        <option value="section_name">섹션명</option>
+        <option value="title">책갈피제목</option>
+      </select>
+      <div class="lecture_wrap">
+        <div class="lecture" v-for="(li, index) in lecture_info" :key="index">
           <div class="left">
             <div class="row1">
-              <span class="name">{{ li.coupon_name }}</span>
-            </div>
-            <div class="row2">
-              <span class="date">{{ li.limit_date }}</span>
+              <span class="lec" v-if="li.type == 'course'">강의</span>
+              <span class="course" v-else>코스</span>
+              <span class="name">{{ li.title }}</span>
             </div>
           </div>
           <div class="right">
@@ -33,10 +28,22 @@
           </div>
         </div>
       </div>
+      <h2 class="h2_title reason_title">취소 사유</h2>
+      <select slot="option" class="select" v-model="reason">
+        <option value="">기타</option>
+        <option value="course_name">강의명</option>
+        <option value="section_name">섹션명</option>
+        <option value="title">책갈피제목</option>
+      </select>
+      <textarea
+        :disabled="reason == ''"
+        class="textarea"
+        placeholder="취소 사유를 입력해 주세요."
+      ></textarea>
       <div class="btn_wrap">
         <BaseButton>
-          <button class="confirm_ok" slot="blue_btn" @click="confirmOk()">
-            적용
+          <button class="confirm_ok" slot="blue_btn" @click="send()">
+            확인
           </button>
         </BaseButton>
         <BaseButton>
@@ -49,22 +56,30 @@
 <script>
   import BaseButton from "@/components/common/BaseButton.vue";
   import CheckBox from "@/components/common/BaseCheckBox.vue";
-
   export default {
-    components: { CheckBox, BaseButton },
+    props: {
+      lecture_info: {
+        type: Array,
+        required: true,
+      },
+    },
+    components: { BaseButton, CheckBox },
     data() {
-      return { list: "", checked_list: [] };
+      return {
+        select: "", // 취소 강의
+        reason: "", // 취소 사유
+        checked_list: [],
+      };
     },
     methods: {
-      close() {
-        this.$emit("emitCloseModal");
-      },
-      getList() {
+      send() {
         const data = {
-          action: "my_coupon_list",
-          search_status: "available",
-          current: 1,
+          action: "request_cancel",
+          trans_id: "",
+          reason: "",
+          reason_etc: "",
         };
+        console.log(data);
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
@@ -72,15 +87,15 @@
             this.list = result.data.data;
           });
       },
-    },
-    created() {
-      this.getList();
+      close() {
+        this.$emit("emitClose");
+      },
     },
   };
 </script>
 <style scoped lang="scss">
   .mask {
-    .coupon_modal {
+    .cancel_lecture {
       background: white;
       max-width: 720px;
       width: 80%;
@@ -92,57 +107,57 @@
       transform: translate(-50%, -50%);
       .h2_title {
         font-size: 16px;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
       }
-      .register {
-        border: 1px solid #707070;
+      .reason_title {
+        margin-top: 35px;
+      }
+      .select {
         width: 100%;
-        box-sizing: border-box;
-        height: 40px;
+        outline: none;
+        border: 1px solid #333333;
         font-size: 14px;
+        height: 40px;
+        padding: 0 10px;
+        line-height: 31px;
         border-radius: 4px;
+        color: #333333;
+        background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat
+          right 10px center / 7px 5px;
+      }
+      .textarea {
+        margin-top: 10px;
+        width: 100%;
+        outline: none;
+        border: 1px solid #333333;
+        font-size: 14px;
         padding: 10px;
-        margin-bottom: 10px;
+        border-radius: 4px;
+        resize: none;
+        height: 80px;
+        box-sizing: border-box;
       }
-      .blue_btn {
-        button {
-          height: 40px;
-          line-height: 31px;
-          font-size: 16px;
-        }
-      }
-      .coupon_wrap {
-        margin-top: 30px;
-        .coupon {
-          border-top: 1px solid #333333;
-          &:after {
-            display: block;
-            content: "";
-            clear: both;
-          }
+      .lecture_wrap {
+        margin-top: 20px;
+        .lecture {
+          border-bottom: 1px solid #ccc;
+
           .left {
             display: inline-block;
             padding: 10px 0;
             width: 86%;
             box-sizing: border-box;
             vertical-align: middle;
-            img {
-              width: 40%;
-              position: absolute;
-              top: 0;
-              right: 10%;
-              bottom: 0;
-              margin: auto;
-            }
             .row1 {
-              .name {
+              .name,
+              .lec,
+              .course {
                 font-size: 14px;
               }
-            }
-            .row2 {
-              .date {
-                font-size: 12px;
+              .lec,
+              .course {
                 color: #999999;
+                margin-right: 5px;
               }
             }
           }
@@ -169,6 +184,8 @@
         }
       }
       .btn_wrap {
+        width: 90%;
+        margin: 0 auto;
         margin-top: 20px;
         .blue_btn {
           text-align: center;
@@ -177,6 +194,9 @@
           .confirm_ok,
           .cancel {
             width: 90%;
+            height: 40px;
+            line-height: 31px;
+            font-size: 16px;
           }
           .cancel {
             background: #ccc;

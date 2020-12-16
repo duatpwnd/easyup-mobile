@@ -1,13 +1,16 @@
 <template>
   <div class="counpon_list">
+    <ConfirmModal
+      @ok="couponRemove"
+      v-if="toggleStore_confirmModal"
+    ></ConfirmModal>
     <h2 class="h2_title">쿠폰 관리</h2>
     <div class="search_area">
       <Search>
         <select slot="option" class="select" v-model="order">
           <option value="">전체</option>
-          <option value="course_name">강의명</option>
-          <option value="section_name">섹션명</option>
-          <option value="title">책갈피제목</option>
+          <option value="course_name">발급중</option>
+          <option value="section_name">종료</option>
         </select>
         <input
           slot="slot_input"
@@ -32,7 +35,7 @@
           쿠폰 생성
         </button>
       </BlueBtn>
-      <BlueBtn class="right">
+      <BlueBtn class="right" @click.native="isRemove()">
         <button slot="blue_btn">
           쿠폰 삭제
         </button>
@@ -99,9 +102,16 @@
   import Search from "@/components/common/Search.vue";
   import CheckBox from "@/components/common/BaseCheckBox.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import { mapState, mapMutations } from "vuex";
 
   export default {
-    components: { BlueBtn, Search, CheckBox },
+    components: { BlueBtn, Search, CheckBox, ConfirmModal },
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_confirmModal: "confirm_modal",
+      }),
+    },
     data() {
       return {
         order: "",
@@ -111,6 +121,28 @@
       };
     },
     methods: {
+      isRemove() {
+        this.$confirmMessage(
+          "선택한 쿠폰을 삭제 하시겠습니까?<br>쿠폰을 삭제해도 사전에 발행된 쿠폰은 사용이<br> 가능하며 상세 내역 확인은 불가 합니다."
+        );
+      },
+      couponRemove() {
+        if (this.checked_list.length == 0) {
+          this.$noticeMessage("삭제할 쿠폰을 선택해주세요.");
+        } else {
+          const data = {
+            action: "delete_coupon",
+            coupon_id: this.checked_list,
+          };
+          console.log(data);
+          this.$axios
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+            .then((result) => {
+              console.log(result);
+              this.getList();
+            });
+        }
+      },
       getList() {
         const data = {
           action: "get_course_coupon_list",
@@ -176,14 +208,26 @@
         width: 8%;
         display: inline-block;
         position: relative;
-        .container-checkbox {
-          width: 100%;
+        vertical-align: middle;
+        ::v-deep .container-checkbox {
+          position: unset;
+          width: unset;
+          height: 24px;
+          display: inline-block;
+          .checkmark {
+            position: unset;
+            width: 24px;
+            display: inline-block;
+            height: 24px;
+            padding: 0;
+            box-sizing: border-box;
+          }
         }
       }
       .right {
         display: inline-block;
         border: 1px solid #333333;
-
+        vertical-align: middle;
         box-sizing: border-box;
         width: 92%;
         .top_section {

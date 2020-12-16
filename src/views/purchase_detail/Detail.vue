@@ -1,5 +1,14 @@
 <template>
   <div class="detail_wrap" v-if="list">
+    <ConfirmModal
+      @ok="cancelLecture = true"
+      v-if="toggleStore_confirmModal"
+    ></ConfirmModal>
+    <CancelLecture
+      v-if="cancelLecture"
+      @emitClose="cancelLecture = false"
+      :lecture_info="list.lecture_info"
+    ></CancelLecture>
     <Row>
       <template slot="row">
         <div class="section">
@@ -169,7 +178,11 @@
     </Row>
     <div class="btn_wrap">
       <BaseButton class="left">
-        <button slot="blue_btn" v-if="list.cancel_btn_status == 'request'">
+        <button
+          slot="blue_btn"
+          v-if="list.cancel_btn_status == 'request'"
+          @click="isCancel()"
+        >
           취소 요청
         </button>
         <button
@@ -206,17 +219,33 @@
 <script>
   import Row from "@/components/common/Row.vue";
   import BaseButton from "@/components/common/BaseButton.vue";
+  import { mapState, mapMutations } from "vuex";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import CancelLecture from "@/components/modal/CancelLecture.vue";
   export default {
     components: {
+      CancelLecture,
+      ConfirmModal,
       Row,
       BaseButton,
+    },
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_confirmModal: "confirm_modal",
+      }),
     },
     data() {
       return {
         list: "",
+        cancelLecture: false,
       };
     },
     methods: {
+      isCancel() {
+        this.$confirmMessage(
+          "구매하신 강의를 취소 하시겠습니까?<br>취소 신청 시 강의 시청이 불가 합니다."
+        );
+      },
       getList() {
         const data = {
           action: "order_info",

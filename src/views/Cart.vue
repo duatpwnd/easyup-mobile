@@ -46,7 +46,7 @@
         </div>
       </template>
       <template slot="list_info">
-        <BaseButton class="right">
+        <BaseButton class="right" @click.native="cartRemove([li.id])">
           <button slot="blue_btn">
             삭제
           </button>
@@ -97,25 +97,12 @@
             slot="check"
         /></CheckBox>
       </div>
-      <BaseButton
-        class="left"
-        @click.native="$router.push('/couponManageTeacher/register')"
-      >
+      <BaseButton class="left" @click.native="cartRemove(checked_list)">
         <button slot="blue_btn">
           선택 삭제
         </button>
       </BaseButton>
-      <BaseButton
-        class="right"
-        @click.native="
-          $router.push({
-            path: '/order',
-            query: {
-              cart_id: checked_list.toString(),
-            },
-          })
-        "
-      >
+      <BaseButton class="right" @click.native="goToOrder()">
         <button slot="blue_btn">
           구매하기
         </button>
@@ -139,6 +126,35 @@
       };
     },
     methods: {
+      goToOrder() {
+        if (this.checked_list.length == 0) {
+          this.list.list.forEach((el, index) => {
+            this.checked_list.push(el.id);
+          });
+        }
+        this.$router.push({
+          path: "/order",
+          query: {
+            cart_id: this.checked_list.toString(),
+          },
+        });
+      },
+      cartRemove(id) {
+        if (id.length == 0) {
+          this.$noticeMessage("삭제할 강의를 선택해주세요.");
+        } else {
+          const data = {
+            action: "delete_cart",
+            cart_id: id,
+          };
+          this.$axios
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+            .then((result) => {
+              console.log(result);
+              this.getList();
+            });
+        }
+      },
       all_check() {
         this.allCheck = !this.allCheck;
         if (this.allCheck) {

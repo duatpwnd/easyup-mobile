@@ -78,7 +78,7 @@
           </div>
         </slot>
       </div>
-      <div class="coupon_wrap">
+      <div class="coupon_wrap" @click="couponDownload()">
         <span class="txt" v-if="detail.coupon.discount_type == 'price'"
           >{{ discount_price }}원 할인 쿠폰 받기</span
         >
@@ -106,43 +106,76 @@
               </button>
             </BlueBtn>
             <BlueBtn v-else>
-              <button ref="subs_btn" slot="blue_btn" @click="subscribe()">
-                구독하기
+              <button
+                ref="subs_btn"
+                slot="blue_btn"
+                @click="
+                  $router.push({
+                    path: 'order',
+                    query: {
+                      cart_id: [$route.query.id].toString(),
+                    },
+                  })
+                "
+              >
+                구매하기
               </button>
             </BlueBtn>
           </div>
         </div>
-        <button class="fixed_subs_btn" v-if="subscribe_btn">
-          <span
+        <div class="fixed_subs_btn" v-if="subscribe_btn">
+          <button
             v-if="is_subscribe"
             class="active_subscribe"
             @click="video($route.query.id, detail.lp_id)"
-            >강의 보러가기</span
           >
-          <span v-else @click="subscribe()">구독하기</span>
-        </button>
+            강의 보러가기
+          </button>
+          <div v-else>
+            <button class="add_btn">강의담기</button>
+            <button class="share_btn">공유하기</button>
+            <button
+              class="purchase_btn"
+              @click="
+                $router.push({
+                  path: 'order',
+                  query: { cart_id: [$route.query.id].toString() },
+                })
+              "
+            >
+              구매하기
+            </button>
+          </div>
+        </div>
       </div>
       <div class="add_share">
-        <BlueBtn class="add">
-          <button slot="blue_btn" @click="lectureAdd()">
+        <BlueBtn class="add" @click.native="cartAdd()">
+          <button slot="blue_btn">
             강의담기
           </button>
         </BlueBtn>
-        <BlueBtn class="share">
-          <button slot="blue_btn" @click="share()">
-            공유하기
+        <BlueBtn class="share" @click.native="share()">
+          <button slot="blue_btn" v-clipboard="url" v-clipboard:success="share">
+            /> 공유하기
           </button>
         </BlueBtn>
       </div>
     </section>
     <section class="section2">
       <div class="user_intro">
-        <span class="total_lec"
-          >총<span class="color"> {{ detail.total_lecture }}</span
-          >강</span
-        >
+        <div>
+          <span>{{ detail.access_limit }}</span>
+        </div>
+        <div>
+          <span class="total_lec"
+            >총<span class="color"> {{ detail.total_lecture }}</span
+            >강</span
+          >
+        </div>
+        <div>
+          <span class="name">{{ detail.teachers }}</span>
+        </div>
       </div>
-      <span class="name">{{ detail.teachers }}</span>
     </section>
     <div id="intro">
       <div v-if="typeof detail.description[0] != 'undefined'">
@@ -192,7 +225,6 @@
           PLAY ▶
         </button>
         <button class="subscribe_btn" v-else>강의 구독</button>
-
         <span class="total_lec"
           >총 {{ detail.curriculum_list.count_detail }} 강</span
         >
@@ -338,9 +370,43 @@
       }),
     },
     data() {
-      return {};
+      return {
+        url: window.document.location.href,
+      };
     },
     methods: {
+      share() {
+        this.$noticeMessage("현재 페이지 주소가 복사되었습니다.");
+      },
+      cartAdd() {
+        const data = {
+          action: "add_cart",
+          type: this.$route.name == "lecDetail" ? "course" : "session",
+          id: this.$route.query.id,
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log(result);
+            this.$noticeMessage("강의바구니에 담았습니다.");
+          });
+      },
+      // 쿠폰다운
+      couponDownload() {
+        const data = {
+          action: "download_coupon",
+          course_id: this.$route.query.id,
+          c_id: this.detail.coupon.coupon_id,
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log(result);
+            this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
+          });
+      },
       video(course_id, lp_id) {
         this.$router.push({
           path: "/play",
@@ -539,20 +605,38 @@
         position: fixed;
         bottom: 0;
         background: #114fff;
-        color: #ffffff;
-        font-family: "NotoSansCJKkr-Medium";
-        font-size: 20px;
         width: 100%;
         max-width: 720px;
         z-index: 2;
         left: 0;
         right: 0;
         margin: auto;
-        span {
-          width: 100%;
-          display: block;
+        .add_btn,
+        .share_btn {
+          white-space: nowrap;
+          text-indent: 100%;
+          overflow: hidden;
           height: 60px;
-          line-height: 60px;
+          width: 20%;
+        }
+        .purchase_btn {
+          background: transparent;
+          width: 60%;
+          font-family: "NotoSansCJKkr-Medium";
+          font-size: 20px;
+          color: #ffffff;
+          text-align: center;
+          height: 60px;
+        }
+        .add_btn {
+          background: #333333
+            url("~@/assets/images/lec_detail/fixed_lecture_add_ico.png")
+            no-repeat center / 28px 27px;
+        }
+        .share_btn {
+          background: #333333
+            url("~@/assets/images/lec_detail/fixed_share_ico.png") no-repeat
+            center / 28px 27px;
         }
         .active_subscribe {
           background-color: #ff114a;
