@@ -44,8 +44,14 @@
         ></StarRating>
       </div>
       <div class="price">
-        <del class="original">{{ detail.price.original }}</del>
-        <span class="final">{{ detail.price.final }}원</span>
+        <del class="original">{{
+          detail.price.original.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        }}</del>
+        <span class="final"
+          >{{
+            detail.price.final.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }}원</span
+        >
       </div>
       <div id="tag_wrap">
         <slot name="title_wrap">
@@ -80,7 +86,7 @@
                 slot="blue_btn"
                 @click="goToPath()"
               >
-                구독중
+                코스 보러가기
               </button>
             </BlueBtn>
             <BlueBtn v-else>
@@ -101,23 +107,39 @@
             </BlueBtn>
           </div>
         </div>
-        <button class="fixed_subs_btn" v-if="subscribe_btn">
-          <span v-if="is_subscribe" class="active_subscribe" @click="goToPath()"
-            >구독중</span
+        <div class="fixed_subs_btn" v-if="subscribe_btn">
+          <button
+            v-if="is_subscribe"
+            class="active_subscribe"
+            @click="goToPath()"
           >
-          <span
-            v-else
-            @click="
-              $router.push({
-                path: 'order',
-                query: {
-                  cart_id: [$route.query.id].toString(),
-                },
-              })
-            "
-            >구매하기</span
-          >
-        </button>
+            코스 보러가기
+          </button>
+          <div v-else>
+            <button class="add_btn" @click="cartAdd()">코스담기</button>
+            <button
+              class="share_btn"
+              v-clipboard="url"
+              v-clipboard:success="share"
+              @click="share()"
+            >
+              공유하기
+            </button>
+            <button
+              class="purchase_btn"
+              @click="
+                $router.push({
+                  path: 'order',
+                  query: {
+                    cart_id: [$route.query.id].toString(),
+                  },
+                })
+              "
+            >
+              구매하기
+            </button>
+          </div>
+        </div>
       </div>
       <div class="add_share">
         <BlueBtn class="add" @click.native="cartAdd()">
@@ -285,7 +307,6 @@
     mixins: [mixin],
     components: {
       ProgressBar,
-
       StarRating,
       CommentWrap,
       BlueBtn,
@@ -300,26 +321,9 @@
       }),
     },
     data() {
-      return { url: window.document.location.href };
+      return {};
     },
     methods: {
-      share() {
-        this.$noticeMessage("현재 페이지 주소가 복사되었습니다.");
-      },
-      cartAdd() {
-        const data = {
-          action: "add_cart",
-          type: this.$route.name == "lecDetail" ? "course" : "session",
-          id: this.$route.query.id,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.$noticeMessage("강의바구니에 담았습니다.");
-          });
-      },
       goToPath() {
         this.$router.push({
           path: "/myClass/course",
@@ -436,7 +440,6 @@
           background-color: #ff114a;
           border-color: #ff114a;
         }
-
         .total_lec {
           font-size: 1.375rem;
           .color {
@@ -454,26 +457,51 @@
           vertical-align: middle;
           margin-left: 2%;
         }
-
-        .fixed_subs_btn {
-          position: fixed;
-          bottom: 0;
-          background: #114fff;
-          color: #ffffff;
+      }
+      .fixed_subs_btn {
+        position: fixed;
+        bottom: 0;
+        background: #114fff;
+        width: 100%;
+        max-width: 720px;
+        z-index: 2;
+        left: 0;
+        right: 0;
+        margin: auto;
+        .add_btn,
+        .share_btn {
+          white-space: nowrap;
+          text-indent: 100%;
+          overflow: hidden;
+          height: 64px;
+          width: 20%;
+        }
+        .purchase_btn {
+          background: transparent;
+          width: 60%;
           font-family: "NotoSansCJKkr-Medium";
           font-size: 20px;
+          vertical-align: middle;
+          color: #ffffff;
+          text-align: center;
+        }
+        .add_btn {
+          background: #333333
+            url("~@/assets/images/lec_detail/fixed_lecture_add_ico.png")
+            no-repeat center / 28px 27px;
+        }
+        .share_btn {
+          background: #333333
+            url("~@/assets/images/lec_detail/fixed_share_ico.png") no-repeat
+            center / 28px 27px;
+        }
+        .active_subscribe {
+          background-color: #ff114a;
+          border-color: #ff114a;
           width: 100%;
-          max-width: 720px;
-          z-index: 2;
-          left: 0;
-          right: 0;
-          margin: auto;
-          span {
-            width: 100%;
-            display: block;
-            height: 60px;
-            line-height: 60px;
-          }
+          font-size: 20px;
+          color: white;
+          height: 64px;
         }
       }
     }

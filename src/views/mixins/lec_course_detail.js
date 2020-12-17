@@ -56,6 +56,25 @@ let detail = {
         }
       }
     },
+    // url 복사
+    share() {
+      this.$noticeMessage("현재 페이지 주소가 복사되었습니다.");
+    },
+    // 강의바구니
+    cartAdd() {
+      const data = {
+        action: "add_cart",
+        type: this.$route.name == "lecDetail" ? "course" : "session",
+        id: this.$route.query.id,
+      };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          console.log(result);
+          this.$noticeMessage("강의바구니에 담았습니다.");
+        });
+    },
   },
   data() {
     return {
@@ -64,6 +83,7 @@ let detail = {
       subscribe_btn: false,
       detail: "",
       score_info: "", // 각 별점의 개수
+      url: window.document.location.href, // 클립보드 현재 url
     };
   },
   computed: {

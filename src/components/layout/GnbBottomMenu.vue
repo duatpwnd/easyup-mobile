@@ -220,7 +220,7 @@
         };
         this.bottom_menu.push({
           title: "정산/결제",
-          path: "/settlementAndPayment/settlelList",
+          path: "/settlementAndPayment/settleList",
           name: require("@/assets/images/common/payment_ico.png"),
           active: require("@/assets/images/common/payment_active_ico.png"),
           status: 1,

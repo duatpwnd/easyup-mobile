@@ -122,7 +122,13 @@
           });
       },
     },
+    beforeDestroy() {
+      this.$EventBus.$off(`detail_datePick`);
+    },
     created() {
+      this.$EventBus.$on(`detail_datePick`, () => {
+        this.getList(1);
+      });
       this.getList(this.$route.query.pageCurrent);
     },
   };

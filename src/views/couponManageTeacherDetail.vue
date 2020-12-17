@@ -1,28 +1,33 @@
 <template>
   <div class="coupon_detail" v-if="list">
     <h2 class="h2_title">쿠폰 내역</h2>
-    <DatePicker @emitDatePick="datePick"></DatePicker>
-    <div class="search_area">
-      <div class="chk">
-        <CheckBox>
-          <input type="checkbox" id="isuse" v-model="checked_list" slot="check"
-        /></CheckBox>
-        <label for="isuse" class="isuse">사용</label>
+    <div class="filter">
+      <DatePicker @emitDatePick="datePick"></DatePicker>
+      <div class="search_area">
+        <div class="chk">
+          <CheckBox
+            @change.native="getList(1, order == true ? 'use' : '', keyword)"
+          >
+            <input type="checkbox" value="use" v-model="order" slot="check"
+          /></CheckBox>
+          <label class="isuse">사용</label>
+        </div>
+        <Search>
+          <input
+            slot="slot_input"
+            class="search_contents"
+            placeholder="검색어를 검색하세요."
+            :value="keyword"
+            v-on:input="keyword = $event.target.value"
+            @change="getList(1, order, keyword)"
+          />
+          <button
+            slot="search_btn"
+            class="search_btn"
+            @click="getList(1, order, keyword)"
+          ></button>
+        </Search>
       </div>
-      <Search>
-        <input
-          slot="slot_input"
-          class="search_contents"
-          placeholder="검색어를 검색하세요."
-          :value="keyword"
-          v-on:input="keyword = $event.target.value"
-        />
-        <button
-          slot="search_btn"
-          class="search_btn"
-          @click="getList(1, order, keyword)"
-        ></button>
-      </Search>
     </div>
     <div class="coupon_info">
       <div class="left">
@@ -75,8 +80,9 @@
     components: { Search, DatePicker, CheckBox, Row },
     data() {
       return {
-        checked_list: "",
         list: "",
+        keyword: "",
+        order: "",
       };
     },
     methods: {
@@ -89,12 +95,15 @@
               order: this.$route.query.order,
               start_date: this.$dateFormat(result[0]),
               end_date: this.$dateFormat(result[1]),
+              c_id: this.$route.query.c_id,
+              coupon_id: this.$route.query.coupon_id,
             },
           })
           .catch(() => {});
         this.getList(1, this.$route.query.order, this.$route.query.keyword);
       },
       getList(num, order, keyword) {
+        console.log(num, order, keyword);
         const data = {
           action: "get_coupon_use_list",
           current: num,
@@ -145,40 +154,51 @@
     .h2_title {
       font-size: 18px;
     }
-    .search_area {
-      margin-top: 10px;
-      .chk {
-        width: 15%;
-        display: inline-block;
-        vertical-align: middle;
-        position: relative;
-        ::v-deep .container-checkbox {
-          width: 80%;
-          position: unset;
-          .checkmark {
+    .filter {
+      margin-top: 15px;
+      .search_area {
+        margin-top: 15px;
+        .chk {
+          width: 15%;
+          display: inline-block;
+          vertical-align: middle;
+          position: relative;
+          ::v-deep .container-checkbox {
             position: unset;
-            padding: 2% 20%;
+            width: unset;
+            height: 24px;
+            display: inline-block;
+            vertical-align: middle;
+            .checkmark {
+              position: unset;
+              width: 24px;
+              display: inline-block;
+              height: 24px;
+              padding: 0;
+              box-sizing: border-box;
+            }
+          }
+          .isuse {
+            margin-left: 10%;
+            display: inline-block;
+            vertical-align: middle;
           }
         }
-      }
-      .isuse {
-        margin-left: 10%;
-        display: inline-block;
-      }
-      .search {
-        width: 85%;
-        vertical-align: middle;
-        margin-top: 0;
-        display: inline-block;
-        .search_contents {
-          width: 98%;
+
+        .search {
+          width: 85%;
+          vertical-align: middle;
+          margin-top: 0;
+          display: inline-block;
+          .search_contents {
+            width: 98%;
+          }
         }
       }
     }
     .coupon_info {
       padding: 10px;
-      margin-top: 10px;
-      border: 1px solid #333333;
+      margin-top: 15px;
       border-radius: 4px;
       background: #f8f8f8;
       .left,
@@ -194,6 +214,9 @@
         .dd {
           font-size: 16px;
         }
+        .unit {
+          font-size: 12px;
+        }
       }
       .left {
         border-right: 1px solid #333333;
@@ -202,7 +225,7 @@
     section {
       .li {
         border: 1px solid #333333;
-        margin-top: 10px;
+        margin-top: 15px;
         padding: 10px;
         .coupon {
           .email {

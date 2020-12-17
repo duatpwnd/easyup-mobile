@@ -7,10 +7,15 @@
     <h2 class="h2_title">쿠폰 관리</h2>
     <div class="search_area">
       <Search>
-        <select slot="option" class="select" v-model="order">
+        <select
+          slot="option"
+          class="select"
+          v-model="order"
+          @change="getList(1, order, keyword)"
+        >
           <option value="">전체</option>
-          <option value="course_name">발급중</option>
-          <option value="section_name">종료</option>
+          <option value="ing">발급중</option>
+          <option value="end">종료</option>
         </select>
         <input
           slot="slot_input"
@@ -143,12 +148,12 @@
             });
         }
       },
-      getList() {
+      getList(num, order, keyword) {
         const data = {
           action: "get_course_coupon_list",
-          search_status: this.$route.query.order,
-          current: this.$route.query.pageCurrent,
-          keyword: this.$route.query.keyword,
+          search_status: order,
+          current: num,
+          keyword: keyword,
         };
         console.log(data);
         this.$axios
@@ -156,11 +161,26 @@
           .then((result) => {
             console.log(result);
             this.list = result.data.data;
+            this.order = order;
+            this.keyword = keyword;
+            this.$router
+              .push({
+                query: {
+                  order: order,
+                  pageCurrent: num,
+                  keyword: keyword,
+                },
+              })
+              .catch(() => {});
           });
       },
     },
     created() {
-      this.getList();
+      this.getList(
+        this.$route.query.pageCurrent,
+        this.$route.query.order,
+        this.$route.query.keyword
+      );
     },
   };
 </script>

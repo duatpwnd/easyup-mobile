@@ -52,8 +52,14 @@
         ></StarRating>
       </div>
       <div class="price">
-        <del class="original">{{ ori_price }}</del>
-        <span class="final">{{ final_price }}원</span>
+        <del class="original">{{
+          ori_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        }}</del>
+        <span class="final"
+          >{{
+            final_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }}원</span
+        >
       </div>
       <div id="tag_wrap">
         <slot name="title_wrap">
@@ -132,8 +138,15 @@
             강의 보러가기
           </button>
           <div v-else>
-            <button class="add_btn">강의담기</button>
-            <button class="share_btn">공유하기</button>
+            <button class="add_btn" @click="cartAdd()">강의담기</button>
+            <button
+              class="share_btn"
+              v-clipboard="url"
+              v-clipboard:success="share"
+              @click="share()"
+            >
+              공유하기
+            </button>
             <button
               class="purchase_btn"
               @click="
@@ -375,23 +388,6 @@
       };
     },
     methods: {
-      share() {
-        this.$noticeMessage("현재 페이지 주소가 복사되었습니다.");
-      },
-      cartAdd() {
-        const data = {
-          action: "add_cart",
-          type: this.$route.name == "lecDetail" ? "course" : "session",
-          id: this.$route.query.id,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.$noticeMessage("강의바구니에 담았습니다.");
-          });
-      },
       // 쿠폰다운
       couponDownload() {
         const data = {
@@ -616,7 +612,7 @@
           white-space: nowrap;
           text-indent: 100%;
           overflow: hidden;
-          height: 60px;
+          height: 64px;
           width: 20%;
         }
         .purchase_btn {
@@ -624,9 +620,9 @@
           width: 60%;
           font-family: "NotoSansCJKkr-Medium";
           font-size: 20px;
+          vertical-align: middle;
           color: #ffffff;
           text-align: center;
-          height: 60px;
         }
         .add_btn {
           background: #333333
@@ -641,6 +637,10 @@
         .active_subscribe {
           background-color: #ff114a;
           border-color: #ff114a;
+          width: 100%;
+          font-size: 20px;
+          color: white;
+          height: 64px;
         }
       }
     }

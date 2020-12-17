@@ -29,7 +29,6 @@
     },
     methods: {
       set() {
-        console.log(this.value1);
         this.$emit("emitDatePick", this.value1);
       },
       // 모바일에서 키보드 안나오게
@@ -40,6 +39,8 @@
       getToday() {
         let s_date = "";
         let e_date = "";
+        this.value1 = [];
+        this.value2 = [];
         if (this.$route.query.start_date == undefined) {
           s_date = this.$dateFormat().split("-");
           this.value1.push(
@@ -76,16 +77,24 @@
         }
       },
     },
+    watch: {
+      $route(to, from) {
+        if (to.path != from.path) {
+          this.getToday();
+          console.log(to.path, from.path);
+        }
+      },
+    },
     mounted() {
       this.getToday();
-      this.set();
+      // this.set();
     },
   };
 </script>
 <style scoped lang="scss">
   .box {
     border: 1px solid #707070;
-    margin-top: 5px;
+
     ::v-deep .mx-datepicker {
       width: 100%;
       .mx-input-wrapper {

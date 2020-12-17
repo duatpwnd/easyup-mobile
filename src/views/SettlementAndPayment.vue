@@ -9,7 +9,7 @@
         },
       ]"
       :to="{
-        path: '/settlementAndPayment/settlelList',
+        path: '/settlementAndPayment/settleList',
         query: {
           start_date: this.$dateFormat(),
           end_date: this.$dateFormat(),
@@ -33,17 +33,56 @@
       }"
       ><span class="active_bar"></span>결제</router-link
     >
-
+    <div class="filter">
+      <router-view name="Search"></router-view>
+      <DatePicker
+        v-if="$route.name != 'paymentDetail'"
+        @emitDatePick="datePick"
+      ></DatePicker>
+    </div>
+    <router-view name="PayList"></router-view>
     <router-view></router-view>
   </div>
 </template>
 <script>
+  import DatePicker from "@/components/common/DatePicker.vue";
+
   export default {
-    components: {},
+    components: { DatePicker },
     data() {
       return {};
     },
-    methods: {},
+    methods: {
+      datePick(result) {
+        console.log(result);
+        if (this.$route.name == "payList") {
+          this.$router
+            .push({
+              query: {
+                pageCurrent: 1,
+                order: this.$route.query.order,
+                keyword: this.$route.query.keyword,
+                start_date: this.$dateFormat(result[0]),
+                end_date: this.$dateFormat(result[1]),
+              },
+            })
+            .catch(() => {});
+        } else {
+          this.$router
+            .push({
+              query: {
+                pageCurrent: 1,
+                start_date: this.$dateFormat(result[0]),
+                end_date: this.$dateFormat(result[1]),
+              },
+            })
+            .catch(() => {});
+        }
+
+        this.$EventBus.$emit(`${this.$route.name}_datePick`, true);
+      },
+    },
+
     mounted() {},
   };
 </script>
@@ -76,12 +115,9 @@
         background: #114fff;
       }
     }
-    .date_section {
+    .filter {
       padding: 0 4.445%;
       margin-top: 10px;
-      .box {
-        margin-top: 0;
-      }
     }
   }
 </style>

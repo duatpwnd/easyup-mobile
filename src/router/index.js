@@ -363,8 +363,8 @@ const routes = [
     component: () => import("../views/SettlementAndPayment.vue"),
     children: [
       {
-        path: "settlelList",
-        name: "settlelList",
+        path: "settleList",
+        name: "settleList",
         component: () => import("@/views/settlement_payment/SettleList.vue"),
         meta: { GnbBottomMenu: true },
       },
@@ -383,7 +383,10 @@ const routes = [
       {
         path: "payList",
         name: "payList",
-        component: () => import("@/views/settlement_payment/PayList.vue"),
+        components: {
+          Search: () => import("@/components/SettlementAndPayment/Search.vue"),
+          PayList: () => import("@/views/settlement_payment/PayList.vue"),
+        },
         meta: { GnbBottomMenu: true },
       },
     ],

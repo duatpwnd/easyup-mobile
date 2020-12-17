@@ -1,31 +1,6 @@
 <template>
   <div v-if="list">
-    <div class="filter">
-      <Search>
-        <select
-          slot="option"
-          class="select"
-          v-model="order"
-          @change="getList(1, order, keyword)"
-        >
-          <option value="">전체</option>
-          <option value="success">결제완료</option>
-          <option value="refund">환불완료</option>
-        </select>
-        <input
-          slot="slot_input"
-          class="search_contents"
-          placeholder="강의명을 검색하세요."
-          :value="keyword"
-          v-on:input="keyword = $event.target.value"/>
-        <button
-          slot="search_btn"
-          class="search_btn"
-          @click="getList(1, 'type_date', keyword)"
-        ></button
-      ></Search>
-      <DatePicker @emitDatePick="datePick"></DatePicker>
-    </div>
+    <div class="filter"></div>
     <Row class="payment">
       <template slot="row">
         <div class="row">
@@ -71,11 +46,9 @@
           <BaseButton
             @click.native="
               $router.push({
-                path: '/settlementAndPayment/detail',
+                path: '/settlementAndPayment/paymentDetail',
                 query: {
-                  start_date: $dateFormat(),
-                  end_date: $dateFormat(),
-                  pageCurrent: 1,
+                  trans_id: li.trans_id,
                 },
               })
             "
@@ -113,11 +86,9 @@
 <script>
   import Row from "@/components/common/Row.vue";
   import BaseButton from "@/components/common/BaseButton";
-  import Search from "@/components/common/Search.vue";
-  import DatePicker from "@/components/common/DatePicker.vue";
 
   export default {
-    components: { Row, BaseButton, Search, DatePicker },
+    components: { Row, BaseButton },
     data() {
       return {
         list: "",
@@ -173,7 +144,18 @@
           });
       },
     },
+    beforeDestroy() {
+      this.$EventBus.$off(`payList_datePick`);
+      this.$EventBus.$off(`search`);
+    },
     created() {
+      this.$EventBus.$on(`search`, (result) => {
+        console.log(result);
+        this.getList(1, result.order, result.keyword);
+      });
+      this.$EventBus.$on(`payList_datePick`, () => {
+        this.getList(1, this.$route.query.order, this.$route.query.keyword);
+      });
       this.getList(
         this.$route.query.pageCurrent,
         this.$route.query.order,

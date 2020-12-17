@@ -1,8 +1,5 @@
 <template>
   <div v-if="list">
-    <div class="filter">
-      <DatePicker @emitDatePick="datePick"></DatePicker>
-    </div>
     <Row class="amount_wrap">
       <template slot="row">
         <div class="row">
@@ -130,15 +127,12 @@
   </div>
 </template>
 <script>
-  import DatePicker from "@/components/common/DatePicker.vue";
-
   import Row from "@/components/common/Row.vue";
   import BaseButton from "@/components/common/BaseButton.vue";
   export default {
     components: {
       Row,
       BaseButton,
-      DatePicker,
     },
     data() {
       return {
@@ -147,18 +141,6 @@
       };
     },
     methods: {
-      datePick(result) {
-        this.$router
-          .push({
-            query: {
-              pageCurrent: 1,
-              start_date: this.$dateFormat(result[0]),
-              end_date: this.$dateFormat(result[1]),
-            },
-          })
-          .catch(() => {});
-        // this.getList(1);
-      },
       getList(num) {
         const data = {
           action: "get_settlement_list",
@@ -185,7 +167,13 @@
           });
       },
     },
+    beforeDestroy() {
+      this.$EventBus.$off(`settleList_datePick`);
+    },
     created() {
+      this.$EventBus.$on(`settleList_datePick`, () => {
+        this.getList(1);
+      });
       this.getList(this.$route.query.pageCurrent);
     },
   };
