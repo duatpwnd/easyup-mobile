@@ -118,6 +118,9 @@
     .filter {
       padding: 0 4.445%;
       margin-top: 10px;
+      .box {
+        margin-top: 10px;
+      }
     }
   }
 </style>

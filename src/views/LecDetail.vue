@@ -169,7 +169,7 @@
         </BlueBtn>
         <BlueBtn class="share" @click.native="share()">
           <button slot="blue_btn" v-clipboard="url" v-clipboard:success="share">
-            /> 공유하기
+            공유하기
           </button>
         </BlueBtn>
       </div>

@@ -278,6 +278,7 @@
 <style scoped lang="scss">
   .register {
     padding: 4.445%;
+    padding-bottom: 65px;
     .h2_title {
       font-size: 18px;
     }
@@ -327,15 +328,18 @@
             }
             .container-radiobox {
               width: 15%;
+              margin-right: 1%;
             }
             .common_label {
               width: 25%;
+              margin-right: 1%;
               line-height: 29px;
               display: inline-block;
+              font-family: unset;
             }
 
             input {
-              width: 50%;
+              width: 48%;
             }
             .unit {
               vertical-align: middle;
@@ -349,7 +353,7 @@
               border: 1px solid #ccc;
               border-radius: 4px;
               overflow: hidden;
-              width: 85%;
+              width: 83%;
               box-sizing: border-box;
               vertical-align: middle;
               display: inline-block;
@@ -357,8 +361,9 @@
                 .mx-input {
                   height: 28px;
                   line-height: 13px;
-                  width: 85%;
+                  width: 87%;
                   font-size: 12px;
+
                   border-right: 1px solid #ccc;
                   color: #333333;
                   &::placeholder {
@@ -366,7 +371,7 @@
                   }
                 }
                 .mx-icon-calendar {
-                  width: 15%;
+                  width: 13%;
                 }
               }
             }

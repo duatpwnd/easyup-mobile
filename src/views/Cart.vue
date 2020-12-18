@@ -1,5 +1,5 @@
 <template>
-  <div v-if="list">
+  <div v-if="list" id="cart">
     <h2 class="h2_title">강의바구니</h2>
     <LectureCourseList
       v-for="(li, index) in list.list"
@@ -226,13 +226,21 @@
       .chk {
         width: 20%;
         position: relative;
+        display: inline-block;
         text-align: right;
         vertical-align: top;
         .container-checkbox {
           position: unset;
+          width: unset;
+          height: 24px;
+          display: inline-block;
           .checkmark {
             position: unset;
-            padding: 2% 20%;
+            width: 24px;
+            display: inline-block;
+            height: 24px;
+            padding: 0;
+            box-sizing: border-box;
           }
         }
       }
@@ -285,18 +293,26 @@
     }
   }
   .btn_wrap {
-    margin-top: 10px;
-    line-height: 40px;
+    margin-top: 15px;
     padding: 0 4.445%;
+    padding-bottom: 40px;
     .chk {
       width: 14%;
-      float: left;
+      display: inline-block;
       position: relative;
+      vertical-align: middle;
       ::v-deep .container-checkbox {
         position: unset;
+        width: unset;
+        height: 24px;
+        display: inline-block;
         .checkmark {
           position: unset;
-          padding: 2% 20%;
+          width: 24px;
+          display: inline-block;
+          height: 24px;
+          padding: 0;
+          box-sizing: border-box;
         }
       }
     }
@@ -306,7 +322,7 @@
       clear: both;
     }
     .blue_btn {
-      width: 40%;
+      width: 42%;
       button {
         height: 40px;
         line-height: 28px;
@@ -315,7 +331,9 @@
       }
     }
     .left {
-      float: left;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 2%;
       button {
         background: #dbdbdb;
         color: white;
@@ -323,7 +341,8 @@
       }
     }
     .right {
-      float: right;
+      display: inline-block;
+      vertical-align: middle;
       button {
         background: #114fff;
         color: white;

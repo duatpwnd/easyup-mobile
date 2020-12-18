@@ -359,7 +359,7 @@ const routes = [
   {
     path: "/settlementAndPayment",
     name: "settlementAndPayment",
-    redirect: "/settlementAndPayment/settlelList",
+    redirect: "/settlementAndPayment/settleList",
     component: () => import("../views/SettlementAndPayment.vue"),
     children: [
       {

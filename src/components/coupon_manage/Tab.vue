@@ -14,7 +14,10 @@
           <span class="name">{{ li.coupon_name }}</span>
         </div>
         <div class="row2">
-          <span class="date">{{ li.limit_date }}</span>
+          <span class="date" v-if="li.limit_type == 'date'"
+            >{{ li.limit_date }}일까지</span
+          >
+          <span class="date" v-else>발급일로부터 {{ li.limit_date }}일</span>
         </div>
       </div>
       <div

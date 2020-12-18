@@ -58,11 +58,15 @@
             <div class="row">
               <span class="dt issuance">{{ li.issued_date }}발급</span>
             </div>
-            <div class="row">
-              <span class="dt" v-if="li.use">사용완료</span>
-              <span class="dt" v-else>{{ li.limit_date }} 까지</span>
-
-              <span class="dd" v-if="li.use">{{ li.use_date }}</span>
+            <div class="row" v-if="li.use">
+              <span class="dt">사용완료</span>
+              <span class="dd">{{ li.use_date }}</span>
+            </div>
+            <div class="row" v-else>
+              <span class="dt" v-if="li.limit_type == 'date'"
+                >{{ li.limit_date }}일까지</span
+              >
+              <span class="dt" v-else>발급일로부터 {{ li.limit_date }}일</span>
             </div>
           </div>
         </template>
@@ -151,6 +155,7 @@
 <style scoped lang="scss">
   .coupon_detail {
     padding: 4.445%;
+    padding-bottom: 65px;
     .h2_title {
       font-size: 18px;
     }
@@ -159,14 +164,15 @@
       .search_area {
         margin-top: 15px;
         .chk {
-          width: 15%;
+          width: 23%;
           display: inline-block;
           vertical-align: middle;
           position: relative;
           ::v-deep .container-checkbox {
             position: unset;
-            width: unset;
             height: 24px;
+            width: 24px;
+            margin-right: 10px;
             display: inline-block;
             vertical-align: middle;
             .checkmark {
@@ -179,19 +185,21 @@
             }
           }
           .isuse {
-            margin-left: 10%;
+            width: calc(100% - 34px);
             display: inline-block;
             vertical-align: middle;
+            font-size: 14px;
           }
         }
 
         .search {
-          width: 85%;
+          width: 77%;
           vertical-align: middle;
           margin-top: 0;
           display: inline-block;
           .search_contents {
-            width: 98%;
+            width: 100%;
+            margin: 0;
           }
         }
       }

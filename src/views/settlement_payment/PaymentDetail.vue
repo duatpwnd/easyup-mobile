@@ -28,9 +28,10 @@
       <Row v-for="(li, index) in list.lecture_info" :key="index">
         <template slot="row">
           <div class="row">
-            <span class="dt lec" v-if="li.type == 'course'">강의</span>
-            <span class="dt course" v-else>코스</span>
-            <span class="dt">{{ li.title }}</span>
+            <span class="dt">
+              <span class=" lec" v-if="li.type == 'course'">강의</span>
+              <span class=" course" v-else>코스</span>{{ li.title }}</span
+            >
           </div>
           <div class="row price_line">
             <span class="dt">{{ li.teacher_name }}</span>
@@ -53,7 +54,18 @@
           </div>
           <div class="row">
             <span class="dt">결제 수단</span>
-            <span class="dd">{{ list.pay_info.method }}</span>
+            <span class="dd" v-if="list.pay_info.method == 'card'"
+              >신용카드</span
+            >
+            <span class="dd" v-else-if="list.pay_info.method == 'transfer'"
+              >계좌이체</span
+            >
+            <span class="dd" v-else-if="list.pay_info.method == 'simple'"
+              >간편결제</span
+            >
+            <span class="dd" v-else-if="list.pay_info.method == 'phone'"
+              >휴대폰</span
+            >
           </div>
           <div class="row">
             <span class="dt">강의 비용</span>

@@ -21,6 +21,7 @@
       font-size: 16px;
     }
     .row {
+      white-space: pre-wrap;
       &::after {
         display: block;
         content: "";

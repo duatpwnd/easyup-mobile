@@ -63,7 +63,10 @@
             <span class="name">{{ li.coupon_name }}</span>
           </div>
           <div class="row2">
-            <span class="date">{{ li.limit_date }}</span>
+            <span class="date" v-if="li.limit_type == 'date'"
+              >{{ li.limit_date }}일까지</span
+            >
+            <span class="date" v-else>발급일로부터 {{ li.limit_date }}일</span>
           </div>
         </div>
         <div
@@ -187,6 +190,7 @@
 <style scoped lang="scss">
   .counpon_list {
     padding: 4.445%;
+    padding-bottom: 65px;
     .h2_title {
       font-size: 18px;
     }
@@ -225,7 +229,7 @@
         clear: both;
       }
       .left {
-        width: 8%;
+        width: 15%;
         display: inline-block;
         position: relative;
         vertical-align: middle;
@@ -249,7 +253,7 @@
         border: 1px solid #333333;
         vertical-align: middle;
         box-sizing: border-box;
-        width: 92%;
+        width: 85%;
         .top_section {
           padding: 10px;
           .title {
@@ -270,7 +274,6 @@
 
         .row3 {
           padding: 10px;
-          line-height: 28px;
           &:after {
             display: block;
             content: "";
@@ -282,13 +285,15 @@
           }
           .ing {
             color: white;
+            font-family: unset;
+            line-height: 28px;
           }
           .end {
             color: #999999;
           }
           .modify,
           .list {
-            width: 25%;
+            width: 26%;
             float: right;
             button {
               background: white;

@@ -81,15 +81,9 @@
           >
         </div>
         <div class="row">
-          <span class="status" v-if="li.status == 'success'">
-            결제완료
-          </span>
-          <span class="status" v-else-if="li.status == 'refund'">
-            환불완료
-          </span>
-          <span class="status" v-else-if="li.status == 'cancel'">
-            취소신청
-          </span>
+          <span class="status" v-if="li.status == 'success'">결제완료</span>
+          <span class="status" v-else-if="li.status == 'refund'">환불완료</span>
+          <span class="status" v-else-if="li.status == 'cancel'">취소신청</span>
         </div>
       </template>
     </Row>
@@ -189,6 +183,9 @@
 <style scoped lang="scss">
   .filter {
     padding: 0 4.445%;
+    .box {
+      margin-top: 15px;
+    }
   }
   .li {
     padding: 4.445%;

@@ -39,9 +39,10 @@
             v-for="(li, index) in list.lecture_info"
             :key="index"
           >
-            <span class="dt lec" v-if="li.type == 'course'">강의</span>
-            <span class="dt course" v-else>코스</span>
-            <span class="dt">{{ li.title }}</span>
+            <span class="dt"
+              ><span class="lec" v-if="li.type == 'course'">강의</span>
+              <span class="course" v-else>코스</span>{{ li.title }}</span
+            >
             <div class="clear_both">
               <span class="dt">{{ li.teacher_name }}</span>
               <del class="dt final_price">{{
@@ -71,6 +72,18 @@
             <span class="dt">
               결제수단
             </span>
+            <span class="dd" v-if="list.pay_info.method == 'card'"
+              >신용카드</span
+            >
+            <span class="dd" v-else-if="list.pay_info.method == 'transfer'"
+              >계좌이체</span
+            >
+            <span class="dd" v-else-if="list.pay_info.method == 'simple'"
+              >간편결제</span
+            >
+            <span class="dd" v-else-if="list.pay_info.method == 'phone'"
+              >휴대폰</span
+            >
           </div>
           <div class="row">
             <span class="dt">

@@ -105,6 +105,7 @@
 </script>
 <style scoped lang="scss">
   .coupon_manage {
+    padding-bottom: 65px;
     section {
       padding: 4.445%;
       .register_line {

@@ -78,7 +78,7 @@
         resize: none;
         padding: 15px;
         width: 100%;
-        height: 500px;
+        height: 250px;
         box-sizing: border-box;
       }
 
