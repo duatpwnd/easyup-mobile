@@ -35,10 +35,12 @@
                 />
               </BaseRadioBox>
               <label class="common_label" for="discount_percent">할인률</label>
-              <input type="number" max="98" v-model="percent_enter" /><span
-                class="unit"
-                >%</span
-              >
+              <input
+                type="number"
+                max="98"
+                v-model="percent_enter"
+                @input="limit"
+              /><span class="unit">%</span>
             </div>
             <div class="dd_line">
               <BaseRadioBox>
@@ -52,7 +54,8 @@
                 />
               </BaseRadioBox>
               <label for="price" class="common_label">금액</label>
-              <input type="number" v-model="price_enter" /><span class="unit"
+              <input type="number" v-model="price_enter" @input="limit" /><span
+                class="unit"
                 >원</span
               >
             </div>
@@ -85,7 +88,8 @@
                 />
               </BaseRadioBox>
               <label for="issue_date" class="common_label">발급일</label>
-              <input type="text" v-model="limit_date" /><span class="unit"
+              <input type="number" v-model="limit_date" @input="limit" /><span
+                class="unit"
                 >일</span
               >
             </div>
@@ -120,7 +124,8 @@
                 />
               </BaseRadioBox>
               <label for="quantity_limit" class="common_label">수량제한</label>
-              <input type="text" v-model="quantity_count" /><span class="unit"
+              <input type="text" v-model="quantity_count" @input="limit" /><span
+                class="unit"
                 >개</span
               >
             </div>
@@ -214,6 +219,21 @@
       };
     },
     methods: {
+      limit(event) {
+        const unit = event.target.nextElementSibling.innerText;
+        const value = event.target.value;
+        if (value >= 98 && unit == "%") {
+          this.percent_enter = "";
+        } else if (value < 1 && unit == "%") {
+          this.percent_enter = "";
+        } else if (value < 1 && unit == "원") {
+          this.price_enter = "";
+        } else if (value < 1 && unit == "일") {
+          this.limit_date = "";
+        } else if (value < 1 && unit == "개") {
+          this.quantity_count = "";
+        }
+      },
       datePick(result) {
         console.log(this.$dateFormat(result[0]));
         this.limit_start_date = this.$dateFormat(result[0]);

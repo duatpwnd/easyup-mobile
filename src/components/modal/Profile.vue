@@ -46,10 +46,13 @@
           action: "update_teacher_profile",
           contents: this.contents,
         };
+        console.log(obj);
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {
             console.log(result);
+            this.$noticeMessage("프로필이 등록되었습니다.");
+            this.cancel();
           });
       },
       cancel() {

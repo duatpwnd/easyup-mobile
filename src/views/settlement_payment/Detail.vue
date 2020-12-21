@@ -79,15 +79,35 @@
         </div>
       </template>
     </Row>
+    <Pagination>
+      <template slot="paging">
+        <li
+          class="prev"
+          @click="getList(Number(current) - 1)"
+          v-if="current > 1"
+        >
+          이전페이지
+        </li>
+        <li
+          class="next"
+          v-if="list.total_page != current && list.total_page > 1"
+          @click="getList(Number(current) + 1)"
+        >
+          다음페이지
+        </li>
+      </template>
+    </Pagination>
   </div>
 </template>
 <script>
   import Row from "@/components/common/Row.vue";
   import BaseButton from "@/components/common/BaseButton.vue";
+  import Pagination from "@/components/common/Pagination.vue";
   export default {
     components: {
       Row,
       BaseButton,
+      Pagination,
     },
     data() {
       return {

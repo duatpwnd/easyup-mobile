@@ -1,5 +1,9 @@
 <template>
   <div id="lec_detail" v-if="detail">
+    <ConfirmModal
+      @ok="video($route.query.id, detail.lp_id)"
+      v-if="toggleStore_confirmModal"
+    ></ConfirmModal>
     <StarScoreModal
       :score_info="toggleStore_score_info"
       v-if="toggleStore_score_info.score_modal"
@@ -51,7 +55,8 @@
           ]"
         ></StarRating>
       </div>
-      <div class="price">
+      <h2 class="free" v-if="detail.is_free == 'Y'">무료</h2>
+      <div class="price" v-else>
         <del class="original">{{
           ori_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         }}</del>
@@ -84,7 +89,11 @@
           </div>
         </slot>
       </div>
-      <div class="coupon_wrap" @click="couponDownload()">
+      <div
+        class="coupon_wrap"
+        @click="couponDownload()"
+        v-if="detail.is_free != 'Y'"
+      >
         <span class="txt" v-if="detail.coupon.discount_type == 'price'"
           >{{ discount_price }}원 할인 쿠폰 받기</span
         >
@@ -94,14 +103,15 @@
         <span class="coupon_section">
           <span class="get_coupon"></span>
         </span>
-      </div>
-      <div class="quantity">
-        <span class="count">수량 : {{ quantity }}개</span>
+        <div class="quantity">
+          <span class="count">수량 : {{ quantity }}개</span>
+        </div>
       </div>
       <div id="subscribe">
         <div>
           <div class="subscribe_wrap">
-            <BlueBtn v-if="is_subscribe">
+            <!-- 강의를 구매한경우 -->
+            <BlueBtn v-if="is_subscribe && detail.is_free != 'Y'">
               <button
                 ref="subs_btn"
                 class="active_subscribe"
@@ -111,7 +121,17 @@
                 강의 보러가기
               </button>
             </BlueBtn>
-            <BlueBtn v-else>
+            <!-- 무료강의인경우 -->
+            <BlueBtn
+              v-else-if="detail.is_free == 'Y'"
+              @click.native="isWatch()"
+            >
+              <button ref="subs_btn" slot="blue_btn">
+                구매하기
+              </button>
+            </BlueBtn>
+            <!-- 강의 구매를 안한경우 -->
+            <BlueBtn v-else-if="is_subscribe == false && detail.is_free != 'Y'">
               <button
                 ref="subs_btn"
                 slot="blue_btn"
@@ -130,14 +150,24 @@
           </div>
         </div>
         <div class="fixed_subs_btn" v-if="subscribe_btn">
+          <!-- 강의를 구매한경우 -->
           <button
-            v-if="is_subscribe"
+            v-if="is_subscribe && detail.is_free != 'Y'"
             class="active_subscribe"
             @click="video($route.query.id, detail.lp_id)"
           >
             강의 보러가기
           </button>
-          <div v-else>
+          <!-- 무료강의인경우 -->
+          <button
+            class="free_lecture_btn"
+            v-else-if="detail.is_free == 'Y'"
+            @click="isWatch()"
+          >
+            구매하기
+          </button>
+          <!-- 강의 구매를 안한경우 -->
+          <div v-else-if="is_subscribe == false && detail.is_free != 'Y'">
             <button class="add_btn" @click="cartAdd()">강의담기</button>
             <button
               class="share_btn"
@@ -346,6 +376,7 @@
   </div>
 </template>
 <script>
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import StarScoreModal from "@/components/lecture_detail/StarScoreModal.vue";
   import CommentWrap from "@/components/lecture_detail/CommentWrap";
   import BlueBtn from "@/components/common/BaseButton.vue";
@@ -356,6 +387,7 @@
   export default {
     mixins: [mixin],
     components: {
+      ConfirmModal,
       StarScoreModal,
       BlueBtn,
       StarRating,
@@ -377,6 +409,7 @@
       },
       ...mapState("toggleStore", {
         toggleStore_score_info: "score_info",
+        toggleStore_confirmModal: "confirm_modal",
       }),
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
@@ -388,6 +421,9 @@
       };
     },
     methods: {
+      isWatch() {
+        this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
+      },
       // 쿠폰다운
       couponDownload() {
         const data = {
@@ -517,6 +553,10 @@
         }
       }
     }
+    .free {
+      margin-top: 10px;
+      font-size: 18px;
+    }
     .coupon_wrap {
       margin-top: 15px;
       .txt {
@@ -614,6 +654,16 @@
           overflow: hidden;
           height: 64px;
           width: 20%;
+        }
+        .free_lecture_btn {
+          width: 100%;
+          display: block;
+          height: 64px;
+          line-height: 64px;
+          background: transparent;
+          font-family: "NotoSansCJKkr-Medium";
+          font-size: 20px;
+          color: #ffffff;
         }
         .purchase_btn {
           background: transparent;

@@ -104,6 +104,24 @@
         </div>
       </div>
     </div>
+    <Pagination>
+      <template slot="paging">
+        <li
+          class="prev"
+          @click="getList(Number(current) - 1, order, $route.query.keyword)"
+          v-if="current > 1"
+        >
+          이전페이지
+        </li>
+        <li
+          class="next"
+          v-if="list.total_page != current && list.total_page > 1"
+          @click="getList(Number(current) + 1, order, $route.query.keyword)"
+        >
+          다음페이지
+        </li>
+      </template>
+    </Pagination>
   </div>
 </template>
 <script>
@@ -111,10 +129,10 @@
   import CheckBox from "@/components/common/BaseCheckBox.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import Pagination from "@/components/common/Pagination.vue";
   import { mapState, mapMutations } from "vuex";
-
   export default {
-    components: { BlueBtn, Search, CheckBox, ConfirmModal },
+    components: { BlueBtn, Search, CheckBox, ConfirmModal, Pagination },
     computed: {
       ...mapState("toggleStore", {
         toggleStore_confirmModal: "confirm_modal",
@@ -122,6 +140,7 @@
     },
     data() {
       return {
+        current: "",
         order: "",
         keyword: "",
         list: "",
@@ -166,6 +185,7 @@
             this.list = result.data.data;
             this.order = order;
             this.keyword = keyword;
+            this.current = num;
             this.$router
               .push({
                 query: {

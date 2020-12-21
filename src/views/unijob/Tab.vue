@@ -173,11 +173,13 @@
     },
     watch: {
       $route(to, from) {
-        this.getList(
-          to.name,
-          this.$route.query.pageCurrent,
-          this.$route.query.keyword
-        );
+        if (to.path != from.path) {
+          this.getList(
+            to.name,
+            this.$route.query.pageCurrent,
+            this.$route.query.keyword
+          );
+        }
       },
     },
     created() {

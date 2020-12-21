@@ -5,11 +5,19 @@
     </p>
     <div class="coupon" v-for="(li, index) in list.list" :key="index">
       <div class="left">
-        <img
-          src="@/assets/images/common/used_txt.png"
-          v-if="$route.query.type == 'used'"
-        />
-        <!-- <img src="@/assets/images/common/expired_txt.png" /> -->
+        <div v-if="$route.query.type == 'used'">
+          <img
+            src="@/assets/images/common/used_txt.png"
+            v-if="li.status == 'used'"
+          />
+          <img
+            src="@/assets/images/common/expired_txt.png"
+            v-else-if="li.status == 'exceeded'"
+          />
+        </div>
+        <div class="row0">
+          <span class="name">{{ li.course_name }}</span>
+        </div>
         <div class="row1">
           <span class="name">{{ li.coupon_name }}</span>
         </div>
@@ -26,12 +34,26 @@
           { background: $route.query.type == 'used' ? '#DBDBDB' : '#ff114a' },
         ]"
       >
-        <h2>10%</h2>
-        <span
-          >최대{{
-            li.discount_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}원</span
-        >
+        <div class="discount_info" v-if="li.discount_type == 'price'">
+          <span class="price"
+            >{{
+              li.discount_price
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }}<span class="unit">원</span></span
+          >
+        </div>
+        <div class="discount_info" v-else>
+          <span class="price"
+            >{{ li.discount_price }}<span class="unit">%</span></span
+          >
+          <div class="max" v-if="li.coupon_type == 'admin'">
+            최대
+            {{
+              li.max_discount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }}원
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -71,9 +93,10 @@
         clear: both;
       }
       .left {
-        float: left;
+        display: inline-block;
+        vertical-align: middle;
         padding: 10px;
-        width: 75%;
+        width: 70%;
         box-sizing: border-box;
         position: relative;
         img {
@@ -84,9 +107,15 @@
           bottom: 0;
           margin: auto;
         }
-        .row1 {
+
+        .row0 {
           .name {
             font-size: 14px;
+          }
+        }
+        .row1 {
+          .name {
+            font-size: 12px;
           }
         }
         .row2 {
@@ -99,10 +128,26 @@
       .right {
         color: white;
         text-align: center;
-        float: right;
-        width: 25%;
+        width: 30%;
         padding: 10px;
         box-sizing: border-box;
+        display: inline-block;
+        vertical-align: middle;
+        .discount_info {
+          display: flex;
+          flex-direction: column;
+          height: 102px;
+          justify-content: center;
+          .price {
+            font-size: 20px;
+          }
+          .unit {
+            font-size: 14px;
+          }
+          .max {
+            margin-top: 17px;
+          }
+        }
       }
     }
   }

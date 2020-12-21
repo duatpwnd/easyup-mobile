@@ -1,16 +1,18 @@
 <template>
-  <div>
-    <span
-      class="tab"
-      v-for="(tab, index) in types"
-      :class="{ active: index == isActive }"
-      :key="index"
-      @click="toggle(tab.target, index)"
-      ><span class="active_bar"></span>{{ tab.name }}</span
-    >
-    <keep-alive>
-      <component v-bind:is="type"></component>
-    </keep-alive>
+  <div class="policy">
+    <slot name="tab">
+      <span
+        class="tab"
+        v-for="(tab, index) in types"
+        :class="{ active: index == isActive }"
+        :key="index"
+        @click="toggle(tab.target, index)"
+        ><span class="active_bar"></span>{{ tab.name }}</span
+      >
+      <keep-alive>
+        <component v-bind:is="type"></component>
+      </keep-alive>
+    </slot>
   </div>
 </template>
 <script>

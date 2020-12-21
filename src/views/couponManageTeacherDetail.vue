@@ -72,21 +72,40 @@
         </template>
       </Row>
     </section>
+    <Pagination>
+      <template slot="paging">
+        <li
+          class="prev"
+          @click="getList(Number(current) - 1, order, $route.query.keyword)"
+          v-if="current > 1"
+        >
+          이전페이지
+        </li>
+        <li
+          class="next"
+          v-if="list.total_page != current && list.total_page > 1"
+          @click="getList(Number(current) + 1, order, $route.query.keyword)"
+        >
+          다음페이지
+        </li>
+      </template>
+    </Pagination>
   </div>
 </template>
 <script>
   import Search from "@/components/common/Search.vue";
-
+  import Pagination from "@/components/common/Pagination.vue";
   import DatePicker from "@/components/common/DatePicker.vue";
   import CheckBox from "@/components/common/BaseCheckBox.vue";
   import Row from "@/components/common/Row.vue";
   export default {
-    components: { Search, DatePicker, CheckBox, Row },
+    components: { Search, DatePicker, CheckBox, Row, Pagination },
     data() {
       return {
         list: "",
         keyword: "",
         order: "",
+        current: "",
       };
     },
     methods: {

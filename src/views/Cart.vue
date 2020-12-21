@@ -11,7 +11,7 @@
       </template>
       <template slot="thumbnail">
         <img
-          src="http://develop.hell0world.net/courses/PY08/course-pic.png"
+          :src="li.thumbnail"
           class="thumb"
           :alt="li.title"
           :title="li.title"

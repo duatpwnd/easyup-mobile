@@ -48,16 +48,35 @@
       >
     </div>
     <Tab :list="list"></Tab>
+    <Pagination>
+      <template slot="paging">
+        <li
+          class="prev"
+          @click="getList(Number(current) - 1)"
+          v-if="current > 1"
+        >
+          이전페이지
+        </li>
+        <li
+          class="next"
+          v-if="list.total_page != current && list.total_page > 1"
+          @click="getList(Number(current) + 1)"
+        >
+          다음페이지
+        </li>
+      </template>
+    </Pagination>
   </div>
 </template>
 <script>
   import BaseButton from "@/components/common/BaseButton.vue";
   import Tab from "@/components/coupon_manage/Tab.vue";
+  import Pagination from "@/components/common/Pagination.vue";
 
   export default {
-    components: { BaseButton, Tab },
+    components: { BaseButton, Tab, Pagination },
     data() {
-      return { list: "", couponNumber: "" };
+      return { list: "", couponNumber: "", current: "" };
     },
     methods: {
       register() {
@@ -77,29 +96,38 @@
             });
         }
       },
-      getList() {
+      getList(num) {
         const data = {
           action: "my_coupon_list",
           search_status: this.$route.query.type,
-          current: this.$route.query.pageCurrent,
+          current: num,
         };
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result);
+            this.$router
+              .push({
+                query: {
+                  type: this.$route.query.type,
+                  pageCurrent: num,
+                },
+              })
+              .catch(() => {});
             this.list = result.data.data;
+            this.current = num;
           });
       },
     },
     watch: {
       $route(to, from) {
         if (to.query.type != from.query.type) {
-          this.getList();
+          this.getList(this.$route.query.pageCurrent);
         }
       },
     },
     created() {
-      this.getList();
+      this.getList(this.$route.query.pageCurrent);
     },
   };
 </script>

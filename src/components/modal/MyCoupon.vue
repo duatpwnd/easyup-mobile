@@ -38,6 +38,24 @@
           </div>
         </div>
       </div>
+      <Pagination>
+        <template slot="paging">
+          <li
+            class="prev"
+            @click="getList(Number(current) - 1)"
+            v-if="current > 1"
+          >
+            이전페이지
+          </li>
+          <li
+            class="next"
+            v-if="list.total_page != current && list.total_page > 1"
+            @click="getList(Number(current) + 1)"
+          >
+            다음페이지
+          </li>
+        </template>
+      </Pagination>
       <div class="btn_wrap">
         <BaseButton>
           <button class="confirm_ok" slot="blue_btn" @click="confirmOk()">
@@ -54,32 +72,34 @@
 <script>
   import BaseButton from "@/components/common/BaseButton.vue";
   import CheckBox from "@/components/common/BaseCheckBox.vue";
+  import Pagination from "@/components/common/Pagination.vue";
 
   export default {
-    components: { CheckBox, BaseButton },
+    components: { CheckBox, BaseButton, Pagination },
     data() {
-      return { list: "", checked_list: [] };
+      return { list: "", checked_list: [], current: "" };
     },
     methods: {
       close() {
         this.$emit("emitCloseModal");
       },
-      getList() {
+      getList(num) {
         const data = {
           action: "my_coupon_list",
           search_status: "available",
-          current: 1,
+          current: num,
         };
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result);
             this.list = result.data.data;
+            this.current = num;
           });
       },
     },
     created() {
-      this.getList();
+      this.getList(1);
     },
   };
 </script>

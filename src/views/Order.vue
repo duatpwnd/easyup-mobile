@@ -1,6 +1,6 @@
 <template>
   <div v-if="list">
-    <MyCoupon v-if="modal" @emitCloseModal="close()"></MyCoupon>
+    <MyCoupon v-show="modal" @emitCloseModal="close()"></MyCoupon>
     <h2 class="h2_title">결제하기</h2>
     <LectureCourseList v-for="(li, index) in list.list" :key="'강의' + index">
       <template slot="title">
@@ -126,6 +126,39 @@
         </button>
       </BaseButton>
     </div>
+    <div class="isAgree">
+      <span class="chk">
+        <CheckBox>
+          <input type="checkbox" id="agree" v-model="isAgree" slot="check" />
+        </CheckBox>
+      </span>
+      <label for="agree" class="notice"
+        >구매조건 확인 및 결제대행 서비스 약관 동의</label
+      >
+      <span class="view" @click="policyModal = true">(보기)</span>
+    </div>
+    <div class="mask" v-if="policyModal">
+      <div class="policy_wrap">
+        <Policy>
+          <template slot="tab">
+            <span
+              class="tab"
+              v-for="(tab, index) in types"
+              :class="{ active: index == isActive }"
+              :key="index"
+              @click="toggle(tab.target, index)"
+              ><span class="active_bar"></span>{{ tab.name }}</span
+            >
+            <component v-bind:is="type"></component>
+          </template>
+        </Policy>
+        <BaseButton class="close_btn" @click.native="policyModal = false">
+          <button slot="blue_btn">
+            닫기
+          </button>
+        </BaseButton>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -133,12 +166,40 @@
   import BaseButton from "@/components/common/BaseButton.vue";
   import LectureCourseList from "@/components/common/LectureCourseList.vue";
   import MyCoupon from "@/components/modal/MyCoupon.vue";
+  import CheckBox from "@/components/common/BaseCheckBox.vue";
+  import Policy from "@/views/Policy.vue";
+  import Terms from "@/components/policy/Terms.vue";
+  import Privacy from "@/components/policy/Privacy.vue";
   export default {
-    components: { MyCoupon, Row, BaseButton, LectureCourseList },
+    components: {
+      Policy,
+      CheckBox,
+      MyCoupon,
+      Row,
+      BaseButton,
+      LectureCourseList,
+      Terms,
+      Privacy,
+    },
     data() {
-      return { list: "", modal: false };
+      return {
+        policyModal: false,
+        list: "",
+        modal: false,
+        isAgree: false,
+        isActive: 0,
+        type: "Terms",
+        types: [
+          { name: "이용약관", target: "Terms" },
+          { name: "개인정보 취급방침", target: "Privacy" },
+        ],
+      };
     },
     methods: {
+      toggle(type, index) {
+        this.type = type;
+        this.isActive = index;
+      },
       close() {
         this.modal = false;
       },
@@ -261,6 +322,86 @@
       button {
         background: white;
         color: #114fff;
+      }
+    }
+  }
+  .isAgree {
+    text-align: center;
+    padding-bottom: 20px;
+    .chk {
+      display: inline-block;
+      vertical-align: middle;
+      ::v-deep .container-checkbox {
+        position: unset;
+        width: unset;
+        height: 24px;
+        display: inline-block;
+        .checkmark {
+          position: unset;
+          width: 24px;
+          display: inline-block;
+          height: 24px;
+          padding: 0;
+          box-sizing: border-box;
+        }
+      }
+    }
+    .view,
+    .notice {
+      font-size: 14px;
+    }
+    .notice {
+      margin-left: 10px;
+    }
+    .view {
+      color: #114fff;
+    }
+  }
+  .policy_wrap {
+    position: fixed;
+    width: 90%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background: white;
+    max-width: 720px;
+    height: 70%;
+    overflow: hidden;
+    ::v-deep .policy {
+      height: calc(100% - 60px);
+
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 10px;
+        background-clip: padding-box;
+        border: 2px solid transparent;
+      }
+      .tab {
+        font-size: 18px;
+        height: 40px;
+        line-height: 40px;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      pre {
+        height: calc(100% - 40px);
+        overflow-y: auto;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+    }
+    ::v-deep .close_btn {
+      margin-top: 20px;
+      button {
+        height: 40px;
+        line-height: 31px;
+        border-radius: 0;
+        font-size: 18px;
       }
     }
   }
