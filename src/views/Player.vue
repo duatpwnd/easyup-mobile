@@ -95,7 +95,7 @@
             console.log("플레이어 정보", result);
             this.info = result.data.data;
             let current_link;
-            console.log(this.info.current_item[0].link.split("?")[1]);
+            console.log(this.info.current_item[0].link.split("start=")[1]);
             // rel 있을경우 제거해주기. 이거때문에 start 옵션이 제대로 작동안함
             // 스타트 옵션때문에 분기 처리해줘야함
             if (
@@ -104,11 +104,12 @@
             ) {
               current_link =
                 this.info.current_item[0].link +
-                "?cc_load_policy=3&html5=1&playsinline=1&fs=0&start=1";
+                "?html5=1&playsinline=1&fs=0&start=1";
+              console.log(current_link);
             } else {
               current_link =
-                this.info.current_item[0].link +
-                `&cc_load_policy=3&html5=1&playsinline=1&fs=0&`;
+                this.info.current_item[0].link + `&html5=1&playsinline=1&fs=0&`;
+              console.log(current_link);
             }
             this.$store.commit("playerStore/playerState", {
               current_index: this.info.current_item[0].idx,

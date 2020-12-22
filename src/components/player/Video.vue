@@ -121,6 +121,7 @@
       validationCheck() {
         const link = this.playerStore_current_link;
         // 북마크 시간 있는지 없는지
+        console.log(this.playerStore_checkTime);
         if (this.playerStore_checkTime != "") {
           console.log(link, this.playerStore_checkTime);
           // 스타트 옵션

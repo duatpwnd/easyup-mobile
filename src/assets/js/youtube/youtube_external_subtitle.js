@@ -410,7 +410,13 @@
       this.render();
       initService.grantIframeApi(function() {
         var YT = DIC.getYT();
-        _this.player = new YT.Player(iframe);
+        _this.player = new YT.Player(iframe, {
+          events: {
+            onApiChange: function(event) {
+              _this.player.setOption("captions", "track", {});
+            },
+          },
+        });
         _this.player.addEventListener("onReady", _this.onPlayerReady);
         _this.player.addEventListener(
           "onStateChange",
