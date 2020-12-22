@@ -17,15 +17,17 @@
       <button
         class="lnb"
         @click="
-          $router.push({
-            path: '/course',
-            query: {
-              action: 'get_session_list',
-              pageCurrent: 1,
-              order: 'type_date',
-              keyword: '',
-            },
-          });
+          $router
+            .push({
+              path: '/course',
+              query: {
+                action: 'get_session_list',
+                pageCurrent: 1,
+                order: 'type_date',
+                keyword: '',
+              },
+            })
+            .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
           });
@@ -37,13 +39,15 @@
         v-if="env == 'development'"
         class="lnb"
         @click="
-          $router.push({
-            path: '/techBlog',
-            query: {
-              pageCurrent: 1,
-              keyword: '',
-            },
-          });
+          $router
+            .push({
+              path: '/techBlog',
+              query: {
+                pageCurrent: 1,
+                keyword: '',
+              },
+            })
+            .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
           });
@@ -53,7 +57,7 @@
       </button>
       <button
         @click="
-          $router.push('/studentClaasRoom');
+          $router.push('/studentClaasRoom').catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
           });
@@ -66,13 +70,15 @@
       <button
         v-if="userStore_userinfo.info.is_unijob_possible"
         @click="
-          $router.push({
-            path: '/uniJob',
-            query: {
-              pageCurrent: 1,
-              keyword: '',
-            },
-          });
+          $router
+            .push({
+              path: '/uniJob',
+              query: {
+                pageCurrent: 1,
+                keyword: '',
+              },
+            })
+            .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
           });
@@ -84,9 +90,11 @@
       <button
         class="lnb"
         @click="
-          $router.push({
-            path: '/profileModify',
-          });
+          $router
+            .push({
+              path: '/profileModify',
+            })
+            .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
           });
@@ -98,13 +106,15 @@
     <div class="support">
       <button
         @click="
-          $router.push({
-            path: '/help/notice',
-            query: {
-              pageCurrent: 1,
-              keyword: '',
-            },
-          });
+          $router
+            .push({
+              path: '/help/notice',
+              query: {
+                pageCurrent: 1,
+                keyword: '',
+              },
+            })
+            .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
           });
@@ -114,14 +124,16 @@
       </button>
       <button
         @click="
-          $router.push({
-            name: 'helpFaq',
-            query: {
-              category: 'all',
-              current: 1,
-              keyword: '',
-            },
-          });
+          $router
+            .push({
+              name: 'helpFaq',
+              query: {
+                category: 'all',
+                current: 1,
+                keyword: '',
+              },
+            })
+            .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
           });
@@ -131,7 +143,7 @@
       </button>
       <button
         @click="
-          $router.push('/help/qna');
+          $router.push('/help/qna').catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
           });
