@@ -95,12 +95,12 @@
             console.log("플레이어 정보", result);
             this.info = result.data.data;
             let current_link;
-            console.log(this.info.current_item[0].link.split("start=")[1]);
+            console.log(this.info.current_item[0].link.split("?"));
+            console.log(this.info.current_item[0].link.split("start="));
             // rel 있을경우 제거해주기. 이거때문에 start 옵션이 제대로 작동안함
             // 스타트 옵션때문에 분기 처리해줘야함
             if (
-              this.info.current_item[0].link.split("?")[1] == undefined ||
-              this.info.current_item[0].link.split("?")[1] == "rel=0"
+              this.info.current_item[0].link.split("start=")[1] == undefined
             ) {
               current_link =
                 this.info.current_item[0].link +

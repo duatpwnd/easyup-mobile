@@ -131,6 +131,7 @@
                 `start=${link.split("start=")[1]}`,
                 `start=${this.playerStore_checkTime}`
               ) + `&autoplay=1&mute=1`,
+            check_time: "",
           });
           console.log(this.playerStore_current_link);
         }
