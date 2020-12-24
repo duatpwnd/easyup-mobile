@@ -1,7 +1,7 @@
 <template>
   <div id="my_lecture" v-if="dashboard_list">
     <Profile
-      v-if="profile_modal"
+      v-show="profile_modal"
       @profileModalClose="profile_modal = false"
     ></Profile>
     <UserInfo v-if="top_count">
@@ -15,13 +15,13 @@
       <span
         slot="convert"
         v-if="userStore_userinfo.info.status == 5"
-        @click="convert()"
+        @click="convert('teacher')"
         class="convert"
         >강사전환</span
       >
       <template v-else slot="convert">
         <span class="report" @click="profile_modal = true">프로필</span>
-        <span class="convert" @click="convert()">학생전환</span>
+        <span class="convert" @click="convert('student')">학생전환</span>
       </template>
       <p class="update_date" slot="update_date">
         최근 접속일: {{ userStore_userinfo.info.last_login }}
@@ -208,8 +208,20 @@
       };
     },
     methods: {
-      convert() {
-        this.$router.push("/teacherClassRoom");
+      convert(type) {
+        console.log(type);
+        this.$router.push({
+          query: {
+            type: type,
+          },
+        });
+        let userinfo = this.userStore_userinfo;
+        if (type == "student") {
+          userinfo.info.status = 5;
+        } else {
+          userinfo.info.status = 1;
+        }
+        this.$store.commit("userStore/loginToken", this.userStore_userinfo);
       },
 
       getMyLecture(action) {
@@ -227,22 +239,9 @@
             }
           });
       },
-      // 강사 프로필 조회
-      getTeacherProfile() {
-        const data = {
-          action: "get_teacher_profile",
-        };
-        this.$axios
-          .post(this.$ApiUrl.get_teacher_profile, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-          });
-      },
     },
     created() {
-      this.getTeacherProfile();
       this.getMyLecture("get_top_count");
-
       this.getMyLecture("get_dashboard_list");
     },
   };

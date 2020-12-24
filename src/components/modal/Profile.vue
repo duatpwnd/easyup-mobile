@@ -32,13 +32,13 @@
     methods: {
       getInfo() {
         const obj = {
-          action: "get_teacher_profile_info",
+          action: "get_teacher_profile",
         };
         console.log(obj);
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {
-            console.log(result);
+            this.contents = result.data.data.profile;
           });
       },
       register() {

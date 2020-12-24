@@ -127,7 +127,8 @@
           font-family: unset;
           box-sizing: border-box;
         }
-        .review {
+        .review,
+        .lecture_remove {
           border: 1px solid #114fff;
           background: white;
           color: #114fff;
@@ -136,7 +137,8 @@
         .not_approved_ico {
           background: #ff114a;
         }
-        .non_ing_ico {
+        .non_ing_ico,
+        .not_active_ico {
           background: #dbdbdb;
           color: #999999;
         }

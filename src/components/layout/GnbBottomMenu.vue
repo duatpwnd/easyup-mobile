@@ -97,6 +97,9 @@
       ...mapState("toggleStore", {
         toggleStore_more_view: "more_view",
       }),
+      detect_status() {
+        return this.$store.getters["userStore/status"];
+      },
     },
     data() {
       return {
@@ -166,6 +169,15 @@
         ],
       };
     },
+    watch: {
+      detect_status(a, b) {
+        console.log(a, b);
+        if (a != b) {
+          this.bottom_menu.splice(3, 3);
+          this.menuSet();
+        }
+      },
+    },
     methods: {
       removeMask() {
         this.$store.commit("toggleStore/Toggle", {
@@ -179,58 +191,61 @@
           more_view: true,
         });
       },
-    },
-    mounted() {},
-    created() {
-      if (this.userStore_userinfo.info.status == 5) {
-        this.bottom_menu.push(
-          {
-            title: "구매내역",
-            path: "/purchase/list",
-            name: require("@/assets/images/common/purchase_ico.png"),
-            active: require("@/assets/images/common/purchase_active_ico.png"),
-            status: 5,
+      menuSet() {
+        if (this.userStore_userinfo.info.status == 5) {
+          this.bottom_menu.push(
+            {
+              title: "구매내역",
+              path: "/purchase/list",
+              name: require("@/assets/images/common/purchase_ico.png"),
+              active: require("@/assets/images/common/purchase_active_ico.png"),
+              status: 5,
+              query: {
+                keyword: "",
+                pageCurrent: 1,
+                order: "",
+                start_date: this.$dateFormat(),
+                end_date: this.$dateFormat(),
+              },
+            },
+            {
+              title: "책갈피 관리",
+              path: "/bookmarkManage/list",
+              name: require("@/assets/images/common/bookmark_ico.png"),
+              active: require("@/assets/images/common/bookmark_active_ico.png"),
+              status: 5,
+              query: {
+                keyword: "",
+                pageCurrent: 1,
+                order: "",
+              },
+            }
+          );
+        } else {
+          this.bottom_menu[2].path = "/couponManageTeacher/list";
+          this.bottom_menu[2].query = {
+            order: "",
+            pageCurrent: 1,
+            keyword: "",
+          };
+          this.bottom_menu.push({
+            title: "정산/결제",
+            path: "/settlementAndPayment/settleList",
+            name: require("@/assets/images/common/payment_ico.png"),
+            active: require("@/assets/images/common/payment_active_ico.png"),
+            status: 1,
             query: {
-              keyword: "",
               pageCurrent: 1,
-              order: "",
               start_date: this.$dateFormat(),
               end_date: this.$dateFormat(),
             },
-          },
-          {
-            title: "책갈피 관리",
-            path: "/bookmarkManage/list",
-            name: require("@/assets/images/common/bookmark_ico.png"),
-            active: require("@/assets/images/common/bookmark_active_ico.png"),
-            status: 5,
-            query: {
-              keyword: "",
-              pageCurrent: 1,
-              order: "",
-            },
-          }
-        );
-      } else {
-        this.bottom_menu[2].path = "/couponManageTeacher/list";
-        this.bottom_menu[2].query = {
-          order: "",
-          pageCurrent: 1,
-          keyword: "",
-        };
-        this.bottom_menu.push({
-          title: "정산/결제",
-          path: "/settlementAndPayment/settleList",
-          name: require("@/assets/images/common/payment_ico.png"),
-          active: require("@/assets/images/common/payment_active_ico.png"),
-          status: 1,
-          query: {
-            pageCurrent: 1,
-            start_date: this.$dateFormat(),
-            end_date: this.$dateFormat(),
-          },
-        });
-      }
+          });
+        }
+      },
+    },
+    mounted() {},
+    created() {
+      this.menuSet();
     },
   };
 </script>

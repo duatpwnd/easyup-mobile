@@ -142,7 +142,10 @@
                 v-if="list.show_btn_review"
                 >리뷰관리</router-link
               >
-              <span class=" ing_ico lecture_remove" v-if="list.show_btn_delete"
+              <span
+                @click="lectureDelete(list.id)"
+                class="ing_ico lecture_remove"
+                v-if="list.show_btn_delete"
                 >강의삭제</span
               >
             </div>
@@ -209,6 +212,28 @@
     },
     data() {
       return {};
+    },
+    methods: {
+      lectureDelete(id) {
+        const obj = {
+          action: "change_visibility",
+          id: id,
+          type: "course",
+        };
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
+          .then((result) => {
+            console.log(result);
+            this.getMyCourse(
+              this.userStore_userinfo.info.status == 1
+                ? "get_my_course_teacher"
+                : "get_my_course",
+              this.$route.query.pageCurrent,
+              this.$route.query.order,
+              this.$route.query.keyword
+            );
+          });
+      },
     },
     created() {
       // 강사버전, 학생버전 분기처리

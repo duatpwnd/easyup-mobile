@@ -11,6 +11,9 @@ const userStore = {
     isToken(state) {
       return state.userinfo.access_token;
     },
+    status(state) {
+      return state.userinfo.info.status;
+    },
   },
   mutations: {
     loginToken(state, param) {

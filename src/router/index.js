@@ -461,7 +461,12 @@ const router = new VueRouter({
   duplicateNavigationPolicy: "ignore",
   routes,
   scrollBehavior(to, from, savedPosition) {
-    return { x: 0, y: 0 };
+    console.log(to, from);
+    if (to.name == "lecDetail" && from.name == "myClassLecture") {
+      return { x: 0, y: 9999 };
+    } else {
+      return { x: 0, y: 0 };
+    }
   },
 });
 
