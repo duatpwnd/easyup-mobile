@@ -209,7 +209,6 @@
     },
     methods: {
       convert(type) {
-        console.log(type);
         this.$router.push({
           query: {
             type: type,
