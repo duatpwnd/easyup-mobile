@@ -117,7 +117,11 @@
         },
       };
     },
-
+    computed: {
+      ...mapState("playerStore", {
+        playerStore_check_time: "check_time",
+      }),
+    },
     methods: {
       getPlayInfo(id, linkType) {
         this.video_set = false;
@@ -194,9 +198,12 @@
             this.videoOptions,
             function onPlayerReady() {
               console.log("onPlayerReady");
+              if (self.$route.query.linkType != undefined) {
+                console.log(self.playerStore_check_time, this, self);
+                self.player.currentTime(self.playerStore_check_time);
+              }
             }
           );
-          console.log(this.player);
           // 반응형으로 바꿔줌
           this.player.fluid(true);
           self.$store.commit("playerStore/playerState", {
