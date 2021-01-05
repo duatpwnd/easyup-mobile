@@ -37,6 +37,9 @@
     computed: {
       ...mapState("playerStore", {
         playerStore_stopTime: "stop_time",
+        playerStore_video: "video_stop_time",
+        playerStore_custom_type: "custom_type",
+        playerStore_lp_type: "lp_type",
       }),
     },
     components: {
@@ -55,7 +58,11 @@
           course_id: this.$route.query.course_id,
           lp_id: this.$route.query.lp_id,
           current_id: this.current_id,
-          check_time: Math.floor(this.playerStore_stopTime()),
+          check_time:
+            this.playerStore_lp_type == "document" &&
+            this.playerStore_custom_type == "video"
+              ? Math.floor(this.playerStore_video.currentTime())
+              : Math.floor(this.playerStore_stopTime()),
           title: this.title,
         };
         console.log(data);
