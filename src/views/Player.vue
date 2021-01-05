@@ -111,7 +111,7 @@
           sources: [
             {
               src: "",
-              type: "video/mp4",
+              type: "application/x-mpegURL",
             },
           ],
         },
