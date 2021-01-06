@@ -11,7 +11,12 @@
       v-if="toggleStore_bookmark_modal"
     ></BookmarkModal>
     <!-- lp 타입은 링크인지 영상인지 구분하기 위해서 -->
-    <div v-if="info.current_item[0].lp_type == 'document'">
+    <div
+      v-if="
+        info.current_item[0].lp_type == 'document' &&
+          info.current_item[0].custom_type == 'youtube'
+      "
+    >
       <!-- video set 하는이유는 자막을 다시 갱신해주기 위해서 -->
       <Video v-if="video_set"></Video>
       <!-- video가 잠시 사라지면 위치가 깨지기 때문에 자리잡는용도 :: S -->
@@ -27,6 +32,24 @@
       </div>
       <!-- video가 잠시 사라지면 위치가 깨지기 때문에 자리잡는용도 :: E -->
     </div>
+    <!-- 비디오 파일인 경우  -->
+    <video
+      id="myvideo"
+      ref="videoPlayer"
+      class="video-js vjs-matrix"
+      v-else-if="
+        info.current_item[0].lp_type == 'document' &&
+          info.current_item[0].custom_type == 'video'
+      "
+    >
+      <track
+        id="my-alternate-video-track"
+        kind="commentary"
+        srclang="kr"
+        label="한국어"
+        default
+      />
+    </video>
     <div
       class="link"
       target="_blank"
@@ -35,6 +58,7 @@
     >
       {{ info.current_item[0].link }}
     </div>
+
     <Scorm :player_info="info.player_info"></Scorm>
     <span
       class="tab"
@@ -62,6 +86,8 @@
   import BookmarkListModal from "@/components/player/BookMarkListModal.vue";
   import { mapState, mapMutations } from "vuex";
   import mixin from "@/components/player/player_mixin.js";
+  import videojs from "video.js";
+
   export default {
     mixins: [mixin],
     components: { BookmarkListModal, Tab1, Tab2, Video, Scorm, BookmarkModal },
@@ -75,9 +101,27 @@
           { name: "강의 목록", target: "Tab1" },
           { name: "강의 노트", target: "Tab2" },
         ],
+        player: null,
+        videoOptions: {
+          controls: true,
+          autoplay: false,
+          muted: false,
+          preload: "auto",
+          playbackRates: [0.5, 1, 1.5, 2],
+          sources: [
+            {
+              src: "",
+              type: "application/x-mpegURL",
+            },
+          ],
+        },
       };
     },
-
+    computed: {
+      ...mapState("playerStore", {
+        playerStore_check_time: "check_time",
+      }),
+    },
     methods: {
       getPlayInfo(id, linkType) {
         this.video_set = false;
@@ -94,6 +138,7 @@
           .then((result) => {
             console.log("플레이어 정보", result);
             this.info = result.data.data;
+            this.videoOptions.sources[0].src = this.info.current_item[0].link;
             let current_link;
             console.log(this.info.current_item[0].link.split("?"));
             console.log(this.info.current_item[0].link.split("start="));
@@ -132,6 +177,41 @@
         this.isActive = index;
       },
     },
+    beforeDestroy() {
+      if (this.player) {
+        this.player.dispose();
+      }
+    },
+    beforeUpdate() {
+      console.log("before");
+    },
+    updated() {
+      console.log("update");
+      const self = this;
+      if (
+        this.info.current_item[0].lp_type == "document" &&
+        this.info.current_item[0].custom_type == "video"
+      ) {
+        this.$nextTick(() => {
+          this.player = videojs(
+            this.$refs.videoPlayer,
+            this.videoOptions,
+            function onPlayerReady() {
+              console.log("onPlayerReady");
+              if (self.$route.query.linkType != undefined) {
+                console.log(self.playerStore_check_time, this, self);
+                self.player.currentTime(self.playerStore_check_time);
+              }
+            }
+          );
+          // 반응형으로 바꿔줌
+          this.player.fluid(true);
+          self.$store.commit("playerStore/playerState", {
+            video_stop_time: this.player,
+          });
+        });
+      }
+    },
     created() {
       if (this.$route.query.linkType != undefined) {
         this.getPlayInfo(this.$route.query.iid, "bookmark");
@@ -145,6 +225,7 @@
   };
 </script>
 <style scoped lang="scss">
+  @import "../../node_modules/video.js/dist/video-js.min.css";
   #youtube_player {
     height: 100%;
     overflow: hidden;
@@ -188,6 +269,15 @@
         position: absolute;
         width: 100%;
         height: 100%;
+      }
+    }
+    ::v-deep .video-js {
+      .vjs-big-play-button {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
       }
     }
   }

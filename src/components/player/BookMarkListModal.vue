@@ -32,15 +32,30 @@
       ...mapState("toggleStore", {
         toggleStore_bookmark_list_info: "bookmark_list_info",
       }),
+      ...mapState("playerStore", {
+        playerStore_video: "video_stop_time",
+        playerStore_custom_type: "custom_type",
+        playerStore_lp_type: "lp_type",
+      }),
     },
 
     methods: {
       goToPlayer(id, check_point) {
         const check = this.$hms_to_s(check_point);
-        this.$store.commit("playerStore/playerState", {
-          check_time: check == 0 ? 1 : check,
-        });
-        this.$emit("bookmark_move", id, "bookmark");
+        if (
+          // 비디오 영상일때
+          this.playerStore_lp_type == "document" &&
+          this.playerStore_custom_type == "video"
+        ) {
+          this.playerStore_video.currentTime(check);
+        } else {
+          // 유튜브 일떄
+          this.$store.commit("playerStore/playerState", {
+            check_time: check == 0 ? 1 : check,
+          });
+          this.$emit("bookmark_move", id, "bookmark");
+        }
+
         this.close();
       },
       close() {
