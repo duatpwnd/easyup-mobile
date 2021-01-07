@@ -110,7 +110,7 @@
           playbackRates: [0.5, 1, 1.5, 2],
           sources: [
             {
-              file: "",
+              src: "",
               type: "application/x-mpegURL",
             },
           ],
