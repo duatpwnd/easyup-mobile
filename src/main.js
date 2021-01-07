@@ -8,7 +8,7 @@ import VueMq from "vue-mq";
 import CKEditor from "ckeditor4-vue";
 import VueCookies from "vue-cookies";
 import ApiUrl from "@/assets/js/api_url.js";
-import GlobalPlugin from "@/ts/global_plugin.js";
+import GlobalPlugin from "@/transfile_js/global_plugin.js";
 import axios from "axios";
 import VueRouterBackButton from "vue-router-back-button";
 import Clipboard from "v-clipboard";
