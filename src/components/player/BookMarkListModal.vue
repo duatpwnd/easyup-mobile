@@ -48,6 +48,7 @@
           this.playerStore_custom_type == "video"
         ) {
           this.playerStore_video.currentTime(check);
+          this.playerStore_video.autoplay("muted");
         } else {
           // 유튜브 일떄
           this.$store.commit("playerStore/playerState", {
