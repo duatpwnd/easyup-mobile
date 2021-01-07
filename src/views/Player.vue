@@ -110,7 +110,7 @@
           playbackRates: [0.5, 1, 1.5, 2],
           sources: [
             {
-              src: "",
+              file: "",
               type: "application/x-mpegURL",
             },
           ],
@@ -121,6 +121,37 @@
       ...mapState("playerStore", {
         playerStore_check_time: "check_time",
       }),
+    },
+    watch: {
+      info(a, b) {
+        if (b == "" && a != "") {
+          console.log(a, b);
+          const self = this;
+          if (
+            this.info.current_item[0].lp_type == "document" &&
+            this.info.current_item[0].custom_type == "video"
+          ) {
+            this.$nextTick(() => {
+              this.player = videojs(
+                this.$refs.videoPlayer,
+                this.videoOptions,
+                function onPlayerReady() {
+                  console.log("onPlayerReady");
+                  if (self.$route.query.linkType != undefined) {
+                    console.log(self.playerStore_check_time, this, self);
+                    self.player.currentTime(self.playerStore_check_time);
+                  }
+                }
+              );
+              // 반응형으로 바꿔줌
+              this.player.fluid(true);
+              self.$store.commit("playerStore/playerState", {
+                video_stop_time: this.player,
+              });
+            });
+          }
+        }
+      },
     },
     methods: {
       getPlayInfo(id, linkType) {
@@ -182,35 +213,10 @@
         this.player.dispose();
       }
     },
-    beforeUpdate() {
-      console.log("before");
-    },
-    updated() {
-      console.log("update");
-      const self = this;
-      if (
-        this.info.current_item[0].lp_type == "document" &&
-        this.info.current_item[0].custom_type == "video"
-      ) {
-        this.$nextTick(() => {
-          this.player = videojs(
-            this.$refs.videoPlayer,
-            this.videoOptions,
-            function onPlayerReady() {
-              console.log("onPlayerReady");
-              if (self.$route.query.linkType != undefined) {
-                console.log(self.playerStore_check_time, this, self);
-                self.player.currentTime(self.playerStore_check_time);
-              }
-            }
-          );
-          // 반응형으로 바꿔줌
-          this.player.fluid(true);
-          self.$store.commit("playerStore/playerState", {
-            video_stop_time: this.player,
-          });
-        });
-      }
+    mounted() {
+      this.$nextTick(() => {
+        console.log(this.info);
+      });
     },
     created() {
       if (this.$route.query.linkType != undefined) {

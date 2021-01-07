@@ -2,7 +2,7 @@ import VueCookies from "vue-cookies";
 import store from "@/store/index.js";
 import { router } from "@/router/index.js";
 export default {
-  install(Vue, options) {
+  install(Vue) {
     Vue.noticeMessage = (msg) => {
       store.commit("toggleStore/Toggle", {
         notice_modal: true,

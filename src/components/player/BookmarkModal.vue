@@ -99,7 +99,7 @@
     right: 0;
     bottom: 0;
     margin: auto;
-    z-index: 1;
+    z-index: 2;
     .clearfix {
       text-align: right;
       .pull-right {
