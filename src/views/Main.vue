@@ -186,76 +186,79 @@
     </div>
   </div>
 </template>
-<script>
+
+<script lang="ts">
+  import { Component, Prop, Vue } from "vue-property-decorator";
   import LecItem from "@/components/common/LectureItem.vue";
   import CategoryLec from "@/components/main/MainCategory.vue";
   import Slide from "@/components/common/Slide.vue";
-  export default {
+  @Component({
     components: {
       Slide,
       LecItem,
       CategoryLec,
     },
-    data() {
-      return {
-        slide_option: {
-          banner: {
-            autoplay: {
-              delay: 2500,
-              disableOnInteraction: false,
-            },
-            pagination: {
-              el: ".swiper-pagination",
-            },
+  })
+  export default class Main extends Vue {
+    slide_option: Object;
+    list: String;
+    constructor() {
+      super();
+      this.slide_option = {
+        banner: {
+          autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
           },
-          popular_course: {
-            spaceBetween: 8,
-            slidesPerView: 1.049,
-            pagination: {
-              el: ".swiper-pagination",
-              clickable: true,
-            },
-          },
-          latest_lecture: {
-            spaceBetween: 8,
-            slidesPerView: 2.12,
-            pagination: {
-              el: ".swiper-pagination",
-              clickable: true,
-            },
+          pagination: {
+            el: ".swiper-pagination",
           },
         },
-        list: "",
+        popular_course: {
+          spaceBetween: 8,
+          slidesPerView: 1.049,
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+        },
+        latest_lecture: {
+          spaceBetween: 8,
+          slidesPerView: 2.12,
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+        },
       };
-    },
-    methods: {
-      noticeRead(id) {
-        if (id != null) {
-          this.$router.push({
-            path: "/help/notice/read",
-            query: {
-              id: id,
-            },
-          });
-        }
-      },
-      async getLectureList() {
-        const data = {
-          action: "main_page_list",
-        };
-        await this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.list = result.data.data;
-          });
-      },
-    },
-    mounted() {},
+      this.list = "";
+    }
+    noticeRead(id: any) {
+      if (id != null) {
+        this.$router.push({
+          path: "/help/notice/read",
+          query: {
+            id: id,
+          },
+        });
+      }
+    }
+    getLectureList() {
+      const data = {
+        action: "main_page_list",
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: any) => {
+          console.log(result);
+          this.list = result.data.data;
+        });
+    }
+    mounted() {}
     created() {
       this.getLectureList();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   #main {
