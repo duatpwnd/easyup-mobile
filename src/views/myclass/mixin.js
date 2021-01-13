@@ -4,7 +4,7 @@ let myLectureCourse = {
       lec_course_list: "",
       current: "", //현재번호
       order: "",
-      keyword: "",
+      keyword: ""
     };
   },
   methods: {
@@ -13,17 +13,17 @@ let myLectureCourse = {
         action: action,
         current: num == undefined ? 1 : num,
         search_status: order == undefined ? "" : order,
-        keyword: keyword == undefined ? "" : keyword,
+        keyword: keyword == undefined ? "" : keyword
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
           headers: {
             Authorization: this.$cookies.get("user_info")
               ? "Bearer " + this.$cookies.get("user_info").access_token
-              : null,
-          },
+              : null
+          }
         })
-        .then((result) => {
+        .then(result => {
           console.log(result);
           this.lec_course_list = result.data.data;
           this.$router
@@ -31,17 +31,17 @@ let myLectureCourse = {
               query: {
                 pageCurrent: num,
                 order: order,
-                keyword: keyword,
-              },
+                keyword: keyword
+              }
             })
             .catch(() => {});
           this.order = order;
           this.keyword = keyword;
           this.current = num;
         });
-    },
+    }
   },
   mounted() {},
-  created() {},
+  created() {}
 };
 export default myLectureCourse;

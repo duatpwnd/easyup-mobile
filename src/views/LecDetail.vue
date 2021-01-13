@@ -51,7 +51,7 @@
             46,
             19,
             31,
-            17,
+            17
           ]"
         ></StarRating>
       </div>
@@ -78,8 +78,8 @@
                   pageCurrent: 1,
                   order: 'type_date',
                   keyword: '',
-                  tag: list.tag.replace('#', ''),
-                },
+                  tag: list.tag.replace('#', '')
+                }
               }"
               v-for="(list, index) in detail.tags"
               :key="index"
@@ -139,8 +139,8 @@
                   $router.push({
                     path: 'order',
                     query: {
-                      cart_id: [$route.query.id].toString(),
-                    },
+                      cart_id: [$route.query.id].toString()
+                    }
                   })
                 "
               >
@@ -182,7 +182,7 @@
               @click="
                 $router.push({
                   path: 'order',
-                  query: { cart_id: [$route.query.id].toString() },
+                  query: { cart_id: [$route.query.id].toString() }
                 })
               "
             >
@@ -329,7 +329,7 @@
               46,
               19,
               31,
-              17,
+              17
             ]"
           ></StarRating>
           <button
@@ -368,7 +368,7 @@
     <CommentWrap
       :action="{
         action: 'get_course_review',
-        course_id: $route.query.id,
+        course_id: $route.query.id
       }"
       :isSubscribe="is_subscribe"
       @emitScoreCount="scoreCount"
@@ -376,557 +376,557 @@
   </div>
 </template>
 <script>
-  import ConfirmModal from "@/components/common/ConfirmModal.vue";
-  import StarScoreModal from "@/components/lecture_detail/StarScoreModal.vue";
-  import CommentWrap from "@/components/lecture_detail/CommentWrap";
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  import StarRating from "vue-star-rating";
-  import ProgressBar from "@/components/common/ProgressBar.vue";
-  import mixin from "@/views/mixins/lec_course_detail.js";
-  import { mapState, mapMutations } from "vuex";
-  export default {
-    mixins: [mixin],
-    components: {
-      ConfirmModal,
-      StarScoreModal,
-      BlueBtn,
-      StarRating,
-      ProgressBar,
-      CommentWrap,
+import ConfirmModal from "@/components/common/ConfirmModal.vue";
+import StarScoreModal from "@/components/lecture_detail/StarScoreModal.vue";
+import CommentWrap from "@/components/lecture_detail/CommentWrap";
+import BlueBtn from "@/components/common/BaseButton.vue";
+import StarRating from "vue-star-rating";
+import ProgressBar from "@/components/common/ProgressBar.vue";
+import mixin from "@/views/mixins/lec_course_detail.js";
+import { mapState, mapMutations } from "vuex";
+export default {
+  mixins: [mixin],
+  components: {
+    ConfirmModal,
+    StarScoreModal,
+    BlueBtn,
+    StarRating,
+    ProgressBar,
+    CommentWrap
+  },
+  computed: {
+    ori_price() {
+      return this.$numberWithCommas(this.detail.price.original);
     },
-    computed: {
-      ori_price() {
-        return this.$numberWithCommas(this.detail.price.original);
-      },
-      final_price() {
-        return this.$numberWithCommas(this.detail.price.final);
-      },
-      discount_price() {
-        return this.$numberWithCommas(this.detail.coupon.discount_price);
-      },
-      quantity() {
-        return this.$numberWithCommas(this.detail.coupon.quantity);
-      },
-      ...mapState("toggleStore", {
-        toggleStore_score_info: "score_info",
-        toggleStore_confirmModal: "confirm_modal",
-      }),
-      ...mapState("userStore", {
-        userStore_userinfo: "userinfo",
-      }),
+    final_price() {
+      return this.$numberWithCommas(this.detail.price.final);
     },
-    data() {
-      return {
-        url: window.document.location.href,
+    discount_price() {
+      return this.$numberWithCommas(this.detail.coupon.discount_price);
+    },
+    quantity() {
+      return this.$numberWithCommas(this.detail.coupon.quantity);
+    },
+    ...mapState("toggleStore", {
+      toggleStore_score_info: "score_info",
+      toggleStore_confirmModal: "confirm_modal"
+    }),
+    ...mapState("userStore", {
+      userStore_userinfo: "userinfo"
+    })
+  },
+  data() {
+    return {
+      url: window.document.location.href
+    };
+  },
+  methods: {
+    isWatch() {
+      this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
+    },
+    // 쿠폰다운
+    couponDownload() {
+      const data = {
+        action: "download_coupon",
+        course_id: this.$route.query.id,
+        c_id: this.detail.coupon.coupon_id
       };
-    },
-    methods: {
-      isWatch() {
-        this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
-      },
-      // 쿠폰다운
-      couponDownload() {
-        const data = {
-          action: "download_coupon",
-          course_id: this.$route.query.id,
-          c_id: this.detail.coupon.coupon_id,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
-          });
-      },
-      video(course_id, lp_id) {
-        this.$router.push({
-          path: "/play",
-          query: {
-            course_id: course_id,
-            lp_id: lp_id,
-          },
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result);
+          this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
         });
-      },
-      // 강의평가 모달
-      scoreModal() {
-        this.$store.commit("toggleStore/scoreToggle", {
-          score_modal: true,
-          score: 0,
-          score_contents: "",
-        });
-      },
-
-      // 강의 상세 조회
-      async getLectureDetail() {
-        const data = {
-          action: "get_course_info",
-          course_id: this.$route.query.id,
-        };
-        await this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.detail = result.data.data;
-          });
-      },
     },
-    mounted() {
-      this.$EventBus.$on("commentReload", () => {
-        this.getLectureDetail();
+    video(course_id, lp_id) {
+      this.$router.push({
+        path: "/play",
+        query: {
+          course_id: course_id,
+          lp_id: lp_id
+        }
       });
     },
-    created() {
-      if (this.$cookies.get("user_info") != null) {
-        this.isSubscribe();
-      }
-      this.getLectureDetail();
+    // 강의평가 모달
+    scoreModal() {
+      this.$store.commit("toggleStore/scoreToggle", {
+        score_modal: true,
+        score: 0,
+        score_contents: ""
+      });
     },
-  };
+
+    // 강의 상세 조회
+    async getLectureDetail() {
+      const data = {
+        action: "get_course_info",
+        course_id: this.$route.query.id
+      };
+      await this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result);
+          this.detail = result.data.data;
+        });
+    }
+  },
+  mounted() {
+    this.$EventBus.$on("commentReload", () => {
+      this.getLectureDetail();
+    });
+  },
+  created() {
+    if (this.$cookies.get("user_info") != null) {
+      this.isSubscribe();
+    }
+    this.getLectureDetail();
+  }
+};
 </script>
 <style scoped lang="scss">
-  .update_noti {
-    padding: 15px 4.445%;
-    background: #f8f8f8;
-    span {
+.update_noti {
+  padding: 15px 4.445%;
+  background: #f8f8f8;
+  span {
+    color: #999999;
+    font-size: 14px;
+  }
+}
+.section1 {
+  padding: 4.445%;
+  padding-bottom: 0;
+  border-bottom: 4px solid #f8f8f8;
+  .lecture_title {
+    .sub_title {
+      font-size: 12px;
       color: #999999;
-      font-size: 14px;
-    }
-  }
-  .section1 {
-    padding: 4.445%;
-    padding-bottom: 0;
-    border-bottom: 4px solid #f8f8f8;
-    .lecture_title {
-      .sub_title {
-        font-size: 12px;
-        color: #999999;
-      }
-      .title {
-        font-size: 16px;
-        color: #333333;
-      }
-    }
-    .star_rating {
-      margin: 5px 0;
-      ::v-deep .vue-star-rating {
-        display: unset;
-        .vue-star-rating-rating-text {
-          font-size: 16px;
-          color: #333333;
-          margin-left: 4px;
-          display: inline-block;
-          vertical-align: 1.5px;
-        }
-      }
-    }
-    .price {
-      span {
-        font-weight: bold;
-      }
-      .original {
-        font-size: 14px;
-        color: #bdbdbd;
-      }
-      .final {
-        margin-left: 5px;
-        font-size: 18px;
-        color: #114fff;
-      }
-    }
-    #tag_wrap {
-      .tag_list {
-        margin-top: 5px;
-        line-height: 35px;
-        .tag {
-          color: #a4a4a4;
-          border: 2px solid #757575;
-          border-radius: 20px;
-          height: 24px;
-          padding: 0 10px;
-          display: inline-block;
-          margin-right: 0.763%;
-          font-size: 12px;
-          text-align: center;
-          line-height: 24px;
-          font-family: unset;
-        }
-      }
-    }
-    .free {
-      margin-top: 10px;
-      font-size: 18px;
-    }
-    .coupon_wrap {
-      margin-top: 15px;
-      .txt {
-        font-size: 18px;
-        display: inline-block;
-        height: 46px;
-        line-height: 46px;
-        vertical-align: middle;
-        width: 80%;
-        text-align: center;
-        font-weight: bold;
-        border: 1px solid #dbdbdb;
-        box-sizing: border-box;
-        border-right: 0;
-      }
-      .coupon_section {
-        background-color: #ff114a;
-        width: 20%;
-        height: 46px;
-        display: inline-block;
-        position: relative;
-        vertical-align: middle;
-        box-sizing: border-box;
-        border: 1px solid #ff114a;
-        .get_coupon {
-          vertical-align: middle;
-          background: url("~@/assets/images/lec_detail/discount_ico.png")
-            no-repeat center center / 24px 22px;
-          display: inline-block;
-          width: 24px;
-          height: 26px;
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          margin: auto;
-        }
-      }
-    }
-    .quantity {
-      margin-top: 5px;
-      .count {
-        font-size: 14px;
-      }
-    }
-    #subscribe {
-      .subscribe_wrap {
-        .blue_btn {
-          ::v-deep button {
-            border-radius: 10px;
-            margin: 10px 0;
-            height: 40px;
-            line-height: 32px;
-            font-size: 18px;
-          }
-        }
-        .active_subscribe {
-          background-color: #ff114a;
-          border-color: #ff114a;
-        }
-        .total_lec {
-          font-size: 1.375rem;
-          .color {
-            color: #114fff;
-          }
-        }
-        .name {
-          font-size: 1.375rem;
-          color: #666666;
-        }
-
-        .score {
-          font-size: 1.375rem;
-          color: #333333;
-          vertical-align: middle;
-          margin-left: 2%;
-        }
-      }
-
-      .fixed_subs_btn {
-        position: fixed;
-        bottom: 0;
-        background: #114fff;
-        width: 100%;
-        max-width: 720px;
-        z-index: 2;
-        left: 0;
-        right: 0;
-        margin: auto;
-        .add_btn,
-        .share_btn {
-          white-space: nowrap;
-          text-indent: 100%;
-          overflow: hidden;
-          height: 64px;
-          width: 20%;
-        }
-        .free_lecture_btn {
-          width: 100%;
-          display: block;
-          height: 64px;
-          line-height: 64px;
-          background: transparent;
-          font-family: "NotoSansCJKkr-Medium";
-          font-size: 20px;
-          color: #ffffff;
-        }
-        .purchase_btn {
-          background: transparent;
-          width: 60%;
-          font-family: "NotoSansCJKkr-Medium";
-          font-size: 20px;
-          vertical-align: middle;
-          color: #ffffff;
-          text-align: center;
-        }
-        .add_btn {
-          background: #333333
-            url("~@/assets/images/lec_detail/fixed_lecture_add_ico.png")
-            no-repeat center / 28px 27px;
-        }
-        .share_btn {
-          background: #333333
-            url("~@/assets/images/lec_detail/fixed_share_ico.png") no-repeat
-            center / 28px 27px;
-        }
-        .active_subscribe {
-          background-color: #ff114a;
-          border-color: #ff114a;
-          width: 100%;
-          font-size: 20px;
-          color: white;
-          height: 64px;
-        }
-      }
-    }
-  }
-  .section2 {
-    padding: 4.445%;
-    border-bottom: 4px solid #f8f8f8;
-    .user_intro {
-      .total_lec {
-        font-size: 14px;
-      }
-    }
-    .name {
-      font-size: 14px;
-    }
-  }
-  .add_share {
-    .blue_btn {
-      display: inline-block;
-      width: 49%;
-
-      ::v-deep button {
-        padding-left: 20px;
-        background: white;
-        border: 2px solid black;
-        color: black;
-        border-radius: 10px;
-        margin: 10px 0;
-        height: 40px;
-        line-height: 32px;
-        font-size: 18px;
-      }
-    }
-    .add {
-      ::v-deep button {
-        background: url("~@/assets/images/lec_detail/lecture_add_ico.png")
-          no-repeat 14px center / 28px 27px;
-      }
-    }
-    .share {
-      margin-left: 2%;
-      ::v-deep button {
-        background: url("~@/assets/images/lec_detail/share_ico.png") no-repeat
-          no-repeat 14px center / 28px 27px;
-      }
-    }
-  }
-  #intro {
-    padding: 4.445%;
-    h2 {
-      font-size: 2rem;
     }
     .title {
-      display: inline-block;
-      border-bottom: 8px solid #5ef4ff;
+      font-size: 16px;
+      color: #333333;
     }
-    .title2 {
-      margin-top: 50px;
-    }
-    .description_contents {
-      margin-top: 10px;
-      color: #666666;
-      font-size: 14px;
-      text-align: justify;
-      font-family: "NotoSansCJKkr-Regular";
-    }
-    .recommand_list {
-      margin-top: 20px;
-      font-size: 14px;
-      font-family: "NotoSansCJKkr-Regular";
-    }
-    .example {
-      margin-top: 50px;
-
-      img {
-        margin-top: 20px;
+  }
+  .star_rating {
+    margin: 5px 0;
+    ::v-deep .vue-star-rating {
+      display: unset;
+      .vue-star-rating-rating-text {
+        font-size: 16px;
+        color: #333333;
+        margin-left: 4px;
+        display: inline-block;
+        vertical-align: 1.5px;
       }
     }
   }
-  .curriculum {
-    margin-top: 30px;
-    padding: 0 4.445%;
-    .curriculum_header {
-      position: relative;
-      .curriculum_title {
+  .price {
+    span {
+      font-weight: bold;
+    }
+    .original {
+      font-size: 14px;
+      color: #bdbdbd;
+    }
+    .final {
+      margin-left: 5px;
+      font-size: 18px;
+      color: #114fff;
+    }
+  }
+  #tag_wrap {
+    .tag_list {
+      margin-top: 5px;
+      line-height: 35px;
+      .tag {
+        color: #a4a4a4;
+        border: 2px solid #757575;
+        border-radius: 20px;
+        height: 24px;
+        padding: 0 10px;
         display: inline-block;
-        vertical-align: middle;
-        font-size: 2rem;
-      }
-      .subscribe_btn {
-        vertical-align: middle;
-
-        border-radius: 5px;
-        margin-left: 3%;
-        width: 23%;
-        height: 22px;
-        font-family: inherit;
+        margin-right: 0.763%;
         font-size: 12px;
-        color: #114fff;
-        border: 1px solid #114fff;
+        text-align: center;
+        line-height: 24px;
+        font-family: unset;
       }
-      .total_lec {
-        font-size: 1.25rem;
-        color: #333333;
-        line-height: 100%;
+    }
+  }
+  .free {
+    margin-top: 10px;
+    font-size: 18px;
+  }
+  .coupon_wrap {
+    margin-top: 15px;
+    .txt {
+      font-size: 18px;
+      display: inline-block;
+      height: 46px;
+      line-height: 46px;
+      vertical-align: middle;
+      width: 80%;
+      text-align: center;
+      font-weight: bold;
+      border: 1px solid #dbdbdb;
+      box-sizing: border-box;
+      border-right: 0;
+    }
+    .coupon_section {
+      background-color: #ff114a;
+      width: 20%;
+      height: 46px;
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+      box-sizing: border-box;
+      border: 1px solid #ff114a;
+      .get_coupon {
+        vertical-align: middle;
+        background: url("~@/assets/images/lec_detail/discount_ico.png")
+          no-repeat center center / 24px 22px;
+        display: inline-block;
+        width: 24px;
+        height: 26px;
         position: absolute;
         top: 0;
+        left: 0;
         right: 0;
         bottom: 0;
         margin: auto;
-        height: 50%;
-      }
-    }
-    .curriculum_list {
-      li {
-        margin-top: 2%;
-        .lec_title,
-        .lec_num {
-          font-size: 1.25rem;
-          color: #333333;
-          background: #f8f8f8;
-          padding: 10px 15px;
-          box-sizing: border-box;
-          border-radius: 100px;
-        }
-        .lec_title {
-          display: inline-block;
-          width: 80%;
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          vertical-align: middle;
-        }
-        .else_lec_title {
-          width: 100%;
-          border-radius: 100px;
-        }
-        .lec_num {
-          width: 18%;
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
-          margin-left: 2%;
-          display: inline-block;
-          text-align: center;
-          vertical-align: middle;
-        }
       }
     }
   }
-  .teacher_intro {
-    margin-top: 30px;
-    padding: 0 4.445%;
-    .intro {
-      font-size: 2rem;
-    }
-    .name {
-      font-size: 1.5rem;
-      margin: 2.287% 0;
-    }
-    .career {
-      color: #999999;
-      font-size: 1.25rem;
+  .quantity {
+    margin-top: 5px;
+    .count {
+      font-size: 14px;
     }
   }
-  #lec_eval {
-    margin-top: 30px;
-    padding: 0 4.445%;
-    h2 {
-      font-size: 2rem;
-    }
-    .section_wrap {
-      margin-top: 10px;
+  #subscribe {
+    .subscribe_wrap {
+      .blue_btn {
+        ::v-deep button {
+          border-radius: 10px;
+          margin: 10px 0;
+          height: 40px;
+          line-height: 32px;
+          font-size: 18px;
+        }
+      }
+      .active_subscribe {
+        background-color: #ff114a;
+        border-color: #ff114a;
+      }
+      .total_lec {
+        font-size: 1.375rem;
+        .color {
+          color: #114fff;
+        }
+      }
+      .name {
+        font-size: 1.375rem;
+        color: #666666;
+      }
 
-      .left_sec {
-        width: 41%;
+      .score {
+        font-size: 1.375rem;
+        color: #333333;
+        vertical-align: middle;
+        margin-left: 2%;
+      }
+    }
+
+    .fixed_subs_btn {
+      position: fixed;
+      bottom: 0;
+      background: #114fff;
+      width: 100%;
+      max-width: 720px;
+      z-index: 2;
+      left: 0;
+      right: 0;
+      margin: auto;
+      .add_btn,
+      .share_btn {
+        white-space: nowrap;
+        text-indent: 100%;
+        overflow: hidden;
+        height: 64px;
+        width: 20%;
+      }
+      .free_lecture_btn {
+        width: 100%;
+        display: block;
+        height: 64px;
+        line-height: 64px;
+        background: transparent;
+        font-family: "NotoSansCJKkr-Medium";
+        font-size: 20px;
+        color: #ffffff;
+      }
+      .purchase_btn {
+        background: transparent;
+        width: 60%;
+        font-family: "NotoSansCJKkr-Medium";
+        font-size: 20px;
+        vertical-align: middle;
+        color: #ffffff;
+        text-align: center;
+      }
+      .add_btn {
+        background: #333333
+          url("~@/assets/images/lec_detail/fixed_lecture_add_ico.png") no-repeat
+          center / 28px 27px;
+      }
+      .share_btn {
+        background: #333333
+          url("~@/assets/images/lec_detail/fixed_share_ico.png") no-repeat
+          center / 28px 27px;
+      }
+      .active_subscribe {
+        background-color: #ff114a;
+        border-color: #ff114a;
+        width: 100%;
+        font-size: 20px;
+        color: white;
+        height: 64px;
+      }
+    }
+  }
+}
+.section2 {
+  padding: 4.445%;
+  border-bottom: 4px solid #f8f8f8;
+  .user_intro {
+    .total_lec {
+      font-size: 14px;
+    }
+  }
+  .name {
+    font-size: 14px;
+  }
+}
+.add_share {
+  .blue_btn {
+    display: inline-block;
+    width: 49%;
+
+    ::v-deep button {
+      padding-left: 20px;
+      background: white;
+      border: 2px solid black;
+      color: black;
+      border-radius: 10px;
+      margin: 10px 0;
+      height: 40px;
+      line-height: 32px;
+      font-size: 18px;
+    }
+  }
+  .add {
+    ::v-deep button {
+      background: url("~@/assets/images/lec_detail/lecture_add_ico.png")
+        no-repeat 14px center / 28px 27px;
+    }
+  }
+  .share {
+    margin-left: 2%;
+    ::v-deep button {
+      background: url("~@/assets/images/lec_detail/share_ico.png") no-repeat
+        no-repeat 14px center / 28px 27px;
+    }
+  }
+}
+#intro {
+  padding: 4.445%;
+  h2 {
+    font-size: 2rem;
+  }
+  .title {
+    display: inline-block;
+    border-bottom: 8px solid #5ef4ff;
+  }
+  .title2 {
+    margin-top: 50px;
+  }
+  .description_contents {
+    margin-top: 10px;
+    color: #666666;
+    font-size: 14px;
+    text-align: justify;
+    font-family: "NotoSansCJKkr-Regular";
+  }
+  .recommand_list {
+    margin-top: 20px;
+    font-size: 14px;
+    font-family: "NotoSansCJKkr-Regular";
+  }
+  .example {
+    margin-top: 50px;
+
+    img {
+      margin-top: 20px;
+    }
+  }
+}
+.curriculum {
+  margin-top: 30px;
+  padding: 0 4.445%;
+  .curriculum_header {
+    position: relative;
+    .curriculum_title {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 2rem;
+    }
+    .subscribe_btn {
+      vertical-align: middle;
+
+      border-radius: 5px;
+      margin-left: 3%;
+      width: 23%;
+      height: 22px;
+      font-family: inherit;
+      font-size: 12px;
+      color: #114fff;
+      border: 1px solid #114fff;
+    }
+    .total_lec {
+      font-size: 1.25rem;
+      color: #333333;
+      line-height: 100%;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      height: 50%;
+    }
+  }
+  .curriculum_list {
+    li {
+      margin-top: 2%;
+      .lec_title,
+      .lec_num {
+        font-size: 1.25rem;
+        color: #333333;
+        background: #f8f8f8;
+        padding: 10px 15px;
+        box-sizing: border-box;
+        border-radius: 100px;
+      }
+      .lec_title {
+        display: inline-block;
+        width: 80%;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+      }
+      .else_lec_title {
+        width: 100%;
+        border-radius: 100px;
+      }
+      .lec_num {
+        width: 18%;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        margin-left: 2%;
+        display: inline-block;
         text-align: center;
         vertical-align: middle;
-        display: inline-block;
-        h3 {
-          font-size: 15px;
-        }
-        ::v-deep .vue-star-rating {
-          margin: 5px 0;
-          display: block;
-          .vue-star-rating-rating-text {
-            display: none;
-          }
-        }
-        .eval_btn {
-          background: #114fff;
-          color: white;
-          border-radius: 5px;
-          font-size: 11px;
-          padding: 3px 26.95%;
+      }
+    }
+  }
+}
+.teacher_intro {
+  margin-top: 30px;
+  padding: 0 4.445%;
+  .intro {
+    font-size: 2rem;
+  }
+  .name {
+    font-size: 1.5rem;
+    margin: 2.287% 0;
+  }
+  .career {
+    color: #999999;
+    font-size: 1.25rem;
+  }
+}
+#lec_eval {
+  margin-top: 30px;
+  padding: 0 4.445%;
+  h2 {
+    font-size: 2rem;
+  }
+  .section_wrap {
+    margin-top: 10px;
+
+    .left_sec {
+      width: 41%;
+      text-align: center;
+      vertical-align: middle;
+      display: inline-block;
+      h3 {
+        font-size: 15px;
+      }
+      ::v-deep .vue-star-rating {
+        margin: 5px 0;
+        display: block;
+        .vue-star-rating-rating-text {
+          display: none;
         }
       }
-      .right_sec {
-        width: 59%;
+      .eval_btn {
+        background: #114fff;
+        color: white;
+        border-radius: 5px;
+        font-size: 11px;
+        padding: 3px 26.95%;
+      }
+    }
+    .right_sec {
+      width: 59%;
+      display: inline-block;
+      vertical-align: middle;
+      span {
         display: inline-block;
         vertical-align: middle;
-        span {
-          display: inline-block;
+        img {
           vertical-align: middle;
-          img {
-            vertical-align: middle;
-            width: 50%;
-          }
+          width: 50%;
         }
-        .line {
-          &:not(:first-child) {
-            margin-top: 1%;
-          }
-          .left_star_wrap {
-            width: 15%;
-            .left_star {
-              width: 100%;
-              .star {
-                width: 10px;
-                height: 10px;
-              }
-              .star_count {
-                font-size: 12px;
-                margin-left: 4px;
-              }
+      }
+      .line {
+        &:not(:first-child) {
+          margin-top: 1%;
+        }
+        .left_star_wrap {
+          width: 15%;
+          .left_star {
+            width: 100%;
+            .star {
+              width: 10px;
+              height: 10px;
+            }
+            .star_count {
+              font-size: 12px;
+              margin-left: 4px;
             }
           }
-          ::v-deep .progress_bar {
-            height: 8px;
-            position: relative;
-            width: 85%;
-            margin: 0;
-          }
+        }
+        ::v-deep .progress_bar {
+          height: 8px;
+          position: relative;
+          width: 85%;
+          margin: 0;
         }
       }
     }
   }
+}
 </style>

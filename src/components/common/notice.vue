@@ -20,27 +20,27 @@
   </ul>
 </template>
 <script>
-  export default {
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+export default {
+  components: {},
+  data() {
+    return {};
+  },
+  methods: {}
+};
 </script>
 <style scoped lang="scss">
-  .notice {
-    border-radius: 5px;
-    margin-top: 4%;
-    background: #f8f8f8;
-    padding: 1.39% 2.778%;
-    li {
-      margin-top: 1%;
-      p {
-        font-size: 1.25rem;
-        color: #757575;
-        text-align: left;
-      }
+.notice {
+  border-radius: 5px;
+  margin-top: 4%;
+  background: #f8f8f8;
+  padding: 1.39% 2.778%;
+  li {
+    margin-top: 1%;
+    p {
+      font-size: 1.25rem;
+      color: #757575;
+      text-align: left;
     }
   }
+}
 </style>

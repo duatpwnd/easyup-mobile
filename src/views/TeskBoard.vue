@@ -8,39 +8,39 @@
   </div>
 </template>
 <script>
-  import Notice from "@/components/common/notice.vue";
-  export default {
-    components: {
-      Notice,
-    },
-    data() {
-      return {
-        notice: true,
-      };
-    },
-    watch: {
-      $route(to, from) {
-        if (this.$route.meta.notice == false) {
-          this.notice = false;
-        } else {
-          this.notice = true;
-        }
-      },
-    },
-    created() {
+import Notice from "@/components/common/notice.vue";
+export default {
+  components: {
+    Notice
+  },
+  data() {
+    return {
+      notice: true
+    };
+  },
+  watch: {
+    $route(to, from) {
       if (this.$route.meta.notice == false) {
         this.notice = false;
       } else {
         this.notice = true;
       }
-    },
-  };
-</script>
-<style scoped lang="scss">
-  #teskboard {
-    padding: 4.445%;
-    .title {
-      font-size: 2rem;
+    }
+  },
+  created() {
+    if (this.$route.meta.notice == false) {
+      this.notice = false;
+    } else {
+      this.notice = true;
     }
   }
+};
+</script>
+<style scoped lang="scss">
+#teskboard {
+  padding: 4.445%;
+  .title {
+    font-size: 2rem;
+  }
+}
 </style>

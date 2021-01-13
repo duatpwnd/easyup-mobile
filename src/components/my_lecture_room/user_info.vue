@@ -47,112 +47,112 @@
   </div>
 </template>
 <script>
-  import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
-  export default {
-    computed: {
-      ...mapState("userStore", {
-        userStore_userinfo: "userinfo",
-      }),
-    },
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {
-      convert() {
-        this.$router.push("/studentClaasRoom");
-      },
-    },
-  };
+export default {
+  computed: {
+    ...mapState("userStore", {
+      userStore_userinfo: "userinfo"
+    })
+  },
+  components: {},
+  data() {
+    return {};
+  },
+  methods: {
+    convert() {
+      this.$router.push("/studentClaasRoom");
+    }
+  }
+};
 </script>
 <style scoped lang="scss">
-  .user_info {
-    background: #343536;
-    display: table;
-    width: 100%;
-    padding: 4.167% 8.333%;
-    box-sizing: border-box;
+.user_info {
+  background: #343536;
+  display: table;
+  width: 100%;
+  padding: 4.167% 8.333%;
+  box-sizing: border-box;
 
-    .profile {
-      width: 26.6%;
-      display: table-cell;
-      vertical-align: middle;
-      border-radius: 50%;
-      overflow: hidden;
-    }
-    .info {
-      display: table-cell;
-      vertical-align: middle;
-      padding-left: 10%;
-      .name {
-        color: #ffffff;
-        font-weight: 500;
-        font-size: 2rem;
-      }
-      .class {
-        @extend .name;
-        font-weight: 100;
-        margin-left: 3%;
-      }
-      .email {
-        color: #999999;
-        font-size: 1.375rem;
-        margin-bottom: 3%;
-      }
-      .report {
-        font-size: 12px;
-        font-weight: 600;
-        color: #114fff;
-        border-radius: 4px;
-        margin-right: 5%;
-        width: 38%;
-        padding: 0 10px;
-        height: 25px;
-        line-height: 27px;
-        display: inline-block;
-        box-sizing: border-box;
-        background: url("~@/assets/images/common/profile_active_ico.png")
-          no-repeat 100%-10 center/ 12px 12px;
-        background-color: white;
-        span {
-          font-weight: 600;
-        }
-      }
-      .convert {
-        @extend .report;
-        padding: 0 4.5px;
-        background: url("~@/assets/images/mylecture_room/convert_ico.png")
-          no-repeat 100%-4.5 center / 11.5px 9px;
-        background-color: white;
-      }
-      .update_date {
-        font-size: 1rem;
-        color: #757677;
-        margin-top: 3%;
-      }
-    }
+  .profile {
+    width: 26.6%;
+    display: table-cell;
+    vertical-align: middle;
+    border-radius: 50%;
+    overflow: hidden;
   }
-  .course_info {
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
+  .info {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 10%;
+    .name {
+      color: #ffffff;
+      font-weight: 500;
+      font-size: 2rem;
     }
-    li {
-      float: left;
-      width: 25%;
-      text-align: center;
-      color: white;
-      background-color: #29292a;
-      padding: 11px;
+    .class {
+      @extend .name;
+      font-weight: 100;
+      margin-left: 3%;
+    }
+    .email {
+      color: #999999;
+      font-size: 1.375rem;
+      margin-bottom: 3%;
+    }
+    .report {
+      font-size: 12px;
+      font-weight: 600;
+      color: #114fff;
+      border-radius: 4px;
+      margin-right: 5%;
+      width: 38%;
+      padding: 0 10px;
+      height: 25px;
+      line-height: 27px;
+      display: inline-block;
       box-sizing: border-box;
-      h3,
+      background: url("~@/assets/images/common/profile_active_ico.png")
+        no-repeat 100%-10 center/ 12px 12px;
+      background-color: white;
       span {
-        font-size: 10px;
-        font-weight: 500;
-        color: #dbdbdb;
+        font-weight: 600;
       }
     }
+    .convert {
+      @extend .report;
+      padding: 0 4.5px;
+      background: url("~@/assets/images/mylecture_room/convert_ico.png")
+        no-repeat 100%-4.5 center / 11.5px 9px;
+      background-color: white;
+    }
+    .update_date {
+      font-size: 1rem;
+      color: #757677;
+      margin-top: 3%;
+    }
   }
+}
+.course_info {
+  &:after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+  li {
+    float: left;
+    width: 25%;
+    text-align: center;
+    color: white;
+    background-color: #29292a;
+    padding: 11px;
+    box-sizing: border-box;
+    h3,
+    span {
+      font-size: 10px;
+      font-weight: 500;
+      color: #dbdbdb;
+    }
+  }
+}
 </style>

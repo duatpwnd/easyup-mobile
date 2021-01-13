@@ -1,16 +1,16 @@
 {
   "name": "easyup",
-  "description": "easyup_mobile",
   "version": "0.1.0",
   "private": true,
+  "description": "easyup_mobile",
   "scripts": {
+    "lint": "vue-cli-service lint",
     "dev": "vue-cli-service serve --mode development",
-    "production": "vue-cli-service serve --mode production",
     "dev_build": "vue-cli-service build --mode development",
+    "production": "vue-cli-service serve --mode production",
     "production_build": "vue-cli-service build --mode production",
-    "test": "jest",
     "t": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.20.0",
@@ -42,13 +42,18 @@
     "webpack": "^4.45.0"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.19",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-typescript": "^4.5.10",
     "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-typescript": "^5.0.2",
     "@vue/test-utils": "^1.0.3",
     "axios-mock-adapter": "^1.18.2",
     "babel-eslint": "^10.1.0",
@@ -59,6 +64,7 @@
     "prettier": "^1.19.1",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
+    "typescript": "~3.9.3",
     "vue-typescript-import-dts": "^4.0.0"
   }
 }

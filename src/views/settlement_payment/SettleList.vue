@@ -59,8 +59,8 @@
                 query: {
                   start_date: $dateFormat(),
                   end_date: $dateFormat(),
-                  pageCurrent: 1,
-                },
+                  pageCurrent: 1
+                }
               })
             "
           >
@@ -145,114 +145,114 @@
   </div>
 </template>
 <script>
-  import Pagination from "@/components/common/Pagination.vue";
-  import Row from "@/components/common/Row.vue";
-  import BaseButton from "@/components/common/BaseButton.vue";
-  export default {
-    components: {
-      Row,
-      BaseButton,
-      Pagination,
-    },
-    data() {
-      return {
-        list: "",
-        current: "",
+import Pagination from "@/components/common/Pagination.vue";
+import Row from "@/components/common/Row.vue";
+import BaseButton from "@/components/common/BaseButton.vue";
+export default {
+  components: {
+    Row,
+    BaseButton,
+    Pagination
+  },
+  data() {
+    return {
+      list: "",
+      current: ""
+    };
+  },
+  methods: {
+    getList(num) {
+      const data = {
+        action: "get_settlement_list",
+        current: num,
+        search_start_date: this.$route.query.start_date,
+        search_end_date: this.$route.query.end_date
       };
-    },
-    methods: {
-      getList(num) {
-        const data = {
-          action: "get_settlement_list",
-          current: num,
-          search_start_date: this.$route.query.start_date,
-          search_end_date: this.$route.query.end_date,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.list = result.data.data;
-            this.$router
-              .push({
-                query: {
-                  pageCurrent: num,
-                  start_date: this.$route.query.start_date,
-                  end_date: this.$route.query.end_date,
-                },
-              })
-              .catch(() => {});
-            this.current = num;
-          });
-      },
-    },
-    beforeDestroy() {
-      this.$EventBus.$off(`settleList_datePick`);
-    },
-    created() {
-      this.$EventBus.$on(`settleList_datePick`, () => {
-        this.getList(1);
-      });
-      this.getList(this.$route.query.pageCurrent);
-    },
-  };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result);
+          this.list = result.data.data;
+          this.$router
+            .push({
+              query: {
+                pageCurrent: num,
+                start_date: this.$route.query.start_date,
+                end_date: this.$route.query.end_date
+              }
+            })
+            .catch(() => {});
+          this.current = num;
+        });
+    }
+  },
+  beforeDestroy() {
+    this.$EventBus.$off(`settleList_datePick`);
+  },
+  created() {
+    this.$EventBus.$on(`settleList_datePick`, () => {
+      this.getList(1);
+    });
+    this.getList(this.$route.query.pageCurrent);
+  }
+};
 </script>
 <style scoped lang="scss">
-  .filter {
-    padding: 0 4.445%;
-    margin-top: 10px;
-  }
-  .amount_wrap {
-    .row {
-      .amount,
-      .settlement,
-      .unit {
-        font-size: 16px;
-      }
-      .settlement {
-        color: #114fff;
-      }
-      .unit {
-        vertical-align: middle;
-      }
+.filter {
+  padding: 0 4.445%;
+  margin-top: 10px;
+}
+.amount_wrap {
+  .row {
+    .amount,
+    .settlement,
+    .unit {
+      font-size: 16px;
+    }
+    .settlement {
+      color: #114fff;
+    }
+    .unit {
+      vertical-align: middle;
     }
   }
-  .settlement_info {
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 4px;
-    background: #f8f8f8;
-    .left,
-    .right,
-    .center {
-      text-align: center;
-      display: inline-block;
-      width: 33.3333%;
-      box-sizing: border-box;
-      .dt {
-        font-size: 12px;
-        color: #999999;
-      }
-      .dd {
-        font-size: 16px;
-      }
+}
+.settlement_info {
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  background: #f8f8f8;
+  .left,
+  .right,
+  .center {
+    text-align: center;
+    display: inline-block;
+    width: 33.3333%;
+    box-sizing: border-box;
+    .dt {
+      font-size: 12px;
+      color: #999999;
     }
-    .left,
-    .center {
-      border-right: 1px solid #333333;
+    .dd {
+      font-size: 16px;
     }
   }
+  .left,
+  .center {
+    border-right: 1px solid #333333;
+  }
+}
 
-  .li {
-    padding: 4.445%;
-    padding-top: 0;
-    margin-top: 24px;
-    border-bottom: 4px solid #f8f8f8;
-  }
-  .amount_wrap {
-    border: 0;
-    padding: 0 4.445%;
-    margin: 10px 0;
-  }
+.li {
+  padding: 4.445%;
+  padding-top: 0;
+  margin-top: 24px;
+  border-bottom: 4px solid #f8f8f8;
+}
+.amount_wrap {
+  border: 0;
+  padding: 0 4.445%;
+  margin: 10px 0;
+}
 </style>

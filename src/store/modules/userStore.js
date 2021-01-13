@@ -3,9 +3,9 @@ const userStore = {
   state: {
     userinfo: {
       access_token: null,
-      info: "",
+      info: ""
     },
-    referer: "",
+    referer: ""
   },
   getters: {
     isToken(state) {
@@ -13,7 +13,7 @@ const userStore = {
     },
     status(state) {
       return state.userinfo.info.status;
-    },
+    }
   },
   mutations: {
     loginToken(state, param) {
@@ -26,8 +26,8 @@ const userStore = {
           state.referer = param;
         }
       }
-    },
-  },
+    }
+  }
 };
 
 export default userStore;

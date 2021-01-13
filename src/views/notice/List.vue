@@ -66,86 +66,86 @@
   </div>
 </template>
 <script>
-  import Search from "@/components/common/Search.vue";
-  import BoardTitle from "@/components/common/BoardTitle.vue";
-  import BoardList from "@/components/common/BoardList.vue";
-  import Pagination from "@/components/common/Pagination.vue";
+import Search from "@/components/common/Search.vue";
+import BoardTitle from "@/components/common/BoardTitle.vue";
+import BoardList from "@/components/common/BoardList.vue";
+import Pagination from "@/components/common/Pagination.vue";
 
-  export default {
-    components: {
-      Pagination,
+export default {
+  components: {
+    Pagination,
 
-      BoardTitle,
-      BoardList,
-      Search,
+    BoardTitle,
+    BoardList,
+    Search
+  },
+  data() {
+    return {
+      current: "", //현재번호
+      order: "",
+      keyword: "",
+      notice_list: ""
+    };
+  },
+  methods: {
+    read(id, c_id) {
+      this.$router.push({
+        path: "/notice/read",
+        query: { id: id, c_id: c_id }
+      });
     },
-    data() {
-      return {
-        current: "", //현재번호
-        order: "",
-        keyword: "",
-        notice_list: "",
+    go_to_path() {
+      this.$router.push("/notice/noticeRegister");
+    },
+    getNoticeList(num, order, keyword) {
+      const data = {
+        action: "get_my_notice_list",
+        current: num == undefined ? 1 : num,
+        search_status: order == undefined ? "all" : order,
+        keyword: keyword == undefined ? "" : keyword
       };
-    },
-    methods: {
-      read(id, c_id) {
-        this.$router.push({
-          path: "/notice/read",
-          query: { id: id, c_id: c_id },
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result);
+          this.notice_list = result.data.data;
+          this.$router
+            .push({
+              query: {
+                pageCurrent: num,
+                order: order,
+                keyword: keyword
+              }
+            })
+            .catch(() => {});
+          this.order = order;
+          this.keyword = keyword;
+          this.current = num;
         });
-      },
-      go_to_path() {
-        this.$router.push("/notice/noticeRegister");
-      },
-      getNoticeList(num, order, keyword) {
-        const data = {
-          action: "get_my_notice_list",
-          current: num == undefined ? 1 : num,
-          search_status: order == undefined ? "all" : order,
-          keyword: keyword == undefined ? "" : keyword,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.notice_list = result.data.data;
-            this.$router
-              .push({
-                query: {
-                  pageCurrent: num,
-                  order: order,
-                  keyword: keyword,
-                },
-              })
-              .catch(() => {});
-            this.order = order;
-            this.keyword = keyword;
-            this.current = num;
-          });
-      },
-    },
-    created() {
-      this.getNoticeList(
-        this.$route.query.pageCurrent,
-        this.$route.query.order,
-        this.$route.query.keyword
-      );
-    },
-  };
+    }
+  },
+  created() {
+    this.getNoticeList(
+      this.$route.query.pageCurrent,
+      this.$route.query.order,
+      this.$route.query.keyword
+    );
+  }
+};
 </script>
 <style scoped lang="scss">
-  .search_area {
-    margin: 3.5% 0;
+.search_area {
+  margin: 3.5% 0;
+}
+.list {
+  &:nth-child(even) {
+    background: #f8f8f8;
   }
-  .list {
-    &:nth-child(even) {
-      background: #f8f8f8;
-    }
-  }
-  .no_result {
-    text-align: center;
-    font-size: 16px;
-    padding: 15px;
-  }
+}
+.no_result {
+  text-align: center;
+  font-size: 16px;
+  padding: 15px;
+}
 </style>

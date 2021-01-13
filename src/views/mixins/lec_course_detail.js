@@ -13,7 +13,7 @@ let detail = {
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then(result => {
           console.log("구독하기 성공 실패?", result);
           this.isSubscribe();
         });
@@ -31,7 +31,7 @@ let detail = {
       console.log(data);
       await this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then(result => {
           console.log("구독여부", result);
           if (result.data.error != true) {
             this.is_subscribe = result.data.data.isSubscribe;
@@ -65,16 +65,16 @@ let detail = {
       const data = {
         action: "add_cart",
         type: this.$route.name == "lecDetail" ? "course" : "session",
-        id: this.$route.query.id,
+        id: this.$route.query.id
       };
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then(result => {
           console.log(result);
           this.$noticeMessage("강의바구니에 담았습니다.");
         });
-    },
+    }
   },
   data() {
     return {
@@ -83,19 +83,19 @@ let detail = {
       subscribe_btn: false,
       detail: "",
       score_info: "", // 각 별점의 개수
-      url: window.document.location.href, // 클립보드 현재 url
+      url: window.document.location.href // 클립보드 현재 url
     };
   },
   computed: {
     detect_token() {
       return this.$store.getters["userStore/isToken"];
-    },
+    }
   },
   watch: {
     detect_token(a, b) {
       console.log(a, b);
       this.isSubscribe();
-    },
+    }
   },
   mounted() {
     // this.$store.watch(
@@ -119,6 +119,6 @@ let detail = {
     window.onscroll = () => {
       this.subscribe_btn_toggle();
     };
-  },
+  }
 };
 export default detail;

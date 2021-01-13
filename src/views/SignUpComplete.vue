@@ -18,50 +18,50 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
+import BlueBtn from "@/components/common/BaseButton.vue";
+import { mapState, mapMutations } from "vuex";
 
-  export default {
-    components: { BlueBtn },
-    computed: {
-      ...mapState("userStore", {
-        userStore_userinfo: "userinfo",
-      }),
-    },
-    data() {
-      return {};
-    },
-    methods: {
-      goToPath() {
-        this.$router.push("/");
-      },
-    },
-  };
-</script>
-<style scoped lang="scss">
-  .complete_msg {
-    text-align: center;
-    padding: 8%;
-    padding-top: 4.445%;
-    .big_title {
-      font-size: 2rem;
-    }
-    .name {
-      color: #114fff;
-    }
-    .row2 {
-      margin: 3% 0;
-      margin-top: 5%;
-    }
-    .row3 {
-      margin-bottom: 5%;
-      font-family: "NotoSansCJKkr-Regular";
-      font-size: 1.5rem;
-    }
-    .blue_btn {
-      ::v-deep button {
-        width: 70%;
-      }
+export default {
+  components: { BlueBtn },
+  computed: {
+    ...mapState("userStore", {
+      userStore_userinfo: "userinfo"
+    })
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    goToPath() {
+      this.$router.push("/");
     }
   }
+};
+</script>
+<style scoped lang="scss">
+.complete_msg {
+  text-align: center;
+  padding: 8%;
+  padding-top: 4.445%;
+  .big_title {
+    font-size: 2rem;
+  }
+  .name {
+    color: #114fff;
+  }
+  .row2 {
+    margin: 3% 0;
+    margin-top: 5%;
+  }
+  .row3 {
+    margin-bottom: 5%;
+    font-family: "NotoSansCJKkr-Regular";
+    font-size: 1.5rem;
+  }
+  .blue_btn {
+    ::v-deep button {
+      width: 70%;
+    }
+  }
+}
 </style>

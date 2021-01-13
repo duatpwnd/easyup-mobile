@@ -12,7 +12,7 @@ const toggle = {
       review_id: "", // 댓글 수정 아이디
       score_modal: false, // 강의평가 모달
       score: 0, // 스코어점수
-      score_contents: "", // 스코어 컨텐츠
+      score_contents: "" // 스코어 컨텐츠
     },
     confirm_modal: false, // 각종 확인 모달
     notice_modal: false, // 각종 경고 모달
@@ -20,8 +20,8 @@ const toggle = {
     bookmark_modal: false, // 책갈피 모달
     bookmark_list_info: {
       current_id: "",
-      bookmark_list_modal: false, // 책갈피 리스트 모달
-    },
+      bookmark_list_modal: false // 책갈피 리스트 모달
+    }
   },
   mutations: {
     noticeMessage(state, param) {
@@ -37,8 +37,8 @@ const toggle = {
       Object.keys(obj).forEach((el, index) => {
         state[el] = Object.values(obj)[index];
       });
-    },
-  },
+    }
+  }
 };
 
 export default toggle;

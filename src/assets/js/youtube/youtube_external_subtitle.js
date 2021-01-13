@@ -75,7 +75,7 @@
     ID: "youtube-external-subtitle-style",
     CLASS: "youtube-external-subtitle",
     FULLSCREEN: "fullscreen",
-    FULLSCREEN_IGNORE: "fullscreen-ignore",
+    FULLSCREEN_IGNORE: "fullscreen-ignore"
   };
   var iframeApiScriptAdded = function(document) {
     var scripts = document.getElementsByTagName("script");
@@ -217,7 +217,7 @@
     DIC.setDocument(window.document);
     DIC.setInitService({
       grantIframeApi: grantIframeApi,
-      grantGlobalStyles: grantGlobalStyles,
+      grantGlobalStyles: grantGlobalStyles
     });
   };
 
@@ -345,7 +345,7 @@
       y: iframe.offsetTop - iframe.scrollTop + iframe.clientTop,
       width: iframe.offsetWidth,
       height: height,
-      bottomPadding: height < 200 && !controlsVisible ? 20 : 60,
+      bottomPadding: height < 200 && !controlsVisible ? 20 : 60
     };
   };
   var Subtitle = /** @class */ (function() {
@@ -361,7 +361,7 @@
         text: null,
         isFullscreenActive: null,
         controlsVisible: true,
-        duration_time: null,
+        duration_time: null
       };
 
       // get stop time 2020.06.08
@@ -414,8 +414,8 @@
           events: {
             onApiChange: function(event) {
               _this.player.setOption("captions", "track", {});
-            },
-          },
+            }
+          }
         });
         _this.player.addEventListener("onReady", _this.onPlayerReady);
         _this.player.addEventListener(

@@ -27,13 +27,11 @@
   </div>
 </template>
 <script>
-  export default {
+  import { Component, Prop, Vue } from "vue-property-decorator";
+  @Component({
     components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+  })
+  export default class LectureItem extends Vue {}
 </script>
 <style scoped lang="scss">
   .item {

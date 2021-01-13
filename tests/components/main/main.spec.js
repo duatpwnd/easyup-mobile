@@ -8,8 +8,8 @@ describe("Main.vue", () => {
   test("getLectureList call", async () => {
     const wrapper = mount(Main, {
       propsData: {
-        list: [],
-      },
+        list: []
+      }
     });
     jest.spyOn(wrapper.vm, "getLectureList");
     wrapper.vm.getLectureList();

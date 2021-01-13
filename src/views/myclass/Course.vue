@@ -52,8 +52,8 @@
               $router.push({
                 path: '/courseDetail',
                 query: {
-                  id: list.id,
-                },
+                  id: list.id
+                }
               })
             "
           />
@@ -65,8 +65,8 @@
               $router.push({
                 path: '/courseDetail',
                 query: {
-                  id: list.id,
-                },
+                  id: list.id
+                }
               })
             "
           >
@@ -174,121 +174,121 @@
   </div>
 </template>
 <script>
-  import Search from "@/components/common/Search.vue";
-  import Pagination from "@/components/common/Pagination.vue";
-  import LectureCourseList from "@/components/common/LectureCourseList.vue";
-  import VideoList from "@/components/common/VideoList.vue";
-  import mixin from "./mixin.js";
-  import { mapState, mapMutations } from "vuex";
-  export default {
-    mixins: [mixin],
-    components: {
-      Pagination,
-      VideoList,
-      Search,
-      LectureCourseList,
-    },
-    computed: {
-      ...mapState("userStore", {
-        userStore_userinfo: "userinfo",
-      }),
-    },
-    data() {
-      return {};
-    },
-    methods: {},
-    created() {
-      // 강사버전, 학생버전 분기처리
-      this.getMyCourse(
-        this.userStore_userinfo.info.status == 1
-          ? "get_my_session_teacher"
-          : "get_my_session",
-        this.$route.query.pageCurrent,
-        this.$route.query.order,
-        this.$route.query.keyword
-      );
-    },
-  };
+import Search from "@/components/common/Search.vue";
+import Pagination from "@/components/common/Pagination.vue";
+import LectureCourseList from "@/components/common/LectureCourseList.vue";
+import VideoList from "@/components/common/VideoList.vue";
+import mixin from "./mixin.js";
+import { mapState, mapMutations } from "vuex";
+export default {
+  mixins: [mixin],
+  components: {
+    Pagination,
+    VideoList,
+    Search,
+    LectureCourseList
+  },
+  computed: {
+    ...mapState("userStore", {
+      userStore_userinfo: "userinfo"
+    })
+  },
+  data() {
+    return {};
+  },
+  methods: {},
+  created() {
+    // 강사버전, 학생버전 분기처리
+    this.getMyCourse(
+      this.userStore_userinfo.info.status == 1
+        ? "get_my_session_teacher"
+        : "get_my_session",
+      this.$route.query.pageCurrent,
+      this.$route.query.order,
+      this.$route.query.keyword
+    );
+  }
+};
 </script>
 <style scoped lang="scss">
-  .search_area,
-  .section {
-    padding: 4.445%;
-    padding-bottom: 0;
-    padding-top: 0;
-    .no_result {
-      text-align: center;
-      font-size: 16px;
-      padding-bottom: 15px;
-    }
-    .statistics {
-      display: flex;
-      .date {
-        background: url("~@/assets/images/my_lecture_course/date_ico.png")
-          no-repeat center left/ 18px 18px;
-        // display: inline-block;
-        width: 30%;
-        padding-left: 6%;
-        box-sizing: border-box;
-        font-size: 12px;
-        line-height: 27px;
-      }
-      .count {
-        background: url("~@/assets/images/my_lecture_course/person_count_ico.png")
-          no-repeat center left/ 18px 18px;
-        // display: inline-block;
-        width: 25%;
-        padding-left: 6%;
-        box-sizing: border-box;
-        font-size: 12px;
-        line-height: 27px;
-      }
-      .price {
-        width: 50%;
-        text-align: right;
-        .final_price {
-          font-size: 14px;
-          color: #bdbdbd;
-          margin-left: 4px;
-        }
-        .ori_price {
-          font-weight: bold;
-          margin-left: 5px;
-          font-size: 18px;
-          color: #114fff;
-        }
-      }
-    }
-    .compile_wrap {
-      margin: 4px 0;
-      padding: 8px 4.445%;
-      position: relative;
-      background: #f8f8f8;
+.search_area,
+.section {
+  padding: 4.445%;
+  padding-bottom: 0;
+  padding-top: 0;
+  .no_result {
+    text-align: center;
+    font-size: 16px;
+    padding-bottom: 15px;
+  }
+  .statistics {
+    display: flex;
+    .date {
+      background: url("~@/assets/images/my_lecture_course/date_ico.png")
+        no-repeat center left/ 18px 18px;
+      // display: inline-block;
+      width: 30%;
+      padding-left: 6%;
       box-sizing: border-box;
-      // span {
-      //   display: inline-block;
-      //   vertical-align: middle;
-      //   font-size: 12px;
-      // }
-
-      .date {
-        color: #999999;
-        font-size: 10px;
-        position: absolute;
-        top: 0;
-        right: 4.445%;
-        color: #999999;
-        font-size: 10px;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 4.445%;
-        height: 15px;
-        margin: auto;
+      font-size: 12px;
+      line-height: 27px;
+    }
+    .count {
+      background: url("~@/assets/images/my_lecture_course/person_count_ico.png")
+        no-repeat center left/ 18px 18px;
+      // display: inline-block;
+      width: 25%;
+      padding-left: 6%;
+      box-sizing: border-box;
+      font-size: 12px;
+      line-height: 27px;
+    }
+    .price {
+      width: 50%;
+      text-align: right;
+      .final_price {
+        font-size: 14px;
+        color: #bdbdbd;
+        margin-left: 4px;
+      }
+      .ori_price {
+        font-weight: bold;
+        margin-left: 5px;
+        font-size: 18px;
+        color: #114fff;
       }
     }
   }
-  .section {
-    margin-top: 15px;
+  .compile_wrap {
+    margin: 4px 0;
+    padding: 8px 4.445%;
+    position: relative;
+    background: #f8f8f8;
+    box-sizing: border-box;
+    // span {
+    //   display: inline-block;
+    //   vertical-align: middle;
+    //   font-size: 12px;
+    // }
+
+    .date {
+      color: #999999;
+      font-size: 10px;
+      position: absolute;
+      top: 0;
+      right: 4.445%;
+      color: #999999;
+      font-size: 10px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 4.445%;
+      height: 15px;
+      margin: auto;
+    }
   }
+}
+.section {
+  margin-top: 15px;
+}
 </style>

@@ -1,10 +1,5 @@
 const path = require("path");
 module.exports = {
-  pages: {
-    index: {
-      entry: "./src/main.js",
-    },
-  },
   configureWebpack: {
     optimization: {
       splitChunks: {
@@ -16,35 +11,6 @@ module.exports = {
       alias: {
         "@": path.join(__dirname, "src/"),
       },
-    },
-    module: {
-      rules: [
-        {
-          test: /\.vue$/,
-          loader: "vue-loader",
-          options: {
-            loaders: {
-              scss: "vue-style-loader!css-loader!sass-loader",
-              sass: "vue-style-loader!css-loader!sass-loader?indentedSyntax",
-            },
-          },
-        },
-        {
-          test: /\.tsx?$/,
-          loader: "ts-loader",
-          exclude: /node_modules/,
-          options: {
-            appendTsSuffixTo: [/\.vue$/],
-          },
-        },
-        {
-          test: /\.(png|jpg|gif|svg)$/,
-          loader: "file-loader",
-          options: {
-            name: "[name].[ext]?[hash]",
-          },
-        },
-      ],
     },
   },
 };

@@ -26,7 +26,7 @@
           46,
           19,
           31,
-          17,
+          17
         ]"
       >
       </StarRating>
@@ -98,206 +98,206 @@
   </div>
 </template>
 <script>
-  import ProgressBar from "@/components/common/ProgressBar.vue";
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
-  import StarRating from "vue-star-rating";
-  import mixin from "@/components/player/player_mixin.js";
+import ProgressBar from "@/components/common/ProgressBar.vue";
+import BlueBtn from "@/components/common/BaseButton.vue";
+import { mapState, mapMutations } from "vuex";
+import StarRating from "vue-star-rating";
+import mixin from "@/components/player/player_mixin.js";
 
-  export default {
-    mixins: [mixin],
-    props: {
-      player_info: {
-        type: Object,
-        required: true,
-      },
-    },
-    data() {
-      return {
-        evaluate: true,
-        modal: false,
-        contents: "",
-        rating: "",
+export default {
+  mixins: [mixin],
+  props: {
+    player_info: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      evaluate: true,
+      modal: false,
+      contents: "",
+      rating: ""
+    };
+  },
+  components: {
+    StarRating,
+    ProgressBar,
+    BlueBtn
+  },
+  methods: {
+    add_review() {
+      const data = {
+        action: "add_review",
+        course_id: this.$route.query.course_id,
+        star: this.rating,
+        contents: this.contents.trim(),
+        type: "course"
       };
+      console.log(data);
+      if (data.star == 0) {
+        this.$noticeMessage("점수를 선택해주세요.");
+      } else {
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null
+            }
+          })
+          .then(result => {
+            console.log("강의평가등록", result);
+            if (result.data.error != true) {
+              this.$noticeMessage(result.data.data.msg);
+              this.modal = false;
+              this.evaluate = false;
+            }
+          });
+      }
     },
-    components: {
-      StarRating,
-      ProgressBar,
-      BlueBtn,
+    setRating(rating) {
+      this.rating = rating;
     },
-    methods: {
-      add_review() {
-        const data = {
-          action: "add_review",
-          course_id: this.$route.query.course_id,
-          star: this.rating,
-          contents: this.contents.trim(),
-          type: "course",
-        };
-        console.log(data);
-        if (data.star == 0) {
-          this.$noticeMessage("점수를 선택해주세요.");
-        } else {
-          this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
-              headers: {
-                Authorization: this.$cookies.get("user_info")
-                  ? "Bearer " + this.$cookies.get("user_info").access_token
-                  : null,
-              },
-            })
-            .then((result) => {
-              console.log("강의평가등록", result);
-              if (result.data.error != true) {
-                this.$noticeMessage(result.data.data.msg);
-                this.modal = false;
-                this.evaluate = false;
-              }
-            });
-        }
-      },
-      setRating(rating) {
-        this.rating = rating;
-      },
-      // 즐겨찾기 추가 모달
-      bookmarkAddModal() {
-        this.$store.commit("toggleStore/Toggle", {
-          bookmark_modal: true,
-        });
-      },
-    },
-    created() {},
-  };
+    // 즐겨찾기 추가 모달
+    bookmarkAddModal() {
+      this.$store.commit("toggleStore/Toggle", {
+        bookmark_modal: true
+      });
+    }
+  },
+  created() {}
+};
 </script>
 <style scoped lang="scss">
-  .scorm {
-    padding: 4.445%;
-    padding-bottom: 3%;
-    h2 {
-      font-size: 18px;
+.scorm {
+  padding: 4.445%;
+  padding-bottom: 3%;
+  h2 {
+    font-size: 18px;
+    color: #333333;
+  }
+  ::v-deep .progress_bar {
+    height: 8px;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    border-radius: 5px;
+    margin: 10px 0;
+  }
+  .progress {
+    width: 100%;
+    background: #dbdbdb;
+    height: 8px;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 4% 0;
+    position: relative;
+    .progress_bar {
+      display: inline-block;
+      border-radius: 10px;
+      background: #114fff;
+      width: 40%;
+      height: 8px;
+      position: absolute;
+      top: 0;
+    }
+  }
+  .process {
+    span {
+      font-size: 16px;
+      font-weight: 500;
       color: #333333;
     }
-    ::v-deep .progress_bar {
-      height: 8px;
-      position: relative;
-      width: 100%;
-      margin: 0;
-      border-radius: 5px;
-      margin: 10px 0;
+  }
+  .btn_wrap {
+    margin-top: 2%;
+    &:after {
+      display: block;
+      content: "";
+      clear: both;
     }
-    .progress {
-      width: 100%;
-      background: #dbdbdb;
-      height: 8px;
-      border-radius: 10px;
-      display: inline-block;
-      margin: 4% 0;
-      position: relative;
-      .progress_bar {
-        display: inline-block;
-        border-radius: 10px;
-        background: #114fff;
-        width: 40%;
-        height: 8px;
-        position: absolute;
-        top: 0;
+
+    .btn {
+      float: left;
+      width: 23.171%; /* 152px/656px */
+      button {
+        border: 1px solid #114fff;
+        background: white;
+        color: #114fff;
+        height: 24px;
+        line-height: 16px;
+        font-size: 12px;
       }
     }
-    .process {
-      span {
-        font-size: 16px;
-        font-weight: 500;
-        color: #333333;
+    .next {
+      float: right;
+      width: 28.354%; /* 186px/656px */
+    }
+    .eval {
+      margin-right: 2%;
+    }
+  }
+  .lec_eval_modal {
+    position: fixed;
+    width: 90%;
+    height: 320px;
+    background: #ffffff;
+    border: 1px solid #707070;
+    padding: 20px;
+    margin-top: 12px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 1;
+    max-width: 720px;
+    box-sizing: border-box;
+    ::v-deep .vue-star-rating {
+      display: block;
+      text-align: center;
+      .vue-star-rating-rating-text {
+        display: none;
       }
+    }
+    .add-txt {
+      font-size: 16px;
+      text-align: center;
+      margin: 14px 0 10px 0;
+    }
+    .lec_edit {
+      resize: none;
+      width: 100%;
+      height: 152px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      box-sizing: border-box;
+      outline: none;
     }
     .btn_wrap {
-      margin-top: 2%;
+      margin-top: 10px;
+
       &:after {
         display: block;
         content: "";
         clear: both;
       }
-
-      .btn {
+      .blue_btn {
+        width: 48%;
+      }
+      .left {
         float: left;
-        width: 23.171%; /* 152px/656px */
+      }
+      .right {
+        float: right;
         button {
-          border: 1px solid #114fff;
           background: white;
           color: #114fff;
-          height: 24px;
-          line-height: 16px;
-          font-size: 12px;
-        }
-      }
-      .next {
-        float: right;
-        width: 28.354%; /* 186px/656px */
-      }
-      .eval {
-        margin-right: 2%;
-      }
-    }
-    .lec_eval_modal {
-      position: fixed;
-      width: 90%;
-      height: 320px;
-      background: #ffffff;
-      border: 1px solid #707070;
-      padding: 20px;
-      margin-top: 12px;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: auto;
-      z-index: 1;
-      max-width: 720px;
-      box-sizing: border-box;
-      ::v-deep .vue-star-rating {
-        display: block;
-        text-align: center;
-        .vue-star-rating-rating-text {
-          display: none;
-        }
-      }
-      .add-txt {
-        font-size: 16px;
-        text-align: center;
-        margin: 14px 0 10px 0;
-      }
-      .lec_edit {
-        resize: none;
-        width: 100%;
-        height: 152px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 10px;
-        box-sizing: border-box;
-        outline: none;
-      }
-      .btn_wrap {
-        margin-top: 10px;
-
-        &:after {
-          display: block;
-          content: "";
-          clear: both;
-        }
-        .blue_btn {
-          width: 48%;
-        }
-        .left {
-          float: left;
-        }
-        .right {
-          float: right;
-          button {
-            background: white;
-            color: #114fff;
-          }
         }
       }
     }
   }
+}
 </style>

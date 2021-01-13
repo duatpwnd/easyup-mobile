@@ -31,20 +31,20 @@ d. 보안에 따른 활용
   >
 </template>
 <script>
-  export default {
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+export default {
+  components: {},
+  data() {
+    return {};
+  },
+  methods: {}
+};
 </script>
 <style scoped lang="scss">
-  pre {
-    padding: 4.445%;
-    font-family: "NotoSansCJKkr-DemiLight";
-    white-space: pre-wrap;
-    color: #666666;
-    font-size: 1.125rem;
-  }
+pre {
+  padding: 4.445%;
+  font-family: "NotoSansCJKkr-DemiLight";
+  white-space: pre-wrap;
+  color: #666666;
+  font-size: 1.125rem;
+}
 </style>

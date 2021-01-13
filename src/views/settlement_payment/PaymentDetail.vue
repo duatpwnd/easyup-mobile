@@ -166,66 +166,66 @@
   </div>
 </template>
 <script>
-  import Row from "@/components/common/Row.vue";
-  export default {
-    components: {
-      Row,
-    },
-    data() {
-      return {
-        list: "",
+import Row from "@/components/common/Row.vue";
+export default {
+  components: {
+    Row
+  },
+  data() {
+    return {
+      list: ""
+    };
+  },
+  methods: {
+    getList() {
+      const data = {
+        action: "get_pay_info",
+        trans_id: this.$route.query.trans_id
       };
-    },
-    methods: {
-      getList() {
-        const data = {
-          action: "get_pay_info",
-          trans_id: this.$route.query.trans_id,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.list = result.data.data;
-          });
-      },
-    },
-    created() {
-      this.getList();
-    },
-  };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result);
+          this.list = result.data.data;
+        });
+    }
+  },
+  created() {
+    this.getList();
+  }
+};
 </script>
 <style scoped lang="scss">
-  .payment_detail {
-    section {
-      padding: 4.445%;
-      border-bottom: 4px solid #f8f8f8;
-      .h2_title {
-        font-size: 18px;
-      }
-      .h3_title {
-        font-size: 16px;
-      }
-      .info {
-        margin-bottom: 12px;
-      }
-      .trans_id {
-        margin-top: 16px;
-      }
+.payment_detail {
+  section {
+    padding: 4.445%;
+    border-bottom: 4px solid #f8f8f8;
+    .h2_title {
+      font-size: 18px;
+    }
+    .h3_title {
+      font-size: 16px;
+    }
+    .info {
+      margin-bottom: 12px;
+    }
+    .trans_id {
+      margin-top: 16px;
+    }
 
-      .price_line {
-        line-height: 20px;
-        .final_price {
-          color: #bdbdbd;
-          margin-left: 4px;
-        }
-        .ori_price {
-          font-weight: bold;
-          margin-left: 5px;
-          color: #114fff;
-        }
+    .price_line {
+      line-height: 20px;
+      .final_price {
+        color: #bdbdbd;
+        margin-left: 4px;
+      }
+      .ori_price {
+        font-weight: bold;
+        margin-left: 5px;
+        color: #114fff;
       }
     }
   }
+}
 </style>

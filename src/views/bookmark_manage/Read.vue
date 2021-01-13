@@ -13,7 +13,7 @@
                 check_time:
                   $hms_to_s(info.check_point) == 0
                     ? 1
-                    : $hms_to_s(info.check_point),
+                    : $hms_to_s(info.check_point)
               });
               $router.push({
                 path: '/play',
@@ -21,8 +21,8 @@
                   course_id: info.c_id,
                   lp_id: info.lp_id,
                   iid: info.iid,
-                  linkType: 'bookmark',
-                },
+                  linkType: 'bookmark'
+                }
               });
             "
             slot="blue_btn"
@@ -52,144 +52,144 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/BaseButton.vue";
+import BlueBtn from "@/components/common/BaseButton.vue";
 
-  export default {
-    components: {
-      BlueBtn,
+export default {
+  components: {
+    BlueBtn
+  },
+  data() {
+    return {
+      info: ""
+    };
+  },
+
+  methods: {
+    go_to_path(url, id) {
+      this.$router
+        .push({
+          path: url,
+          query: {
+            id: id,
+            mode: "modify"
+          }
+        })
+        .catch(() => {});
     },
-    data() {
-      return {
-        info: "",
+
+    deleteBookmark() {
+      const data = {
+        action: "delete_bookmark",
+        id: this.$route.query.id //게시물ID
       };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result);
+          if (result.data.data.result == 1) {
+            this.$router.push({
+              path: "/bookmarkManage",
+              query: {
+                keyword: "",
+                pageCurrent: 1,
+                order: "course_name"
+              }
+            });
+          }
+        });
     },
-
-    methods: {
-      go_to_path(url, id) {
-        this.$router
-          .push({
-            path: url,
-            query: {
-              id: id,
-              mode: "modify",
-            },
-          })
-          .catch(() => {});
-      },
-
-      deleteBookmark() {
-        const data = {
-          action: "delete_bookmark",
-          id: this.$route.query.id, //게시물ID
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            if (result.data.data.result == 1) {
-              this.$router.push({
-                path: "/bookmarkManage",
-                query: {
-                  keyword: "",
-                  pageCurrent: 1,
-                  order: "course_name",
-                },
-              });
-            }
-          });
-      },
-      bookmarkRead() {
-        const data = {
-          action: "get_bookmark_info",
-          id: this.$route.query.id, //게시물ID
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result.data);
-            this.info = result.data.data.info;
-            this.info.check_point = this.$getTimeStringSeconds(
-              this.info.check_point
-            );
-          });
-      },
-    },
-    created() {
-      this.bookmarkRead();
-    },
-  };
+    bookmarkRead() {
+      const data = {
+        action: "get_bookmark_info",
+        id: this.$route.query.id //게시물ID
+      };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result.data);
+          this.info = result.data.data.info;
+          this.info.check_point = this.$getTimeStringSeconds(
+            this.info.check_point
+          );
+        });
+    }
+  },
+  created() {
+    this.bookmarkRead();
+  }
+};
 </script>
 <style scoped lang="scss">
-  .head {
-    margin-top: 5%;
-    span {
-      font-size: 1.375rem;
-    }
-    .title {
-      color: #114fff;
-      margin-right: 2%;
-      font-weight: 600;
-    }
+.head {
+  margin-top: 5%;
+  span {
+    font-size: 1.375rem;
   }
-  .contents_wrap {
-    border-top: 2px solid #333333;
-    border-bottom: 2px solid #333333;
-    margin: 2% 0;
-    padding: 2% 0;
-    .blue_btn {
-      position: relative;
-      button {
-        width: 40%;
-        font-size: 12px;
-        height: 22px;
-        line-height: 20px;
-        padding: 0;
-      }
-      .date {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 14.5px;
-        bottom: 0;
-        margin: auto;
-        font-size: 12px;
-        color: #666666;
-      }
+  .title {
+    color: #114fff;
+    margin-right: 2%;
+    font-weight: 600;
+  }
+}
+.contents_wrap {
+  border-top: 2px solid #333333;
+  border-bottom: 2px solid #333333;
+  margin: 2% 0;
+  padding: 2% 0;
+  .blue_btn {
+    position: relative;
+    button {
+      width: 40%;
+      font-size: 12px;
+      height: 22px;
+      line-height: 20px;
+      padding: 0;
     }
-    .contents {
-      white-space: pre-wrap;
-      font-size: 1.25rem;
+    .date {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 14.5px;
+      bottom: 0;
+      margin: auto;
+      font-size: 12px;
       color: #666666;
-      font-family: "NotoSansCJKkr-Regular";
-      margin-top: 10px;
-      word-break: break-all;
     }
   }
-  .button_wrap {
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
+  .contents {
+    white-space: pre-wrap;
+    font-size: 1.25rem;
+    color: #666666;
+    font-family: "NotoSansCJKkr-Regular";
+    margin-top: 10px;
+    word-break: break-all;
+  }
+}
+.button_wrap {
+  &:after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+  .btn {
+    float: left;
+    width: 23.172%;
+    button {
+      border: 1px solid #114fff;
+      background: white;
+      color: #114fff;
+      height: 24px;
+      line-height: 16px;
+      font-size: 12px;
     }
-    .btn {
-      float: left;
-      width: 23.172%;
-      button {
-        border: 1px solid #114fff;
-        background: white;
-        color: #114fff;
-        height: 24px;
-        line-height: 16px;
-        font-size: 12px;
-      }
-      &:not(:first-child) {
-        margin-left: 2%;
-      }
-    }
-    .last_btn {
-      float: right;
+    &:not(:first-child) {
+      margin-left: 2%;
     }
   }
+  .last_btn {
+    float: right;
+  }
+}
 </style>

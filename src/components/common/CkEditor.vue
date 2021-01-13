@@ -4,16 +4,16 @@
   </div>
 </template>
 <script>
-  export default {
-    name: "app",
-    data() {
-      return {
-        editorData: "",
-        editorConfig: {
-          // The configuration of the editor.
-        },
-      };
-    },
-  };
+export default {
+  name: "app",
+  data() {
+    return {
+      editorData: "",
+      editorConfig: {
+        // The configuration of the editor.
+      }
+    };
+  }
+};
 </script>
 <style scoped lang="scss"></style>
