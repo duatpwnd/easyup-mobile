@@ -28,7 +28,7 @@ var parser = (function() {
         id: data[i].trim(),
         startTime: useMs ? timeMs(data[i + 1].trim()) : data[i + 1].trim(),
         endTime: useMs ? timeMs(data[i + 2].trim()) : data[i + 2].trim(),
-        text: data[i + 3].trim(),
+        text: data[i + 3].trim()
       });
     }
 

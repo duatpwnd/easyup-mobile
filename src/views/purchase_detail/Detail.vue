@@ -218,8 +218,8 @@
               query: {
                 keyword: '',
                 pageCurrent: 1,
-                order: '',
-              },
+                order: ''
+              }
             })
           "
         >
@@ -230,110 +230,110 @@
   </div>
 </template>
 <script>
-  import Row from "@/components/common/Row.vue";
-  import BaseButton from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
-  import ConfirmModal from "@/components/common/ConfirmModal.vue";
-  import CancelLecture from "@/components/modal/CancelLecture.vue";
-  export default {
-    components: {
-      CancelLecture,
-      ConfirmModal,
-      Row,
-      BaseButton,
+import Row from "@/components/common/Row.vue";
+import BaseButton from "@/components/common/BaseButton.vue";
+import { mapState, mapMutations } from "vuex";
+import ConfirmModal from "@/components/common/ConfirmModal.vue";
+import CancelLecture from "@/components/modal/CancelLecture.vue";
+export default {
+  components: {
+    CancelLecture,
+    ConfirmModal,
+    Row,
+    BaseButton
+  },
+  computed: {
+    ...mapState("toggleStore", {
+      toggleStore_confirmModal: "confirm_modal"
+    })
+  },
+  data() {
+    return {
+      list: "",
+      cancelLecture: false
+    };
+  },
+  methods: {
+    isCancel() {
+      this.$confirmMessage(
+        "구매하신 강의를 취소 하시겠습니까?<br>취소 신청 시 강의 시청이 불가 합니다."
+      );
     },
-    computed: {
-      ...mapState("toggleStore", {
-        toggleStore_confirmModal: "confirm_modal",
-      }),
-    },
-    data() {
-      return {
-        list: "",
-        cancelLecture: false,
+    getList() {
+      const data = {
+        action: "order_info",
+        trans_id: this.$route.query.trans_id
       };
-    },
-    methods: {
-      isCancel() {
-        this.$confirmMessage(
-          "구매하신 강의를 취소 하시겠습니까?<br>취소 신청 시 강의 시청이 불가 합니다."
-        );
-      },
-      getList() {
-        const data = {
-          action: "order_info",
-          trans_id: this.$route.query.trans_id,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.list = result.data.data;
-          });
-      },
-    },
-    created() {
-      this.getList();
-    },
-  };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result);
+          this.list = result.data.data;
+        });
+    }
+  },
+  created() {
+    this.getList();
+  }
+};
 </script>
 <style scoped lang="scss">
-  .detail_wrap {
-    .section {
-      padding: 4.445%;
-      border-bottom: 4px solid #f8f8f8;
-    }
-    .clear_both {
+.detail_wrap {
+  .section {
+    padding: 4.445%;
+    border-bottom: 4px solid #f8f8f8;
+  }
+  .clear_both {
+    clear: both;
+    line-height: 20px;
+    &:after {
+      display: block;
+      content: "";
       clear: both;
-      line-height: 20px;
-      &:after {
-        display: block;
-        content: "";
-        clear: both;
+    }
+    .final_price {
+      font-size: 14px;
+      color: #bdbdbd;
+      margin-left: 4px;
+    }
+    .ori_price {
+      font-weight: bold;
+      margin-left: 5px;
+      font-size: 14px;
+      color: #114fff;
+    }
+  }
+  .btn_wrap {
+    padding: 4.445%;
+    &:after {
+      display: block;
+      content: "";
+      clear: both;
+    }
+    .blue_btn {
+      width: 48%;
+      button {
+        height: 40px;
+        line-height: 31px;
+        font-size: 16px;
       }
-      .final_price {
-        font-size: 14px;
-        color: #bdbdbd;
-        margin-left: 4px;
-      }
-      .ori_price {
-        font-weight: bold;
-        margin-left: 5px;
-        font-size: 14px;
+    }
+    .left {
+      float: left;
+    }
+    .right {
+      float: right;
+      button {
+        background: white;
         color: #114fff;
       }
     }
-    .btn_wrap {
-      padding: 4.445%;
-      &:after {
-        display: block;
-        content: "";
-        clear: both;
-      }
-      .blue_btn {
-        width: 48%;
-        button {
-          height: 40px;
-          line-height: 31px;
-          font-size: 16px;
-        }
-      }
-      .left {
-        float: left;
-      }
-      .right {
-        float: right;
-        button {
-          background: white;
-          color: #114fff;
-        }
-      }
-      .cancel_req_btn {
-        border: 1px solid #dbdbdb;
-        background: #dbdbdb;
-        color: white;
-      }
+    .cancel_req_btn {
+      border: 1px solid #dbdbdb;
+      background: #dbdbdb;
+      color: white;
     }
   }
+}
 </style>

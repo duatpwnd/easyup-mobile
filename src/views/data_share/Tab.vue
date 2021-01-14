@@ -111,211 +111,211 @@
   </div>
 </template>
 <script>
-  import CheckBox from "@/components/common/BaseCheckBox.vue";
-  import BoardTitle from "@/components/common/BoardTitle.vue";
-  import BoardList from "@/components/common/BoardList.vue";
-  import Search from "@/components/common/Search.vue";
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  import Pagination from "@/components/common/Pagination.vue";
-  export default {
-    components: {
-      Pagination,
+import CheckBox from "@/components/common/BaseCheckBox.vue";
+import BoardTitle from "@/components/common/BoardTitle.vue";
+import BoardList from "@/components/common/BoardList.vue";
+import Search from "@/components/common/Search.vue";
+import BlueBtn from "@/components/common/BaseButton.vue";
+import Pagination from "@/components/common/Pagination.vue";
+export default {
+  components: {
+    Pagination,
 
-      CheckBox,
-      BoardList,
-      BoardTitle,
-      BlueBtn,
-      Search,
+    CheckBox,
+    BoardList,
+    BoardTitle,
+    BlueBtn,
+    Search
+  },
+  data() {
+    return {
+      checked_list: [],
+      allCheck: false,
+      datashare_list: "",
+      current: "", //현재번호
+      order: "",
+      keyword: ""
+    };
+  },
+  methods: {
+    upload() {
+      this.$router.push("/dataShare/upload");
     },
-    data() {
-      return {
-        checked_list: [],
-        allCheck: false,
-        datashare_list: "",
-        current: "", //현재번호
-        order: "",
-        keyword: "",
+    fileDownload(id, course_id, file_name) {
+      const data = {
+        action: "get_file_download_info",
+        id: id,
+        course_id: course_id
       };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, data, {
+          responseType: "blob",
+          headers: {
+            Authorization: this.$cookies.get("user_info")
+              ? "Bearer " + this.$cookies.get("user_info").access_token
+              : null
+          }
+        })
+        .then(result => {
+          console.log(result);
+          console.log(file_name);
+          if (window.navigator.msSaveOrOpenBlob) {
+            // IE 10+
+            window.navigator.msSaveOrOpenBlob(result.data, filename);
+          } else {
+            // not IE
+            let link = document.createElement("a");
+            link.href = window.URL.createObjectURL(result.data);
+            link.target = "_self";
+            link.download = file_name;
+            link.click();
+            window.URL.revokeObjectURL(result.data);
+          }
+        });
     },
-    methods: {
-      upload() {
-        this.$router.push("/dataShare/upload");
-      },
-      fileDownload(id, course_id, file_name) {
-        const data = {
-          action: "get_file_download_info",
-          id: id,
-          course_id: course_id,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, data, {
-            responseType: "blob",
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
-          .then((result) => {
-            console.log(result);
-            console.log(file_name);
-            if (window.navigator.msSaveOrOpenBlob) {
-              // IE 10+
-              window.navigator.msSaveOrOpenBlob(result.data, filename);
-            } else {
-              // not IE
-              let link = document.createElement("a");
-              link.href = window.URL.createObjectURL(result.data);
-              link.target = "_self";
-              link.download = file_name;
-              link.click();
-              window.URL.revokeObjectURL(result.data);
-            }
-          });
-      },
-      all_check() {
-        this.allCheck = !this.allCheck;
-        if (this.allCheck) {
-          this.datashare_list.list.forEach((el, index) => {
-            this.checked_list.push(el.id);
-          });
-        } else {
-          this.checked_list = [];
-        }
-      },
-      // 부분체크
-      partial_check() {
-        if (this.datashare_list.list.length != this.checked_list.length) {
+    all_check() {
+      this.allCheck = !this.allCheck;
+      if (this.allCheck) {
+        this.datashare_list.list.forEach((el, index) => {
+          this.checked_list.push(el.id);
+        });
+      } else {
+        this.checked_list = [];
+      }
+    },
+    // 부분체크
+    partial_check() {
+      if (this.datashare_list.list.length != this.checked_list.length) {
+        this.allCheck = false;
+      } else {
+        this.allCheck = true;
+      }
+    },
+    // 공유한 파일 삭제
+    deleteFile() {
+      const data = {
+        action: "delete_dropbox_file",
+        type: this.$route.meta.type,
+        id: this.checked_list
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result);
+          this.$noticeMessage(result.data.data[0]);
           this.allCheck = false;
-        } else {
-          this.allCheck = true;
-        }
-      },
-      // 공유한 파일 삭제
-      deleteFile() {
-        const data = {
-          action: "delete_dropbox_file",
-          type: this.$route.meta.type,
-          id: this.checked_list,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.$noticeMessage(result.data.data[0]);
-            this.allCheck = false;
-            this.getDropBoxList(
-              this.$route.meta.type,
-              this.$route.query.pageCurrent,
-              this.$route.query.order,
-              this.$route.query.keyword
-            );
-          });
-      },
-      getDropBoxList(type, num, order, keyword) {
-        const data = {
-          action: "get_dropbox_list",
-          type: type,
-          current: num == undefined ? 1 : num,
-          search_status: order == undefined ? "all" : order,
-          keyword: keyword == undefined ? "" : keyword,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            if (result.data.error != true) {
-              this.datashare_list = result.data.data;
-              this.$router
-                .push({
-                  query: {
-                    pageCurrent: num,
-                    order: order,
-                    keyword: keyword,
-                  },
-                })
-                .catch(() => {});
-              this.order = order;
-              this.keyword = keyword;
-              this.current = num;
-            }
-          });
-      },
+          this.getDropBoxList(
+            this.$route.meta.type,
+            this.$route.query.pageCurrent,
+            this.$route.query.order,
+            this.$route.query.keyword
+          );
+        });
     },
-    mounted() {},
-    watch: {
-      $route(to, from) {
-        this.getDropBoxList(
-          to.meta.type,
-          this.$route.query.pageCurrent,
-          this.$route.query.order,
-          this.$route.query.keyword
-        );
-      },
-    },
-    created() {
+    getDropBoxList(type, num, order, keyword) {
+      const data = {
+        action: "get_dropbox_list",
+        type: type,
+        current: num == undefined ? 1 : num,
+        search_status: order == undefined ? "all" : order,
+        keyword: keyword == undefined ? "" : keyword
+      };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result);
+          if (result.data.error != true) {
+            this.datashare_list = result.data.data;
+            this.$router
+              .push({
+                query: {
+                  pageCurrent: num,
+                  order: order,
+                  keyword: keyword
+                }
+              })
+              .catch(() => {});
+            this.order = order;
+            this.keyword = keyword;
+            this.current = num;
+          }
+        });
+    }
+  },
+  mounted() {},
+  watch: {
+    $route(to, from) {
       this.getDropBoxList(
-        this.$route.meta.type,
+        to.meta.type,
         this.$route.query.pageCurrent,
         this.$route.query.order,
         this.$route.query.keyword
       );
-    },
-  };
+    }
+  },
+  created() {
+    this.getDropBoxList(
+      this.$route.meta.type,
+      this.$route.query.pageCurrent,
+      this.$route.query.order,
+      this.$route.query.keyword
+    );
+  }
+};
 </script>
 <style scoped lang="scss">
-  .tab1 {
-    padding: 4.445%;
-    padding-top: 0;
-    .no_result {
-      text-align: center;
-      padding: 15px;
-      font-size: 16px;
+.tab1 {
+  padding: 4.445%;
+  padding-top: 0;
+  .no_result {
+    text-align: center;
+    padding: 15px;
+    font-size: 16px;
+  }
+  .btn_wrap {
+    &:after {
+      display: block;
+      content: "";
+      clear: both;
     }
-    .btn_wrap {
-      &:after {
-        display: block;
-        content: "";
-        clear: both;
-      }
-      .blue_btn {
-        width: 48%;
-      }
-      .left {
-        float: left;
-      }
-      .right {
-        float: right;
-        button {
-          background: white;
-          color: #114fff;
-        }
-      }
+    .blue_btn {
+      width: 48%;
     }
-    .search {
-      margin: 2% 0;
+    .left {
+      float: left;
     }
-    .file_list {
-      &:nth-child(odd) {
-        background: #f8f8f8;
-      }
-    }
-    .list_wrap {
-      ::v-deep .top_tr {
-        .left_td {
-          padding-left: 9%;
-          width: 39%;
-        }
-        .right_td {
-          width: 61%;
-        }
-      }
-      ::v-deep .bottom_tr {
-        .left_td {
-          padding-left: 9%;
-        }
+    .right {
+      float: right;
+      button {
+        background: white;
+        color: #114fff;
       }
     }
   }
+  .search {
+    margin: 2% 0;
+  }
+  .file_list {
+    &:nth-child(odd) {
+      background: #f8f8f8;
+    }
+  }
+  .list_wrap {
+    ::v-deep .top_tr {
+      .left_td {
+        padding-left: 9%;
+        width: 39%;
+      }
+      .right_td {
+        width: 61%;
+      }
+    }
+    ::v-deep .bottom_tr {
+      .left_td {
+        padding-left: 9%;
+      }
+    }
+  }
+}
 </style>

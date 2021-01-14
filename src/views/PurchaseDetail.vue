@@ -5,26 +5,26 @@
   </div>
 </template>
 <script>
-  export default {
-    data() {
-      return {
-        keyword: "",
-        order: "",
-      };
-    },
-    watch: {
-      $route(to, from) {},
-    },
-    methods: {},
-    mounted() {},
-  };
+export default {
+  data() {
+    return {
+      keyword: "",
+      order: ""
+    };
+  },
+  watch: {
+    $route(to, from) {}
+  },
+  methods: {},
+  mounted() {}
+};
 </script>
 <style scoped lang="scss">
-  .purchase_warp {
-    padding-bottom: 65px;
-    .title {
-      font-size: 18px;
-      padding: 0 4.445%;
-    }
+.purchase_warp {
+  padding-bottom: 65px;
+  .title {
+    font-size: 18px;
+    padding: 0 4.445%;
   }
+}
 </style>

@@ -28,20 +28,20 @@ h. 위 항에서 정의되지 않은 약관 상의 용어의 의미는 일반적
   >
 </template>
 <script>
-  export default {
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+export default {
+  components: {},
+  data() {
+    return {};
+  },
+  methods: {}
+};
 </script>
 <style scoped lang="scss">
-  pre {
-    padding: 4.445%;
-    font-family: "NotoSansCJKkr-DemiLight";
-    white-space: pre-wrap;
-    color: #666666;
-    font-size: 1.125rem;
-  }
+pre {
+  padding: 4.445%;
+  font-family: "NotoSansCJKkr-DemiLight";
+  white-space: pre-wrap;
+  color: #666666;
+  font-size: 1.125rem;
+}
 </style>

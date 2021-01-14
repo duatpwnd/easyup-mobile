@@ -74,166 +74,166 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  import Notice from "@/components/common/notice.vue";
-  export default {
-    components: {
-      BlueBtn,
-      Notice,
+import BlueBtn from "@/components/common/BaseButton.vue";
+import Notice from "@/components/common/notice.vue";
+export default {
+  components: {
+    BlueBtn,
+    Notice
+  },
+  data() {
+    return {
+      file_obj: "",
+      name: "",
+      category: "",
+      email: "",
+      phone: "",
+      contents: ""
+    };
+  },
+  methods: {
+    fileSelect() {
+      const selected_file = this.$refs.upload.files[0];
+      this.file_obj = selected_file;
     },
-    data() {
-      return {
-        file_obj: "",
-        name: "",
-        category: "",
-        email: "",
-        phone: "",
-        contents: "",
-      };
+    goToPath() {
+      this.$router.push("/help/read");
     },
-    methods: {
-      fileSelect() {
-        const selected_file = this.$refs.upload.files[0];
-        this.file_obj = selected_file;
-      },
-      goToPath() {
-        this.$router.push("/help/read");
-      },
-      validationCheck() {
-        return new Promise((resolve, reject) => {
-          if (this.name.trim().length == 0) {
-            this.$noticeMessage("이름을 입력하세요");
-          } else if (this.email.trim().length == 0) {
-            this.$noticeMessage("이메일을 입력하세요");
-          } else {
-            resolve("success");
-          }
-        });
-      },
-      register() {
-        this.validationCheck().then((result) => {
-          console.log(result);
-          if (result == "success") {
-            // const formData = new FormData();
-            // formData.append("action", "send_qna");
-            // formData.append("add_file", this.file_obj);
-            // formData.append("name", this.name);
-            // formData.append("email", this.email);
-            // formData.append("phone", this.phone);
-            // formData.append("contents", this.contents);
-            // formData.append("category", "all");
-            // console.log(formData);
-            const data = {
-              action: "send_qna",
-              category: "all",
-              name: this.name,
-              email: this.email,
-              phone: this.phone,
-              contents: this.contents,
-              add_file: this.file_obj,
-            };
-            console.log(data);
-            this.$axios
-              .post(this.$ApiUrl.mobileAPI_v1, data, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              })
-              .then((result) => {
-                console.log(result);
-                this.$noticeMessage(result.data.data[0]);
-              });
-          }
-        });
-      },
+    validationCheck() {
+      return new Promise((resolve, reject) => {
+        if (this.name.trim().length == 0) {
+          this.$noticeMessage("이름을 입력하세요");
+        } else if (this.email.trim().length == 0) {
+          this.$noticeMessage("이메일을 입력하세요");
+        } else {
+          resolve("success");
+        }
+      });
     },
-  };
+    register() {
+      this.validationCheck().then(result => {
+        console.log(result);
+        if (result == "success") {
+          // const formData = new FormData();
+          // formData.append("action", "send_qna");
+          // formData.append("add_file", this.file_obj);
+          // formData.append("name", this.name);
+          // formData.append("email", this.email);
+          // formData.append("phone", this.phone);
+          // formData.append("contents", this.contents);
+          // formData.append("category", "all");
+          // console.log(formData);
+          const data = {
+            action: "send_qna",
+            category: "all",
+            name: this.name,
+            email: this.email,
+            phone: this.phone,
+            contents: this.contents,
+            add_file: this.file_obj
+          };
+          console.log(data);
+          this.$axios
+            .post(this.$ApiUrl.mobileAPI_v1, data, {
+              headers: {
+                "Content-Type": "multipart/form-data"
+              }
+            })
+            .then(result => {
+              console.log(result);
+              this.$noticeMessage(result.data.data[0]);
+            });
+        }
+      });
+    }
+  }
+};
 </script>
 <style scoped lang="scss">
-  .qna {
-    padding: 4.445%;
+.qna {
+  padding: 4.445%;
 
-    h2 {
-      font-size: 1.375rem;
-      margin-top: 2.5%;
-      padding-bottom: 2%;
-      border-bottom: 2px solid #333333;
-      .num {
-        color: #114fff;
-      }
+  h2 {
+    font-size: 1.375rem;
+    margin-top: 2.5%;
+    padding-bottom: 2%;
+    border-bottom: 2px solid #333333;
+    .num {
+      color: #114fff;
     }
-    .blue_btn {
-      margin-top: 5%;
-      width: calc(100% - 35%);
-      float: right;
-      ::v-deep button {
-        width: 70%;
-      }
+  }
+  .blue_btn {
+    margin-top: 5%;
+    width: calc(100% - 35%);
+    float: right;
+    ::v-deep button {
+      width: 70%;
     }
-    .search {
-      margin-top: 0;
-    }
-    .form {
-      margin-top: 10px;
-      .row {
-        margin-top: 5px;
+  }
+  .search {
+    margin-top: 0;
+  }
+  .form {
+    margin-top: 10px;
+    .row {
+      margin-top: 5px;
 
-        input,
-        textarea,
-        select {
-          font-family: "NotoSansCJKkr-Regular";
-          font-size: 12px;
-          width: calc(100% - 35%);
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          outline: none;
-          padding: 5px 6px;
-          height: 28px;
-          line-height: 13px;
-          box-sizing: border-box;
-        }
-        select {
-          background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat
-            95% center / 7px 5px;
-        }
-        textarea {
-          vertical-align: top;
-          resize: none;
+      input,
+      textarea,
+      select {
+        font-family: "NotoSansCJKkr-Regular";
+        font-size: 12px;
+        width: calc(100% - 35%);
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+        padding: 5px 6px;
+        height: 28px;
+        line-height: 13px;
+        box-sizing: border-box;
+      }
+      select {
+        background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 95%
+          center / 7px 5px;
+      }
+      textarea {
+        vertical-align: top;
+        resize: none;
+        font-size: 9px;
+        height: 60px;
+
+        &::placeholder {
+          color: #666666;
           font-size: 9px;
-          height: 60px;
-
-          &::placeholder {
-            color: #666666;
-            font-size: 9px;
-          }
         }
-        .dt {
-          width: 35%;
-          display: inline-block;
-          font-size: 12px;
-          font-family: "NotoSansCJKkr-Regular";
-          .required {
-            color: #114fff;
-          }
-        }
-        input[type="file"] {
-          display: none;
-        }
-        .file {
-          height: 24px;
+      }
+      .dt {
+        width: 35%;
+        display: inline-block;
+        font-size: 12px;
+        font-family: "NotoSansCJKkr-Regular";
+        .required {
           color: #114fff;
-          border: 1px solid #114fff;
-          border-radius: 5px;
-          font-size: 11px;
-          width: 76px;
-          display: inline-block;
-          text-align: center;
-          line-height: 24px;
         }
-        .file_name {
-          margin-left: 35%;
-        }
+      }
+      input[type="file"] {
+        display: none;
+      }
+      .file {
+        height: 24px;
+        color: #114fff;
+        border: 1px solid #114fff;
+        border-radius: 5px;
+        font-size: 11px;
+        width: 76px;
+        display: inline-block;
+        text-align: center;
+        line-height: 24px;
+      }
+      .file_name {
+        margin-left: 35%;
       }
     }
   }
+}
 </style>

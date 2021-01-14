@@ -162,247 +162,247 @@
   </div>
 </template>
 <script>
-  import Row from "@/components/common/Row.vue";
-  import BaseButton from "@/components/common/BaseButton.vue";
-  import LectureCourseList from "@/components/common/LectureCourseList.vue";
-  import MyCoupon from "@/components/modal/MyCoupon.vue";
-  import CheckBox from "@/components/common/BaseCheckBox.vue";
-  import Policy from "@/views/Policy.vue";
-  import Terms from "@/components/policy/Terms.vue";
-  import Privacy from "@/components/policy/Privacy.vue";
-  export default {
-    components: {
-      Policy,
-      CheckBox,
-      MyCoupon,
-      Row,
-      BaseButton,
-      LectureCourseList,
-      Terms,
-      Privacy,
+import Row from "@/components/common/Row.vue";
+import BaseButton from "@/components/common/BaseButton.vue";
+import LectureCourseList from "@/components/common/LectureCourseList.vue";
+import MyCoupon from "@/components/modal/MyCoupon.vue";
+import CheckBox from "@/components/common/BaseCheckBox.vue";
+import Policy from "@/views/Policy.vue";
+import Terms from "@/components/policy/Terms.vue";
+import Privacy from "@/components/policy/Privacy.vue";
+export default {
+  components: {
+    Policy,
+    CheckBox,
+    MyCoupon,
+    Row,
+    BaseButton,
+    LectureCourseList,
+    Terms,
+    Privacy
+  },
+  data() {
+    return {
+      policyModal: false,
+      list: "",
+      modal: false,
+      isAgree: false,
+      isActive: 0,
+      type: "Terms",
+      types: [
+        { name: "이용약관", target: "Terms" },
+        { name: "개인정보 취급방침", target: "Privacy" }
+      ]
+    };
+  },
+  methods: {
+    toggle(type, index) {
+      this.type = type;
+      this.isActive = index;
     },
-    data() {
-      return {
-        policyModal: false,
-        list: "",
-        modal: false,
-        isAgree: false,
-        isActive: 0,
-        type: "Terms",
-        types: [
-          { name: "이용약관", target: "Terms" },
-          { name: "개인정보 취급방침", target: "Privacy" },
-        ],
+    close() {
+      this.modal = false;
+    },
+    getList() {
+      const data = {
+        action: "pay_step1",
+        cart_id: this.$route.query.cart_id.split(",")
       };
-    },
-    methods: {
-      toggle(type, index) {
-        this.type = type;
-        this.isActive = index;
-      },
-      close() {
-        this.modal = false;
-      },
-      getList() {
-        const data = {
-          action: "pay_step1",
-          cart_id: this.$route.query.cart_id.split(","),
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.list = result.data.data;
-          });
-      },
-    },
-    created() {
-      this.getList();
-    },
-  };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result);
+          this.list = result.data.data;
+        });
+    }
+  },
+  created() {
+    this.getList();
+  }
+};
 </script>
 <style scoped lang="scss">
-  .h2_title {
-    font-size: 18px;
-    padding: 4.445%;
-    border-bottom: 4px solid #f8f8f8;
+.h2_title {
+  font-size: 18px;
+  padding: 4.445%;
+  border-bottom: 4px solid #f8f8f8;
+}
+.h3_title {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+::v-deep .list_wrap {
+  padding: 4.445%;
+  border-bottom: 4px solid #f8f8f8;
+  &:after {
+    display: block;
+    content: "";
+    clear: both;
   }
-  .h3_title {
-    font-size: 16px;
-    margin-bottom: 10px;
+  .list_left {
+    width: 20%;
   }
-  ::v-deep .list_wrap {
-    padding: 4.445%;
-    border-bottom: 4px solid #f8f8f8;
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
-    }
-    .list_left {
-      width: 20%;
-    }
-    .list_right {
-      width: 80%;
-      padding-left: 0 10px;
-    }
-    .price {
-      .final_price {
-        font-size: 12px;
-        color: #bdbdbd;
-      }
-      .ori_price {
-        font-weight: bold;
-        margin-left: 5px;
-        font-size: 14px;
-        color: #114fff;
-      }
-    }
-    .limit {
+  .list_right {
+    width: 80%;
+    padding-left: 0 10px;
+  }
+  .price {
+    .final_price {
       font-size: 12px;
-      color: #999999;
+      color: #bdbdbd;
     }
-    .right {
-      float: right;
-      width: 20%;
-      button {
-        background: white;
-        color: #114fff;
-      }
-    }
-  }
-  .li {
-    padding: 4.445%;
-    border-bottom: 4px solid #f8f8f8;
-    .line {
-      border-bottom: 1px solid black;
-      padding-bottom: 10px;
-      .discount_coupon {
-        color: #ff114a;
-      }
-      .blue_btn {
-        float: unset;
-        width: 100%;
-        margin-left: 10px;
-        button {
-          background: white;
-          color: #114fff;
-        }
-      }
-    }
-    .order {
-      .dt {
-        font-size: 16px;
-        font-weight: bold;
-      }
-    }
-    .amount {
-      padding-top: 10px;
-      .dt,
-      .dd {
-        font-size: 16px;
-        font-weight: bold;
-      }
-    }
-  }
-  .btn_wrap {
-    padding: 4.445%;
-    h2 {
-      font-size: 16px;
-      margin-bottom: 15px;
+    .ori_price {
       font-weight: bold;
-    }
-    .blue_btn {
-      display: inline-block;
-      width: 24.25%;
-      &:not(:last-child) {
-        margin-right: 1%;
-      }
-      button {
-        background: white;
-        color: #114fff;
-      }
-    }
-  }
-  .isAgree {
-    text-align: center;
-    padding-bottom: 20px;
-    .chk {
-      display: inline-block;
-      vertical-align: middle;
-      ::v-deep .container-checkbox {
-        position: unset;
-        width: unset;
-        height: 24px;
-        display: inline-block;
-        .checkmark {
-          position: unset;
-          width: 24px;
-          display: inline-block;
-          height: 24px;
-          padding: 0;
-          box-sizing: border-box;
-        }
-      }
-    }
-    .view,
-    .notice {
+      margin-left: 5px;
       font-size: 14px;
-    }
-    .notice {
-      margin-left: 10px;
-    }
-    .view {
       color: #114fff;
     }
   }
-  .policy_wrap {
-    position: fixed;
-    width: 90%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    background: white;
-    max-width: 720px;
-    height: 70%;
-    overflow: hidden;
-    ::v-deep .policy {
-      height: calc(100% - 60px);
-
-      ::-webkit-scrollbar {
-        width: 10px;
-      }
-      ::-webkit-scrollbar-thumb {
-        background-color: #ccc;
-        border-radius: 10px;
-        background-clip: padding-box;
-        border: 2px solid transparent;
-      }
-      .tab {
-        font-size: 18px;
-        height: 40px;
-        line-height: 40px;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      pre {
-        height: calc(100% - 40px);
-        overflow-y: auto;
-        padding: 20px;
-        box-sizing: border-box;
-      }
+  .limit {
+    font-size: 12px;
+    color: #999999;
+  }
+  .right {
+    float: right;
+    width: 20%;
+    button {
+      background: white;
+      color: #114fff;
     }
-    ::v-deep .close_btn {
-      margin-top: 20px;
+  }
+}
+.li {
+  padding: 4.445%;
+  border-bottom: 4px solid #f8f8f8;
+  .line {
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
+    .discount_coupon {
+      color: #ff114a;
+    }
+    .blue_btn {
+      float: unset;
+      width: 100%;
+      margin-left: 10px;
       button {
-        height: 40px;
-        line-height: 31px;
-        border-radius: 0;
-        font-size: 18px;
+        background: white;
+        color: #114fff;
       }
     }
   }
+  .order {
+    .dt {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+  .amount {
+    padding-top: 10px;
+    .dt,
+    .dd {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+}
+.btn_wrap {
+  padding: 4.445%;
+  h2 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  .blue_btn {
+    display: inline-block;
+    width: 24.25%;
+    &:not(:last-child) {
+      margin-right: 1%;
+    }
+    button {
+      background: white;
+      color: #114fff;
+    }
+  }
+}
+.isAgree {
+  text-align: center;
+  padding-bottom: 20px;
+  .chk {
+    display: inline-block;
+    vertical-align: middle;
+    ::v-deep .container-checkbox {
+      position: unset;
+      width: unset;
+      height: 24px;
+      display: inline-block;
+      .checkmark {
+        position: unset;
+        width: 24px;
+        display: inline-block;
+        height: 24px;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    }
+  }
+  .view,
+  .notice {
+    font-size: 14px;
+  }
+  .notice {
+    margin-left: 10px;
+  }
+  .view {
+    color: #114fff;
+  }
+}
+.policy_wrap {
+  position: fixed;
+  width: 90%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background: white;
+  max-width: 720px;
+  height: 70%;
+  overflow: hidden;
+  ::v-deep .policy {
+    height: calc(100% - 60px);
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 10px;
+      background-clip: padding-box;
+      border: 2px solid transparent;
+    }
+    .tab {
+      font-size: 18px;
+      height: 40px;
+      line-height: 40px;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    pre {
+      height: calc(100% - 40px);
+      overflow-y: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+  }
+  ::v-deep .close_btn {
+    margin-top: 20px;
+    button {
+      height: 40px;
+      line-height: 31px;
+      border-radius: 0;
+      font-size: 18px;
+    }
+  }
+}
 </style>

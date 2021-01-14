@@ -1,5 +1,5 @@
 <template>
-  <div id="main" v-if="list">
+  <div id="main" v-if="Object.keys(list).length > 0">
     <!-- 배너 :: S -->
     <Slide :swiper_option="slide_option.banner">
       <swiper-slide
@@ -200,61 +200,58 @@
     },
   })
   export default class Main extends Vue {
-    slide_option: Object;
-    list: String;
-    constructor() {
-      super();
-      this.slide_option = {
-        banner: {
-          autoplay: {
-            delay: 2500,
-            disableOnInteraction: false,
-          },
-          pagination: {
-            el: ".swiper-pagination",
-          },
+    private slide_option = {
+      banner: {
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: false,
         },
-        popular_course: {
-          spaceBetween: 8,
-          slidesPerView: 1.049,
-          pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-          },
+        pagination: {
+          el: ".swiper-pagination",
         },
-        latest_lecture: {
-          spaceBetween: 8,
-          slidesPerView: 2.12,
-          pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-          },
+      },
+      popular_course: {
+        spaceBetween: 8,
+        slidesPerView: 1.049,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
         },
-      };
-      this.list = "";
-    }
-    noticeRead(id: any) {
+      },
+      latest_lecture: {
+        spaceBetween: 8,
+        slidesPerView: 2.12,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+      },
+    };
+    private list: Object = {};
+    private noticeRead(id: number): void {
       if (id != null) {
         this.$router.push({
           path: "/help/notice/read",
           query: {
-            id: id,
+            id: id.toFixed(0),
           },
         });
       }
     }
-    getLectureList() {
+    private getLectureList(): void {
       const data = {
         action: "main_page_list",
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: any) => {
-          console.log(result);
           this.list = result.data.data;
+          console.log(this.list);
         });
     }
-    mounted() {}
+    mounted() {
+      console.log(this);
+    }
     created() {
       this.getLectureList();
     }

@@ -16,73 +16,73 @@
   </div>
 </template>
 <script>
-  import Terms from "@/components/policy/Terms.vue";
-  import Privacy from "@/components/policy/Privacy.vue";
-  export default {
-    components: { Terms, Privacy },
-    data() {
-      return {
-        isActive: 0,
-        type: "Terms",
-        types: [
-          { name: "이용약관", target: "Terms" },
-          { name: "개인정보 취급방침", target: "Privacy" },
-        ],
-      };
+import Terms from "@/components/policy/Terms.vue";
+import Privacy from "@/components/policy/Privacy.vue";
+export default {
+  components: { Terms, Privacy },
+  data() {
+    return {
+      isActive: 0,
+      type: "Terms",
+      types: [
+        { name: "이용약관", target: "Terms" },
+        { name: "개인정보 취급방침", target: "Privacy" }
+      ]
+    };
+  },
+  methods: {
+    toggle(type, index) {
+      this.$router
+        .push({
+          name: "policy",
+          query: {
+            action: type,
+            active: index
+          }
+        })
+        .catch(() => {});
     },
-    methods: {
-      toggle(type, index) {
-        this.$router
-          .push({
-            name: "policy",
-            query: {
-              action: type,
-              active: index,
-            },
-          })
-          .catch(() => {});
-      },
-      compSet() {
-        this.type = this.$route.query.action;
-        this.isActive = this.$route.query.active;
-      },
-    },
-    watch: {
-      $route(to, from) {
-        this.compSet();
-      },
-    },
-    created() {
+    compSet() {
+      this.type = this.$route.query.action;
+      this.isActive = this.$route.query.active;
+    }
+  },
+  watch: {
+    $route(to, from) {
       this.compSet();
-    },
-  };
+    }
+  },
+  created() {
+    this.compSet();
+  }
+};
 </script>
 <style scoped lang="scss">
-  .tab {
-    font-size: 2rem;
-    font-weight: 600;
-    width: 50%;
-    display: inline-block;
-    text-align: center;
-    background: #f8f8f8;
-    padding: 2% 0;
-    position: relative;
-    color: #999999;
-  }
+.tab {
+  font-size: 2rem;
+  font-weight: 600;
+  width: 50%;
+  display: inline-block;
+  text-align: center;
+  background: #f8f8f8;
+  padding: 2% 0;
+  position: relative;
+  color: #999999;
+}
+.active_bar {
+  background: #f8f8f8;
+  height: 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.active {
+  background: #ffffff;
+  color: black;
   .active_bar {
-    background: #f8f8f8;
-    height: 4px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    box-sizing: border-box;
+    background: #114fff;
   }
-  .active {
-    background: #ffffff;
-    color: black;
-    .active_bar {
-      background: #114fff;
-    }
-  }
+}
 </style>

@@ -39,8 +39,8 @@
               path: '/msg/sentList',
               query: {
                 pageCurrent: 1,
-                keyword: '',
-              },
+                keyword: ''
+              }
             })
           "
         >
@@ -54,8 +54,8 @@
             $router.push({
               path: '/msg/newMessage',
               query: {
-                id: view.id,
-              },
+                id: view.id
+              }
             })
           "
         >
@@ -71,171 +71,171 @@
   </div>
 </template>
 <script>
-  import ConfirmModal from "@/components/common/ConfirmModal.vue";
-  import { mapState, mapMutations } from "vuex";
+import ConfirmModal from "@/components/common/ConfirmModal.vue";
+import { mapState, mapMutations } from "vuex";
 
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  export default {
-    components: {
-      BlueBtn,
-      ConfirmModal,
-    },
-    computed: {
-      ...mapState("toggleStore", {
-        toggleStore_confirmModal: "confirm_modal",
-      }),
-    },
-    data() {
-      return {
-        view: "",
+import BlueBtn from "@/components/common/BaseButton.vue";
+export default {
+  components: {
+    BlueBtn,
+    ConfirmModal
+  },
+  computed: {
+    ...mapState("toggleStore", {
+      toggleStore_confirmModal: "confirm_modal"
+    })
+  },
+  data() {
+    return {
+      view: ""
+    };
+  },
+  methods: {
+    download(filename, file_id) {
+      const data = {
+        action: "download_message_attach",
+        type: this.$route.query.type,
+        file_id: file_id
       };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, data, {
+          responseType: "blob",
+          headers: {
+            Authorization: this.$cookies.get("user_info")
+              ? "Bearer " + this.$cookies.get("user_info").access_token
+              : null
+          }
+        })
+        .then(result => {
+          console.log(result, filename);
+          // 로컬서버에서는 작동하지 않음
+          if (window.navigator.msSaveOrOpenBlob) {
+            // IE 10+
+            window.navigator.msSaveOrOpenBlob(result.data, filename);
+          } else {
+            // not IE
+            let link = document.createElement("a");
+            link.href = window.URL.createObjectURL(result.data);
+            link.target = "_self";
+            if (filename) link.download = filename;
+            link.click();
+            window.URL.revokeObjectURL(result.data);
+          }
+        });
     },
-    methods: {
-      download(filename, file_id) {
-        const data = {
-          action: "download_message_attach",
-          type: this.$route.query.type,
-          file_id: file_id,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, data, {
-            responseType: "blob",
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
-            },
-          })
-          .then((result) => {
-            console.log(result, filename);
-            // 로컬서버에서는 작동하지 않음
-            if (window.navigator.msSaveOrOpenBlob) {
-              // IE 10+
-              window.navigator.msSaveOrOpenBlob(result.data, filename);
-            } else {
-              // not IE
-              let link = document.createElement("a");
-              link.href = window.URL.createObjectURL(result.data);
-              link.target = "_self";
-              if (filename) link.download = filename;
-              link.click();
-              window.URL.revokeObjectURL(result.data);
+    confirm() {
+      this.$confirmMessage("삭제하시겠습니까?");
+    },
+    deleteMessage(type) {
+      const data = {
+        action: "delete_message",
+        type: this.$route.query.type,
+        id: [this.$route.query.id]
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          this.$router.push({
+            path: "/msg/receivedList",
+            query: {
+              pageCurrent: 1,
+              keyword: ""
             }
           });
-      },
-      confirm() {
-        this.$confirmMessage("삭제하시겠습니까?");
-      },
-      deleteMessage(type) {
-        const data = {
-          action: "delete_message",
-          type: this.$route.query.type,
-          id: [this.$route.query.id],
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            this.$router.push({
-              path: "/msg/receivedList",
-              query: {
-                pageCurrent: 1,
-                keyword: "",
-              },
-            });
-          });
-      },
-      read() {
-        const data = {
-          action: "get_message_info",
-          id: this.$route.query.id,
-          type: this.$route.query.type,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.view = result.data.data.info;
-          });
-      },
+        });
     },
-    created() {
-      this.read();
-    },
-  };
+    read() {
+      const data = {
+        action: "get_message_info",
+        id: this.$route.query.id,
+        type: this.$route.query.type
+      };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result);
+          this.view = result.data.data.info;
+        });
+    }
+  },
+  created() {
+    this.read();
+  }
+};
 </script>
 <style scoped lang="scss">
-  .read {
-    padding: 4.445%;
-    padding-bottom: 96px;
-    h2 {
-      font-size: 2rem;
+.read {
+  padding: 4.445%;
+  padding-bottom: 96px;
+  h2 {
+    font-size: 2rem;
+  }
+  .head {
+    margin-top: 5%;
+    span {
+      font-size: 1.375rem;
     }
-    .head {
-      margin-top: 5%;
-      span {
-        font-size: 1.375rem;
-      }
+  }
+  .contents {
+    border-top: 2px solid #333333;
+    border-bottom: 2px solid #333333;
+    white-space: pre-wrap;
+    padding: 2% 0;
+    margin: 2% 0;
+    font-size: 1.25rem;
+    color: #666666;
+    font-family: "NotoSansCJKkr-Regular";
+    word-break: break-all;
+    .view {
+      margin: 5px 0;
     }
-    .contents {
-      border-top: 2px solid #333333;
-      border-bottom: 2px solid #333333;
-      white-space: pre-wrap;
-      padding: 2% 0;
-      margin: 2% 0;
-      font-size: 1.25rem;
-      color: #666666;
-      font-family: "NotoSansCJKkr-Regular";
-      word-break: break-all;
-      .view {
-        margin: 5px 0;
-      }
-      .send,
-      .receive {
-        font-size: 14px;
-      }
-      .send {
-        &:after {
-          content: "to";
-          font-size: 14px;
-          margin: 0 4px;
-        }
-      }
-      .file {
-        .file_list {
-          .attach {
-            background: url("~@/assets/images/common/attach_file_ico.png")
-              no-repeat left / 19px 18px;
-            padding-left: 30px;
-            display: inline-block;
-            font-size: 14px;
-          }
-        }
-      }
+    .send,
+    .receive {
+      font-size: 14px;
     }
-    .button_wrap {
-      button {
-        border: 1px solid #114fff;
-        background: white;
-        color: #114fff;
-        height: 24px;
-        line-height: 16px;
-        font-size: 12px;
-      }
+    .send {
       &:after {
-        display: block;
-        content: "";
-        clear: both;
+        content: "to";
+        font-size: 14px;
+        margin: 0 4px;
       }
-      .left_btn {
-        float: left;
-        width: 30%;
-      }
-      .right_btn {
-        float: right;
-        width: 30%;
+    }
+    .file {
+      .file_list {
+        .attach {
+          background: url("~@/assets/images/common/attach_file_ico.png")
+            no-repeat left / 19px 18px;
+          padding-left: 30px;
+          display: inline-block;
+          font-size: 14px;
+        }
       }
     }
   }
+  .button_wrap {
+    button {
+      border: 1px solid #114fff;
+      background: white;
+      color: #114fff;
+      height: 24px;
+      line-height: 16px;
+      font-size: 12px;
+    }
+    &:after {
+      display: block;
+      content: "";
+      clear: both;
+    }
+    .left_btn {
+      float: left;
+      width: 30%;
+    }
+    .right_btn {
+      float: right;
+      width: 30%;
+    }
+  }
+}
 </style>

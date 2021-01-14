@@ -375,102 +375,98 @@
     ></CommentWrap>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Component, Prop, Vue } from "vue-property-decorator";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import StarScoreModal from "@/components/lecture_detail/StarScoreModal.vue";
   import CommentWrap from "@/components/lecture_detail/CommentWrap";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import StarRating from "vue-star-rating";
   import ProgressBar from "@/components/common/ProgressBar.vue";
-  import mixin from "@/views/mixins/lec_course_detail.js";
+  import mixin from "@/views/mixins/lec_course_detail.ts";
+  import { mixins } from "vue-class-component";
   import { mapState, mapMutations } from "vuex";
-  export default {
-    mixins: [mixin],
-    components: {
-      ConfirmModal,
-      StarScoreModal,
-      BlueBtn,
-      StarRating,
-      ProgressBar,
-      CommentWrap,
-    },
-    computed: {
-      ori_price() {
+    @Component({
+      components: {
+        ConfirmModal,
+        StarScoreModal,
+        BlueBtn,
+        StarRating,
+        ProgressBar,
+        CommentWrap
+      }
+    })
+    export default class LecDetail extends mixins(mixin) {
+      get ori_price() {
         return this.$numberWithCommas(this.detail.price.original);
-      },
-      final_price() {
+      }
+      get final_price() {
         return this.$numberWithCommas(this.detail.price.final);
-      },
-      discount_price() {
+      }
+      get discount_price() {
         return this.$numberWithCommas(this.detail.coupon.discount_price);
-      },
-      quantity() {
+      }
+      get quantity() {
         return this.$numberWithCommas(this.detail.coupon.quantity);
-      },
+      }
       ...mapState("toggleStore", {
         toggleStore_score_info: "score_info",
-        toggleStore_confirmModal: "confirm_modal",
+        toggleStore_confirmModal: "confirm_modal"
       }),
       ...mapState("userStore", {
-        userStore_userinfo: "userinfo",
-      }),
-    },
-    data() {
-      return {
-        url: window.document.location.href,
-      };
-    },
-    methods: {
+        userStore_userinfo: "userinfo"
+      })
+      private url:string = window.document.location.href
       isWatch() {
         this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
-      },
+      }
       // 쿠폰다운
       couponDownload() {
         const data = {
           action: "download_coupon",
           course_id: this.$route.query.id,
-          c_id: this.detail.coupon.coupon_id,
+          c_id: this.detail.coupon.coupon_id
         };
         console.log(data);
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
+          .then(result => {
             console.log(result);
             this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
           });
-      },
+      }
       video(course_id, lp_id) {
         this.$router.push({
           path: "/play",
           query: {
             course_id: course_id,
-            lp_id: lp_id,
-          },
+            lp_id: lp_id
+          }
         });
-      },
+      }
       // 강의평가 모달
       scoreModal() {
         this.$store.commit("toggleStore/scoreToggle", {
           score_modal: true,
           score: 0,
-          score_contents: "",
+          score_contents: ""
         });
-      },
+      }
 
       // 강의 상세 조회
       async getLectureDetail() {
         const data = {
           action: "get_course_info",
-          course_id: this.$route.query.id,
+          course_id: this.$route.query.id
         };
         await this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
+          .then(result => {
             console.log(result);
             this.detail = result.data.data;
           });
-      },
-    },
+      }
+
     mounted() {
       this.$EventBus.$on("commentReload", () => {
         this.getLectureDetail();
@@ -481,7 +477,7 @@
         this.isSubscribe();
       }
       this.getLectureDetail();
-    },
+    }
   };
 </script>
 <style scoped lang="scss">

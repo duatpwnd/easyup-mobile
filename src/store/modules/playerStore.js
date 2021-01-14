@@ -12,20 +12,20 @@ const playerStore = {
     lp_type: "", //영상인지 링크인지
     nextBtn: true, // 다음강좌 버튼
     nextItem: "", // 다음강의아이디
-    isBookmarkLink: true,
+    isBookmarkLink: true
   },
   getters: {
     getCurrentLink(state) {
       return state.current_link.split("?")[0];
-    },
+    }
   },
   mutations: {
     playerState(state, param) {
       Object.keys(param).forEach((el, index) => {
         state[el] = Object.values(param)[index];
       });
-    },
-  },
+    }
+  }
 };
 
 export default playerStore;

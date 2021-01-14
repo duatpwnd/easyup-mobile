@@ -9,27 +9,27 @@
   </div>
 </template>
 <script>
-  export default {
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+export default {
+  components: {},
+  data() {
+    return {};
+  },
+  methods: {}
+};
 </script>
 <style scoped lang="scss">
-  .title {
-    font-size: 1.6875rem;
-    color: #333333;
-    margin-top: 10px;
-  }
-  .brief {
-    color: #666666;
-    font-size: 1.25rem;
-    margin: 5px 0;
-  }
-  .date {
-    color: #999999;
-    font-size: 1.125rem;
-  }
+.title {
+  font-size: 1.6875rem;
+  color: #333333;
+  margin-top: 10px;
+}
+.brief {
+  color: #666666;
+  font-size: 1.25rem;
+  margin: 5px 0;
+}
+.date {
+  color: #999999;
+  font-size: 1.125rem;
+}
 </style>

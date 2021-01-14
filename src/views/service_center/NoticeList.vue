@@ -54,106 +54,106 @@
   </div>
 </template>
 <script>
-  import Pagination from "@/components/common/Pagination.vue";
+import Pagination from "@/components/common/Pagination.vue";
 
-  import BoardTitle from "@/components/common/BoardTitle.vue";
-  import Search from "@/components/common/Search.vue";
-  export default {
-    components: { BoardTitle, Search, Pagination },
-    data() {
-      return {
-        list: "",
-        keyword: "",
-        current: "",
+import BoardTitle from "@/components/common/BoardTitle.vue";
+import Search from "@/components/common/Search.vue";
+export default {
+  components: { BoardTitle, Search, Pagination },
+  data() {
+    return {
+      list: "",
+      keyword: "",
+      current: ""
+    };
+  },
+  methods: {
+    getList(num, keyword) {
+      const data = {
+        action: "get_cs_list", //필수
+        current: num, //필수
+        type: "notice",
+        keyword: keyword //옵션
       };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          this.$router
+            .push({
+              query: {
+                pageCurrent: num,
+                keyword: keyword
+              }
+            })
+            .catch(() => {});
+          this.list = result.data.data;
+          this.keyword = keyword;
+          this.current = num;
+        });
     },
-    methods: {
-      getList(num, keyword) {
-        const data = {
-          action: "get_cs_list", //필수
-          current: num, //필수
-          type: "notice",
-          keyword: keyword, //옵션
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            this.$router
-              .push({
-                query: {
-                  pageCurrent: num,
-                  keyword: keyword,
-                },
-              })
-              .catch(() => {});
-            this.list = result.data.data;
-            this.keyword = keyword;
-            this.current = num;
-          });
-      },
-      goToPath(id) {
-        this.$router
-          .push({
-            path: "/help/notice/read",
-            query: {
-              id: id,
-            },
-          })
-          .catch(() => {});
-      },
-    },
-    mounted() {
-      this.getList(this.$route.query.pageCurrent, this.$route.query.keyword);
-    },
-  };
+    goToPath(id) {
+      this.$router
+        .push({
+          path: "/help/notice/read",
+          query: {
+            id: id
+          }
+        })
+        .catch(() => {});
+    }
+  },
+  mounted() {
+    this.getList(this.$route.query.pageCurrent, this.$route.query.keyword);
+  }
+};
 </script>
 <style scoped lang="scss">
-  .notice {
-    padding: 4.445%;
-    .search {
-      .search_contents {
-        width: 100%;
-        margin-left: 0;
-      }
+.notice {
+  padding: 4.445%;
+  .search {
+    .search_contents {
+      width: 100%;
+      margin-left: 0;
     }
-    h2 {
-      font-size: 1.375rem;
-      margin-top: 2.5%;
-      .num {
-        color: #114fff;
-      }
+  }
+  h2 {
+    font-size: 1.375rem;
+    margin-top: 2.5%;
+    .num {
+      color: #114fff;
     }
-    .title_wrap {
+  }
+  .title_wrap {
+    span {
+      text-align: right;
+    }
+  }
+  .item_wrap {
+    li {
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
+      }
+      padding: 2%;
+      &:nth-child(even) {
+        background: #f8f8f8;
+      }
       span {
-        text-align: right;
+        color: #333333;
+        font-size: 1.25rem;
       }
-    }
-    .item_wrap {
-      li {
-        &:after {
-          display: block;
-          content: "";
-          clear: both;
-        }
-        padding: 2%;
-        &:nth-child(even) {
-          background: #f8f8f8;
-        }
-        span {
-          color: #333333;
-          font-size: 1.25rem;
-        }
-        .left {
-          float: left;
-          width: 55%;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-        .right {
-          float: right;
-        }
+      .left {
+        float: left;
+        width: 55%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .right {
+        float: right;
       }
     }
   }
+}
 </style>

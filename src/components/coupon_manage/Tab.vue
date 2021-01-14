@@ -31,7 +31,7 @@
       <div
         class="right"
         :style="[
-          { background: $route.query.type == 'used' ? '#DBDBDB' : '#ff114a' },
+          { background: $route.query.type == 'used' ? '#DBDBDB' : '#ff114a' }
         ]"
       >
         <div class="discount_info" v-if="li.discount_type == 'price'">
@@ -59,96 +59,96 @@
   </div>
 </template>
 <script>
-  export default {
-    props: {
-      list: {
-        type: Object,
-        required: true,
-      },
-    },
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+export default {
+  props: {
+    list: {
+      type: Object,
+      required: true
+    }
+  },
+  components: {},
+  data() {
+    return {};
+  },
+  methods: {}
+};
 </script>
 <style scoped lang="scss">
-  .coupon_wrap {
-    padding: 0 4.445%;
-    .notice {
-      margin-top: 10px;
-      color: #999999;
-      font-size: 12px;
-      background: url("~@/assets/images/common/notice_ico1.png") no-repeat left
-        center / 16px 16px;
-      padding-left: 20px;
+.coupon_wrap {
+  padding: 0 4.445%;
+  .notice {
+    margin-top: 10px;
+    color: #999999;
+    font-size: 12px;
+    background: url("~@/assets/images/common/notice_ico1.png") no-repeat left
+      center / 16px 16px;
+    padding-left: 20px;
+  }
+  .coupon {
+    border: 1px solid black;
+    margin-top: 10px;
+    &:after {
+      display: block;
+      content: "";
+      clear: both;
     }
-    .coupon {
-      border: 1px solid black;
-      margin-top: 10px;
-      &:after {
-        display: block;
-        content: "";
-        clear: both;
+    .left {
+      display: inline-block;
+      vertical-align: middle;
+      padding: 10px;
+      width: 70%;
+      box-sizing: border-box;
+      position: relative;
+      img {
+        width: 40%;
+        position: absolute;
+        top: 0;
+        right: 10%;
+        bottom: 0;
+        margin: auto;
       }
-      .left {
-        display: inline-block;
-        vertical-align: middle;
-        padding: 10px;
-        width: 70%;
-        box-sizing: border-box;
-        position: relative;
-        img {
-          width: 40%;
-          position: absolute;
-          top: 0;
-          right: 10%;
-          bottom: 0;
-          margin: auto;
-        }
 
-        .row0 {
-          .name {
-            font-size: 14px;
-          }
-        }
-        .row1 {
-          .name {
-            font-size: 12px;
-          }
-        }
-        .row2 {
-          .date {
-            font-size: 12px;
-            color: #999999;
-          }
+      .row0 {
+        .name {
+          font-size: 14px;
         }
       }
-      .right {
-        color: white;
-        text-align: center;
-        width: 30%;
-        padding: 10px;
-        box-sizing: border-box;
-        display: inline-block;
-        vertical-align: middle;
-        .discount_info {
-          display: flex;
-          flex-direction: column;
-          height: 102px;
-          justify-content: center;
-          .price {
-            font-size: 20px;
-          }
-          .unit {
-            font-size: 14px;
-          }
-          .max {
-            margin-top: 17px;
-          }
+      .row1 {
+        .name {
+          font-size: 12px;
+        }
+      }
+      .row2 {
+        .date {
+          font-size: 12px;
+          color: #999999;
+        }
+      }
+    }
+    .right {
+      color: white;
+      text-align: center;
+      width: 30%;
+      padding: 10px;
+      box-sizing: border-box;
+      display: inline-block;
+      vertical-align: middle;
+      .discount_info {
+        display: flex;
+        flex-direction: column;
+        height: 102px;
+        justify-content: center;
+        .price {
+          font-size: 20px;
+        }
+        .unit {
+          font-size: 14px;
+        }
+        .max {
+          margin-top: 17px;
         }
       }
     }
   }
+}
 </style>
