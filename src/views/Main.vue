@@ -200,7 +200,7 @@
     },
   })
   export default class Main extends Vue {
-    slide_option = {
+    private slide_option = {
       banner: {
         autoplay: {
           delay: 2500,
@@ -227,19 +227,18 @@
         },
       },
     };
-    list: Object = {};
-    noticeRead(id: number): void {
-      console.log(id.toFixed(2));
+    private list: Object = {};
+    private noticeRead(id: number): void {
       if (id != null) {
         this.$router.push({
           path: "/help/notice/read",
           query: {
-            id: id.toString(),
+            id: id.toFixed(0),
           },
         });
       }
     }
-    getLectureList(): void {
+    private getLectureList(): void {
       const data = {
         action: "main_page_list",
       };
