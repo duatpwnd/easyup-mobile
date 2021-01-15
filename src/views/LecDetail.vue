@@ -379,106 +379,110 @@
   import { Component, Prop, Vue } from "vue-property-decorator";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import StarScoreModal from "@/components/lecture_detail/StarScoreModal.vue";
-  import CommentWrap from "@/components/lecture_detail/CommentWrap";
+  import CommentWrap from "@/components/lecture_detail/CommentWrap.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import StarRating from "vue-star-rating";
   import ProgressBar from "@/components/common/ProgressBar.vue";
   import mixin from "@/views/mixins/lec_course_detail.ts";
-  import { mixins } from "vue-class-component";
   import { mapState, mapMutations } from "vuex";
-    @Component({
-      components: {
-        ConfirmModal,
-        StarScoreModal,
-        BlueBtn,
-        StarRating,
-        ProgressBar,
-        CommentWrap
-      }
-    })
-    export default class LecDetail extends mixins(mixin) {
-      get ori_price() {
-        return this.$numberWithCommas(this.detail.price.original);
-      }
-      get final_price() {
-        return this.$numberWithCommas(this.detail.price.final);
-      }
-      get discount_price() {
-        return this.$numberWithCommas(this.detail.coupon.discount_price);
-      }
-      get quantity() {
-        return this.$numberWithCommas(this.detail.coupon.quantity);
-      }
+  @Component({
+    components: {
+      ConfirmModal,
+      StarScoreModal,
+      BlueBtn,
+      StarRating,
+      ProgressBar,
+      CommentWrap,
+    },
+    computed: {
       ...mapState("toggleStore", {
         toggleStore_score_info: "score_info",
-        toggleStore_confirmModal: "confirm_modal"
+        toggleStore_confirmModal: "confirm_modal",
       }),
       ...mapState("userStore", {
-        userStore_userinfo: "userinfo"
-      })
-      private url:string = window.document.location.href
-      isWatch() {
-        this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
-      }
-      // 쿠폰다운
-      couponDownload() {
-        const data = {
-          action: "download_coupon",
-          course_id: this.$route.query.id,
-          c_id: this.detail.coupon.coupon_id
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then(result => {
-            console.log(result);
-            this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
-          });
-      }
-      video(course_id, lp_id) {
-        this.$router.push({
-          path: "/play",
-          query: {
-            course_id: course_id,
-            lp_id: lp_id
-          }
+        userStore_userinfo: "userinfo",
+      }),
+    },
+  })
+  export default class LecDetail extends mixin {
+    public url: string = window.document.location.href;
+    get ori_price() {
+      return this.$numberWithCommas(this.detail.price.original);
+    }
+    get final_price() {
+      return this.$numberWithCommas(this.detail.price.final);
+    }
+    get discount_price() {
+      return this.$numberWithCommas(this.detail.coupon.discount_price);
+    }
+    get quantity() {
+      return this.$numberWithCommas(this.detail.coupon.quantity);
+    }
+    isWatch() {
+      this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
+    }
+    // 쿠폰다운
+    couponDownload() {
+      const data: { action: string; course_id: number; c_id: number } = {
+        action: "download_coupon",
+        course_id: (this.$route.query.id as unknown) as number,
+        c_id: (this.detail.coupon.coupon_id as unknown) as number,
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          console.log(result);
+          this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
         });
-      }
-      // 강의평가 모달
-      scoreModal() {
-        this.$store.commit("toggleStore/scoreToggle", {
-          score_modal: true,
-          score: 0,
-          score_contents: ""
-        });
-      }
+    }
+    video(course_id: number, lp_id: number) {
+      this.$router.push({
+        path: "/play",
+        query: {
+          course_id: course_id.toFixed(0),
+          lp_id: lp_id.toFixed(0),
+        },
+      });
+    }
+    // 강의평가 모달
+    scoreModal() {
+      const obj: {
+        score_modal: boolean;
+        score: number;
+        score_contents: string;
+      } = {
+        score_modal: true,
+        score: 0,
+        score_contents: "",
+      };
+      this.$store.commit("toggleStore/scoreToggle", obj);
+    }
 
-      // 강의 상세 조회
-      async getLectureDetail() {
-        const data = {
-          action: "get_course_info",
-          course_id: this.$route.query.id
-        };
-        await this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then(result => {
-            console.log(result);
-            this.detail = result.data.data;
-          });
-      }
+    // 강의 상세 조회
+    async getLectureDetail() {
+      const data: { action: string; course_id: number } = {
+        action: "get_course_info",
+        course_id: (this.$route.query.id as unknown) as number,
+      };
+      await this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          this.detail = result.data.data;
+        });
+    }
 
     mounted() {
       this.$EventBus.$on("commentReload", () => {
         this.getLectureDetail();
       });
-    },
+    }
     created() {
       if (this.$cookies.get("user_info") != null) {
         this.isSubscribe();
       }
       this.getLectureDetail();
     }
-  };
+  }
 </script>
 <style scoped lang="scss">
   .update_noti {

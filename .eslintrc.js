@@ -2,7 +2,7 @@ module.exports = {
   root: true,
 
   env: {
-    node: true
+    node: true,
   },
 
   extends: ["plugin:vue/essential", "eslint:recommended", "@vue/prettier"],
@@ -10,8 +10,8 @@ module.exports = {
   parserOptions: {
     parser: "@typescript-eslint/parser",
     ecmaFeatures: {
-      legacyDecorators: true
-    }
+      legacyDecorators: true,
+    },
   },
 
   rules: {
@@ -23,25 +23,25 @@ module.exports = {
     "no-unsafe-negation": "off",
     "no-irregular-whitespace": "off",
     "no-unused-vars": "off",
-    "no-debugger": "off"
+    "no-debugger": "off",
   },
 
   overrides: [
     {
       files: [
         "**/__tests__/*.{j,t}s?(x)",
-        "**/tests/unit/**/*.spec.{j,t}s?(x)"
+        "**/tests/unit/**/*.spec.{j,t}s?(x)",
       ],
       env: {
-        jest: true
-      }
-    }
+        jest: true,
+      },
+    },
   ],
 
   extends: [
     "plugin:vue/essential",
     "eslint:recommended",
     "@vue/prettier",
-    "@vue/typescript"
-  ]
+    "@vue/typescript",
+  ],
 };
