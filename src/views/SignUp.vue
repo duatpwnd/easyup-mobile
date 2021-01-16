@@ -306,197 +306,197 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
   </div>
 </template>
 <script>
-import BlueBtn from "@/components/common/BaseButton.vue";
-import CheckBox from "@/components/common/BaseCheckBox.vue";
-export default {
-  components: { CheckBox, BlueBtn },
-  data() {
-    return {
-      lastname: "",
-      firstname: "",
-      email: "",
-      pw1: "",
-      pw2: "",
-      phone: "",
-      agree: ""
-    };
-  },
-  methods: {
-    validationCheck() {
-      let err;
-      return new Promise((resolve, reject) => {
-        if (this.lastname.trim().length == 0) {
-          this.$noticeMessage("성을 입력하세요");
-          err = new Error("성을 입력하세요");
-          err.name = "enter your firstname";
-          throw err;
-        } else if (this.firstname.trim().length == 0) {
-          this.$noticeMessage("이름을 입력하세요");
-          err = new Error("이름을 입력하세요");
-          err.name = "enter your name";
-          throw err;
-        } else if (this.email.trim().length == 0) {
-          this.$noticeMessage("이메일을 입력하세요");
-          err = new Error("이메일을 입력하세요");
-          err.name = "enter your email";
-          throw err;
-        } else if (this.pw1.trim().length == 0) {
-          this.$noticeMessage("비밀번호를 입력하세요");
-          err = new Error("비밀번호를 입력하세요");
-          err.name = "enter your password";
-          throw err;
-        } else if (this.pw2.trim().length == 0) {
-          this.$noticeMessage("비밀번호확인을 입력하세요");
-          err = new Error("비밀번호확인을 입력하세요");
-          err.name = "confirm your password";
-          throw err;
-        } else if (this.pw1.trim() != this.pw2.trim()) {
-          this.$noticeMessage("비밀번호가 서로 다릅니다");
-          err = new Error("비밀번호가 서로 다릅니다");
-          err.name = "wrong password";
-          throw err;
-        } else if (this.agree == false) {
-          this.$noticeMessage("약관 내용에 동의 해주세요");
-          err = new Error("약관 내용에 동의 해주세요");
-          err.name = "Agreement to terms and conditions";
-          throw err;
-        } else {
-          resolve("success");
-        }
-      });
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import CheckBox from "@/components/common/BaseCheckBox.vue";
+  export default {
+    components: { CheckBox, BlueBtn },
+    data() {
+      return {
+        lastname: "",
+        firstname: "",
+        email: "",
+        pw1: "",
+        pw2: "",
+        phone: "",
+        agree: "",
+      };
     },
-    register() {
-      try {
-        this.validationCheck().then(result => {
-          if (result == "success") {
-            const data = {
-              action: "join",
-              firstname: this.firstname, //필수
-              lastname: this.lastname, //필수
-              email: this.email, //필수, 이메일 형식체크, 이미 사용중인 계정인지는 백단에서 체크하고 있음
-              password: this.pw1, //필수
-              password_confirm: this.pw2, //필수, 비밀번호란과 동일여부 체크
-              phone: this.phone //옵션, 입력할 경우 숫자만 입력
-            };
-            this.$axios
-              .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-              .then(result => {
-                console.log(result);
-                if (result.data.error) {
-                  this.$noticeMessage(result.data.message);
-                } else {
-                  this.$EventBus.$emit("login from signUpComplete", data);
-                  this.$router.push("/signupComplete").catch(() => {});
-                }
-              })
-              .catch(err => {
-                console.log(err);
-              });
+    methods: {
+      validationCheck() {
+        let err;
+        return new Promise((resolve, reject) => {
+          if (this.lastname.trim().length == 0) {
+            this.$noticeMessage("성을 입력하세요");
+            err = new Error("성을 입력하세요");
+            err.name = "enter your firstname";
+            throw err;
+          } else if (this.firstname.trim().length == 0) {
+            this.$noticeMessage("이름을 입력하세요");
+            err = new Error("이름을 입력하세요");
+            err.name = "enter your name";
+            throw err;
+          } else if (this.email.trim().length == 0) {
+            this.$noticeMessage("이메일을 입력하세요");
+            err = new Error("이메일을 입력하세요");
+            err.name = "enter your email";
+            throw err;
+          } else if (this.pw1.trim().length == 0) {
+            this.$noticeMessage("비밀번호를 입력하세요");
+            err = new Error("비밀번호를 입력하세요");
+            err.name = "enter your password";
+            throw err;
+          } else if (this.pw2.trim().length == 0) {
+            this.$noticeMessage("비밀번호확인을 입력하세요");
+            err = new Error("비밀번호확인을 입력하세요");
+            err.name = "confirm your password";
+            throw err;
+          } else if (this.pw1.trim() != this.pw2.trim()) {
+            this.$noticeMessage("비밀번호가 서로 다릅니다");
+            err = new Error("비밀번호가 서로 다릅니다");
+            err.name = "wrong password";
+            throw err;
+          } else if (this.agree == false) {
+            this.$noticeMessage("약관 내용에 동의 해주세요");
+            err = new Error("약관 내용에 동의 해주세요");
+            err.name = "Agreement to terms and conditions";
+            throw err;
+          } else {
+            resolve("success");
           }
         });
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  }
-};
+      },
+      register() {
+        try {
+          this.validationCheck().then((result) => {
+            if (result == "success") {
+              const data = {
+                action: "join",
+                firstname: this.firstname, //필수
+                lastname: this.lastname, //필수
+                email: this.email, //필수, 이메일 형식체크, 이미 사용중인 계정인지는 백단에서 체크하고 있음
+                password: this.pw1, //필수
+                password_confirm: this.pw2, //필수, 비밀번호란과 동일여부 체크
+                phone: this.phone, //옵션, 입력할 경우 숫자만 입력
+              };
+              this.$axios
+                .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+                .then((result) => {
+                  console.log(result);
+                  if (result.data.error) {
+                    this.$noticeMessage(result.data.message);
+                  } else {
+                    this.$EventBus.$emit("login from signUpComplete", data);
+                    this.$router.push("/signupComplete").catch(() => {});
+                  }
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      },
+    },
+  };
 </script>
 <style scoped lang="scss">
-#signup {
-  padding: 4.445%;
-  h2 {
-    font-size: 2rem;
-    color: #333333;
-  }
-  .noti {
-    color: #999999;
-    font-size: 1.25rem;
-    margin: 4px 0 15px 0;
-  }
-  .blue_btn {
-    margin-top: 20px;
-    width: calc(100% - 35%);
-    float: right;
-    ::v-deep button {
-      width: 70%;
+  #signup {
+    padding: 4.445%;
+    h2 {
+      font-size: 2rem;
+      color: #333333;
     }
-  }
-  .row {
-    margin-top: 10px;
-    clear: both;
-
-    input,
-    textarea,
-    select {
-      font-family: "NotoSansCJKkr-Regular";
-      font-size: 14px;
+    .noti {
+      color: #999999;
+      font-size: 1.25rem;
+      margin: 4px 0 15px 0;
+    }
+    .blue_btn {
+      margin-top: 20px;
       width: calc(100% - 35%);
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      outline: none;
-      padding: 5px 6px;
-      height: 32px;
-      line-height: 13px;
-      box-sizing: border-box;
-    }
-    select {
-      background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
-        center / 7px 5px;
-    }
-    textarea {
-      vertical-align: top;
-      resize: none;
-
-      height: 60px;
-      &::placeholder {
-        color: #666666;
-        font-size: 12px;
+      float: right;
+      ::v-deep button {
+        width: 70%;
       }
     }
-
-    .dt {
-      width: 35%;
-      display: inline-block;
-      font-size: 14px;
-      font-family: "NotoSansCJKkr-Regular";
-      .required {
-        color: #114fff;
-      }
-    }
-  }
-  .agree {
-    width: calc(100% - 35%);
-    position: relative;
-    float: right;
-    color: #666666;
-    margin: 2% 0;
-    font-size: 1.125rem;
-    font-family: "NotoSansCJKkr-Regular";
-    &:after {
-      display: block;
-      content: "";
+    .row {
+      margin-top: 10px;
       clear: both;
+
+      input,
+      textarea,
+      select {
+        font-family: "NotoSansCJKkr-Regular";
+        font-size: 14px;
+        width: calc(100% - 35%);
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+        padding: 5px 6px;
+        height: 32px;
+        line-height: 13px;
+        box-sizing: border-box;
+      }
+      select {
+        background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
+          center / 7px 5px;
+      }
+      textarea {
+        vertical-align: top;
+        resize: none;
+
+        height: 60px;
+        &::placeholder {
+          color: #666666;
+          font-size: 12px;
+        }
+      }
+
+      .dt {
+        width: 35%;
+        display: inline-block;
+        font-size: 14px;
+        font-family: "NotoSansCJKkr-Regular";
+        .required {
+          color: #114fff;
+        }
+      }
     }
-    ::v-deep .container-checkbox {
-      width: 15px;
-      height: 15px;
-      position: unset;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 10px;
-      input[type="checkbox"] + .checkmark {
+    .agree {
+      width: calc(100% - 35%);
+      position: relative;
+      float: right;
+      color: #666666;
+      margin: 2% 0;
+      font-size: 1.125rem;
+      font-family: "NotoSansCJKkr-Regular";
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
+      }
+      ::v-deep .container-checkbox {
         width: 15px;
         height: 15px;
-        display: inline-block;
-        padding: 0;
         position: unset;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 10px;
+        input[type="checkbox"] + .checkmark {
+          width: 15px;
+          height: 15px;
+          display: inline-block;
+          padding: 0;
+          position: unset;
+        }
+      }
+      label[for="check"] {
+        display: inline-block;
+        font-size: 0.8em;
+        vertical-align: middle;
       }
     }
-    label[for="check"] {
-      display: inline-block;
-      font-size: 0.8em;
-      vertical-align: middle;
-    }
   }
-}
 </style>
