@@ -144,57 +144,58 @@
   import CommentList from "@/components/common/CommentList.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import { mapState, mapMutations } from "vuex";
-   @Component({
-      components: {
-         BlueBtn,
-          CommentList
-      },
-      computed: {
-          ...mapState("userStore", {
-        userStore_info: "userinfo"
-      })
-      },
-    })
+  @Component({
+    components: {
+      BlueBtn,
+      CommentList,
+    },
+    computed: {
+      ...mapState("userStore", {
+        userStore_info: "userinfo",
+      }),
+    },
+  })
   export default class CommentWrap extends Vue {
-    @Prop({ required: true,type:Object }) private action!: Object;
-    @Prop({ required: true,type:Boolean }) private isSubscribe!: Boolean;
-    private active:boolean = false
-    private contents:string= ""
-    private id:string= ""// 리뷰아이디
-    private comment:string= ""
-    private view:number= 4
-
-    private toggle(modify):void {
+    @Prop({ required: true, type: Object }) private action!: Object;
+    @Prop({ required: true, type: Boolean }) private isSubscribe!: Boolean;
+    private active: boolean = false;
+    private contents: string = "";
+    private id: string = ""; // 리뷰아이디
+    private comment: string = "";
+    private view: number = 4;
+    private toggle(modify): void {
       if (
-        event.path[2].nextElementSibling.nextElementSibling.style.display ==
+        event!["path"][2].nextElementSibling.nextElementSibling.style.display ==
         "none"
       ) {
-        event.path[2].nextElementSibling.nextElementSibling.style.display =
+        event!["path"][2].nextElementSibling.nextElementSibling.style.display =
           "block";
         if (modify != undefined) {
-          event.path[2].nextElementSibling.nextElementSibling.children[0].value =
-            event.path[2].nextElementSibling.innerText;
+          event![
+            "path"
+          ][2].nextElementSibling.nextElementSibling.children[0].value = event![
+            "path"
+          ][2].nextElementSibling.innerText;
         }
       } else {
-        event.path[2].nextElementSibling.nextElementSibling.style.display =
+        event!["path"][2].nextElementSibling.nextElementSibling.style.display =
           "none";
       }
     }
-      // 토글 일부취소
-
-    private toggle_cancel():void {
-      if (event.path[3].style.display == "none") {
-        event.path[3].style.display = "block";
+    // 토글 일부취소
+    private toggle_cancel(): void {
+      if (event!["path"][3].style.display == "none") {
+        event!["path"][3].style.display = "block";
       } else {
-        event.path[3].style.display = "none";
+        event!["path"][3].style.display = "none";
       }
     }
-    private toggleOff():void {
-      const edit = this.$refs.edit as unknown as NodeList;
-      Array.prototype.forEach.call(edit,(el:HTMLElement, index:number) => {
+    private toggleOff(): void {
+      const edit = (this.$refs.edit as unknown) as NodeList;
+      Array.prototype.forEach.call(edit, (el: HTMLElement, index: number) => {
         el.style.display = "none";
       });
-      Array.prototype.forEach.call(edit,(el:HTMLElement, index:number) => {
+      Array.prototype.forEach.call(edit, (el: HTMLElement, index: number) => {
         el.style.display = "none";
       });
     }
@@ -203,18 +204,18 @@
         review_id: id,
         score_modal: true,
         score: score,
-        score_contents: contents
+        score_contents: contents,
       });
     }
     // 댓글 삭제
-    private comment_del(index):void {
+    private comment_del(index): void {
       const obj = {
         action: "delete_review",
-        review_id: index
+        review_id: index,
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-        .then(result => {
+        .then((result) => {
           console.log("댓글삭제", result);
           if (result.data.error != true) {
             this.$noticeMessage(result.data.data.msg);
@@ -223,15 +224,15 @@
         });
     }
     // 답글 추가
-    private reply_comment_add():void {
+    private reply_comment_add(): void {
       const data = {
         action: "add_comment",
         review_id: this.id,
-        contents: this.contents
+        contents: this.contents,
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then(result => {
+        .then((result) => {
           console.log("답글등록ddd", result);
           if (result.data.error != true) {
             this.$noticeMessage(result.data.data.msg);
@@ -243,82 +244,81 @@
 
       // this.write_cancel();
     }
-      // 답글 수정
-      reply_comment_modify(index, num) {
-        const obj = {
-          action: "modify_comment",
-          review_comment_id: index,
-          contents: event.path[3].children[0].value.trim()
-        };
-        console.log("수정:", obj);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-          .then(result => {
-            if (result.data.error != true) {
-              this.$noticeMessage(result.data.data.msg);
-              this.toggleOff();
-              this.getCommentList();
-            }
-          });
-      }
-      // 답글 삭제
-      reply_comment_del(index) {
-        const obj = {
-          action: "delete_comment",
-          review_comment_id: index
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-          .then(result => {
+    // 답글 수정
+    reply_comment_modify(index, num) {
+      const obj = {
+        action: "modify_comment",
+        review_comment_id: index,
+        contents: event!["path"][3].children[0].value.trim(),
+      };
+      console.log("수정:", obj);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
+        .then((result) => {
+          if (result.data.error != true) {
+            this.$noticeMessage(result.data.data.msg);
+            this.toggleOff();
             this.getCommentList();
-          });
-      }
-      // write_cancel() {
-      //   this.editor = -1;
-      // }
-      // 각별점 개수 필터링
-      scoreCount(result) {
-        const comment = this.comment as unknown as NodeList;
-        const filter = Array.prototype.filter.call(comment,(el, index) => {
-          return el.reviews.score == result;
+          }
         });
-        return filter.length;
-      }
-      // 더많은 평가 보기
-      moreView() {
-        this.view = this.comment.length;
-        // const data = {
-        //   action: "list_more",
-        //   type: "course",
-        //   course_id: this.$route.query.id,
-        // };
-        // this.$axios
-        //   .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        //   .then((result) => {
-        //     console.log("댓글조회", result);
-        //   });
-      }
-      // 강의평가 조회
-      getCommentList() {
-        const data = this.action;
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then(result => {
-            console.log(result.data.data);
-            this.comment = result.data.data;
-            const score = {
-              total: result.data.data.length,
-              score_list: [
-                { title: 5, count: this.scoreCount(5) },
-                { title: 4, count: this.scoreCount(4) },
-                { title: 3, count: this.scoreCount(3) },
-                { title: 2, count: this.scoreCount(2) },
-                { title: 1, count: this.scoreCount(1) }
-              ]
-            };
-            this.$emit("emitScoreCount", score);
-          });
-      }
+    }
+    // 답글 삭제
+    reply_comment_del(index) {
+      const obj = {
+        action: "delete_comment",
+        review_comment_id: index,
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
+        .then((result) => {
+          this.getCommentList();
+        });
+    }
+    // write_cancel() {
+    //   this.editor = -1;
+    // }
+    // 각별점 개수 필터링
+    scoreCount(result) {
+      const comment = (this.comment as unknown) as NodeList;
+      const filter = Array.prototype.filter.call(comment, (el, index) => {
+        return el.reviews.score == result;
+      });
+      return filter.length;
+    }
+    // 더많은 평가 보기
+    moreView() {
+      this.view = this.comment.length;
+      // const data = {
+      //   action: "list_more",
+      //   type: "course",
+      //   course_id: this.$route.query.id,
+      // };
+      // this.$axios
+      //   .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+      //   .then((result) => {
+      //     console.log("댓글조회", result);
+      //   });
+    }
+    // 강의평가 조회
+    getCommentList() {
+      const data = this.action;
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          console.log(result.data.data);
+          this.comment = result.data.data;
+          const score = {
+            total: result.data.data.length,
+            score_list: [
+              { title: 5, count: this.scoreCount(5) },
+              { title: 4, count: this.scoreCount(4) },
+              { title: 3, count: this.scoreCount(3) },
+              { title: 2, count: this.scoreCount(2) },
+              { title: 1, count: this.scoreCount(1) },
+            ],
+          };
+          this.$emit("emitScoreCount", score);
+        });
     }
     mounted() {
       this.$EventBus.$on("commentReload", () => {
@@ -328,6 +328,7 @@
     created() {
       this.getCommentList();
     }
+  }
 </script>
 <style scoped lang="scss">
   #comment_wrap {
