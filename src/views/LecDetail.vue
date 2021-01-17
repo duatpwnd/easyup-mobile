@@ -430,7 +430,7 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: any) => {
           console.log(result);
           this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
         });
@@ -466,7 +466,7 @@
       };
       await this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: any) => {
           this.detail = result.data.data;
         });
     }

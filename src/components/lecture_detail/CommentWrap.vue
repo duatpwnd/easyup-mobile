@@ -169,7 +169,7 @@
     private id: string = ""; // 리뷰아이디
     private comment: string = "";
     private view: number = 4;
-    private toggle(modify): void {
+    private toggle(modify: string): void {
       if (
         event!["path"][2].nextElementSibling.nextElementSibling.style.display ==
         "none"
@@ -205,7 +205,7 @@
         el.style.display = "none";
       });
     }
-    private scoreModal(id, score, contents) {
+    private scoreModal(id: number, score: number, contents: string) {
       this.$store.commit("toggleStore/scoreToggle", {
         review_id: id,
         score_modal: true,
@@ -221,7 +221,7 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-        .then((result) => {
+        .then((result: any) => {
           console.log("댓글삭제", result);
           if (result.data.error != true) {
             this.$noticeMessage(result.data.data.msg);
@@ -238,7 +238,7 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: any) => {
           console.log("답글등록ddd", result);
           if (result.data.error != true) {
             this.$noticeMessage(result.data.data.msg);
@@ -251,7 +251,7 @@
       // this.write_cancel();
     }
     // 답글 수정
-    reply_comment_modify(index, num) {
+    reply_comment_modify(index: number, num: number) {
       const obj: Data = {
         action: "modify_comment",
         review_comment_id: index,
@@ -260,7 +260,7 @@
       console.log("수정:", obj);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-        .then((result) => {
+        .then((result: any) => {
           if (result.data.error != true) {
             this.$noticeMessage(result.data.data.msg);
             this.toggleOff();
@@ -269,14 +269,14 @@
         });
     }
     // 답글 삭제
-    reply_comment_del(index) {
+    reply_comment_del(index: number) {
       const obj: Data = {
         action: "delete_comment",
         review_comment_id: index,
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-        .then((result) => {
+        .then((result: any) => {
           this.getCommentList();
         });
     }
@@ -284,7 +284,7 @@
     //   this.editor = -1;
     // }
     // 각별점 개수 필터링
-    scoreCount(result) {
+    scoreCount(result: number) {
       const filter = Array.prototype.filter.call(this.comment, (el, index) => {
         return el.reviews.score == result;
       });
@@ -309,7 +309,7 @@
       const data = this.action;
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: any) => {
           console.log(result.data.data);
           this.comment = result.data.data;
           const score = {

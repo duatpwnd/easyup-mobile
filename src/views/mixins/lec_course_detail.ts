@@ -1,4 +1,9 @@
 import { Component, Watch, Vue } from "vue-property-decorator";
+interface Data{
+  action:string,
+  course_id?:number
+  session_id?:number
+}
 @Component({
   computed: {
     detect_token() {
@@ -38,36 +43,36 @@ export default class GroupMixin extends Vue {
     }
     // 구독하기
     subscribe() {
-      const data = {};
+      let data!:Data;
       if (this.$route.name == "lecDetail") {
         data["action"] = "subscribe_course";
-        data["course_id"] = this.$route.query.id;
+        data["course_id"] = Number(this.$route.query.id);
       } else {
         data["action"] = "subscribe_session";
-        data["session_id"] = this.$route.query.id;
+        data["session_id"] = Number(this.$route.query.id);
       }
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result:any) => {
           console.log("구독하기 성공 실패?", result);
           this.isSubscribe();
         });
     }
     // 구독 여부 조회
     async isSubscribe() {
-      const data = {};
+      let data!:Data;
       if (this.$route.name == "lecDetail") {
         data["action"] = "check_subscribe_course";
-        data["course_id"] = this.$route.query.id;
+        data["course_id"] = Number(this.$route.query.id);
       } else {
         data["action"] = "check_subscribe_session";
-        data["session_id"] = this.$route.query.id;
+        data["session_id"] = Number(this.$route.query.id);
       }
       console.log(data);
       await this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result:any) => {
           console.log("구독여부", result);
           if (result.data.error != true) {
             this.is_subscribe = result.data.data.isSubscribe;
@@ -75,7 +80,7 @@ export default class GroupMixin extends Vue {
           }
         });
     }
-    scoreCount(result) {
+    scoreCount(result:any) {
       console.log(result);
       this.score_info = result;
     }
