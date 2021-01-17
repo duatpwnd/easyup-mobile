@@ -228,7 +228,7 @@
       },
     };
     private list: Object = {};
-    private noticeRead(id: number): void {
+    private noticeRead(id: number) {
       if (id != null) {
         this.$router.push({
           path: "/help/notice/read",

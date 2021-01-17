@@ -144,6 +144,12 @@
   import CommentList from "@/components/common/CommentList.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import { mapState, mapMutations } from "vuex";
+  interface Data {
+    action: string;
+    review_id?: number;
+    contents?: string;
+    review_comment_id?: number;
+  }
   @Component({
     components: {
       BlueBtn,
@@ -191,7 +197,7 @@
       }
     }
     private toggleOff(): void {
-      const edit = (this.$refs.edit as unknown) as NodeList;
+      const edit = this.$refs.edit;
       Array.prototype.forEach.call(edit, (el: HTMLElement, index: number) => {
         el.style.display = "none";
       });
@@ -208,8 +214,8 @@
       });
     }
     // 댓글 삭제
-    private comment_del(index): void {
-      const obj = {
+    private comment_del(index: number): void {
+      const obj: Data = {
         action: "delete_review",
         review_id: index,
       };
@@ -225,9 +231,9 @@
     }
     // 답글 추가
     private reply_comment_add(): void {
-      const data = {
+      const data: Data = {
         action: "add_comment",
-        review_id: this.id,
+        review_id: Number(this.id),
         contents: this.contents,
       };
       this.$axios
@@ -246,7 +252,7 @@
     }
     // 답글 수정
     reply_comment_modify(index, num) {
-      const obj = {
+      const obj: Data = {
         action: "modify_comment",
         review_comment_id: index,
         contents: event!["path"][3].children[0].value.trim(),
@@ -264,7 +270,7 @@
     }
     // 답글 삭제
     reply_comment_del(index) {
-      const obj = {
+      const obj: Data = {
         action: "delete_comment",
         review_comment_id: index,
       };
@@ -279,8 +285,7 @@
     // }
     // 각별점 개수 필터링
     scoreCount(result) {
-      const comment = (this.comment as unknown) as NodeList;
-      const filter = Array.prototype.filter.call(comment, (el, index) => {
+      const filter = Array.prototype.filter.call(this.comment, (el, index) => {
         return el.reviews.score == result;
       });
       return filter.length;
