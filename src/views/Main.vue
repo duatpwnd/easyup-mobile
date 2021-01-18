@@ -227,17 +227,7 @@
         },
       },
     };
-    private list: Object = {};
-    private noticeRead(id: number) {
-      if (id != null) {
-        this.$router.push({
-          path: "/help/notice/read",
-          query: {
-            id: id.toFixed(0),
-          },
-        });
-      }
-    }
+    private list = {};
     private getLectureList(): void {
       const data = {
         action: "main_page_list",

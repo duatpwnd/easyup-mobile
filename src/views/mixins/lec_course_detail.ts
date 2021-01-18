@@ -1,9 +1,5 @@
 import { Component, Watch, Vue } from "vue-property-decorator";
-interface Data{
-  action:string,
-  course_id?:number
-  session_id?:number
-}
+
 @Component({
   computed: {
     detect_token() {
@@ -15,26 +11,7 @@ export default class GroupMixin extends Vue {
   public isPossibleReview:boolean = false
   public is_subscribe:boolean= false
   public subscribe_btn:boolean= false
-  public detail = {
-    description:[],
-    coupon:{
-      discount_price:Number,
-      quantity:Number,
-      coupon_id:Number,
-      discount_type:String
-    },
-    price:{
-      original:Number,
-      final:Number
-    },
-    curriculum_list:{
-      count:Number,
-      count_detail:Number,
-      items:[],
-      type:String
-    },
-    teacher_introduce:[]
-  };
+  public detail={};
   public score_info:string = "" // 각 별점의 개수
   public url:string= window.document.location.href // 클립보드 현재 url
    @Watch("detect_token")
@@ -43,7 +20,7 @@ export default class GroupMixin extends Vue {
     }
     // 구독하기
     subscribe() {
-      let data!:Data;
+      let data = {};
       if (this.$route.name == "lecDetail") {
         data["action"] = "subscribe_course";
         data["course_id"] = Number(this.$route.query.id);
@@ -61,7 +38,8 @@ export default class GroupMixin extends Vue {
     }
     // 구독 여부 조회
     async isSubscribe() {
-      let data!:Data;
+      let data = {};
+      console.log(data);
       if (this.$route.name == "lecDetail") {
         data["action"] = "check_subscribe_course";
         data["course_id"] = Number(this.$route.query.id);
@@ -111,7 +89,7 @@ export default class GroupMixin extends Vue {
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result:any) => {
           console.log(result);
           this.$noticeMessage("강의바구니에 담았습니다.");
         });

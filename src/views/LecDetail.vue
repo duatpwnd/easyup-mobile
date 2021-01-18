@@ -1,5 +1,5 @@
 <template>
-  <div id="lec_detail" v-if="detail">
+  <div id="lec_detail" v-if="Object.keys(detail).length > 0">
     <ConfirmModal
       @ok="video($route.query.id, detail.lp_id)"
       v-if="toggleStore_confirmModal"
@@ -407,16 +407,16 @@
   export default class LecDetail extends mixin {
     public url: string = window.document.location.href;
     get ori_price() {
-      return this.$numberWithCommas(this.detail.price.original);
+      return this.$numberWithCommas(this.detail["price"].original);
     }
     get final_price() {
-      return this.$numberWithCommas(this.detail.price.final);
+      return this.$numberWithCommas(this.detail["price"].final);
     }
     get discount_price() {
-      return this.$numberWithCommas(this.detail.coupon.discount_price);
+      return this.$numberWithCommas(this.detail["coupon"].discount_price);
     }
     get quantity() {
-      return this.$numberWithCommas(this.detail.coupon.quantity);
+      return this.$numberWithCommas(this.detail["coupon"].quantity);
     }
     isWatch() {
       this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
@@ -426,7 +426,7 @@
       const data: { action: string; course_id: number; c_id: number } = {
         action: "download_coupon",
         course_id: (this.$route.query.id as unknown) as number,
-        c_id: (this.detail.coupon.coupon_id as unknown) as number,
+        c_id: (this.detail["coupon"].coupon_id as unknown) as number,
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
@@ -436,11 +436,12 @@
         });
     }
     video(course_id: number, lp_id: number) {
+      console.log(typeof course_id, lp_id);
       this.$router.push({
         path: "/play",
         query: {
-          course_id: course_id.toFixed(0),
-          lp_id: lp_id.toFixed(0),
+          course_id: Number(course_id).toFixed(0),
+          lp_id: Number(lp_id).toFixed(0),
         },
       });
     }
@@ -467,6 +468,7 @@
       await this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: any) => {
+          console.log(result);
           this.detail = result.data.data;
         });
     }
