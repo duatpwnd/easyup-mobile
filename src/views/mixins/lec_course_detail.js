@@ -6,23 +6,23 @@ let GroupMixin = class GroupMixin extends Vue {
         this.isPossibleReview = false;
         this.is_subscribe = false;
         this.subscribe_btn = false;
+        this.detail = {};
         this.score_info = ""; // 각 별점의 개수
         this.url = window.document.location.href; // 클립보드 현재 url
     }
     onPropertyChanged(value, oldValue) {
-        console.log(value, oldValue);
         this.isSubscribe();
     }
     // 구독하기
     subscribe() {
-        const data = {};
+        let data = {};
         if (this.$route.name == "lecDetail") {
             data["action"] = "subscribe_course";
-            data["course_id"] = this.$route.query.id;
+            data["course_id"] = Number(this.$route.query.id);
         }
         else {
             data["action"] = "subscribe_session";
-            data["session_id"] = this.$route.query.id;
+            data["session_id"] = Number(this.$route.query.id);
         }
         console.log(data);
         this.$axios
@@ -34,14 +34,15 @@ let GroupMixin = class GroupMixin extends Vue {
     }
     // 구독 여부 조회
     async isSubscribe() {
-        const data = {};
+        let data = {};
+        console.log(data);
         if (this.$route.name == "lecDetail") {
             data["action"] = "check_subscribe_course";
-            data["course_id"] = this.$route.query.id;
+            data["course_id"] = Number(this.$route.query.id);
         }
         else {
             data["action"] = "check_subscribe_session";
-            data["session_id"] = this.$route.query.id;
+            data["session_id"] = Number(this.$route.query.id);
         }
         console.log(data);
         await this.$axios
@@ -90,24 +91,6 @@ let GroupMixin = class GroupMixin extends Vue {
             console.log(result);
             this.$noticeMessage("강의바구니에 담았습니다.");
         });
-    }
-    mounted() {
-        // this.$store.watch(
-        //   () => this.$store.getters.isToken,
-        //   (n) => {
-        //     console.log("watched: ", n);
-        //   }
-        // );
-        // this.$store.watch(this.$store.getters.isToken, (state) => {
-        //   console.log(state);
-        // if (
-        //   el.userStore.userinfo.access_token != null &&
-        //   this.$route.name == "lecDetail"
-        // ) {
-        //   console.log("구독중 함수실행");
-        //   this.isSubscribe();
-        // }
-        // });
     }
     created() {
         window.onscroll = () => {

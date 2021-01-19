@@ -77,59 +77,34 @@
     </keep-alive>
   </div>
 </template>
-<script>
-import Tab1 from "@/components/player/LectureList.vue";
-import Tab2 from "@/components/player/LectureNote.vue";
-import Video from "@/components/player/Video.vue";
-import Scorm from "@/components/player/Scorm.vue";
-import BookmarkModal from "@/components/player/BookmarkModal.vue";
-import BookmarkListModal from "@/components/player/BookMarkListModal.vue";
-import { mapState, mapMutations } from "vuex";
-import mixin from "@/components/player/player_mixin.js";
-import videojs from "video.js";
-
-export default {
-  mixins: [mixin],
-  components: { BookmarkListModal, Tab1, Tab2, Video, Scorm, BookmarkModal },
-  data() {
-    return {
-      video_set: false,
-      info: "",
-      isActive: 0,
-      type: "Tab1",
-      types: [
-        { name: "강의 목록", target: "Tab1" },
-        { name: "강의 노트", target: "Tab2" }
-      ],
-      player: null,
-      videoOptions: {
-        controls: true,
-        autoplay: false,
-        muted: false,
-        preload: "auto",
-        playbackRates: [0.5, 1, 1.5, 2],
-        sources: [
-          {
-            src: "",
-            type: "application/x-mpegURL"
-          }
-        ]
-      }
-    };
-  },
-  computed: {
-    ...mapState("playerStore", {
-      playerStore_check_time: "check_time"
-    })
-  },
-  watch: {
-    info(a, b) {
+<script lang="ts">
+  import { Component, Watch, Vue } from "vue-property-decorator";
+  import Tab1 from "@/components/player/LectureList.vue";
+  import Tab2 from "@/components/player/LectureNote.vue";
+  import Video from "@/components/player/Video.vue";
+  import Scorm from "@/components/player/Scorm.vue";
+  import BookmarkModal from "@/components/player/BookmarkModal.vue";
+  import BookmarkListModal from "@/components/player/BookMarkListModal.vue";
+  import { mapState, mapMutations } from "vuex";
+  import mixin from "@/components/player/player_mixin.ts";
+  import videojs from "video.js";
+  @Component({
+    components: { BookmarkListModal, Tab1, Tab2, Video, Scorm, BookmarkModal },
+    computed: {
+      ...mapState("playerStore", {
+        playerStore_check_time: "check_time",
+      }),
+    },
+  })
+  export default class Player extends mixin {
+    @Watch("info")
+    onPropertyChanged(a: string, b: string) {
       if (b == "" && a != "") {
         console.log(a, b);
         const self = this;
         if (
-          this.info.current_item[0].lp_type == "document" &&
-          this.info.current_item[0].custom_type == "video"
+          this.info["current_item"][0].lp_type == "document" &&
+          this.info["current_item"][0].custom_type == "video"
         ) {
           this.$nextTick(() => {
             this.player = videojs(
@@ -138,22 +113,42 @@ export default {
               function onPlayerReady() {
                 console.log("onPlayerReady");
                 if (self.$route.query.linkType != undefined) {
-                  console.log(self.playerStore_check_time, this, self);
-                  self.player.currentTime(self.playerStore_check_time);
+                  self.player!["currentTime"](self["playerStore_check_time"]);
                 }
               }
             );
             // 반응형으로 바꿔줌
-            this.player.fluid(true);
+            this.player!["fluid"](true);
             self.$store.commit("playerStore/playerState", {
-              video_stop_time: this.player
+              video_stop_time: this.player,
             });
           });
         }
       }
     }
-  },
-  methods: {
+    video_set: boolean = false;
+    info: string = "";
+    isActive: number = 0;
+    type: string = "Tab1";
+    types: { name: string; target: string }[] = [
+      { name: "강의 목록", target: "Tab1" },
+      { name: "강의 노트", target: "Tab2" },
+    ];
+    player: null = null;
+
+    videoOptions = {
+      controls: true,
+      autoplay: false,
+      muted: false,
+      preload: "auto",
+      playbackRates: [0.5, 1, 1.5, 2],
+      sources: [
+        {
+          src: "",
+          type: "application/x-mpegURL",
+        },
+      ],
+    };
     getPlayInfo(id, linkType) {
       this.video_set = false;
       const data = {
@@ -161,128 +156,132 @@ export default {
         course_id: this.$route.query.course_id,
         lp_id: this.$route.query.lp_id,
         linkType: linkType == undefined ? null : linkType,
-        iid: id == undefined ? null : id
+        iid: id == undefined ? null : id,
       };
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then(result => {
+        .then((result) => {
           console.log("플레이어 정보", result);
           this.info = result.data.data;
-          this.videoOptions.sources[0].src = this.info.current_item[0].link;
+          this.videoOptions["sources"][0].src = this.info[
+            "current_item"
+          ][0].link;
           let current_link;
-          console.log(this.info.current_item[0].link.split("?"));
-          console.log(this.info.current_item[0].link.split("start="));
+          console.log(this.info["current_item"][0].link.split("?"));
+          console.log(this.info["current_item"][0].link.split("start="));
           // rel 있을경우 제거해주기. 이거때문에 start 옵션이 제대로 작동안함
           // 스타트 옵션때문에 분기 처리해줘야함
-          if (this.info.current_item[0].link.split("start=")[1] == undefined) {
+          if (
+            this.info["current_item"][0].link.split("start=")[1] == undefined
+          ) {
             current_link =
-              this.info.current_item[0].link +
+              this.info["current_item"][0].link +
               "?html5=1&playsinline=1&fs=0&start=1";
             console.log(current_link);
           } else {
             current_link =
-              this.info.current_item[0].link + `&html5=1&playsinline=1&fs=0&`;
+              this.info["current_item"][0].link +
+              `&html5=1&playsinline=1&fs=0&`;
             console.log(current_link);
           }
           this.$store.commit("playerStore/playerState", {
-            current_index: this.info.current_item[0].idx,
-            current_item_id: this.info.current_item[0].item_id,
+            current_index: this.info["current_item"][0].idx,
+            current_item_id: this.info["current_item"][0].item_id,
             current_link: current_link,
-            list: this.info.list[0],
-            custom_type: this.info.current_item[0].custom_type,
-            lp_type: this.info.current_item[0].lp_type,
-            nextBtn: this.info.current_item[0].last_item_chk,
-            nextItem: this.info.current_item[0].next_item
+            list: this.info["list"][0],
+            custom_type: this.info["current_item"][0].custom_type,
+            lp_type: this.info["current_item"][0].lp_type,
+            nextBtn: this.info["current_item"][0].last_item_chk,
+            nextItem: this.info["current_item"][0].next_item,
           });
           this.video_set = true;
         });
-    },
+    }
     newTab(link) {
       window.open(link);
-    },
+    }
     toggle(type, index) {
       this.type = type;
       this.isActive = index;
     }
-  },
-  beforeDestroy() {
-    if (this.player) {
-      this.player.dispose();
+    beforeDestroy() {
+      if (this.player) {
+        this.player!["dispose"]();
+      }
     }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      console.log(this.info);
-    });
-  },
-  created() {
-    if (this.$route.query.linkType != undefined) {
-      this.getPlayInfo(this.$route.query.iid, "bookmark");
-    } else {
-      this.getPlayInfo();
+    mounted() {
+      this.$nextTick(() => {
+        console.log(this.info);
+      });
     }
-    this.$EventBus.$on("switch_item", result => {
-      this.getPlayInfo();
-    });
+    created() {
+      if (this.$route.query.linkType != undefined) {
+        this.getPlayInfo(this.$route.query.iid, "bookmark");
+      } else {
+        this.getPlayInfo(undefined, undefined);
+      }
+      this.$EventBus.$on("switch_item", (result) => {
+        this.getPlayInfo(undefined, undefined);
+      });
+    }
   }
-};
 </script>
 <style scoped lang="scss">
-@import "../../node_modules/video.js/dist/video-js.min.css";
-#youtube_player {
-  height: 100%;
-  overflow: hidden;
-  .tab {
-    font-size: 2rem;
-    font-weight: 600;
-    width: 50%;
-    display: inline-block;
-    text-align: center;
-    background: #f8f8f8;
-    padding: 2% 0;
-    position: relative;
-    .active_bar {
+  @import "../../node_modules/video.js/dist/video-js.min.css";
+  #youtube_player {
+    height: 100%;
+    overflow: hidden;
+    .tab {
+      font-size: 2rem;
+      font-weight: 600;
+      width: 50%;
+      display: inline-block;
+      text-align: center;
       background: #f8f8f8;
-      height: 4px;
-      position: absolute;
-      top: 0;
-      left: 0;
+      padding: 2% 0;
+      position: relative;
+      .active_bar {
+        background: #f8f8f8;
+        height: 4px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+    .active {
+      background: #ffffff;
+      .active_bar {
+        background: #114fff;
+      }
+    }
+    .link {
+      background-color: #d9edf7;
+      border-color: #bce8f1;
+      text-align: center;
+      padding: 10px;
+    }
+    .video {
+      position: relative;
       width: 100%;
-      box-sizing: border-box;
-    }
-  }
-  .active {
-    background: #ffffff;
-    .active_bar {
-      background: #114fff;
-    }
-  }
-  .link {
-    background-color: #d9edf7;
-    border-color: #bce8f1;
-    text-align: center;
-    padding: 10px;
-  }
-  .video {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%;
+      padding-bottom: 56.25%;
 
-    iframe {
-      position: absolute;
-      width: 100%;
-      height: 100%;
+      iframe {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+    }
+    ::v-deep .video-js {
+      .vjs-big-play-button {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+      }
     }
   }
-  ::v-deep .video-js {
-    .vjs-big-play-button {
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: auto;
-    }
-  }
-}
 </style>
