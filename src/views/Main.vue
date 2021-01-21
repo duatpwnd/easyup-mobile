@@ -20,16 +20,22 @@
           class="li"
           v-for="(list, index) in list.popular_lecture"
           :key="index"
-          @click="$router.push({
+          @click="
+            $router.push({
               path: '/lecDetail',
               query: {
                 id: list.id,
               },
-          })" 
-          >
+            })
+          "
+        >
           <LecItem>
-            <span class="lec_list"  slot="router" :style="{'background-image':`url(${list.image_url})`}">
-               <!-- <img
+            <span
+              class="lec_list"
+              slot="router"
+              :style="{ 'background-image': `url(${list.image_url})` }"
+            >
+              <!-- <img
                 :src="list.image_url"
                 :alt="list.title"
                 :title="list.title"
@@ -78,37 +84,46 @@
         최근 트렌드를 반영한 강의 정보를 확인하세요
       </p>
       <Slide :swiper_option="slide_option.latest_lecture">
-        <swiper-slide
-          slot="list"
-          v-for="(list, index) in list.latest_lecture"
-          :key="index"
-        >
-          <LecItem>
-            <router-link
-              class="lec_list"
-              slot="router"
-              :to="{
-                path: '/lecDetail',
-                query: {
-                  id: list.id,
-                },
-              }"
-              :style="{'background-image':`url(${list.image_url})`}"
-            >
-              <!-- <img :src="list.image_url" alt="이지업" title="이지업" /> -->
-            </router-link>
-            <h4 slot="teacher">{{ list.teachers }}</h4>
+        <template slot="list">
+          <swiper-slide
+            v-for="(list, index) in list.latest_lecture"
+            :key="index"
+          >
+            <LecItem>
+              <router-link
+                class="lec_list"
+                slot="router"
+                :to="{
+                  path: '/lecDetail',
+                  query: {
+                    id: list.id,
+                  },
+                }"
+                :style="{ 'background-image': `url(${list.image_url})` }"
+              >
+              </router-link>
+              <h4 slot="teacher">{{ list.teachers }}</h4>
 
-            <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
-            <span slot="grade" class="score">{{ list.ranking }}</span>
-            <h1 class="free" slot="free" v-if="list.isfree == 'Y'">
-              FREE
-            </h1>
-          </LecItem>
-          <div class="swiper-button-prev" slot="button-prev"></div>
-          <div class="swiper-button-next" slot="button-next"></div>
-          </swiper-slide
-        >
+              <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+              <span slot="grade" class="score">{{ list.ranking }}</span>
+              <h1 class="free" slot="free" v-if="list.isfree == 'Y'">
+                FREE
+              </h1>
+            </LecItem>
+          </swiper-slide>
+        </template>
+        <template slot="nav_btn">
+          <div
+            class="swiper-button-prev swiper-button-prev-1"
+            slot="button-prev"
+            @click.stop=""
+          ></div>
+          <div
+            class="swiper-button-next swiper-button-next-1"
+            slot="button-next"
+            @click.stop=""
+          ></div>
+        </template>
       </Slide>
     </div>
     <!-- 최신강의 ::  E -->
@@ -135,34 +150,47 @@
       <p class="suggest">
         한글 자막이 제공되는 외국 우수 강의를 구독하세요
       </p>
-      <Slide :swiper_option="slide_option.latest_lecture">
-        <swiper-slide
-          slot="list"
-          v-for="(list, index) in list.translation_lecture"
-          :key="index"
-        >
-          <LecItem>
-            <router-link
-              class="lec_list"
-              slot="router"
-              :to="{
-                path: '/lecDetail',
-                query: {
-                  id: list.id,
-                },
-              }"
-              :style="{'background-image':`url(${list.image_url})`}"
-            >
-            </router-link>
-            <h4 slot="teacher">{{ list.teachers }}</h4>
+      <Slide :swiper_option="slide_option.translation_lecture">
+        <template slot="list">
+          <swiper-slide
+            v-for="(list, index) in list.translation_lecture"
+            :key="index"
+          >
+            <LecItem>
+              <router-link
+                class="lec_list"
+                slot="router"
+                :to="{
+                  path: '/lecDetail',
+                  query: {
+                    id: list.id,
+                  },
+                }"
+                :style="{ 'background-image': `url(${list.image_url})` }"
+              >
+              </router-link>
+              <h4 slot="teacher">{{ list.teachers }}</h4>
 
-            <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
-            <span slot="grade" class="score">{{ list.ranking }}</span>
-            <h1 class="free" slot="free" v-if="list.isfree == 'Y'">
-              FREE
-            </h1>
-          </LecItem></swiper-slide
-        >
+              <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+              <span slot="grade" class="score">{{ list.ranking }}</span>
+              <h1 class="free" slot="free" v-if="list.isfree == 'Y'">
+                FREE
+              </h1>
+            </LecItem></swiper-slide
+          >
+        </template>
+        <template slot="nav_btn">
+          <div
+            class="swiper-button-prev swiper-button-prev-2"
+            slot="button-prev"
+            @click.stop=""
+          ></div>
+          <div
+            class="swiper-button-next swiper-button-next-2"
+            slot="button-next"
+            @click.stop=""
+          ></div>
+        </template>
       </Slide>
     </div>
     <!-- 번역강의 :: E -->
@@ -221,11 +249,20 @@
       },
       latest_lecture: {
         spaceBetween: 8,
-        slidesPerView: 2.12,
-        direction: 'horizontal',
+        slidesPerView: 2,
+        direction: "horizontal",
         navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev'
+          nextEl: ".swiper-button-next-1",
+          prevEl: ".swiper-button-prev-1",
+        },
+      },
+      translation_lecture: {
+        spaceBetween: 8,
+        slidesPerView: 2,
+        direction: "horizontal",
+        navigation: {
+          nextEl: ".swiper-button-next-2",
+          prevEl: ".swiper-button-prev-2",
         },
       },
     };
@@ -236,8 +273,8 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result:object)=> { 
-          this.list = result['data'].data;
+        .then((result: object) => {
+          this.list = result["data"].data;
           console.log(this.list);
         });
     }
@@ -254,7 +291,7 @@
     position: relative;
     .section {
       padding: 4.445%;
-      .lec_list{
+      .lec_list {
         padding-bottom: 55%;
         background-repeat: no-repeat;
         background-size: cover;
@@ -336,8 +373,13 @@
       }
     }
     .swiper_section {
-      // padding-right: 0;
       padding-top: 0;
+      .slide {
+        .swiper-button-prev.swiper-button-disabled,
+        .swiper-button-next.swiper-button-disabled {
+          pointer-events: unset;
+        }
+      }
     }
     .category_section {
       padding-top: 0;
