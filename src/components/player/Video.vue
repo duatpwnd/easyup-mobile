@@ -64,7 +64,7 @@
         this.isSrtFile();
       }
     }
-    youtubeExternalSubtitle!: object | null;
+    youtubeExternalSubtitle!: object;
     is_srt: boolean = false;
     getFileName(contentDisposition: string): string | null {
       let fileName = contentDisposition
@@ -158,8 +158,9 @@
         );
       }
       // 스탑시간 구하기
+
       this.$store.commit("playerStore/playerState", {
-        stop_time: eval(this.youtubeExternalSubtitle["onTimeChange"]),
+        stop_time: this.youtubeExternalSubtitle["onTimeChange"],
       });
     }
     // 자막파일 유무
