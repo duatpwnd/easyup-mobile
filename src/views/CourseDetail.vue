@@ -572,11 +572,6 @@ export default {
       font-size: 1.6875rem;
     }
     ::v-deep .item {
-      .lec_list {
-        img {
-          width: 48.782%;
-        }
-      }
       h4 {
         font-size: 14px;
         margin-top: 5px;

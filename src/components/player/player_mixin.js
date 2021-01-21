@@ -25,7 +25,8 @@ let PlayerCommon = class PlayerCommon extends Vue {
                     : null
             }
         })
-            .then(result => {
+            .then((result) => {
+            console.log(result);
             // 플레이어 정보 갱신
             this.$EventBus.$emit("switch_item", true);
         });

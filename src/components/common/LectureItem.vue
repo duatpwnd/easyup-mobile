@@ -44,15 +44,16 @@
       font-size: 1.3125rem;
       text-overflow: ellipsis;
       overflow: hidden;
-      white-space: nowrap;
+      display: -webkit-box;
+      -webkit-box-orient: vertical; 
+      word-wrap:break-word;
+      -webkit-line-clamp: 2;
     }
     .lec_list {
       display: inline-block;
       width: 100%;
     }
     .evaluate {
-      margin-top: 5px;
-
       .star {
         width: 12px;
         height: 11px;

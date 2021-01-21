@@ -69,6 +69,7 @@
         공지사항
       </button>
       <button
+        class="faq_btn"
         @click="
           $router.push({
             name: 'helpFaq',
@@ -180,11 +181,12 @@ export default {
   }
 }
 .menu_modal {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 3;
+  z-index: 5;
   width: 72.222%;
+  height:100%;
   box-sizing: border-box;
   background: #f8f8f8;
   .login_form {
@@ -228,10 +230,15 @@ export default {
     margin-top: 2%;
     padding: 4.445%;
     button {
+      width:100%;
+      text-align: left;
       font-size: 1.5rem;
-      display: inline-block;
-      width: 33.333%;
-      text-align: center;
+      display: block;
+      background: url("~@/assets/images/common/right_arrow.png") no-repeat right
+        center / 3%;
+    }
+    .faq_btn{
+      margin:4% 0;
     }
   }
   .user_find {

@@ -29,7 +29,8 @@
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {
-            login_modal: false
+            login_modal: false,
+            mask:false
           });
         "
       >
@@ -49,7 +50,8 @@
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {
-            login_modal: false
+            login_modal: false,
+            mask:false
           });
         "
       >
@@ -59,7 +61,8 @@
         @click="
           $router.push('/studentClaasRoom').catch(() => {});
           $store.commit('toggleStore/Toggle', {
-            login_modal: false
+            login_modal: false,
+            mask:false
           });
         "
         class="lnb"
@@ -80,7 +83,8 @@
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {
-            login_modal: false
+            login_modal: false,
+            mask:false
           });
         "
         class="lnb"
@@ -96,7 +100,8 @@
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {
-            login_modal: false
+            login_modal: false,
+            mask:false
           });
         "
       >
@@ -116,13 +121,15 @@
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {
-            login_modal: false
+            login_modal: false,
+            mask:false
           });
         "
       >
         공지사항
       </button>
       <button
+        class="faq_btn"
         @click="
           $router
             .push({
@@ -135,7 +142,8 @@
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {
-            login_modal: false
+            login_modal: false,
+            mask:false
           });
         "
       >
@@ -145,7 +153,8 @@
         @click="
           $router.push('/help/qna').catch(() => {});
           $store.commit('toggleStore/Toggle', {
-            login_modal: false
+            login_modal: false,
+            mask:false
           });
         "
       >
@@ -211,13 +220,14 @@ export default {
   }
 }
 .menu_modal {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 3;
+  z-index: 5;
   width: 72.222%;
   box-sizing: border-box;
   background: #f8f8f8;
+  height: 100%;
   .profile {
     padding: 4.445%;
     background: white;
@@ -261,16 +271,25 @@ export default {
     margin-top: 2%;
     padding: 4.445%;
     button {
+      width:100%;
+      text-align: left;
       font-size: 1.5rem;
-      display: inline-block;
-      width: 33.333%;
-      text-align: center;
+      display: block;
+      background: url("~@/assets/images/common/right_arrow.png") no-repeat right
+        center / 3%;
+    }
+    .faq_btn{
+      margin:4% 0;
     }
   }
   .logout {
     background: white;
     padding: 4.445%;
     padding-top: 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 </style>

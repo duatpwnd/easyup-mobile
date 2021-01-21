@@ -180,6 +180,7 @@ export default {
   },
   methods: {
     removeMask() {
+      console.log('remove');
       this.$store.commit("toggleStore/Toggle", {
         mask: false,
         more_view: false
@@ -304,6 +305,9 @@ export default {
         }
       }
     }
+  }
+  .gnb{
+      border-top: 1px solid #ccc;
   }
   .more_view {
     width: 70%;

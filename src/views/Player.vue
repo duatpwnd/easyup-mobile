@@ -39,7 +39,7 @@
       class="video-js vjs-matrix"
       v-else-if="
         info.current_item[0].lp_type == 'document' &&
-          info.current_item[0].custom_type == 'video'
+        info.current_item[0].custom_type == 'video'
       "
     >
       <track
@@ -100,7 +100,6 @@
     @Watch("info")
     onPropertyChanged(a: string, b: string) {
       if (b == "" && a != "") {
-        console.log(a, b);
         const self = this;
         if (
           this.info["current_item"][0].lp_type == "document" &&
@@ -113,12 +112,12 @@
               function onPlayerReady() {
                 console.log("onPlayerReady");
                 if (self.$route.query.linkType != undefined) {
-                  self.player!["currentTime"](self["playerStore_check_time"]);
+                  videojs(self.$refs.videoPlayer).currentTime(self["playerStore_check_time"])
                 }
               }
             );
             // 반응형으로 바꿔줌
-            this.player!["fluid"](true);
+            videojs(this.$refs.videoPlayer).fluid(true);
             self.$store.commit("playerStore/playerState", {
               video_stop_time: this.player,
             });
@@ -149,7 +148,7 @@
         },
       ],
     };
-    getPlayInfo(id, linkType) {
+    getPlayInfo(id:number | undefined, linkType:string | undefined) {
       this.video_set = false;
       const data = {
         action: "get_player_info",
@@ -161,9 +160,9 @@
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result:object) => {
           console.log("플레이어 정보", result);
-          this.info = result.data.data;
+          this.info = result['data'].data;
           this.videoOptions["sources"][0].src = this.info[
             "current_item"
           ][0].link;
@@ -198,26 +197,21 @@
           this.video_set = true;
         });
     }
-    newTab(link) {
+    newTab(link:string) {
       window.open(link);
     }
-    toggle(type, index) {
+    toggle(type:string, index:number) {
       this.type = type;
       this.isActive = index;
     }
     beforeDestroy() {
       if (this.player) {
-        this.player!["dispose"]();
+        videojs(this.$refs.videoPlayer).dispose();
       }
-    }
-    mounted() {
-      this.$nextTick(() => {
-        console.log(this.info);
-      });
     }
     created() {
       if (this.$route.query.linkType != undefined) {
-        this.getPlayInfo(this.$route.query.iid, "bookmark");
+        this.getPlayInfo(Number(this.$route.query.iid), "bookmark");
       } else {
         this.getPlayInfo(undefined, undefined);
       }

@@ -54,13 +54,15 @@ export default {
       userStore_userinfo: "userinfo"
     }),
     ...mapState("toggleStore", {
-      toggleStore_loginModal: "login_modal"
+      toggleStore_loginModal: "login_modal",
+      toggleStore_mask:"mask"
     })
   },
   methods: {
     menu_toggle() {
       this.$store.commit("toggleStore/Toggle", {
-        login_modal: !this.toggleStore_loginModal
+        login_modal: !this.toggleStore_loginModal,
+        mask: !this.toggleStore_mask,
       });
     }
   }
@@ -68,9 +70,13 @@ export default {
 </script>
 <style scoped lang="scss">
 #nav {
-  position: relative;
-  text-align: center;
-  height: 50px;
+     position: sticky;
+    text-align: center;
+    height: 50px;
+    top: 0;
+    background: white;
+    z-index: 4;
+  
   .back_btn {
     position: absolute;
     top: 0;

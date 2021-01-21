@@ -191,7 +191,7 @@ export default {
     .li {
       float: left;
       width: 48.782%;
-      margin-top: 8px;
+      margin-top: 16px;
       &:nth-child(odd) {
         margin-right: 2.436%;
       }

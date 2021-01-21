@@ -17,7 +17,8 @@
               }
             });
             $store.commit('toggleStore/Toggle', {
-              login_modal: false
+              login_modal: false,
+              mask:false
             });
           "
           >전체보기</span
@@ -38,7 +39,8 @@
               }
             });
             $store.commit('toggleStore/Toggle', {
-              login_modal: false
+              login_modal: false,
+              mask:false
             });
           "
           >{{ list }}</span
@@ -80,16 +82,17 @@ export default {
 </script>
 <style scoped lang="scss">
 .menu_modal {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 3;
+  z-index: 5;
   width: 72.222%;
+  height:100%;
   box-sizing: border-box;
   background: #f8f8f8;
   h3 {
     font-size: 1.5rem;
-
+    padding: 10px 0;
     color: #999999;
     text-align: center;
     font-weight: 500;

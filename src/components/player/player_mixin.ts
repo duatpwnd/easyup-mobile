@@ -43,8 +43,9 @@ export default class PlayerCommon extends Vue {
           : null
       }
     })
-    .then(result => {
+    .then((result:object) => {
       // 플레이어 정보 갱신
+      console.log(result);
       this.$EventBus.$emit("switch_item", true);
     });
   }

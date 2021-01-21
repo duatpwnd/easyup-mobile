@@ -20,24 +20,21 @@
           class="li"
           v-for="(list, index) in list.popular_lecture"
           :key="index"
-        >
+          @click="$router.push({
+              path: '/lecDetail',
+              query: {
+                id: list.id,
+              },
+          })" 
+          >
           <LecItem>
-            <router-link
-              class="lec_list"
-              slot="router"
-              :to="{
-                path: '/lecDetail',
-                query: {
-                  id: list.id,
-                },
-              }"
-            >
-              <img
+            <span class="lec_list"  slot="router" :style="{'background-image':`url(${list.image_url})`}">
+               <!-- <img
                 :src="list.image_url"
                 :alt="list.title"
                 :title="list.title"
-              />
-            </router-link>
+              /> -->
+            </span>
             <h4 slot="teacher">{{ list.teachers }}</h4>
             <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
             <span slot="grade" class="score">{{ list.ranking }}</span>
@@ -96,8 +93,9 @@
                   id: list.id,
                 },
               }"
+              :style="{'background-image':`url(${list.image_url})`}"
             >
-              <img :src="list.image_url" alt="이지업" title="이지업" />
+              <!-- <img :src="list.image_url" alt="이지업" title="이지업" /> -->
             </router-link>
             <h4 slot="teacher">{{ list.teachers }}</h4>
 
@@ -106,7 +104,10 @@
             <h1 class="free" slot="free" v-if="list.isfree == 'Y'">
               FREE
             </h1>
-          </LecItem></swiper-slide
+          </LecItem>
+          <div class="swiper-button-prev" slot="button-prev"></div>
+          <div class="swiper-button-next" slot="button-next"></div>
+          </swiper-slide
         >
       </Slide>
     </div>
@@ -150,8 +151,8 @@
                   id: list.id,
                 },
               }"
+              :style="{'background-image':`url(${list.image_url})`}"
             >
-              <img :src="list.image_url" alt="이지업" title="이지업" />
             </router-link>
             <h4 slot="teacher">{{ list.teachers }}</h4>
 
@@ -221,9 +222,10 @@
       latest_lecture: {
         spaceBetween: 8,
         slidesPerView: 2.12,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
+        direction: 'horizontal',
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
         },
       },
     };
@@ -234,8 +236,8 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result: any) => {
-          this.list = result.data.data;
+        .then((result:object)=> { 
+          this.list = result['data'].data;
           console.log(this.list);
         });
     }
@@ -252,6 +254,11 @@
     position: relative;
     .section {
       padding: 4.445%;
+      .lec_list{
+        padding-bottom: 55%;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
       .title {
         position: relative;
         font-size: 2rem;
@@ -329,7 +336,7 @@
       }
     }
     .swiper_section {
-      padding-right: 0;
+      // padding-right: 0;
       padding-top: 0;
     }
     .category_section {
