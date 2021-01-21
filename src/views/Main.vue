@@ -60,19 +60,33 @@
         초심자 과정부터 전문가 과정까지, 전 과정을 합리적인 가격에 마스터하세요
       </p>
       <Slide :swiper_option="slide_option.popular_course">
-        <swiper-slide
-          slot="list"
-          v-for="(list, index) in list.popular_course"
-          :key="index"
-          ><router-link
-            :to="{
-              path: '/courseDetail',
-              query: {
-                id: list.id,
-              },
-            }"
-            ><img :src="list.image_url"/></router-link
-        ></swiper-slide>
+        <template slot="list">
+          <swiper-slide
+            slot="list"
+            v-for="(list, index) in list.popular_course"
+            :key="index"
+            ><router-link
+              :to="{
+                path: '/courseDetail',
+                query: {
+                  id: list.id,
+                },
+              }"
+              ><img :src="list.image_url"/></router-link
+          ></swiper-slide>
+        </template>
+        <template slot="nav_btn">
+          <div
+            class="swiper-button-prev swiper-button-prev-0"
+            slot="button-prev"
+            @click.stop=""
+          ></div>
+          <div
+            class="swiper-button-next swiper-button-next-0"
+            slot="button-next"
+            @click.stop=""
+          ></div>
+        </template>
       </Slide>
     </div>
     <!-- 인기코스 :: E -->
@@ -241,10 +255,11 @@
       },
       popular_course: {
         spaceBetween: 8,
-        slidesPerView: 1.049,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
+        slidesPerView: 1,
+        direction: "horizontal",
+        navigation: {
+          nextEl: ".swiper-button-next-0",
+          prevEl: ".swiper-button-prev-0",
         },
       },
       latest_lecture: {
@@ -277,9 +292,6 @@
           this.list = result["data"].data;
           console.log(this.list);
         });
-    }
-    mounted() {
-      console.log(this);
     }
     created() {
       this.getLectureList();
@@ -378,6 +390,11 @@
         .swiper-button-prev.swiper-button-disabled,
         .swiper-button-next.swiper-button-disabled {
           pointer-events: unset;
+        }
+        .swiper-button-prev,
+        .swiper-button-next {
+          z-index: 1;
+          outline: none;
         }
       }
     }
