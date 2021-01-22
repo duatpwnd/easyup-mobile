@@ -194,7 +194,7 @@
       .li {
         float: left;
         width: 48.782%;
-        margin-top: 16px;
+        margin-top: 24px;
         &:nth-child(odd) {
           margin-right: 2.436%;
         }

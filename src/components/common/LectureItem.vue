@@ -41,12 +41,13 @@
       color: #999999;
     }
     .subtitle {
-      font-size: 1.3125rem;
+      font-size: 14px;
+      height: 38px;
       text-overflow: ellipsis;
       overflow: hidden;
       display: -webkit-box;
-      -webkit-box-orient: vertical; 
-      word-wrap:break-word;
+      -webkit-box-orient: vertical;
+      word-wrap: break-word;
       -webkit-line-clamp: 2;
     }
     .lec_list {

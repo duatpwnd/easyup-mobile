@@ -337,13 +337,13 @@
         color: #999999;
       }
       .lec_list_wrap {
-        margin-top: 8px;
         &:after {
           display: block;
           clear: both;
           content: "";
         }
         .li {
+          margin-top: 24px;
           float: left;
           width: 48.782%;
           &:nth-child(odd) {
@@ -395,6 +395,24 @@
         .swiper-button-next {
           z-index: 1;
           outline: none;
+          width: 20px;
+          height: 40px;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          &:after {
+            content: none;
+          }
+        }
+        .swiper-button-prev {
+          background: url("~@/assets/images/main/prev_btn.png") no-repeat center
+            center / 100% 100%;
+          left: 0;
+        }
+        .swiper-button-next {
+          background: url("~@/assets/images/main/next_btn.png") no-repeat center
+            center / 100% 100%;
+          right: 0;
         }
       }
     }
