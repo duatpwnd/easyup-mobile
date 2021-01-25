@@ -422,21 +422,21 @@ const routes = [
   {
     path: "/couponManageTeacher/list",
     name: "couponManageTeacherList",
-    component: () => import("@/views/couponManageTeacherList.vue"),
+    component: () => import("@/views/CouponManageTeacherList.vue"),
     meta: { GnbBottomMenu: true }
   },
   // 쿠폰 내역
   {
     path: "/couponManageTeacher/detail",
     name: "couponManageTeacherDetail",
-    component: () => import("@/views/couponManageTeacherDetail.vue"),
+    component: () => import("@/views/CouponManageTeacherDetail.vue"),
     meta: { GnbBottomMenu: true }
   },
   // 쿠폰 등록
   {
     path: "/couponManageTeacher/register",
     name: "couponManageTeacherRegister",
-    component: () => import("@/views/couponManageTeacherRegister.vue"),
+    component: () => import("@/views/CouponManageTeacherRegister.vue"),
     meta: { GnbBottomMenu: true }
   },
   // 강의 바구니
