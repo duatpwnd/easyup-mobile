@@ -1,5 +1,4 @@
 import { Component, Watch, Vue } from "vue-property-decorator";
-
 @Component({
   computed: {
     detect_token() {
@@ -8,12 +7,12 @@ import { Component, Watch, Vue } from "vue-property-decorator";
   }
 })
 export default class GroupMixin extends Vue {
-  public isPossibleReview:boolean = false
-  public is_subscribe:boolean= false
-  public subscribe_btn:boolean= false
-  public detail={};
-  public score_info:string = "" // 각 별점의 개수
-  public url:string= window.document.location.href // 클립보드 현재 url
+  public isPossibleReview = false
+  public is_subscribe = false
+  public subscribe_btn = false
+  public detail = {};
+  public score_info = "" // 각 별점의 개수
+  public url = window.document.location.href // 클립보드 현재 url
    @Watch("detect_token")
     onPropertyChanged(value: string, oldValue: string) {
       this.isSubscribe();

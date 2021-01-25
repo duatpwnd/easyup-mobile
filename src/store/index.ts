@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import toggleStore from "./modules/toggle.js";
+import toggleStore from "./modules/toggle";
 import userStore from "./modules/userStore.js";
 import playerStore from "./modules/playerStore.js";
 

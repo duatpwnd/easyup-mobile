@@ -22,7 +22,9 @@ Vue.use(GlobalPlugin);
 Vue.use(CKEditor);
 Vue.use(VueMq, {
     breakpoints: {
-        mobile: 768,
+        mobile_768: 768,
+        mobile_425: 425,
+        mobile_360: 360,
         tablet: 769
     }
 });
