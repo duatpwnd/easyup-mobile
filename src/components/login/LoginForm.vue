@@ -117,7 +117,7 @@
         toggleStore_loginModal: "login_modal",
       }),
       ...mapState("userStore", {
-        userStore_referer: "referer",
+        userStore_referer: "refererLink",
       }),
     },
     methods: {

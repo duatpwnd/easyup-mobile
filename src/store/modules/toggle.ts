@@ -4,7 +4,6 @@ export default class Toggle extends VuexModule {
   more_view = false; // 내강의실 상위 메뉴
   mask = false; // 내강의실 메뉴 학습관리 클릭시 마스크 생성
   login_modal = false; // 로그인 모달
-  // before_login= true, // 로그인 전 모달
   isFooter = true; // 푸터
   GnbBottomMenu = false; // 내강좌/코스, 과제게시판, 공지사항, 자료공유 메뉴
   ProfileMsgTab = false; // 프로필 편집 ,메세지 탭
