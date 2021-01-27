@@ -312,6 +312,13 @@
       }
     }
     ::v-deep .video-js {
+      .vjs-text-track-display  {
+        div{
+        font-size: 1.5em;
+        padding:5px;
+        border-radius: 5px;
+        }
+      }
       .vjs-big-play-button {
         top: 0;
         left: 0;
