@@ -170,6 +170,7 @@
         action: "get_srt_file",
         course_id: Number(this.$route.query.course_id),
         lp_id: Number(this.$route.query.lp_id),
+        item_id: Number(this["playerStore_current_item_id"]),
         idx: Number(this.$store.state.playerStore.current_index),
       };
       interface ResData {
@@ -178,6 +179,7 @@
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, data)
         .then((result: ResData) => {
+          console.log(result);
           if (result.data != "") {
             // 자막파일이 있는경우
             this.srtParsing(result.data);

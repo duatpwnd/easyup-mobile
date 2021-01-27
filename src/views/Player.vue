@@ -39,17 +39,10 @@
       class="video-js vjs-matrix"
       v-else-if="
         info.current_item[0].lp_type == 'document' &&
-        info.current_item[0].custom_type == 'video'
+          info.current_item[0].custom_type == 'video'
       "
-    >
-      <track
-        id="my-alternate-video-track"
-        kind="commentary"
-        srclang="kr"
-        label="한국어"
-        default
-      />
-    </video>
+    ></video>
+
     <div
       class="link"
       target="_blank"
@@ -88,43 +81,23 @@
   import { mapState, mapMutations } from "vuex";
   import mixin from "@/components/player/player_mixin.ts";
   import videojs from "video.js";
+  interface BodyData {
+    action: string;
+    course_id: number;
+    lp_id: number;
+    item_id?: number;
+    idx?: number;
+  }
   @Component({
     components: { BookmarkListModal, Tab1, Tab2, Video, Scorm, BookmarkModal },
     computed: {
       ...mapState("playerStore", {
         playerStore_check_time: "check_time",
+        playerStore_current_item_id: "current_item_id",
       }),
     },
   })
   export default class Player extends mixin {
-    @Watch("info")
-    onPropertyChanged(a: string, b: string) {
-      if (b == "" && a != "") {
-        const self = this;
-        if (
-          this.info["current_item"][0].lp_type == "document" &&
-          this.info["current_item"][0].custom_type == "video"
-        ) {
-          this.$nextTick(() => {
-            this.player = videojs(
-              this.$refs.videoPlayer,
-              this.videoOptions,
-              function onPlayerReady() {
-                console.log("onPlayerReady");
-                if (self.$route.query.linkType != undefined) {
-                  videojs(self.$refs.videoPlayer).currentTime(self["playerStore_check_time"])
-                }
-              }
-            );
-            // 반응형으로 바꿔줌
-            videojs(this.$refs.videoPlayer).fluid(true);
-            self.$store.commit("playerStore/playerState", {
-              video_stop_time: this.player,
-            });
-          });
-        }
-      }
-    }
     video_set: boolean = false;
     info: string = "";
     isActive: number = 0;
@@ -141,6 +114,7 @@
       muted: false,
       preload: "auto",
       playbackRates: [0.5, 1, 1.5, 2],
+      textTrackSettings: true,
       sources: [
         {
           src: "",
@@ -148,7 +122,79 @@
         },
       ],
     };
-    getPlayInfo(id:number | undefined, linkType:string | undefined) {
+    @Watch("info")
+    onPropertyChanged(a: string, b: string) {
+      const self = this;
+      if (
+        this.info["current_item"][0].lp_type == "document" &&
+        this.info["current_item"][0].custom_type == "video"
+      ) {
+        this.$nextTick(() => {
+          const data: BodyData = {
+            action: "get_srt_file",
+            course_id: Number(self.$route.query.course_id),
+            lp_id: Number(self.$route.query.lp_id),
+            item_id: Number(self["playerStore_current_item_id"]),
+            idx: Number(self.$store.state.playerStore.current_index),
+          };
+          interface ResData {
+            data: string;
+          }
+          self.$axios
+            .post(self.$ApiUrl.mobileAPI_v1, data)
+            .then((result: ResData) => {
+              console.log("자막링크:", result);
+              const captionOption = {
+                kind: "captions",
+                srclang: "ko",
+                label: "한국어",
+                src: result.data == "" ? "" : result.data["data"].srtFileLink,
+                default: true,
+              };
+
+              this.player = videojs(
+                this.$refs.videoPlayer,
+                this.videoOptions,
+                function onPlayerReady() {
+                  console.log(
+                    "onPlayerReady",
+                    self.info["current_item"][0].link
+                  );
+                  videojs(self.$refs.videoPlayer).src({
+                    src: self.info["current_item"][0].link,
+                  });
+                  videojs(self.$refs.videoPlayer).addRemoteTextTrack(
+                    captionOption,
+                    false
+                  );
+                  // 북마크 시간 있는지 없는지 검사
+                  if (
+                    self["playerStore_check_time"] != undefined &&
+                    self["playerStore_check_time"] != ""
+                  ) {
+                    videojs(self.$refs.videoPlayer).currentTime(
+                      self["playerStore_check_time"]
+                    );
+                    videojs(self.$refs.videoPlayer).autoplay("muted");
+                  }
+                  if (self.$route.query.linkType != undefined) {
+                    videojs(self.$refs.videoPlayer).currentTime(
+                      self["playerStore_check_time"]
+                    );
+                  }
+                }
+              );
+              // 반응형으로 바꿔줌
+              videojs(this.$refs.videoPlayer).fluid(true);
+              self.$store.commit("playerStore/playerState", {
+                video_stop_time: this.player,
+              });
+            });
+        });
+      }
+    }
+
+    getPlayInfo(id: number | undefined, linkType: string | undefined) {
       this.video_set = false;
       const data = {
         action: "get_player_info",
@@ -160,15 +206,14 @@
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result:object) => {
+        .then((result: object) => {
           console.log("플레이어 정보", result);
-          this.info = result['data'].data;
+          this.info = result["data"].data;
+          console.log(this.info["current_item"][0].link);
           this.videoOptions["sources"][0].src = this.info[
             "current_item"
           ][0].link;
           let current_link;
-          console.log(this.info["current_item"][0].link.split("?"));
-          console.log(this.info["current_item"][0].link.split("start="));
           // rel 있을경우 제거해주기. 이거때문에 start 옵션이 제대로 작동안함
           // 스타트 옵션때문에 분기 처리해줘야함
           if (
@@ -177,12 +222,10 @@
             current_link =
               this.info["current_item"][0].link +
               "?html5=1&playsinline=1&fs=0&start=1";
-            console.log(current_link);
           } else {
             current_link =
               this.info["current_item"][0].link +
               `&html5=1&playsinline=1&fs=0&`;
-            console.log(current_link);
           }
           this.$store.commit("playerStore/playerState", {
             current_index: this.info["current_item"][0].idx,
@@ -197,10 +240,10 @@
           this.video_set = true;
         });
     }
-    newTab(link:string) {
+    newTab(link: string) {
       window.open(link);
     }
-    toggle(type:string, index:number) {
+    toggle(type: string, index: number) {
       this.type = type;
       this.isActive = index;
     }
