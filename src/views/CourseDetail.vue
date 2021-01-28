@@ -1,5 +1,5 @@
 <template>
-  <div id="course_detail" v-if="detail">
+  <div id="course_detail" v-if="Object.keys(detail).length > 0">
     <img
       :src="detail.course_image"
       alt="파이썬 코딩 기본편"
@@ -39,19 +39,13 @@
             46,
             19,
             31,
-            17
+            17,
           ]"
         ></StarRating>
       </div>
       <div class="price">
-        <del class="original">{{
-          detail.price.original.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        }}</del>
-        <span class="final"
-          >{{
-            detail.price.final.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}원</span
-        >
+        <del class="original">{{ detail.price.format_original }}</del>
+        <span class="final">{{ detail.price.format_final }}원</span>
       </div>
       <div id="tag_wrap">
         <slot name="title_wrap">
@@ -65,8 +59,8 @@
                   pageCurrent: 1,
                   order: 'type_date',
                   keyword: '',
-                  tag: list.tag.replace('#', '')
-                }
+                  tag: list.tag.replace('#', ''),
+                },
               }"
               v-for="(list, index) in detail.tags"
               :key="index"
@@ -97,8 +91,8 @@
                   $router.push({
                     path: 'order',
                     query: {
-                      cart_id: [$route.query.id].toString()
-                    }
+                      cart_id: [$route.query.id].toString(),
+                    },
                   })
                 "
               >
@@ -131,8 +125,8 @@
                 $router.push({
                   path: 'order',
                   query: {
-                    cart_id: [$route.query.id].toString()
-                  }
+                    cart_id: [$route.query.id].toString(),
+                  },
                 })
               "
             >
@@ -196,20 +190,22 @@
           </h1>
         </CourseItem>
         <div class="btn_wrap">
-          <BlueBtn v-if="index > 0">
+          <BlueBtn v-if="list.chk_previous == 1">
             <button slot="blue_btn">
               선행과정 필수
             </button>
           </BlueBtn>
-          <BlueBtn :class="[index == 0 ? 'confirm_btn' : 'right_btn']">
+          <BlueBtn
+            :class="[list.chk_previous == 0 ? 'confirm_btn' : 'right_btn']"
+          >
             <router-link
               slot="blue_btn"
               tag="button"
               :to="{
                 path: '/lecDetail',
                 query: {
-                  id: list.id
-                }
+                  id: list.id,
+                },
               }"
             >
               강의정보 확인
@@ -248,7 +244,7 @@
                 46,
                 19,
                 31,
-                17
+                17,
               ]"
             ></StarRating>
             <button
@@ -287,7 +283,7 @@
       <CommentWrap
         :action="{
           action: 'get_session_review',
-          session_id: $route.query.id
+          session_id: $route.query.id,
         }"
         :isSubscribe="is_subscribe"
         @emitScoreCount="scoreCount"
@@ -296,395 +292,395 @@
   </div>
 </template>
 <script>
-import StarRating from "vue-star-rating";
-import CommentWrap from "@/components/lecture_detail/CommentWrap";
-import ProgressBar from "@/components/common/ProgressBar.vue";
-import CourseItem from "@/components/common/LectureItem.vue";
-import BlueBtn from "@/components/common/BaseButton.vue";
-import mixin from "@/views/mixins/lec_course_detail.js";
-import { mapState, mapMutations } from "vuex";
-export default {
-  mixins: [mixin],
-  components: {
-    ProgressBar,
-    StarRating,
-    CommentWrap,
-    BlueBtn,
-    CourseItem
-  },
-  computed: {
-    ...mapState("toggleStore", {
-      toggleStore_score_info: "score_info"
-    }),
-    ...mapState("userStore", {
-      userStore_userinfo: "userinfo"
-    })
-  },
-  data() {
-    return {};
-  },
-  methods: {
-    goToPath() {
-      this.$router.push({
-        path: "/myClass/course",
-        query: {
-          keyword: "",
-          pageCurrent: 1,
-          order: ""
-        }
-      });
+  import StarRating from "vue-star-rating";
+  import CommentWrap from "@/components/lecture_detail/CommentWrap";
+  import ProgressBar from "@/components/common/ProgressBar.vue";
+  import CourseItem from "@/components/common/LectureItem.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import mixin from "@/views/mixins/lec_course_detail.js";
+  import { mapState, mapMutations } from "vuex";
+  export default {
+    mixins: [mixin],
+    components: {
+      ProgressBar,
+      StarRating,
+      CommentWrap,
+      BlueBtn,
+      CourseItem,
     },
-    // 코스 상세 조회
-    async getCourseDetail() {
-      const data = {
-        action: "get_session_info",
-        session_id: this.$route.query.id
-      };
-      await this.$axios
-        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then(result => {
-          console.log("코스상세:", result.data.data);
-          this.detail = result.data.data;
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_score_info: "score_info",
+      }),
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
+    },
+    data() {
+      return {};
+    },
+    methods: {
+      goToPath() {
+        this.$router.push({
+          path: "/myClass/course",
+          query: {
+            keyword: "",
+            pageCurrent: 1,
+            order: "",
+          },
         });
-    }
-  },
-  created() {
-    if (this.$cookies.get("user_info") != null) {
-      this.isSubscribe();
-    }
-    this.getCourseDetail();
-  }
-};
+      },
+      // 코스 상세 조회
+      async getCourseDetail() {
+        const data = {
+          action: "get_session_info",
+          session_id: this.$route.query.id,
+        };
+        await this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log("코스상세:", result.data.data);
+            this.detail = result.data.data;
+          });
+      },
+    },
+    created() {
+      if (this.$cookies.get("user_info") != null) {
+        this.isSubscribe();
+      }
+      this.getCourseDetail();
+    },
+  };
 </script>
 <style scoped lang="scss">
-.update_noti {
-  padding: 15px 4.445%;
-  background: #f8f8f8;
-  span {
-    color: #999999;
-    font-size: 14px;
-  }
-}
-.section1 {
-  padding: 4.445%;
-  padding-bottom: 0;
-  border-bottom: 4px solid #f8f8f8;
-  .lecture_title {
-    .sub_title {
-      font-size: 12px;
-      color: #999999;
-    }
-    .title {
-      font-size: 16px;
-      color: #333333;
-    }
-  }
-  .star_rating {
-    margin: 5px 0;
-    ::v-deep .vue-star-rating {
-      display: unset;
-      .vue-star-rating-rating-text {
-        font-size: 16px;
-        color: #333333;
-        margin-left: 4px;
-        display: inline-block;
-        vertical-align: 1.5px;
-      }
-    }
-  }
-  .price {
+  .update_noti {
+    padding: 15px 4.445%;
+    background: #f8f8f8;
     span {
-      font-weight: bold;
-    }
-    .original {
+      color: #999999;
       font-size: 14px;
-      color: #bdbdbd;
-    }
-    .final {
-      margin-left: 5px;
-      font-size: 18px;
-      color: #114fff;
     }
   }
-  #tag_wrap {
-    .tag_list {
-      margin-top: 5px;
-      line-height: 35px;
-      .tag {
-        color: #a4a4a4;
-        border: 2px solid #757575;
-        border-radius: 20px;
-        height: 24px;
-        padding: 0 10px;
-        display: inline-block;
-        margin-right: 0.763%;
+  .section1 {
+    padding: 4.445%;
+    padding-bottom: 0;
+    border-bottom: 4px solid #f8f8f8;
+    .lecture_title {
+      .sub_title {
         font-size: 12px;
-        text-align: center;
-        line-height: 24px;
-        font-family: unset;
+        color: #999999;
       }
-    }
-  }
-  #subscribe {
-    .subscribe_wrap {
-      .blue_btn {
-        ::v-deep button {
-          border-radius: 10px;
-          margin: 10px 0;
-          height: 40px;
-          line-height: 32px;
-          font-size: 18px;
-        }
-      }
-      .active_subscribe {
-        background-color: #ff114a;
-        border-color: #ff114a;
-      }
-      .total_lec {
-        font-size: 1.375rem;
-        .color {
-          color: #114fff;
-        }
-      }
-      .name {
-        font-size: 1.375rem;
-        color: #666666;
-      }
-
-      .score {
-        font-size: 1.375rem;
-        color: #333333;
-        vertical-align: middle;
-        margin-left: 2%;
-      }
-    }
-    .fixed_subs_btn {
-      position: fixed;
-      bottom: 0;
-      background: #114fff;
-      width: 100%;
-      max-width: 720px;
-      z-index: 2;
-      left: 0;
-      right: 0;
-      margin: auto;
-      .add_btn,
-      .share_btn {
-        white-space: nowrap;
-        text-indent: 100%;
-        overflow: hidden;
-        height: 64px;
-        width: 20%;
-      }
-      .purchase_btn {
-        background: transparent;
-        width: 60%;
-        font-family: "NotoSansCJKkr-Medium";
-        font-size: 20px;
-        vertical-align: middle;
-        color: #ffffff;
-        text-align: center;
-      }
-      .add_btn {
-        background: #333333
-          url("~@/assets/images/lec_detail/fixed_lecture_add_ico.png") no-repeat
-          center / 28px 27px;
-      }
-      .share_btn {
-        background: #333333
-          url("~@/assets/images/lec_detail/fixed_share_ico.png") no-repeat
-          center / 28px 27px;
-      }
-      .active_subscribe {
-        background-color: #ff114a;
-        border-color: #ff114a;
-        width: 100%;
-        font-size: 20px;
-        color: white;
-        height: 64px;
-      }
-    }
-  }
-}
-.section2 {
-  padding: 4.445%;
-  border-bottom: 4px solid #f8f8f8;
-  .user_intro {
-    .total_lec {
-      margin-bottom: 7px;
-      display: block;
-    }
-  }
-  .name {
-    font-size: 14px;
-  }
-}
-.add_share {
-  .blue_btn {
-    display: inline-block;
-    width: 49%;
-
-    ::v-deep button {
-      padding-left: 20px;
-      background: white;
-      border: 2px solid black;
-      color: black;
-      border-radius: 10px;
-      margin: 10px 0;
-      height: 40px;
-      line-height: 32px;
-      font-size: 18px;
-    }
-  }
-  .add {
-    ::v-deep button {
-      background: url("~@/assets/images/lec_detail/lecture_add_ico.png")
-        no-repeat 14px center / 28px 27px;
-    }
-  }
-  .share {
-    margin-left: 2%;
-    ::v-deep button {
-      background: url("~@/assets/images/lec_detail/share_ico.png") no-repeat
-        no-repeat 14px center / 28px 27px;
-    }
-  }
-}
-.course_info {
-  padding: 4.445%;
-  .course_list {
-    font-size: 2rem;
-    position: relative;
-    .all_lecture_num {
-      font-size: 14px;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      height: 21px;
-      margin: auto;
-    }
-  }
-  .ol_list {
-    // width: 48.782%;
-    margin-top: 5%;
-    .title {
-      font-size: 1.6875rem;
-    }
-    ::v-deep .item {
-      h4 {
-        font-size: 14px;
-        margin-top: 5px;
-      }
-      .subtitle {
+      .title {
         font-size: 16px;
-      }
-      .evaluate {
-        .score {
-          width: 7%;
-        }
-        .free {
-          width: calc(100% - 7% - 12px);
-        }
+        color: #333333;
       }
     }
-    .btn_wrap {
-      margin-top: 5px;
-      &:after {
-        display: block;
-        content: "";
-        clear: both;
-      }
-      .blue_btn {
-        width: 48%;
-        float: left;
-      }
-      .right_btn {
-        float: right;
-        ::v-deep button {
-          background: white;
-          color: #114fff;
-        }
-      }
-      .confirm_btn {
-        ::v-deep button {
-          background: white;
-          color: #114fff;
-        }
-      }
-    }
-  }
-}
-#lec_eval {
-  margin-top: 30px;
-  padding: 0 4.445%;
-  h2 {
-    font-size: 2rem;
-  }
-  .section_wrap {
-    margin-top: 10px;
-
-    .left_sec {
-      width: 41%;
-      text-align: center;
-      vertical-align: middle;
-      display: inline-block;
-      h3 {
-        font-size: 15px;
-      }
+    .star_rating {
+      margin: 5px 0;
       ::v-deep .vue-star-rating {
-        margin: 5px 0;
-        display: block;
+        display: unset;
         .vue-star-rating-rating-text {
-          display: none;
+          font-size: 16px;
+          color: #333333;
+          margin-left: 4px;
+          display: inline-block;
+          vertical-align: 1.5px;
         }
-      }
-      .eval_btn {
-        background: #114fff;
-        color: white;
-        border-radius: 5px;
-        font-size: 11px;
-        padding: 3px 26.95%;
       }
     }
-    .right_sec {
-      width: 59%;
-      display: inline-block;
-      vertical-align: middle;
+    .price {
       span {
-        display: inline-block;
-        vertical-align: middle;
-        img {
-          vertical-align: middle;
-          width: 50%;
+        font-weight: bold;
+      }
+      .original {
+        font-size: 14px;
+        color: #bdbdbd;
+      }
+      .final {
+        margin-left: 5px;
+        font-size: 18px;
+        color: #114fff;
+      }
+    }
+    #tag_wrap {
+      .tag_list {
+        margin-top: 5px;
+        line-height: 35px;
+        .tag {
+          color: #a4a4a4;
+          border: 2px solid #757575;
+          border-radius: 20px;
+          height: 24px;
+          padding: 0 10px;
+          display: inline-block;
+          margin-right: 0.763%;
+          font-size: 12px;
+          text-align: center;
+          line-height: 24px;
+          font-family: unset;
         }
       }
-      .line {
-        &:not(:first-child) {
-          margin-top: 1%;
-        }
-        .left_star_wrap {
-          width: 15%;
-          .left_star {
-            width: 100%;
-            .star {
-              width: 10px;
-              height: 10px;
-            }
-            .star_count {
-              font-size: 12px;
-              margin-left: 4px;
-            }
+    }
+    #subscribe {
+      .subscribe_wrap {
+        .blue_btn {
+          ::v-deep button {
+            border-radius: 10px;
+            margin: 10px 0;
+            height: 40px;
+            line-height: 32px;
+            font-size: 18px;
           }
         }
-        ::v-deep .progress_bar {
-          height: 8px;
-          position: relative;
-          width: 85%;
-          margin: 0;
+        .active_subscribe {
+          background-color: #ff114a;
+          border-color: #ff114a;
+        }
+        .total_lec {
+          font-size: 1.375rem;
+          .color {
+            color: #114fff;
+          }
+        }
+        .name {
+          font-size: 1.375rem;
+          color: #666666;
+        }
+
+        .score {
+          font-size: 1.375rem;
+          color: #333333;
+          vertical-align: middle;
+          margin-left: 2%;
+        }
+      }
+      .fixed_subs_btn {
+        position: fixed;
+        bottom: 0;
+        background: #114fff;
+        width: 100%;
+        max-width: 720px;
+        z-index: 2;
+        left: 0;
+        right: 0;
+        margin: auto;
+        .add_btn,
+        .share_btn {
+          white-space: nowrap;
+          text-indent: 100%;
+          overflow: hidden;
+          height: 64px;
+          width: 20%;
+        }
+        .purchase_btn {
+          background: transparent;
+          width: 60%;
+          font-family: "NotoSansCJKkr-Medium";
+          font-size: 20px;
+          vertical-align: middle;
+          color: #ffffff;
+          text-align: center;
+        }
+        .add_btn {
+          background: #333333
+            url("~@/assets/images/lec_detail/fixed_lecture_add_ico.png")
+            no-repeat center / 28px 27px;
+        }
+        .share_btn {
+          background: #333333
+            url("~@/assets/images/lec_detail/fixed_share_ico.png") no-repeat
+            center / 28px 27px;
+        }
+        .active_subscribe {
+          background-color: #ff114a;
+          border-color: #ff114a;
+          width: 100%;
+          font-size: 20px;
+          color: white;
+          height: 64px;
         }
       }
     }
   }
-}
+  .section2 {
+    padding: 4.445%;
+    border-bottom: 4px solid #f8f8f8;
+    .user_intro {
+      .total_lec {
+        margin-bottom: 7px;
+        display: block;
+      }
+    }
+    .name {
+      font-size: 14px;
+    }
+  }
+  .add_share {
+    .blue_btn {
+      display: inline-block;
+      width: 49%;
+
+      ::v-deep button {
+        padding-left: 20px;
+        background: white;
+        border: 2px solid black;
+        color: black;
+        border-radius: 10px;
+        margin: 10px 0;
+        height: 40px;
+        line-height: 32px;
+        font-size: 18px;
+      }
+    }
+    .add {
+      ::v-deep button {
+        background: url("~@/assets/images/lec_detail/lecture_add_ico.png")
+          no-repeat 14px center / 28px 27px;
+      }
+    }
+    .share {
+      margin-left: 2%;
+      ::v-deep button {
+        background: url("~@/assets/images/lec_detail/share_ico.png") no-repeat
+          no-repeat 14px center / 28px 27px;
+      }
+    }
+  }
+  .course_info {
+    padding: 4.445%;
+    .course_list {
+      font-size: 2rem;
+      position: relative;
+      .all_lecture_num {
+        font-size: 14px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        height: 21px;
+        margin: auto;
+      }
+    }
+    .ol_list {
+      // width: 48.782%;
+      margin-top: 5%;
+      .title {
+        font-size: 1.6875rem;
+      }
+      ::v-deep .item {
+        h4 {
+          font-size: 14px;
+          margin-top: 5px;
+        }
+        .subtitle {
+          font-size: 16px;
+        }
+        .evaluate {
+          .score {
+            width: 7%;
+          }
+          .free {
+            width: calc(100% - 7% - 12px);
+          }
+        }
+      }
+      .btn_wrap {
+        margin-top: 5px;
+        &:after {
+          display: block;
+          content: "";
+          clear: both;
+        }
+        .blue_btn {
+          width: 48%;
+          float: left;
+        }
+        .right_btn {
+          float: right;
+          ::v-deep button {
+            background: white;
+            color: #114fff;
+          }
+        }
+        .confirm_btn {
+          ::v-deep button {
+            background: white;
+            color: #114fff;
+          }
+        }
+      }
+    }
+  }
+  #lec_eval {
+    margin-top: 30px;
+    padding: 0 4.445%;
+    h2 {
+      font-size: 2rem;
+    }
+    .section_wrap {
+      margin-top: 10px;
+
+      .left_sec {
+        width: 41%;
+        text-align: center;
+        vertical-align: middle;
+        display: inline-block;
+        h3 {
+          font-size: 15px;
+        }
+        ::v-deep .vue-star-rating {
+          margin: 5px 0;
+          display: block;
+          .vue-star-rating-rating-text {
+            display: none;
+          }
+        }
+        .eval_btn {
+          background: #114fff;
+          color: white;
+          border-radius: 5px;
+          font-size: 11px;
+          padding: 3px 26.95%;
+        }
+      }
+      .right_sec {
+        width: 59%;
+        display: inline-block;
+        vertical-align: middle;
+        span {
+          display: inline-block;
+          vertical-align: middle;
+          img {
+            vertical-align: middle;
+            width: 50%;
+          }
+        }
+        .line {
+          &:not(:first-child) {
+            margin-top: 1%;
+          }
+          .left_star_wrap {
+            width: 15%;
+            .left_star {
+              width: 100%;
+              .star {
+                width: 10px;
+                height: 10px;
+              }
+              .star_count {
+                font-size: 12px;
+                margin-left: 4px;
+              }
+            }
+          }
+          ::v-deep .progress_bar {
+            height: 8px;
+            position: relative;
+            width: 85%;
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
 </style>

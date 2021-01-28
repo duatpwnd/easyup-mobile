@@ -35,18 +35,17 @@
               slot="router"
               :style="{ 'background-image': `url(${list.image_url})` }"
             >
-              <!-- <img
-                :src="list.image_url"
-                :alt="list.title"
-                :title="list.title"
-              /> -->
             </span>
             <h4 slot="teacher">{{ list.teachers }}</h4>
             <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
             <span slot="grade" class="score">{{ list.ranking }}</span>
-            <h1 class="free" slot="free" v-if="list.isfree == 'Y'">
+            <h1 class="free" slot="free" v-if="list.price.is_free">
               FREE
             </h1>
+            <span class="price" v-else slot="free">
+              <del class="original">{{ list.price.format_original }}</del>
+              <span class="final">{{ list.price.format_final }}</span>
+            </span>
           </LecItem>
         </div>
       </div>
@@ -120,9 +119,13 @@
 
               <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
               <span slot="grade" class="score">{{ list.ranking }}</span>
-              <h1 class="free" slot="free" v-if="list.isfree == 'Y'">
+              <h1 class="free" slot="free" v-if="list.price.is_free">
                 FREE
               </h1>
+              <span class="price" v-else slot="free">
+                <del class="original">{{ list.price.format_original }}</del>
+                <span class="final">{{ list.price.format_final }}</span>
+              </span>
             </LecItem>
           </swiper-slide>
         </template>
@@ -187,9 +190,13 @@
 
               <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
               <span slot="grade" class="score">{{ list.ranking }}</span>
-              <h1 class="free" slot="free" v-if="list.isfree == 'Y'">
+              <h1 class="free" slot="free" v-if="list.price.is_free">
                 FREE
               </h1>
+              <span class="price" v-else slot="free">
+                <del class="original">{{ list.price.format_original }}</del>
+                <span class="final">{{ list.price.format_final }}</span>
+              </span>
             </LecItem></swiper-slide
           >
         </template>
@@ -322,7 +329,7 @@
           color: #114fff;
           border: 1px solid #114fff;
           top: 0;
-          right: 4.445%;
+          right: 0;
           bottom: 0;
           height: 22px;
           padding: 1px 10px;

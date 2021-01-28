@@ -143,7 +143,6 @@
           self.$axios
             .post(self.$ApiUrl.mobileAPI_v1, data)
             .then((result: ResData) => {
-              console.log("자막링크:", result);
               const captionOption = {
                 kind: "captions",
                 srclang: "ko",
@@ -156,10 +155,6 @@
                 this.$refs.videoPlayer,
                 this.videoOptions,
                 function onPlayerReady() {
-                  console.log(
-                    "onPlayerReady",
-                    self.info["current_item"][0].link
-                  );
                   videojs(self.$refs.videoPlayer).src({
                     src: self.info["current_item"][0].link,
                   });
@@ -312,11 +307,11 @@
       }
     }
     ::v-deep .video-js {
-      .vjs-text-track-display  {
-        div{
-        font-size: 1.5em;
-        padding:5px;
-        border-radius: 5px;
+      .vjs-text-track-display {
+        div {
+          font-size: 1.5em;
+          padding: 5px;
+          border-radius: 5px;
         }
       }
       .vjs-big-play-button {

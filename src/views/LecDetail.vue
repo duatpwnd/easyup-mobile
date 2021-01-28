@@ -55,16 +55,10 @@
           ]"
         ></StarRating>
       </div>
-      <h2 class="free" v-if="detail.is_free == 'Y'">무료</h2>
+      <h2 class="free" v-if="detail.price.is_free">무료</h2>
       <div class="price" v-else>
-        <del class="original">{{
-          ori_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        }}</del>
-        <span class="final"
-          >{{
-            final_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}원</span
-        >
+        <del class="original">{{ detail.price.format_original }}</del>
+        <span class="final">{{ detail.price.format_final }}원</span>
       </div>
       <div id="tag_wrap">
         <slot name="title_wrap">
@@ -92,7 +86,7 @@
       <div
         class="coupon_wrap"
         @click="couponDownload()"
-        v-if="detail.is_free != 'Y'"
+        v-if="detail.price.is_free"
       >
         <span class="txt" v-if="detail.coupon.discount_type == 'price'"
           >{{ discount_price }}원 할인 쿠폰 받기</span
@@ -111,7 +105,7 @@
         <div>
           <div class="subscribe_wrap">
             <!-- 강의를 구매한경우 -->
-            <BlueBtn v-if="is_subscribe && detail.is_free != 'Y'">
+            <BlueBtn v-if="is_subscribe && detail.price.is_free">
               <button
                 ref="subs_btn"
                 class="active_subscribe"
@@ -122,16 +116,15 @@
               </button>
             </BlueBtn>
             <!-- 무료강의인경우 -->
-            <BlueBtn
-              v-else-if="detail.is_free == 'Y'"
-              @click.native="isWatch()"
-            >
+            <BlueBtn v-else-if="detail.price.is_free" @click.native="isWatch()">
               <button ref="subs_btn" slot="blue_btn">
                 구매하기
               </button>
             </BlueBtn>
             <!-- 강의 구매를 안한경우 -->
-            <BlueBtn v-else-if="is_subscribe == false && detail.is_free != 'Y'">
+            <BlueBtn
+              v-else-if="is_subscribe == false && detail.price.is_free == false"
+            >
               <button
                 ref="subs_btn"
                 slot="blue_btn"
@@ -152,7 +145,7 @@
         <div class="fixed_subs_btn" v-if="subscribe_btn">
           <!-- 강의를 구매한경우 -->
           <button
-            v-if="is_subscribe && detail.is_free != 'Y'"
+            v-if="is_subscribe && detail.price.is_free == false"
             class="active_subscribe"
             @click="video($route.query.id, detail.lp_id)"
           >
@@ -161,13 +154,15 @@
           <!-- 무료강의인경우 -->
           <button
             class="free_lecture_btn"
-            v-else-if="detail.is_free == 'Y'"
+            v-else-if="detail.price.is_free"
             @click="isWatch()"
           >
             구매하기
           </button>
           <!-- 강의 구매를 안한경우 -->
-          <div v-else-if="is_subscribe == false && detail.is_free != 'Y'">
+          <div
+            v-else-if="is_subscribe == false && detail.price.is_free == false"
+          >
             <button class="add_btn" @click="cartAdd()">강의담기</button>
             <button
               class="share_btn"
@@ -406,12 +401,6 @@
   })
   export default class LecDetail extends mixin {
     public url: string = window.document.location.href;
-    get ori_price() {
-      return this.$numberWithCommas(this.detail["price"].original);
-    }
-    get final_price() {
-      return this.$numberWithCommas(this.detail["price"].final);
-    }
     get discount_price() {
       return this.$numberWithCommas(this.detail["coupon"].discount_price);
     }
