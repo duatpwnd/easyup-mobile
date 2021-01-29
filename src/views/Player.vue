@@ -1,5 +1,5 @@
 <template>
-  <div id="youtube_player" v-if="info">
+  <div id="youtube_player" v-if="Object.keys(info).length > 0">
     <BookmarkListModal
       @bookmark_move="getPlayInfo"
       v-if="toggleStore_bookmark_list_modal.bookmark_list_modal"
@@ -88,6 +88,7 @@
     item_id?: number;
     idx?: number;
   }
+
   @Component({
     components: { BookmarkListModal, Tab1, Tab2, Video, Scorm, BookmarkModal },
     computed: {
@@ -98,15 +99,15 @@
     },
   })
   export default class Player extends mixin {
-    video_set: boolean = false;
-    info: string = "";
-    isActive: number = 0;
-    type: string = "Tab1";
-    types: { name: string; target: string }[] = [
+    video_set = false;
+    info = {};
+    isActive = 0;
+    type = "Tab1";
+    types = [
       { name: "강의 목록", target: "Tab1" },
       { name: "강의 노트", target: "Tab2" },
     ];
-    player: null = null;
+    player = null;
     videoOptions = {
       controls: true,
       autoplay: false,
@@ -133,6 +134,9 @@
       }
     }
     isVtt() {
+      interface VttData<T> {
+        data: T extends "" ? "" : { data: { srtFileLink: string } };
+      }
       const self = this;
       const data: BodyData = {
         action: "get_srt_file",
@@ -141,18 +145,15 @@
         item_id: Number(this["playerStore_current_item_id"]),
         idx: Number(this.$store.state.playerStore.current_index),
       };
-      interface ResData {
-        data: string;
-      }
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, data)
-        .then((result: ResData) => {
+        .then((result: VttData<"" | object>) => {
           console.log(result);
           const captionOption = {
             kind: "captions",
             srclang: "ko",
             label: "한국어",
-            src: result.data == "" ? "" : result.data["data"].srtFileLink,
+            src: result.data == "" ? "" : result.data.data.srtFileLink,
             default: true,
           };
 
@@ -190,6 +191,11 @@
         });
     }
     getPlayInfo<T, U>(id: T, linkType: U) {
+      interface PlayerResultedData {
+        data: {
+          data: {};
+        };
+      }
       this.video_set = false;
       const data = {
         action: "get_player_info",
@@ -201,13 +207,10 @@
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result: object) => {
+        .then((result: PlayerResultedData) => {
           console.log("플레이어 정보", result);
-          this.info = result["data"].data;
-          console.log(this.info["current_item"][0].link);
-          this.videoOptions["sources"][0].src = this.info[
-            "current_item"
-          ][0].link;
+          this.info = result.data.data;
+          this.videoOptions.sources[0].src = this.info["current_item"][0].link;
           let current_link;
           // rel 있을경우 제거해주기. 이거때문에 start 옵션이 제대로 작동안함
           // 스타트 옵션때문에 분기 처리해줘야함

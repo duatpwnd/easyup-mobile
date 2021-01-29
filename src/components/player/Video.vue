@@ -31,6 +31,9 @@
   import external_subtitle from "@/assets/js/youtube/youtube_external_subtitle.js";
   import { mapState, mapMutations } from "vuex";
   import BaseBtn from "@/components/common/BaseButton.vue";
+  interface ResultedData<T> {
+    data: T;
+  }
   interface BodyData {
     action: string;
     course_id: number;
@@ -57,6 +60,8 @@
     },
   })
   export default class Video extends Vue {
+    youtubeExternalSubtitle!: object;
+    is_srt = false;
     @Watch("current_link")
     onPropertyChanged(newValue: string, oldValue: string) {
       if (newValue != oldValue) {
@@ -64,8 +69,6 @@
         this.isSrtFile();
       }
     }
-    youtubeExternalSubtitle!: object;
-    is_srt: boolean = false;
     getFileName(contentDisposition: string): string | null {
       let fileName = contentDisposition
         .split(";")
@@ -173,13 +176,10 @@
         item_id: Number(this["playerStore_current_item_id"]),
         idx: Number(this.$store.state.playerStore.current_index),
       };
-      interface ResData {
-        data: string;
-      }
+
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, data)
-        .then((result: ResData) => {
-          console.log(result);
+        .then((result: ResultedData<string | "">) => {
           if (result.data != "") {
             // 자막파일이 있는경우
             this.srtParsing(result.data);

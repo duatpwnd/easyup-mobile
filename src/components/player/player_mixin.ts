@@ -4,7 +4,7 @@ import { Component, Vue } from "vue-property-decorator";
   computed: {
     ...mapState("toggleStore", {
       toggleStore_bookmark_modal: "bookmark_modal",
-      toggleStore_bookmark_list_modal: "bookmark_list_info"
+      toggleStore_bookmark_list_modal: "bookmark_list_info",
     }),
     ...mapState("playerStore", {
       playerStore_list: "list",
@@ -15,39 +15,44 @@ import { Component, Vue } from "vue-property-decorator";
       playerStore_nextItem: "nextItem",
       playerStore_stopTime: "stop_time",
       playerStore_checkTime: "check_time",
-      playerStore_current_link: "current_link"
-    })
+      playerStore_current_link: "current_link",
+    }),
   },
 })
 export default class PlayerCommon extends Vue {
   // 강의 변경
-  async switchItem(item_id:number, current_id:number) {
+  async switchItem(item_id: number, current_id: number) {
     if (item_id == current_id) {
       return;
     }
-    let check_time!:number;
+    let check_time!: number;
     this.$store.commit("playerStore/playerState", {
-      check_time: check_time
+      check_time: check_time,
     });
-    const data :{action:string,course_id:number,lp_id:number,item_id:number} = {
+    const data: {
+      action: string;
+      course_id: number;
+      lp_id: number;
+      item_id: number;
+    } = {
       action: "switch_item",
       course_id: Number(this.$route.query.course_id),
       lp_id: Number(this.$route.query.lp_id),
-      item_id: item_id
+      item_id: item_id,
     };
     this.$axios
       .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
-      headers: {
-        Authorization: this.$cookies.get("user_info")
-          ? "Bearer " + this.$cookies.get("user_info").access_token
-          : null
-      }
-    })
-    .then((result:object) => {
-      // 플레이어 정보 갱신
-      console.log(result);
-      this.$EventBus.$emit("switch_item", true);
-    });
+        headers: {
+          Authorization: this.$cookies.get("user_info")
+            ? "Bearer " + this.$cookies.get("user_info").access_token
+            : null,
+        },
+      })
+      .then((result: object) => {
+        // 플레이어 정보 갱신
+        console.log(result);
+        this.$EventBus.$emit("switch_item", true);
+      });
   }
   // 다음강의 아이디
   // isNextLecture() {
@@ -65,5 +70,4 @@ export default class PlayerCommon extends Vue {
   //     }
   //   });
   // },
-};
-
+}
