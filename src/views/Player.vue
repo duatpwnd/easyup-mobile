@@ -107,12 +107,10 @@
       { name: "강의 노트", target: "Tab2" },
     ];
     player: null = null;
-
     videoOptions = {
       controls: true,
       autoplay: false,
       muted: false,
-      preload: "auto",
       playbackRates: [0.5, 1, 1.5, 2],
       textTrackSettings: true,
       sources: [
@@ -123,80 +121,82 @@
       ],
     };
     @Watch("info")
-    onPropertyChanged(a: string, b: string) {
-      const self = this;
+    onPropertyChanged() {
       if (
         this.info["current_item"][0].lp_type == "document" &&
         this.info["current_item"][0].custom_type == "video"
       ) {
         this.$nextTick(() => {
-          const data: BodyData = {
-            action: "get_srt_file",
-            course_id: Number(self.$route.query.course_id),
-            lp_id: Number(self.$route.query.lp_id),
-            item_id: Number(self["playerStore_current_item_id"]),
-            idx: Number(self.$store.state.playerStore.current_index),
-          };
-          interface ResData {
-            data: string;
-          }
-          self.$axios
-            .post(self.$ApiUrl.mobileAPI_v1, data)
-            .then((result: ResData) => {
-              const captionOption = {
-                kind: "captions",
-                srclang: "ko",
-                label: "한국어",
-                src: result.data == "" ? "" : result.data["data"].srtFileLink,
-                default: true,
-              };
-
-              this.player = videojs(
-                this.$refs.videoPlayer,
-                this.videoOptions,
-                function onPlayerReady() {
-                  videojs(self.$refs.videoPlayer).src({
-                    src: self.info["current_item"][0].link,
-                  });
-                  videojs(self.$refs.videoPlayer).addRemoteTextTrack(
-                    captionOption,
-                    false
-                  );
-                  // 북마크 시간 있는지 없는지 검사
-                  if (
-                    self["playerStore_check_time"] != undefined &&
-                    self["playerStore_check_time"] != ""
-                  ) {
-                    videojs(self.$refs.videoPlayer).currentTime(
-                      self["playerStore_check_time"]
-                    );
-                    videojs(self.$refs.videoPlayer).autoplay("muted");
-                  }
-                  if (self.$route.query.linkType != undefined) {
-                    videojs(self.$refs.videoPlayer).currentTime(
-                      self["playerStore_check_time"]
-                    );
-                  }
-                }
-              );
-              // 반응형으로 바꿔줌
-              videojs(this.$refs.videoPlayer).fluid(true);
-              self.$store.commit("playerStore/playerState", {
-                video_stop_time: this.player,
-              });
-            });
+          videojs(this.$refs.videoPlayer, this.videoOptions).fluid(true);
+          this.isVtt();
         });
       }
     }
+    isVtt() {
+      const self = this;
+      const data: BodyData = {
+        action: "get_srt_file",
+        course_id: Number(this.$route.query.course_id),
+        lp_id: Number(this.$route.query.lp_id),
+        item_id: Number(this["playerStore_current_item_id"]),
+        idx: Number(this.$store.state.playerStore.current_index),
+      };
+      interface ResData {
+        data: string;
+      }
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, data)
+        .then((result: ResData) => {
+          console.log(result);
+          const captionOption = {
+            kind: "captions",
+            srclang: "ko",
+            label: "한국어",
+            src: result.data == "" ? "" : result.data["data"].srtFileLink,
+            default: true,
+          };
 
-    getPlayInfo(id: number | undefined, linkType: string | undefined) {
+          this.player = videojs(
+            this.$refs.videoPlayer,
+            this.videoOptions,
+            function onPlayerReady() {
+              videojs(self.$refs.videoPlayer).src({
+                src: self.info["current_item"][0].link,
+              });
+              videojs(self.$refs.videoPlayer).addRemoteTextTrack(
+                captionOption,
+                false
+              );
+              // 북마크 시간 있는지 없는지 검사
+              if (
+                self["playerStore_check_time"] != undefined &&
+                self["playerStore_check_time"] != ""
+              ) {
+                videojs(self.$refs.videoPlayer).currentTime(
+                  self["playerStore_check_time"]
+                );
+                videojs(self.$refs.videoPlayer).autoplay("muted");
+              }
+              if (self.$route.query.linkType != undefined) {
+                videojs(self.$refs.videoPlayer).currentTime(
+                  self["playerStore_check_time"]
+                );
+              }
+            }
+          );
+          this.$store.commit("playerStore/playerState", {
+            video_stop_time: this.player,
+          });
+        });
+    }
+    getPlayInfo<T, U>(id: T, linkType: U) {
       this.video_set = false;
       const data = {
         action: "get_player_info",
         course_id: this.$route.query.course_id,
         lp_id: this.$route.query.lp_id,
-        linkType: linkType == undefined ? null : linkType,
-        iid: id == undefined ? null : id,
+        linkType: typeof linkType === "undefined" ? null : linkType,
+        iid: typeof id === "undefined" ? null : id,
       };
       console.log(data);
       this.$axios
@@ -249,7 +249,10 @@
     }
     created() {
       if (this.$route.query.linkType != undefined) {
-        this.getPlayInfo(Number(this.$route.query.iid), "bookmark");
+        this.getPlayInfo<Number, String>(
+          (this.$route.query.iid as unknown) as Number,
+          "bookmark"
+        );
       } else {
         this.getPlayInfo(undefined, undefined);
       }

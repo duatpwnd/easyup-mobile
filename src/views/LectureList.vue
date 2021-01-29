@@ -30,7 +30,6 @@
         @click="getList(1, 'type_date', keyword)"
       ></button>
     </Search>
-
     <h2 class="total">
       전체 검색 총<span class="count">{{ category_list.total_count }}</span
       >건
@@ -119,7 +118,10 @@
             : null,
           tag: this.$route.query.tag,
         };
-        console.log(data);
+        this.order = order;
+        this.keyword = keyword;
+        this.current = num;
+
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
@@ -137,9 +139,6 @@
                 },
               })
               .catch(() => {});
-            this.order = order;
-            this.keyword = keyword;
-            this.current = num;
           });
       },
     },
