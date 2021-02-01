@@ -242,6 +242,11 @@
   import LecItem from "@/components/common/LectureItem.vue";
   // import CategoryLec from "@/components/main/MainCategory.vue";
   import Slide from "@/components/common/Slide.vue";
+  interface ResultedData {
+    data: {
+      data: {};
+    };
+  }
   @Component({
     components: {
       Slide,
@@ -295,9 +300,9 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result: object) => {
-          this.list = result["data"].data;
-          console.log(this.list);
+        .then((result: ResultedData) => {
+          console.log(result);
+          this.list = result.data.data;
         });
     }
     created() {

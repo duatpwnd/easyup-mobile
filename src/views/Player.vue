@@ -1,5 +1,5 @@
 <template>
-  <div id="youtube_player" v-if="info">
+  <div id="youtube_player" v-if="Object.keys(info).length > 0">
     <BookmarkListModal
       @bookmark_move="getPlayInfo"
       v-if="toggleStore_bookmark_list_modal.bookmark_list_modal"
@@ -88,6 +88,7 @@
     item_id?: number;
     idx?: number;
   }
+
   @Component({
     components: { BookmarkListModal, Tab1, Tab2, Video, Scorm, BookmarkModal },
     computed: {
@@ -98,21 +99,19 @@
     },
   })
   export default class Player extends mixin {
-    video_set: boolean = false;
-    info: string = "";
-    isActive: number = 0;
-    type: string = "Tab1";
-    types: { name: string; target: string }[] = [
+    video_set = false;
+    info = {};
+    isActive = 0;
+    type = "Tab1";
+    types = [
       { name: "강의 목록", target: "Tab1" },
       { name: "강의 노트", target: "Tab2" },
     ];
-    player: null = null;
-
+    player = null;
     videoOptions = {
       controls: true,
       autoplay: false,
       muted: false,
-      preload: "auto",
       playbackRates: [0.5, 1, 1.5, 2],
       textTrackSettings: true,
       sources: [
@@ -123,91 +122,95 @@
       ],
     };
     @Watch("info")
-    onPropertyChanged(a: string, b: string) {
-      const self = this;
+    onPropertyChanged() {
       if (
         this.info["current_item"][0].lp_type == "document" &&
         this.info["current_item"][0].custom_type == "video"
       ) {
         this.$nextTick(() => {
-          const data: BodyData = {
-            action: "get_srt_file",
-            course_id: Number(self.$route.query.course_id),
-            lp_id: Number(self.$route.query.lp_id),
-            item_id: Number(self["playerStore_current_item_id"]),
-            idx: Number(self.$store.state.playerStore.current_index),
-          };
-          interface ResData {
-            data: string;
-          }
-          self.$axios
-            .post(self.$ApiUrl.mobileAPI_v1, data)
-            .then((result: ResData) => {
-              const captionOption = {
-                kind: "captions",
-                srclang: "ko",
-                label: "한국어",
-                src: result.data == "" ? "" : result.data["data"].srtFileLink,
-                default: true,
-              };
-
-              this.player = videojs(
-                this.$refs.videoPlayer,
-                this.videoOptions,
-                function onPlayerReady() {
-                  videojs(self.$refs.videoPlayer).src({
-                    src: self.info["current_item"][0].link,
-                  });
-                  videojs(self.$refs.videoPlayer).addRemoteTextTrack(
-                    captionOption,
-                    false
-                  );
-                  // 북마크 시간 있는지 없는지 검사
-                  if (
-                    self["playerStore_check_time"] != undefined &&
-                    self["playerStore_check_time"] != ""
-                  ) {
-                    videojs(self.$refs.videoPlayer).currentTime(
-                      self["playerStore_check_time"]
-                    );
-                    videojs(self.$refs.videoPlayer).autoplay("muted");
-                  }
-                  if (self.$route.query.linkType != undefined) {
-                    videojs(self.$refs.videoPlayer).currentTime(
-                      self["playerStore_check_time"]
-                    );
-                  }
-                }
-              );
-              // 반응형으로 바꿔줌
-              videojs(this.$refs.videoPlayer).fluid(true);
-              self.$store.commit("playerStore/playerState", {
-                video_stop_time: this.player,
-              });
-            });
+          videojs(this.$refs.videoPlayer, this.videoOptions).fluid(true);
+          this.isVtt();
         });
       }
     }
+    isVtt() {
+      interface VttData<T> {
+        data: T extends "" ? "" : { data: { srtFileLink: string } };
+      }
+      const self = this;
+      const data: BodyData = {
+        action: "get_srt_file",
+        course_id: Number(this.$route.query.course_id),
+        lp_id: Number(this.$route.query.lp_id),
+        item_id: Number(this["playerStore_current_item_id"]),
+        idx: Number(this.$store.state.playerStore.current_index),
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, data)
+        .then((result: VttData<"" | object>) => {
+          console.log(result);
+          const captionOption = {
+            kind: "captions",
+            srclang: "ko",
+            label: "한국어",
+            src: result.data == "" ? "" : result.data.data.srtFileLink,
+            default: true,
+          };
 
-    getPlayInfo(id: number | undefined, linkType: string | undefined) {
+          this.player = videojs(
+            this.$refs.videoPlayer,
+            this.videoOptions,
+            function onPlayerReady() {
+              videojs(self.$refs.videoPlayer).src({
+                src: self.info["current_item"][0].link,
+              });
+              videojs(self.$refs.videoPlayer).addRemoteTextTrack(
+                captionOption,
+                false
+              );
+              // 북마크 시간 있는지 없는지 검사
+              if (
+                self["playerStore_check_time"] != undefined &&
+                self["playerStore_check_time"] != ""
+              ) {
+                videojs(self.$refs.videoPlayer).currentTime(
+                  self["playerStore_check_time"]
+                );
+                videojs(self.$refs.videoPlayer).autoplay("muted");
+              }
+              if (self.$route.query.linkType != undefined) {
+                videojs(self.$refs.videoPlayer).currentTime(
+                  self["playerStore_check_time"]
+                );
+              }
+            }
+          );
+          this.$store.commit("playerStore/playerState", {
+            video_stop_time: this.player,
+          });
+        });
+    }
+    getPlayInfo<T, U>(id: T, linkType: U) {
+      interface PlayerResultedData {
+        data: {
+          data: {};
+        };
+      }
       this.video_set = false;
       const data = {
         action: "get_player_info",
         course_id: this.$route.query.course_id,
         lp_id: this.$route.query.lp_id,
-        linkType: linkType == undefined ? null : linkType,
-        iid: id == undefined ? null : id,
+        linkType: typeof linkType === "undefined" ? null : linkType,
+        iid: typeof id === "undefined" ? null : id,
       };
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result: object) => {
+        .then((result: PlayerResultedData) => {
           console.log("플레이어 정보", result);
-          this.info = result["data"].data;
-          console.log(this.info["current_item"][0].link);
-          this.videoOptions["sources"][0].src = this.info[
-            "current_item"
-          ][0].link;
+          this.info = result.data.data;
+          this.videoOptions.sources[0].src = this.info["current_item"][0].link;
           let current_link;
           // rel 있을경우 제거해주기. 이거때문에 start 옵션이 제대로 작동안함
           // 스타트 옵션때문에 분기 처리해줘야함
@@ -249,7 +252,10 @@
     }
     created() {
       if (this.$route.query.linkType != undefined) {
-        this.getPlayInfo(Number(this.$route.query.iid), "bookmark");
+        this.getPlayInfo<Number, String>(
+          (this.$route.query.iid as unknown) as Number,
+          "bookmark"
+        );
       } else {
         this.getPlayInfo(undefined, undefined);
       }

@@ -164,11 +164,11 @@
   export default class CommentWrap extends Vue {
     @Prop({ required: true, type: Object }) private action!: Object;
     @Prop({ required: true, type: Boolean }) private isSubscribe!: Boolean;
-    private active: boolean = false;
-    private contents: string = "";
-    private id: string = ""; // 리뷰아이디
-    private comment: string = "";
-    private view: number = 4;
+    private active = false;
+    private contents = "";
+    private id = ""; // 리뷰아이디
+    private comment = "";
+    private view = 4;
     private toggle(modify: string): void {
       if (
         event!["path"][2].nextElementSibling.nextElementSibling.style.display ==
