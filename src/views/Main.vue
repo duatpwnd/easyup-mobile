@@ -167,7 +167,7 @@
     <!-- 번역강의 :: E -->
 
     <!-- 카테고리별강의 :: S -->
-    <div class="section category_section">
+    <!-- <div class="section category_section">
       <CategoryLec></CategoryLec>
       <div class="notice_wrap">
         <span class="notice_title">공지사항</span>
@@ -183,18 +183,18 @@
           >{{ list.recent_notice.title }}</router-link
         >
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
   import LecItem from "@/components/common/LectureItem.vue";
-  import CategoryLec from "@/components/main/MainCategory.vue";
+  // import CategoryLec from "@/components/main/MainCategory.vue";
   import Slide from "@/components/common/Slide.vue";
   export default {
     components: {
       Slide,
       LecItem,
-      CategoryLec,
+      // CategoryLec,
     },
     data() {
       return {
