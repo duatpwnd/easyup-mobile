@@ -240,13 +240,13 @@
 <script lang="ts">
   import { Component, Prop, Vue } from "vue-property-decorator";
   import LecItem from "@/components/common/LectureItem.vue";
-  import CategoryLec from "@/components/main/MainCategory.vue";
+  // import CategoryLec from "@/components/main/MainCategory.vue";
   import Slide from "@/components/common/Slide.vue";
   @Component({
     components: {
       Slide,
       LecItem,
-      CategoryLec,
+      // CategoryLec,
     },
   })
   export default class Main extends Vue {
