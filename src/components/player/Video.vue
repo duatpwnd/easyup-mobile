@@ -82,7 +82,7 @@
         });
       return fileName[0] ? fileName[0] : null;
     }
-    download(item_id: Number) {
+    download(item_id: Number): void {
       const data: BodyData = {
         action: "download_lecture_data",
         course_id: Number(this.$route.query.course_id),
@@ -136,7 +136,7 @@
       }
     }
     // 자막파일 파싱
-    srtParsing(link: string | null[]) {
+    srtParsing<T>(link: T) {
       if (typeof link === "string" && link.length > 0) {
         const subtitles: {
           start: number;
@@ -180,6 +180,7 @@
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, data)
         .then((result: ResultedData<string | "">) => {
+          console.log(result);
           if (result.data != "") {
             // 자막파일이 있는경우
             this.srtParsing(result.data);
