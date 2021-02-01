@@ -28,7 +28,10 @@
     <router-view></router-view>
   </div>
 </template>
-<script></script>
+<script lang="ts">
+  import { Component, Watch, Vue } from "vue-property-decorator";
+  export default class DataShare extends Vue {}
+</script>
 <style scoped lang="scss">
   .file_wrap {
     margin-top: 2%;

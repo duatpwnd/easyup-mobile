@@ -1,5 +1,5 @@
 <template>
-  <div id="lec_detail" v-if="detail">
+  <div id="lec_detail" v-if="Object.keys(detail).length > 0">
     <ConfirmModal
       @ok="video($route.query.id, detail.lp_id)"
       v-if="toggleStore_confirmModal"
@@ -55,16 +55,10 @@
           ]"
         ></StarRating>
       </div>
-      <h2 class="free" v-if="detail.is_free == 'Y'">무료</h2>
+      <h2 class="free" v-if="detail.price.is_free">무료</h2>
       <div class="price" v-else>
-        <del class="original">{{
-          ori_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        }}</del>
-        <span class="final"
-          >{{
-            final_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}원</span
-        >
+        <del class="original">{{ detail.price.format_original }}</del>
+        <span class="final">{{ detail.price.format_final }}원</span>
       </div>
       <div id="tag_wrap">
         <slot name="title_wrap">
@@ -92,7 +86,7 @@
       <div
         class="coupon_wrap"
         @click="couponDownload()"
-        v-if="detail.is_free != 'Y'"
+        v-if="detail.price.is_free"
       >
         <span class="txt" v-if="detail.coupon.discount_type == 'price'"
           >{{ discount_price }}원 할인 쿠폰 받기</span
@@ -111,7 +105,7 @@
         <div>
           <div class="subscribe_wrap">
             <!-- 강의를 구매한경우 -->
-            <BlueBtn v-if="is_subscribe && detail.is_free != 'Y'">
+            <BlueBtn v-if="is_subscribe && detail.price.is_free">
               <button
                 ref="subs_btn"
                 class="active_subscribe"
@@ -122,16 +116,15 @@
               </button>
             </BlueBtn>
             <!-- 무료강의인경우 -->
-            <BlueBtn
-              v-else-if="detail.is_free == 'Y'"
-              @click.native="isWatch()"
-            >
+            <BlueBtn v-else-if="detail.price.is_free" @click.native="isWatch()">
               <button ref="subs_btn" slot="blue_btn">
                 구매하기
               </button>
             </BlueBtn>
             <!-- 강의 구매를 안한경우 -->
-            <BlueBtn v-else-if="is_subscribe == false && detail.is_free != 'Y'">
+            <BlueBtn
+              v-else-if="is_subscribe == false && detail.price.is_free == false"
+            >
               <button
                 ref="subs_btn"
                 slot="blue_btn"
@@ -152,7 +145,7 @@
         <div class="fixed_subs_btn" v-if="subscribe_btn">
           <!-- 강의를 구매한경우 -->
           <button
-            v-if="is_subscribe && detail.is_free != 'Y'"
+            v-if="is_subscribe && detail.price.is_free == false"
             class="active_subscribe"
             @click="video($route.query.id, detail.lp_id)"
           >
@@ -161,13 +154,15 @@
           <!-- 무료강의인경우 -->
           <button
             class="free_lecture_btn"
-            v-else-if="detail.is_free == 'Y'"
+            v-else-if="detail.price.is_free"
             @click="isWatch()"
           >
             구매하기
           </button>
           <!-- 강의 구매를 안한경우 -->
-          <div v-else-if="is_subscribe == false && detail.is_free != 'Y'">
+          <div
+            v-else-if="is_subscribe == false && detail.price.is_free == false"
+          >
             <button class="add_btn" @click="cartAdd()">강의담기</button>
             <button
               class="share_btn"
@@ -375,17 +370,17 @@
     ></CommentWrap>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Component, Prop, Vue } from "vue-property-decorator";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import StarScoreModal from "@/components/lecture_detail/StarScoreModal.vue";
-  import CommentWrap from "@/components/lecture_detail/CommentWrap";
+  import CommentWrap from "@/components/lecture_detail/CommentWrap.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import StarRating from "vue-star-rating";
   import ProgressBar from "@/components/common/ProgressBar.vue";
-  import mixin from "@/views/mixins/lec_course_detail.js";
+  import mixin from "@/views/mixins/lec_course_detail.ts";
   import { mapState, mapMutations } from "vuex";
-  export default {
-    mixins: [mixin],
+  @Component({
     components: {
       ConfirmModal,
       StarScoreModal,
@@ -395,18 +390,6 @@
       CommentWrap,
     },
     computed: {
-      ori_price() {
-        return this.$numberWithCommas(this.detail.price.original);
-      },
-      final_price() {
-        return this.$numberWithCommas(this.detail.price.final);
-      },
-      discount_price() {
-        return this.$numberWithCommas(this.detail.coupon.discount_price);
-      },
-      quantity() {
-        return this.$numberWithCommas(this.detail.coupon.quantity);
-      },
       ...mapState("toggleStore", {
         toggleStore_score_info: "score_info",
         toggleStore_confirmModal: "confirm_modal",
@@ -415,74 +398,82 @@
         userStore_userinfo: "userinfo",
       }),
     },
-    data() {
-      return {
-        url: window.document.location.href,
+  })
+  export default class LecDetail extends mixin {
+    public url: string = window.document.location.href;
+    get discount_price() {
+      return this.$numberWithCommas(this.detail["coupon"].discount_price);
+    }
+    get quantity() {
+      return this.$numberWithCommas(this.detail["coupon"].quantity);
+    }
+    isWatch() {
+      this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
+    }
+    // 쿠폰다운
+    couponDownload() {
+      const data: { action: string; course_id: number; c_id: number } = {
+        action: "download_coupon",
+        course_id: (this.$route.query.id as unknown) as number,
+        c_id: (this.detail["coupon"].coupon_id as unknown) as number,
       };
-    },
-    methods: {
-      isWatch() {
-        this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
-      },
-      // 쿠폰다운
-      couponDownload() {
-        const data = {
-          action: "download_coupon",
-          course_id: this.$route.query.id,
-          c_id: this.detail.coupon.coupon_id,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
-          });
-      },
-      video(course_id, lp_id) {
-        this.$router.push({
-          path: "/play",
-          query: {
-            course_id: course_id,
-            lp_id: lp_id,
-          },
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: any) => {
+          console.log(result);
+          this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
         });
-      },
-      // 강의평가 모달
-      scoreModal() {
-        this.$store.commit("toggleStore/scoreToggle", {
-          score_modal: true,
-          score: 0,
-          score_contents: "",
-        });
-      },
+    }
+    video(course_id: number, lp_id: number) {
+      console.log(typeof course_id, lp_id);
+      this.$router.push({
+        path: "/play",
+        query: {
+          course_id: Number(course_id).toFixed(0),
+          lp_id: Number(lp_id).toFixed(0),
+        },
+      });
+    }
+    // 강의평가 모달
+    scoreModal() {
+      const obj: {
+        score_modal: boolean;
+        score: number;
+        score_contents: string;
+      } = {
+        score_modal: true,
+        score: 0,
+        score_contents: "",
+      };
+      this.$store.commit("toggleStore/scoreToggle", obj);
+    }
 
-      // 강의 상세 조회
-      async getLectureDetail() {
-        const data = {
-          action: "get_course_info",
-          course_id: this.$route.query.id,
-        };
-        await this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.detail = result.data.data;
-          });
-      },
-    },
+    // 강의 상세 조회
+    async getLectureDetail() {
+      const data: { action: string; course_id: number } = {
+        action: "get_course_info",
+        course_id: (this.$route.query.id as unknown) as number,
+      };
+      await this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: any) => {
+          console.log(result);
+          this.detail = result.data.data;
+        });
+    }
+
     mounted() {
       this.$EventBus.$on("commentReload", () => {
         this.getLectureDetail();
       });
-    },
+    }
     created() {
       if (this.$cookies.get("user_info") != null) {
         this.isSubscribe();
       }
       this.getLectureDetail();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .update_noti {

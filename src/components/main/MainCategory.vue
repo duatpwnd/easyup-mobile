@@ -13,8 +13,8 @@
             action: 'get_course_list',
             keyword: '',
             pageCurrent: 1,
-            order: 'type_date',
-          },
+            order: 'type_date'
+          }
         }"
       >
         <img
@@ -36,8 +36,8 @@
             action: 'get_course_list',
             keyword: '',
             pageCurrent: 1,
-            order: 'type_date',
-          },
+            order: 'type_date'
+          }
         }"
       >
         <img
@@ -59,8 +59,8 @@
             action: 'get_course_list',
             pageCurrent: 1,
             keyword: '',
-            order: 'type_date',
-          },
+            order: 'type_date'
+          }
         }"
       >
         <img
@@ -82,8 +82,8 @@
             action: 'get_course_list',
             keyword: '',
             pageCurrent: 1,
-            order: 'type_date',
-          },
+            order: 'type_date'
+          }
         }"
       >
         <img
@@ -99,58 +99,58 @@
   </div>
 </template>
 <script>
-  export default {
-    components: {},
-  };
+export default {
+  components: {}
+};
 </script>
 <style scoped lang="scss">
-  #category_lec {
-    margin-top: 24px;
-    h2 {
-      font-size: 2rem;
+#category_lec {
+  margin-top: 24px;
+  h2 {
+    font-size: 2rem;
+    position: relative;
+  }
+  h3 {
+    font-size: 10px;
+    color: #333333;
+    white-space: pre-wrap;
+    position: absolute;
+    top: 35px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    letter-spacing: -1px;
+  }
+  p {
+    margin-top: 5px;
+    font-size: 1.125rem;
+    color: #999999;
+  }
+  .category_list {
+    margin-top: 8px;
+
+    a {
+      border: 1px solid #666666;
+      vertical-align: middle;
+      text-align: center;
+      display: inline-block;
+      width: 23.17%;
+      height: 60px;
       position: relative;
-    }
-    h3 {
-      font-size: 10px;
-      color: #333333;
-      white-space: pre-wrap;
-      position: absolute;
-      top: 35px;
-      left: 0;
-      right: 0;
-      margin: auto;
-      letter-spacing: -1px;
-    }
-    p {
-      margin-top: 5px;
-      font-size: 1.125rem;
-      color: #999999;
-    }
-    .category_list {
-      margin-top: 8px;
+      box-sizing: border-box;
+      &:not(:last-child) {
+        margin-right: 2%;
+      }
 
-      a {
-        border: 1px solid #666666;
-        vertical-align: middle;
-        text-align: center;
-        display: inline-block;
-        width: 23.17%;
-        height: 60px;
-        position: relative;
-        box-sizing: border-box;
-        &:not(:last-child) {
-          margin-right: 2%;
-        }
-
-        img {
-          position: absolute;
-          width: unset;
-          top: 15px;
-          left: 0;
-          right: 0;
-          margin: auto;
-        }
+      img {
+        position: absolute;
+        width: unset;
+        top: 15px;
+        left: 0;
+        right: 0;
+        margin: auto;
       }
     }
   }
+}
 </style>

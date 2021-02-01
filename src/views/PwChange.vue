@@ -28,77 +28,77 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/BaseButton.vue";
+import BlueBtn from "@/components/common/BaseButton.vue";
 
-  export default {
-    components: { BlueBtn },
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+export default {
+  components: { BlueBtn },
+  data() {
+    return {};
+  },
+  methods: {}
+};
 </script>
 <style scoped lang="scss">
-  #signup {
-    padding: 4.445%;
-    h2 {
-      font-size: 2rem;
-      color: #333333;
+#signup {
+  padding: 4.445%;
+  h2 {
+    font-size: 2rem;
+    color: #333333;
+  }
+  .form {
+    margin-top: 4%;
+
+    .blue_btn {
+      margin-top: 5%;
+      width: calc(100% - 35%);
+      float: right;
+      ::v-deep button {
+        width: 70%;
+      }
     }
-    .form {
-      margin-top: 4%;
+    .row {
+      margin-top: 2%;
+      clear: both;
 
-      .blue_btn {
-        margin-top: 5%;
-        width: calc(100% - 35%);
-        float: right;
-        ::v-deep button {
-          width: 70%;
-        }
-      }
-      .row {
-        margin-top: 2%;
-        clear: both;
-
-        input {
-          font-size: 1.5rem;
-          font-family: "NotoSansCJKkr-Regular";
-          width: calc(100% - 35%);
-          box-sizing: border-box;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          outline: none;
-          padding: 1%;
-        }
-
-        .dt {
-          width: 35%;
-          display: inline-block;
-          font-size: 1.5rem;
-          font-family: "NotoSansCJKkr-Regular";
-          .required {
-            color: #114fff;
-          }
-        }
-      }
-      .last_row {
-        width: calc(100% - 35%);
-        position: relative;
-        float: right;
-        color: #333333;
-        margin: 2% 0;
-        font-size: 1.125rem;
+      input {
+        font-size: 1.5rem;
         font-family: "NotoSansCJKkr-Regular";
-        &:after {
-          display: block;
-          content: "";
-          clear: both;
-        }
-        .timer {
+        width: calc(100% - 35%);
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+        padding: 1%;
+      }
+
+      .dt {
+        width: 35%;
+        display: inline-block;
+        font-size: 1.5rem;
+        font-family: "NotoSansCJKkr-Regular";
+        .required {
           color: #114fff;
-          margin-left: 5%;
         }
+      }
+    }
+    .last_row {
+      width: calc(100% - 35%);
+      position: relative;
+      float: right;
+      color: #333333;
+      margin: 2% 0;
+      font-size: 1.125rem;
+      font-family: "NotoSansCJKkr-Regular";
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
+      }
+      .timer {
+        color: #114fff;
+        margin-left: 5%;
       }
     }
   }
+}
 </style>

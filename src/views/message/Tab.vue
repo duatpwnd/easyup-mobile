@@ -92,192 +92,192 @@
   </div>
 </template>
 <script>
-  import Pagination from "@/components/common/Pagination.vue";
-  import CheckBox from "@/components/common/BaseCheckBox.vue";
-  import BoardTitle from "@/components/common/BoardTitle.vue";
-  import BoardList from "@/components/common/BoardList.vue";
-  import Search from "@/components/common/Search.vue";
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  import ConfirmModal from "@/components/common/ConfirmModal.vue";
-  import { mapState, mapMutations } from "vuex";
+import Pagination from "@/components/common/Pagination.vue";
+import CheckBox from "@/components/common/BaseCheckBox.vue";
+import BoardTitle from "@/components/common/BoardTitle.vue";
+import BoardList from "@/components/common/BoardList.vue";
+import Search from "@/components/common/Search.vue";
+import BlueBtn from "@/components/common/BaseButton.vue";
+import ConfirmModal from "@/components/common/ConfirmModal.vue";
+import { mapState, mapMutations } from "vuex";
 
-  export default {
-    components: {
-      Pagination,
-      ConfirmModal,
-      CheckBox,
-      BoardList,
-      BoardTitle,
-      BlueBtn,
-      Search,
+export default {
+  components: {
+    Pagination,
+    ConfirmModal,
+    CheckBox,
+    BoardList,
+    BoardTitle,
+    BlueBtn,
+    Search
+  },
+  computed: {
+    ...mapState("toggleStore", {
+      toggleStore_confirmModal: "confirm_modal"
+    })
+  },
+  data() {
+    return {
+      list: "",
+      keyword: "",
+      current: "",
+      checked_list: [],
+      allCheck: false
+    };
+  },
+  methods: {
+    all_check() {
+      this.allCheck = !this.allCheck;
+      if (this.allCheck) {
+        console.log(this.list.list);
+        this.list.list.forEach((el, index) => {
+          this.checked_list.push(el.id);
+        });
+      } else {
+        this.checked_list = [];
+      }
     },
-    computed: {
-      ...mapState("toggleStore", {
-        toggleStore_confirmModal: "confirm_modal",
-      }),
+    // 부분체크
+    partial_check() {
+      if (this.list.list.length != this.checked_list.length) {
+        this.allCheck = false;
+      } else {
+        this.allCheck = true;
+      }
     },
-    data() {
-      return {
-        list: "",
-        keyword: "",
-        current: "",
-        checked_list: [],
-        allCheck: false,
+    goToPath(id) {
+      this.$router
+        .push({
+          path: "/msg/read",
+          query: {
+            type: this.$route.name,
+            id: id
+          }
+        })
+        .catch(() => {});
+    },
+    confirm() {
+      if (this.checked_list.length == 0) {
+        this.$noticeMessage("삭제할 메시지를 선택해주세요.");
+      } else {
+        this.$confirmMessage("삭제하시겠습니까?");
+      }
+    },
+    deleteMessage(type) {
+      const data = {
+        action: "delete_message",
+        type: type,
+        id: this.checked_list
       };
-    },
-    methods: {
-      all_check() {
-        this.allCheck = !this.allCheck;
-        if (this.allCheck) {
-          console.log(this.list.list);
-          this.list.list.forEach((el, index) => {
-            this.checked_list.push(el.id);
-          });
-        } else {
-          this.checked_list = [];
-        }
-      },
-      // 부분체크
-      partial_check() {
-        if (this.list.list.length != this.checked_list.length) {
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log("메시지", result);
+          this.getList(type, 1, "");
           this.allCheck = false;
-        } else {
-          this.allCheck = true;
-        }
-      },
-      goToPath(id) {
-        this.$router
-          .push({
-            path: "/msg/read",
-            query: {
-              type: this.$route.name,
-              id: id,
-            },
-          })
-          .catch(() => {});
-      },
-      confirm() {
-        if (this.checked_list.length == 0) {
-          this.$noticeMessage("삭제할 메시지를 선택해주세요.");
-        } else {
-          this.$confirmMessage("삭제하시겠습니까?");
-        }
-      },
-      deleteMessage(type) {
-        const data = {
-          action: "delete_message",
-          type: type,
-          id: this.checked_list,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("메시지", result);
-            this.getList(type, 1, "");
-            this.allCheck = false;
-          });
-      },
-      getList(type, num, keyword) {
-        const data = {
-          action: "get_message_list",
-          type: type,
-          current: num, //필수
-          keyword: keyword, //옵션
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("메시지", result);
-            this.list = result.data.data;
-            this.$router
-              .push({
-                query: {
-                  pageCurrent: num,
-                  keyword: keyword,
-                },
-              })
-              .catch(() => {});
-            this.keyword = keyword;
-            this.current = num;
-          });
-      },
+        });
     },
-    watch: {
-      $route(to, from) {
-        this.getList(
-          to.name,
-          this.$route.query.pageCurrent,
-          this.$route.query.keyword
-        );
-      },
-    },
-    created() {
-      console.log(this.$route.name);
+    getList(type, num, keyword) {
+      const data = {
+        action: "get_message_list",
+        type: type,
+        current: num, //필수
+        keyword: keyword //옵션
+      };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log("메시지", result);
+          this.list = result.data.data;
+          this.$router
+            .push({
+              query: {
+                pageCurrent: num,
+                keyword: keyword
+              }
+            })
+            .catch(() => {});
+          this.keyword = keyword;
+          this.current = num;
+        });
+    }
+  },
+  watch: {
+    $route(to, from) {
       this.getList(
-        this.$route.name,
+        to.name,
         this.$route.query.pageCurrent,
         this.$route.query.keyword
       );
-    },
-  };
+    }
+  },
+  created() {
+    console.log(this.$route.name);
+    this.getList(
+      this.$route.name,
+      this.$route.query.pageCurrent,
+      this.$route.query.keyword
+    );
+  }
+};
 </script>
 <style scoped lang="scss">
-  .tab1 {
-    padding: 4.445%;
-    padding-top: 0;
-    .no_result {
-      text-align: center;
-      font-size: 16px;
-      padding: 15px;
+.tab1 {
+  padding: 4.445%;
+  padding-top: 0;
+  .no_result {
+    text-align: center;
+    font-size: 16px;
+    padding: 15px;
+  }
+  .search {
+    .search_contents {
+      width: 100%;
+      margin-left: 0;
     }
-    .search {
-      .search_contents {
-        width: 100%;
-        margin-left: 0;
-      }
+  }
+  .row {
+    &:nth-child(odd) {
+      background: #f8f8f8;
     }
-    .row {
-      &:nth-child(odd) {
-        background: #f8f8f8;
-      }
+  }
+  .btn_wrap {
+    &:after {
+      display: block;
+      content: "";
+      clear: both;
     }
-    .btn_wrap {
-      &:after {
-        display: block;
-        content: "";
-        clear: both;
-      }
-      .blue_btn {
-        width: 48%;
-      }
-      .left {
-        float: left;
-      }
-      .right {
-        float: right;
-        button {
-          background: white;
-          color: #114fff;
-        }
-      }
+    .blue_btn {
+      width: 48%;
     }
-
-    .search {
-      margin: 2% 0;
+    .left {
+      float: left;
     }
-    .list_wrap {
-      .td {
-        padding-left: 9%;
-        width: 100%;
-      }
-      .not_read {
-        font-weight: 100;
-      }
-      .read {
-        font-weight: bold;
+    .right {
+      float: right;
+      button {
+        background: white;
+        color: #114fff;
       }
     }
   }
+
+  .search {
+    margin: 2% 0;
+  }
+  .list_wrap {
+    .td {
+      padding-left: 9%;
+      width: 100%;
+    }
+    .not_read {
+      font-weight: 100;
+    }
+    .read {
+      font-weight: bold;
+    }
+  }
+}
 </style>

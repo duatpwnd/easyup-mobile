@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="message_view">
     <div v-if="$route.name != 'newMessage' && $route.name != 'msgRead'">
       <router-link
         class="tab"
@@ -7,24 +7,24 @@
           path: '/msg/receivedList',
           query: {
             pageCurrent: 1,
-            keyword: '',
-          },
+            keyword: ''
+          }
         }"
         ><span class="active_bar"></span>수신
       </router-link>
       <router-link
         :class="[
           {
-            'router-link-active': $route.path.indexOf('/msg/read') >= 0,
+            'router-link-active': $route.path.indexOf('/msg/read') >= 0
           },
-          'tab',
+          'tab'
         ]"
         :to="{
           path: '/msg/sentList',
           query: {
             pageCurrent: 1,
-            keyword: '',
-          },
+            keyword: ''
+          }
         }"
         ><span class="active_bar"></span>발신</router-link
       >
@@ -33,15 +33,17 @@
   </div>
 </template>
 <script>
-  export default {
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+export default {
+  components: {},
+  data() {
+    return {};
+  },
+  methods: {}
+};
 </script>
 <style scoped lang="scss">
+.message_view{
+  padding-bottom: 65px;
   .tab {
     font-size: 2rem;
     font-weight: 600;
@@ -68,4 +70,5 @@
       background: #114fff;
     }
   }
+}
 </style>

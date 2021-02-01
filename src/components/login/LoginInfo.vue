@@ -24,12 +24,13 @@
                 action: 'get_session_list',
                 pageCurrent: 1,
                 order: 'type_date',
-                keyword: '',
-              },
+                keyword: ''
+              }
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask:false
           });
         "
       >
@@ -44,12 +45,13 @@
               path: '/techBlog',
               query: {
                 pageCurrent: 1,
-                keyword: '',
-              },
+                keyword: ''
+              }
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask:false
           });
         "
       >
@@ -60,6 +62,7 @@
           $router.push('/studentClaasRoom').catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask:false
           });
         "
         class="lnb"
@@ -75,12 +78,13 @@
               path: '/uniJob',
               query: {
                 pageCurrent: 1,
-                keyword: '',
-              },
+                keyword: ''
+              }
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask:false
           });
         "
         class="lnb"
@@ -92,11 +96,12 @@
         @click="
           $router
             .push({
-              path: '/profileModify',
+              path: '/profileModify'
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask:false
           });
         "
       >
@@ -111,18 +116,20 @@
               path: '/help/notice',
               query: {
                 pageCurrent: 1,
-                keyword: '',
-              },
+                keyword: ''
+              }
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask:false
           });
         "
       >
         공지사항
       </button>
       <button
+        class="faq_btn"
         @click="
           $router
             .push({
@@ -130,12 +137,13 @@
               query: {
                 category: 'all',
                 current: 1,
-                keyword: '',
-              },
+                keyword: ''
+              }
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask:false
           });
         "
       >
@@ -146,6 +154,7 @@
           $router.push('/help/qna').catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask:false
           });
         "
       >
@@ -162,115 +171,125 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
-  export default {
-    components: {
-      BlueBtn,
+import BlueBtn from "@/components/common/BaseButton.vue";
+import { mapState, mapMutations } from "vuex";
+export default {
+  components: {
+    BlueBtn
+  },
+  data() {
+    return {
+      userid: "",
+      userpw: "",
+      env: ""
+    };
+  },
+  computed: {
+    ...mapState("toggleStore", {
+      toggleStore_loginModal: "login_modal"
+    }),
+    ...mapState("userStore", {
+      userStore_userinfo: "userinfo"
+    })
+  },
+  methods: {
+    logout() {
+      console.log("로그아웃호출");
+      this.$logOut();
     },
-    data() {
-      return {
-        userid: "",
-        userpw: "",
-        env: "",
-      };
+    goToPath(url, obj) {
+      this.$router.push(url).catch(() => {});
+      this.$store.commit("toggleStore/Toggle", obj);
     },
-    computed: {
-      ...mapState("toggleStore", {
-        toggleStore_loginModal: "login_modal",
-      }),
-      ...mapState("userStore", {
-        userStore_userinfo: "userinfo",
-      }),
-    },
-    methods: {
-      logout() {
-        console.log("로그아웃호출");
-        this.$logOut();
-      },
-      goToPath(url, obj) {
-        this.$router.push(url).catch(() => {});
-        this.$store.commit("toggleStore/Toggle", obj);
-      },
 
-      goToLecture() {
-        this.$EventBus.$emit("GoToLecture", true);
-      },
-    },
-    mounted() {
-      this.env = process.env.NODE_ENV;
-    },
-  };
+    goToLecture() {
+      this.$EventBus.$emit("GoToLecture", true);
+    }
+  },
+  mounted() {
+    this.env = process.env.NODE_ENV;
+  }
+};
 </script>
 <style scoped lang="scss">
-  .blue_btn {
-    ::v-deep button {
+.blue_btn {
+  ::v-deep button {
+    font-size: 1.5rem;
+    height: 40px;
+    line-height: 32px;
+  }
+}
+.menu_modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 72.222%;
+  box-sizing: border-box;
+  background: #f8f8f8;
+  height: 100%;
+  .profile {
+    padding: 4.445%;
+    background: white;
+    text-align: center;
+    .profile_ico {
+      width: 33.773%;
+      display: inline-block;
+      border-radius: 100%;
+      overflow: hidden;
+    }
+    h2 {
+      margin-top: 6%;
+      font-size: 2rem;
+    }
+    h3 {
+      font-size: 1.25rem;
+      color: #999999;
+    }
+  }
+  .lnb_menu {
+    background: white;
+    margin-top: 2%;
+    padding: 4.445%;
+    .lnb {
+      text-align: left;
+      width: 100%;
+      margin-top: 5px;
       font-size: 1.5rem;
-      height: 40px;
-      line-height: 32px;
+      font-family: "NotoSansCJKkr-Regular";
+      background: url("~@/assets/images/common/right_arrow.png") no-repeat right
+        center / 3%;
+    }
+    .last_lnb {
+      @extend .lnb;
+      margin-top: 4%;
     }
   }
-  .menu_modal {
+  .support {
+    padding-bottom: 0;
+    background: white;
+    margin-top: 2%;
+    padding: 4.445%;
+    button {
+      width:100%;
+      text-align: left;
+      font-size: 1.5rem;
+      display: block;
+      background: url("~@/assets/images/common/right_arrow.png") no-repeat right
+        center / 3%;
+    }
+    .faq_btn{
+      margin:4% 0;
+    }
+  }
+  .logout {
+    background: white;
+    padding: 4.445%;
+    padding-top: 0;
     position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 3;
-    width: 72.222%;
+    bottom: 0;
+    width: 100%;
     box-sizing: border-box;
-    background: #f8f8f8;
-    .profile {
-      padding: 4.445%;
-      background: white;
-      text-align: center;
-      .profile_ico {
-        width: 33.773%;
-        display: inline-block;
-        border-radius: 100%;
-        overflow: hidden;
-      }
-      h2 {
-        margin-top: 6%;
-        font-size: 2rem;
-      }
-      h3 {
-        font-size: 1.25rem;
-        color: #999999;
-      }
-    }
-    .lnb_menu {
-      background: white;
-      margin-top: 2%;
-      padding: 4.445%;
-      .lnb {
-        text-align: left;
-        width: 100%;
-        margin-top: 5px;
-        font-size: 1.5rem;
-        font-family: "NotoSansCJKkr-Regular";
-        background: url("~@/assets/images/common/right_arrow.png") no-repeat
-          right center / 3%;
-      }
-      .last_lnb {
-        @extend .lnb;
-        margin-top: 4%;
-      }
-    }
-    .support {
-      padding-bottom: 0;
-      background: white;
-      margin-top: 2%;
-      padding: 4.445%;
-      button {
-        font-size: 1.5rem;
-        display: inline-block;
-        width: 33.333%;
-        text-align: center;
-      }
-    }
-    .logout {
-      background: white;
-      padding: 4.445%;
-      padding-top: 0;
-    }
   }
+}
 </style>

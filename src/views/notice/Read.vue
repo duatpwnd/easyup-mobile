@@ -18,79 +18,79 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  export default {
-    components: {
-      BlueBtn,
+import BlueBtn from "@/components/common/BaseButton.vue";
+export default {
+  components: {
+    BlueBtn
+  },
+  data() {
+    return {
+      view: ""
+    };
+  },
+  methods: {
+    goToList() {
+      this.$router.push({
+        path: "/notice",
+        query: {
+          keyword: "",
+          pageCurrent: 1,
+          order: "all"
+        }
+      });
     },
-    data() {
-      return {
-        view: "",
+    read() {
+      const data = {
+        action: "get_my_notice_info",
+        id: this.$route.query.id,
+        course_id: this.$route.query.c_id
       };
-    },
-    methods: {
-      goToList() {
-        this.$router.push({
-          path: "/notice",
-          query: {
-            keyword: "",
-            pageCurrent: 1,
-            order: "all",
-          },
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          this.view = result.data.data;
         });
-      },
-      read() {
-        const data = {
-          action: "get_my_notice_info",
-          id: this.$route.query.id,
-          course_id: this.$route.query.c_id,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            this.view = result.data.data;
-          });
-      },
-    },
-    created() {
-      this.read();
-    },
-  };
+    }
+  },
+  created() {
+    this.read();
+  }
+};
 </script>
 <style scoped lang="scss">
-  .head {
-    margin-top: 5%;
-    span {
-      font-size: 1.375rem;
-    }
-    .title {
+.head {
+  margin-top: 5%;
+  span {
+    font-size: 1.375rem;
+  }
+  .title {
+    color: #114fff;
+    margin-right: 2%;
+    font-weight: 600;
+  }
+}
+.contents {
+  border-top: 2px solid #333333;
+  border-bottom: 2px solid #333333;
+  padding: 2% 0;
+  margin: 2% 0;
+  font-family: "NotoSansCJKkr-Regular";
+  font-size: 1.25rem;
+  color: #666666;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.button_wrap {
+  .btn {
+    width: 23.172%;
+    button {
+      border: 1px solid #114fff;
+      background: white;
       color: #114fff;
-      margin-right: 2%;
-      font-weight: 600;
+      height: 24px;
+      line-height: 16px;
+      font-size: 12px;
     }
   }
-  .contents {
-    border-top: 2px solid #333333;
-    border-bottom: 2px solid #333333;
-    padding: 2% 0;
-    margin: 2% 0;
-    font-family: "NotoSansCJKkr-Regular";
-    font-size: 1.25rem;
-    color: #666666;
-    white-space: pre-wrap;
-    word-break: break-all;
-  }
-  .button_wrap {
-    .btn {
-      width: 23.172%;
-      button {
-        border: 1px solid #114fff;
-        background: white;
-        color: #114fff;
-        height: 24px;
-        line-height: 16px;
-        font-size: 12px;
-      }
-    }
-  }
+}
 </style>

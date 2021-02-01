@@ -77,107 +77,107 @@
   </div>
 </template>
 <script>
-  import Pagination from "@/components/common/Pagination.vue";
+import Pagination from "@/components/common/Pagination.vue";
 
-  import Search from "@/components/common/Search.vue";
-  import BoardTitle from "@/components/common/BoardTitle.vue";
-  import BoardList from "@/components/common/BoardList.vue";
-  export default {
-    components: {
-      Pagination,
-      BoardTitle,
-      BoardList,
-      Search,
+import Search from "@/components/common/Search.vue";
+import BoardTitle from "@/components/common/BoardTitle.vue";
+import BoardList from "@/components/common/BoardList.vue";
+export default {
+  components: {
+    Pagination,
+    BoardTitle,
+    BoardList,
+    Search
+  },
+  data() {
+    return {
+      current: "", //현재번호
+      order: "",
+      keyword: "",
+      bookmark_list: ""
+    };
+  },
+  methods: {
+    go_to_path(url, id) {
+      this.$router
+        .push({
+          path: url,
+          query: {
+            id: id
+          }
+        })
+        .catch(() => {});
     },
-    data() {
-      return {
-        current: "", //현재번호
-        order: "",
-        keyword: "",
-        bookmark_list: "",
+    async getList(num, order, keyword) {
+      const data = {
+        action: "get_bookmark_list",
+        current: num,
+        search_status: order,
+        keyword: keyword
       };
-    },
-    methods: {
-      go_to_path(url, id) {
-        this.$router
-          .push({
-            path: url,
-            query: {
-              id: id,
-            },
-          })
-          .catch(() => {});
-      },
-      async getList(num, order, keyword) {
-        const data = {
-          action: "get_bookmark_list",
-          current: num,
-          search_status: order,
-          keyword: keyword,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            if (result.data.error != true) {
-              this.bookmark_list = result.data.data;
-              this.$router
-                .push({
-                  query: {
-                    pageCurrent: num,
-                    order: order,
-                    keyword: keyword,
-                  },
-                })
-                .catch(() => {});
-              this.order = order;
-              this.keyword = keyword;
-              this.current = num;
-            }
-          });
-      },
-    },
-    created() {
-      this.getList(
-        this.$route.query.pageCurrent,
-        this.$route.query.order,
-        this.$route.query.keyword
-      );
-    },
-  };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          if (result.data.error != true) {
+            this.bookmark_list = result.data.data;
+            this.$router
+              .push({
+                query: {
+                  pageCurrent: num,
+                  order: order,
+                  keyword: keyword
+                }
+              })
+              .catch(() => {});
+            this.order = order;
+            this.keyword = keyword;
+            this.current = num;
+          }
+        });
+    }
+  },
+  created() {
+    this.getList(
+      this.$route.query.pageCurrent,
+      this.$route.query.order,
+      this.$route.query.keyword
+    );
+  }
+};
 </script>
 <style scoped lang="scss">
-  .search_area {
-    margin: 3.5% 0;
+.search_area {
+  margin: 3.5% 0;
+}
+.no_result {
+  text-align: center;
+  font-size: 16px;
+  padding: 15px;
+}
+.list {
+  &:nth-child(even) {
+    background: #f8f8f8;
   }
-  .no_result {
-    text-align: center;
-    font-size: 16px;
-    padding: 15px;
-  }
-  .list {
-    &:nth-child(even) {
-      background: #f8f8f8;
-    }
 
-    .bookmark_add_btn {
-      position: absolute;
-      top: 0;
-      right: 5px;
-      width: 18.5px;
-      height: 18px;
-      bottom: 0;
-      margin: auto;
-    }
-    .bookmark_read_btn {
-      @extend .bookmark_add_btn;
-      width: 15px;
-      height: 16px;
-    }
-    .list_wrap {
-      .left_td,
-      .right_td {
-        width: 50%;
-      }
+  .bookmark_add_btn {
+    position: absolute;
+    top: 0;
+    right: 5px;
+    width: 18.5px;
+    height: 18px;
+    bottom: 0;
+    margin: auto;
+  }
+  .bookmark_read_btn {
+    @extend .bookmark_add_btn;
+    width: 15px;
+    height: 16px;
+  }
+  .list_wrap {
+    .left_td,
+    .right_td {
+      width: 50%;
     }
   }
+}
 </style>

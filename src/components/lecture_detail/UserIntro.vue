@@ -7,21 +7,21 @@
   </div>
 </template>
 <script>
-  export default {
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+export default {
+  components: {},
+  data() {
+    return {};
+  },
+  methods: {}
+};
 </script>
 <style scoped lang="scss">
-  .user_intro {
-    .total_lec {
-      font-size: 14px;
-    }
-  }
-  .name {
+.user_intro {
+  .total_lec {
     font-size: 14px;
   }
+}
+.name {
+  font-size: 14px;
+}
 </style>

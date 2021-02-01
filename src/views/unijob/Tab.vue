@@ -22,8 +22,8 @@
             path: '/uniJob/register',
             query: {
               type: $route.name,
-              is_notice: true,
-            },
+              is_notice: true
+            }
           })
         "
       >
@@ -38,8 +38,8 @@
             path: '/uniJob/register',
             query: {
               type: $route.name,
-              is_notice: false,
-            },
+              is_notice: false
+            }
           })
         "
       >
@@ -112,149 +112,149 @@
   </div>
 </template>
 <script>
-  import Pagination from "@/components/common/Pagination.vue";
-  import BlueBtn from "@/components/common/BaseButton.vue";
+import Pagination from "@/components/common/Pagination.vue";
+import BlueBtn from "@/components/common/BaseButton.vue";
 
-  import BoardTitle from "@/components/common/BoardTitle.vue";
-  import Search from "@/components/common/Search.vue";
+import BoardTitle from "@/components/common/BoardTitle.vue";
+import Search from "@/components/common/Search.vue";
 
-  export default {
-    components: { BoardTitle, Search, Pagination, BlueBtn },
+export default {
+  components: { BoardTitle, Search, Pagination, BlueBtn },
 
-    data() {
-      return {
-        list: "",
-        keyword: "",
-        current: "",
+  data() {
+    return {
+      list: "",
+      keyword: "",
+      current: ""
+    };
+  },
+  methods: {
+    getList(type, num, keyword) {
+      const data = {
+        action: "get_unijob_list", //필수
+        current: num, //필수
+        type: type,
+        keyword: keyword //옵션
       };
-    },
-    methods: {
-      getList(type, num, keyword) {
-        const data = {
-          action: "get_unijob_list", //필수
-          current: num, //필수
-          type: type,
-          keyword: keyword, //옵션
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("유니잡", result.data.data);
-            this.$router
-              .push({
-                query: {
-                  pageCurrent: num,
-                  keyword: keyword,
-                },
-              })
-              .catch(() => {});
-            this.list = result.data.data;
-            this.keyword = keyword;
-            this.current = num;
-          });
-      },
-      goToPath(id, is_possible) {
-        console.log(is_possible);
-        if (is_possible == "normal") {
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log("유니잡", result.data.data);
           this.$router
             .push({
-              path: "/uniJob/read",
               query: {
-                type: this.$route.name,
-                id: id,
-              },
+                pageCurrent: num,
+                keyword: keyword
+              }
             })
             .catch(() => {});
-        } else {
-          this.$noticeMessage("해당 글을 조회 할 수 없습니다.");
-        }
-      },
+          this.list = result.data.data;
+          this.keyword = keyword;
+          this.current = num;
+        });
     },
-    watch: {
-      $route(to, from) {
-        if (to.path != from.path) {
-          this.getList(
-            to.name,
-            this.$route.query.pageCurrent,
-            this.$route.query.keyword
-          );
-        }
-      },
-    },
-    created() {
-      this.getList(
-        this.$route.name,
-        this.$route.query.pageCurrent,
-        this.$route.query.keyword
-      );
-    },
-  };
+    goToPath(id, is_possible) {
+      console.log(is_possible);
+      if (is_possible == "normal") {
+        this.$router
+          .push({
+            path: "/uniJob/read",
+            query: {
+              type: this.$route.name,
+              id: id
+            }
+          })
+          .catch(() => {});
+      } else {
+        this.$noticeMessage("해당 글을 조회 할 수 없습니다.");
+      }
+    }
+  },
+  watch: {
+    $route(to, from) {
+      if (to.path != from.path) {
+        this.getList(
+          to.name,
+          this.$route.query.pageCurrent,
+          this.$route.query.keyword
+        );
+      }
+    }
+  },
+  created() {
+    this.getList(
+      this.$route.name,
+      this.$route.query.pageCurrent,
+      this.$route.query.keyword
+    );
+  }
+};
 </script>
 <style scoped lang="scss">
-  .wrap {
-    padding: 4.445%;
-    padding-top: 0;
+.wrap {
+  padding: 4.445%;
+  padding-top: 0;
 
-    .search {
-      margin: 2% 0;
-      .search_contents {
-        width: 100%;
-        margin-left: 0;
-      }
+  .search {
+    margin: 2% 0;
+    .search_contents {
+      width: 100%;
+      margin-left: 0;
     }
-    ::v-deep .reg_btn {
-      button {
-        height: 32px;
-        line-height: 23px;
-        font-size: 16px;
-      }
+  }
+  ::v-deep .reg_btn {
+    button {
+      height: 32px;
+      line-height: 23px;
+      font-size: 16px;
     }
-    .title_wrap {
+  }
+  .title_wrap {
+    span {
+      text-align: right;
+    }
+  }
+  .total {
+    font-size: 1.375rem;
+    margin-top: 2.5%;
+    .num {
+      color: #114fff;
+    }
+  }
+  .item_wrap {
+    li {
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
+      }
+      padding: 2%;
+
       span {
-        text-align: right;
+        color: #333333;
+        font-size: 1.25rem;
       }
-    }
-    .total {
-      font-size: 1.375rem;
-      margin-top: 2.5%;
-      .num {
-        color: #114fff;
+
+      .left {
+        float: left;
+        width: 55%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        .is_notice {
+          color: #114fff;
+          font-weight: bold;
+        }
       }
-    }
-    .item_wrap {
-      li {
-        &:after {
-          display: block;
-          content: "";
-          clear: both;
-        }
-        padding: 2%;
-
-        span {
-          color: #333333;
-          font-size: 1.25rem;
-        }
-
-        .left {
-          float: left;
-          width: 55%;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          .is_notice {
-            color: #114fff;
-            font-weight: bold;
-          }
-        }
-        .right {
-          float: right;
-        }
-        .is_delete {
-          color: #999999;
-          text-decoration: line-through;
-        }
+      .right {
+        float: right;
+      }
+      .is_delete {
+        color: #999999;
+        text-decoration: line-through;
       }
     }
   }
+}
 </style>

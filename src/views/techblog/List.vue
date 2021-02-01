@@ -49,71 +49,71 @@
   </div>
 </template>
 <script>
-  import Pagination from "@/components/common/Pagination.vue";
-  import Search from "@/components/common/Search.vue";
-  import TechBlogList from "@/components/techblog/List.vue";
-  export default {
-    components: {
-      Pagination,
-      TechBlogList,
-      Search,
+import Pagination from "@/components/common/Pagination.vue";
+import Search from "@/components/common/Search.vue";
+import TechBlogList from "@/components/techblog/List.vue";
+export default {
+  components: {
+    Pagination,
+    TechBlogList,
+    Search
+  },
+  data() {
+    return {
+      list: "",
+      keyword: "",
+      current: ""
+    };
+  },
+  methods: {
+    goToPath(id) {
+      this.$router.push({
+        path: "/techBlog/read",
+        query: {
+          id: id
+        }
+      });
     },
-    data() {
-      return {
-        list: "",
-        keyword: "",
-        current: "",
+    getList(num, keyword) {
+      const data = {
+        action: "get_blog_list", //필수
+        current: num, //필수
+        keyword: keyword //옵션
       };
-    },
-    methods: {
-      goToPath(id) {
-        this.$router.push({
-          path: "/techBlog/read",
-          query: {
-            id: id,
-          },
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log("기술블로그", result);
+          this.$router
+            .push({
+              query: {
+                pageCurrent: num,
+                keyword: keyword
+              }
+            })
+            .catch(() => {});
+          this.list = result.data.data;
+          this.keyword = keyword;
+          this.current = num;
         });
-      },
-      getList(num, keyword) {
-        const data = {
-          action: "get_blog_list", //필수
-          current: num, //필수
-          keyword: keyword, //옵션
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("기술블로그", result);
-            this.$router
-              .push({
-                query: {
-                  pageCurrent: num,
-                  keyword: keyword,
-                },
-              })
-              .catch(() => {});
-            this.list = result.data.data;
-            this.keyword = keyword;
-            this.current = num;
-          });
-      },
-    },
-    created() {
-      this.getList(this.$route.query.pageCurrent, this.$route.query.keyword);
-    },
-  };
+    }
+  },
+  created() {
+    this.getList(this.$route.query.pageCurrent, this.$route.query.keyword);
+  }
+};
 </script>
 <style scoped lang="scss">
-  .search {
-    margin: 2% 0;
-    .search_contents {
-      width: 100%;
-      margin-left: 0;
-    }
+.search {
+  margin: 2% 0;
+  .search_contents {
+    width: 100%;
+    margin-left: 0;
   }
-  .list {
-    border-bottom: 4px solid #f8f8f8;
-    padding: 10px 0;
-  }
+}
+.list {
+  border-bottom: 4px solid #f8f8f8;
+  padding: 10px 0;
+}
 </style>

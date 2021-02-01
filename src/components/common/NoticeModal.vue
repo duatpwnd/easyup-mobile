@@ -1,5 +1,5 @@
 <template>
-  <div class="mask">
+  <div class="mask1">
     <div class="notice_modal">
       <p class="contents">
         {{ toggleStore_noticeMessage }}
@@ -36,7 +36,15 @@
   };
 </script>
 <style scoped lang="scss">
-  .mask {
+  .mask1 {
+    position: fixed;
+    max-width: 720px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 6;
     .notice_modal {
       background: white;
       max-width: 720px;

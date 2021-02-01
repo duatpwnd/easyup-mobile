@@ -36,26 +36,33 @@
       >건
     </h2>
     <div class="lec_list_wrap">
-      <div class="li" v-for="(list, index) in category_list.list" :key="index">
+      <div
+        class="li"
+        v-for="(list, index) in category_list.list"
+        :key="index"
+        @click="
+          $router.push({
+            path: $route.name == 'course' ? '/courseDetail' : '/lecDetail',
+            query: {
+              id: list.id,
+            },
+          })
+        "
+      >
         <LecItem>
-          <router-link
-            class="lec_list"
-            slot="router"
-            :to="{
-              path: $route.name == 'course' ? '/courseDetail' : '/lecDetail',
-              query: {
-                id: list.id,
-              },
-            }"
-          >
+          <span class="lec_list" slot="router">
             <img :src="list.thumbnail" alt="이지업" title="이지업" />
-          </router-link>
+          </span>
           <h4 slot="teacher">{{ list.teacher }}</h4>
           <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
           <span slot="grade" class="score">{{ list.rating }}</span>
-          <h1 class="free" slot="free" v-if="list.is_free == 'Y'">
+          <h1 class="free" slot="free" v-if="list.price.is_free">
             FREE
           </h1>
+          <span class="price" v-else slot="free">
+            <del class="original">{{ list.price.format_original }}</del>
+            <span class="final">{{ list.price.format_final }}</span>
+          </span>
         </LecItem>
       </div>
     </div>
@@ -83,7 +90,6 @@
 </template>
 <script>
   import Pagination from "@/components/common/Pagination.vue";
-
   import Search from "@/components/common/Search.vue";
   import LecItem from "@/components/common/LectureItem.vue";
   export default {
@@ -126,7 +132,6 @@
                   pageCurrent: num,
                   order: order,
                   keyword: keyword,
-
                   category_code: this.$route.query.category_code,
                   tag: this.$route.query.tag,
                 },
@@ -191,7 +196,7 @@
       .li {
         float: left;
         width: 48.782%;
-        margin-top: 8px;
+        margin-top: 24px;
         &:nth-child(odd) {
           margin-right: 2.436%;
         }

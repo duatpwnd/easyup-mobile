@@ -111,197 +111,125 @@
   </div>
 </template>
 <script>
-  import Row from "@/components/common/Row.vue";
-  import CheckBox from "@/components/common/BaseCheckBox.vue";
-  import BaseButton from "@/components/common/BaseButton.vue";
-  import LectureCourseList from "@/components/common/LectureCourseList.vue";
+import Row from "@/components/common/Row.vue";
+import CheckBox from "@/components/common/BaseCheckBox.vue";
+import BaseButton from "@/components/common/BaseButton.vue";
+import LectureCourseList from "@/components/common/LectureCourseList.vue";
 
-  export default {
-    components: { Row, CheckBox, BaseButton, LectureCourseList },
-    data() {
-      return {
-        list: "",
-        checked_list: [],
-        allCheck: false,
-      };
-    },
-    methods: {
-      goToOrder() {
-        if (this.checked_list.length == 0) {
-          this.list.list.forEach((el, index) => {
-            this.checked_list.push(el.id);
-          });
-        }
-        this.$router.push({
-          path: "/order",
-          query: {
-            cart_id: this.checked_list.toString(),
-          },
+export default {
+  components: { Row, CheckBox, BaseButton, LectureCourseList },
+  data() {
+    return {
+      list: "",
+      checked_list: [],
+      allCheck: false
+    };
+  },
+  methods: {
+    goToOrder() {
+      if (this.checked_list.length == 0) {
+        this.list.list.forEach((el, index) => {
+          this.checked_list.push(el.id);
         });
-      },
-      cartRemove(id) {
-        if (id.length == 0) {
-          this.$noticeMessage("삭제할 강의를 선택해주세요.");
-        } else {
-          const data = {
-            action: "delete_cart",
-            cart_id: id,
-          };
-          this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-            .then((result) => {
-              console.log(result);
-              this.getList();
-            });
+      }
+      this.$router.push({
+        path: "/order",
+        query: {
+          cart_id: this.checked_list.toString()
         }
-      },
-      all_check() {
-        this.allCheck = !this.allCheck;
-        if (this.allCheck) {
-          console.log(this.list.list);
-          this.list.list.forEach((el, index) => {
-            this.checked_list.push(el.id);
-          });
-        } else {
-          this.checked_list = [];
-        }
-      },
-      // 부분체크
-      partial_check() {
-        if (this.list.list.length != this.checked_list.length) {
-          this.allCheck = false;
-        } else {
-          this.allCheck = true;
-        }
-      },
-      getList() {
+      });
+    },
+    cartRemove(id) {
+      if (id.length == 0) {
+        this.$noticeMessage("삭제할 강의를 선택해주세요.");
+      } else {
         const data = {
-          action: "cart_list",
+          action: "delete_cart",
+          cart_id: id
         };
-
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
+          .then(result => {
             console.log(result);
-            this.list = result.data.data;
+            this.getList();
           });
-      },
+      }
     },
-    created() {
-      this.getList(this.$route.query.pageCurrent);
+    all_check() {
+      this.allCheck = !this.allCheck;
+      if (this.allCheck) {
+        console.log(this.list.list);
+        this.list.list.forEach((el, index) => {
+          this.checked_list.push(el.id);
+        });
+      } else {
+        this.checked_list = [];
+      }
     },
-  };
+    // 부분체크
+    partial_check() {
+      if (this.list.list.length != this.checked_list.length) {
+        this.allCheck = false;
+      } else {
+        this.allCheck = true;
+      }
+    },
+    getList() {
+      const data = {
+        action: "cart_list"
+      };
+
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log(result);
+          this.list = result.data.data;
+        });
+    }
+  },
+  created() {
+    this.getList(this.$route.query.pageCurrent);
+  }
+};
 </script>
 <style scoped lang="scss">
-  .h2_title {
-    font-size: 18px;
-    padding: 4.445%;
-    border-bottom: 4px solid #f8f8f8;
+.h2_title {
+  font-size: 18px;
+  padding: 4.445%;
+  border-bottom: 4px solid #f8f8f8;
+}
+.h3_title {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+::v-deep .list_wrap {
+  padding: 4.445%;
+  border-bottom: 4px solid #f8f8f8;
+  &:after {
+    display: block;
+    content: "";
+    clear: both;
   }
-  .h3_title {
-    font-size: 16px;
-    margin-bottom: 10px;
+  .list_left {
+    width: 20%;
   }
-  ::v-deep .list_wrap {
-    padding: 4.445%;
-    border-bottom: 4px solid #f8f8f8;
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
-    }
-    .list_left {
-      width: 20%;
-    }
-    .list_right {
-      width: 80%;
-      padding: 0 10px;
-      .center,
-      .chk {
-        display: inline-block;
-      }
-      .center {
-        width: 80%;
-      }
-      .chk {
-        width: 20%;
-        position: relative;
-        display: inline-block;
-        text-align: right;
-        vertical-align: top;
-        .container-checkbox {
-          position: unset;
-          width: unset;
-          height: 24px;
-          display: inline-block;
-          .checkmark {
-            position: unset;
-            width: 24px;
-            display: inline-block;
-            height: 24px;
-            padding: 0;
-            box-sizing: border-box;
-          }
-        }
-      }
-    }
-    .price {
-      .final_price {
-        font-size: 12px;
-        color: #bdbdbd;
-      }
-      .ori_price {
-        font-weight: bold;
-        margin-left: 5px;
-        font-size: 14px;
-        color: #114fff;
-      }
-    }
-    .limit {
-      font-size: 12px;
-      color: #999999;
-    }
-    .right {
-      float: right;
-      width: 20%;
-      button {
-        background: white;
-        color: #114fff;
-      }
-    }
-  }
-  .li {
-    padding: 4.445%;
-    border-bottom: 4px solid #f8f8f8;
-    .line {
-      border-bottom: 1px solid black;
-      padding-bottom: 10px;
-    }
-    .order {
-      .dt {
-        font-size: 16px;
-        font-weight: bold;
-      }
-    }
-    .amount {
-      padding-top: 10px;
-      .dt,
-      .dd {
-        font-size: 16px;
-        font-weight: bold;
-      }
-    }
-  }
-  .btn_wrap {
-    margin-top: 15px;
-    padding: 0 4.445%;
-    padding-bottom: 40px;
+  .list_right {
+    width: 80%;
+    padding: 0 10px;
+    .center,
     .chk {
-      width: 14%;
       display: inline-block;
+    }
+    .center {
+      width: 80%;
+    }
+    .chk {
+      width: 20%;
       position: relative;
-      vertical-align: middle;
-      ::v-deep .container-checkbox {
+      display: inline-block;
+      text-align: right;
+      vertical-align: top;
+      .container-checkbox {
         position: unset;
         width: unset;
         height: 24px;
@@ -316,37 +244,109 @@
         }
       }
     }
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
+  }
+  .price {
+    .final_price {
+      font-size: 12px;
+      color: #bdbdbd;
     }
-    .blue_btn {
-      width: 42%;
-      button {
-        height: 40px;
-        line-height: 28px;
-        font-size: 18px;
-        font-family: unset;
-      }
+    .ori_price {
+      font-weight: bold;
+      margin-left: 5px;
+      font-size: 14px;
+      color: #114fff;
     }
-    .left {
+  }
+  .limit {
+    font-size: 12px;
+    color: #999999;
+  }
+  .right {
+    float: right;
+    width: 20%;
+    button {
+      background: white;
+      color: #114fff;
+    }
+  }
+}
+.li {
+  padding: 4.445%;
+  border-bottom: 4px solid #f8f8f8;
+  .line {
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
+  }
+  .order {
+    .dt {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+  .amount {
+    padding-top: 10px;
+    .dt,
+    .dd {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+}
+.btn_wrap {
+  margin-top: 15px;
+  padding: 0 4.445%;
+  padding-bottom: 40px;
+  .chk {
+    width: 14%;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    ::v-deep .container-checkbox {
+      position: unset;
+      width: unset;
+      height: 24px;
       display: inline-block;
-      vertical-align: middle;
-      margin-right: 2%;
-      button {
-        background: #dbdbdb;
-        color: white;
-        border: 1px solid #dbdbdb;
-      }
-    }
-    .right {
-      display: inline-block;
-      vertical-align: middle;
-      button {
-        background: #114fff;
-        color: white;
+      .checkmark {
+        position: unset;
+        width: 24px;
+        display: inline-block;
+        height: 24px;
+        padding: 0;
+        box-sizing: border-box;
       }
     }
   }
+  &:after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+  .blue_btn {
+    width: 42%;
+    button {
+      height: 40px;
+      line-height: 28px;
+      font-size: 18px;
+      font-family: unset;
+    }
+  }
+  .left {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 2%;
+    button {
+      background: #dbdbdb;
+      color: white;
+      border: 1px solid #dbdbdb;
+    }
+  }
+  .right {
+    display: inline-block;
+    vertical-align: middle;
+    button {
+      background: #114fff;
+      color: white;
+    }
+  }
+}
 </style>

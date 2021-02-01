@@ -22,59 +22,59 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  export default {
-    components: {
-      BlueBtn,
-    },
-    methods: {},
-  };
+import BlueBtn from "@/components/common/BaseButton.vue";
+export default {
+  components: {
+    BlueBtn
+  },
+  methods: {}
+};
 </script>
 <style scoped lang="scss">
-  .head {
-    margin-top: 5%;
-    span {
-      font-size: 1.375rem;
-    }
-    .title {
-      color: #114fff;
-      margin-right: 2%;
-      font-weight: 600;
-    }
+.head {
+  margin-top: 5%;
+  span {
+    font-size: 1.375rem;
   }
-  .contents {
-    border-top: 2px solid #333333;
-    border-bottom: 2px solid #333333;
-    padding: 2% 0;
-    margin: 2% 0;
-    pre {
-      white-space: pre-wrap;
-      font-size: 1.25rem;
-      color: #666666;
-      font-family: "NotoSansCJKkr-Regular";
-    }
+  .title {
+    color: #114fff;
+    margin-right: 2%;
+    font-weight: 600;
   }
-  .button_wrap {
-    button {
-      border: 1px solid #114fff;
-      background: white;
-      color: #114fff;
-      height: 24px;
-      line-height: 16px;
-      font-size: 12px;
-    }
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
-    }
-    .left_btn {
-      float: left;
-      width: 23.172%;
-    }
-    .right_btn {
-      float: right;
-      width: 23.172%;
-    }
+}
+.contents {
+  border-top: 2px solid #333333;
+  border-bottom: 2px solid #333333;
+  padding: 2% 0;
+  margin: 2% 0;
+  pre {
+    white-space: pre-wrap;
+    font-size: 1.25rem;
+    color: #666666;
+    font-family: "NotoSansCJKkr-Regular";
   }
+}
+.button_wrap {
+  button {
+    border: 1px solid #114fff;
+    background: white;
+    color: #114fff;
+    height: 24px;
+    line-height: 16px;
+    font-size: 12px;
+  }
+  &:after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+  .left_btn {
+    float: left;
+    width: 23.172%;
+  }
+  .right_btn {
+    float: right;
+    width: 23.172%;
+  }
+}
 </style>

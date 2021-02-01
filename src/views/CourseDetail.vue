@@ -1,5 +1,5 @@
 <template>
-  <div id="course_detail" v-if="detail">
+  <div id="course_detail" v-if="Object.keys(detail).length > 0">
     <img
       :src="detail.course_image"
       alt="파이썬 코딩 기본편"
@@ -44,14 +44,8 @@
         ></StarRating>
       </div>
       <div class="price">
-        <del class="original">{{
-          detail.price.original.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        }}</del>
-        <span class="final"
-          >{{
-            detail.price.final.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}원</span
-        >
+        <del class="original">{{ detail.price.format_original }}</del>
+        <span class="final">{{ detail.price.format_final }}원</span>
       </div>
       <div id="tag_wrap">
         <slot name="title_wrap">
@@ -196,12 +190,14 @@
           </h1>
         </CourseItem>
         <div class="btn_wrap">
-          <BlueBtn v-if="index > 0">
+          <BlueBtn v-if="list.chk_previous == 1">
             <button slot="blue_btn">
               선행과정 필수
             </button>
           </BlueBtn>
-          <BlueBtn :class="[index == 0 ? 'confirm_btn' : 'right_btn']">
+          <BlueBtn
+            :class="[list.chk_previous == 0 ? 'confirm_btn' : 'right_btn']"
+          >
             <router-link
               slot="blue_btn"
               tag="button"
@@ -572,11 +568,6 @@
         font-size: 1.6875rem;
       }
       ::v-deep .item {
-        .lec_list {
-          img {
-            width: 48.782%;
-          }
-        }
         h4 {
           font-size: 14px;
           margin-top: 5px;

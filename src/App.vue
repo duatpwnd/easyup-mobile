@@ -66,6 +66,7 @@
         this.$store.commit("toggleStore/Toggle", {
           mask: false,
           more_view: false,
+          login_modal: false,
         });
       },
     },

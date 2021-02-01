@@ -1,7 +1,10 @@
 <template>
-  <swiper class="swiper" :options="swiper_option" ref="mySwiper">
-    <slot name="list"> </slot>
-  </swiper>
+  <div class="slide">
+    <swiper class="swiper" :options="swiper_option" ref="mySwiper">
+      <slot name="list"> </slot>
+    </swiper>
+    <slot name="nav_btn"></slot>
+  </div>
 </template>
 <script>
   export default {
@@ -22,10 +25,13 @@
   };
 </script>
 <style scoped lang="scss">
-  .swiper-slide {
-    margin: 0 auto;
-  }
-  .swiper {
-    margin-top: 8px;
+  .slide {
+    position: relative;
+    .swiper-slide {
+      margin: 0 auto;
+    }
+    .swiper {
+      margin-top: 8px;
+    }
   }
 </style>

@@ -19,23 +19,23 @@
   ></Search>
 </template>
 <script>
-  import Search from "@/components/common/Search.vue";
+import Search from "@/components/common/Search.vue";
 
-  export default {
-    components: {
-      Search,
-    },
-    data() {
-      return { order: "", keyword: "" };
-    },
-    methods: {
-      search() {
-        this.$EventBus.$emit(`search`, {
-          order: this.order,
-          keyword: this.keyword,
-        });
-      },
-    },
-  };
+export default {
+  components: {
+    Search
+  },
+  data() {
+    return { order: "", keyword: "" };
+  },
+  methods: {
+    search() {
+      this.$EventBus.$emit(`search`, {
+        order: this.order,
+        keyword: this.keyword
+      });
+    }
+  }
+};
 </script>
 <style scoped lang="scss"></style>

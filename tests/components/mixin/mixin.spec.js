@@ -3,7 +3,7 @@ import mixin from "@/components/mixins/check_event.js";
 import Tab from "@/views/data_share/Tab.vue";
 describe.skip("mixin", () => {
   const wrapper = shallowMount(Tab, {
-    mixins: [mixin],
+    mixins: [mixin]
   });
   test("all check event", () => {
     jest.spyOn(wrapper.vm, "all_check");
