@@ -172,7 +172,7 @@
 </template>
 <script>
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
+  import { mapState } from "vuex";
   export default {
     components: {
       BlueBtn,
@@ -185,9 +185,6 @@
       };
     },
     computed: {
-      ...mapState("toggleStore", {
-        toggleStore_loginModal: "login_modal",
-      }),
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
       }),

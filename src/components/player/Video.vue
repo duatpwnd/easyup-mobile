@@ -41,6 +41,9 @@
     item_id?: number;
     idx?: number;
   }
+  interface YoutubeSubtitle {
+    onTimeChange: Function;
+  }
   @Component({
     computed: {
       current_link(): string {
@@ -61,8 +64,11 @@
     },
   })
   export default class Video extends Vue {
-    youtubeExternalSubtitle!: object;
+    youtubeExternalSubtitle!: YoutubeSubtitle;
     is_srt = false;
+    playerStore_current_link!: string;
+    playerStore_checkTime!: number | undefined | string;
+    playerStore_current_item_id!: number;
     @Watch("current_link")
     onPropertyChanged(newValue: string, oldValue: string) {
       if (newValue != oldValue) {
@@ -108,32 +114,31 @@
             );
           } else {
             // not IE
-            let link = document.createElement("a") as HTMLElement;
-            link["href"] = window.URL.createObjectURL(result.data);
-            link["target"] = "_self";
-            link["download"] = this.getFileName(
+            let link = document.createElement("a");
+            link.href = window.URL.createObjectURL(result.data);
+            link.target = "_self";
+            link.download = this.getFileName(
               result.headers["content-disposition"]
-            );
+            ) as string;
             link.click();
             window.URL.revokeObjectURL(result.data);
           }
         });
     }
     validationCheck() {
-      const link = this["playerStore_current_link"];
+      const link = this.playerStore_current_link;
       // 북마크 시간 있는지 없는지
-      if (this["playerStore_checkTime"] != "") {
-        console.log(link, this["playerStore_checkTime"]);
+      if (this.playerStore_checkTime != "") {
+        console.log(link, this.playerStore_checkTime);
         // 스타트 옵션
         this.$store.commit("playerStore/playerState", {
           current_link:
             link.replace(
               `start=${link.split("start=")[1]}`,
-              `start=${this["playerStore_checkTime"]}`
+              `start=${this.playerStore_checkTime}`
             ) + `&autoplay=1&mute=1`,
           check_time: "",
         });
-        console.log(this["playerStore_current_link"]);
       }
     }
     // 자막파일 파싱
@@ -162,9 +167,8 @@
         );
       }
       // 스탑시간 구하기
-
       this.$store.commit("playerStore/playerState", {
-        stop_time: this.youtubeExternalSubtitle["onTimeChange"],
+        stop_time: this.youtubeExternalSubtitle.onTimeChange,
       });
     }
 
@@ -175,7 +179,7 @@
         action: "get_srt_file",
         course_id: Number(this.$route.query.course_id),
         lp_id: Number(this.$route.query.lp_id),
-        item_id: Number(this["playerStore_current_item_id"]),
+        item_id: Number(this.playerStore_current_item_id),
         idx: Number(this.$store.state.playerStore.current_index),
       };
 

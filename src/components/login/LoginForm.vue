@@ -45,6 +45,7 @@
           });
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask: false,
           });
         "
       >
@@ -63,6 +64,7 @@
           });
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask: false,
           });
         "
       >
@@ -81,6 +83,7 @@
           });
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask: false,
           });
         "
       >
@@ -91,6 +94,7 @@
           $router.push('/help/qna');
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask: false,
           });
         "
       >
@@ -99,78 +103,74 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Component, Vue } from "vue-property-decorator";
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
-  export default {
+  import { mapState } from "vuex";
+  @Component({
     components: {
       BlueBtn,
     },
-    data() {
-      return {
-        userid: "",
-        userpw: "",
-      };
-    },
     computed: {
-      ...mapState("toggleStore", {
-        toggleStore_loginModal: "login_modal",
-      }),
       ...mapState("userStore", {
         userStore_referer: "refererLink",
       }),
     },
-    methods: {
-      goToLecture() {
-        this.$EventBus.$emit("GoToLecture", true);
-      },
-      goToPath(url) {
-        this.$router.push(url).catch(() => {});
-        this.$store.commit("toggleStore/Toggle", {
-          login_modal: !this.toggleStore_loginModal,
-        });
-      },
-      login() {
-        const data = {
-          action: "login",
-          userid: this.userid,
-          userpw: this.userpw,
-        };
-        if (this.userid.trim().length == 0 || this.userpw.trim().length == 0) {
-          this.$noticeMessage("아이디 또는 비밀번호를 입력해주세요");
-        } else {
-          this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-            .then((result) => {
-              console.log(result);
-              if (result.data.error) {
-                this.$noticeMessage(result.data.message);
-              } else {
-                this.$cookies.set("user_info", result.data.data[0]);
-                this.$store.commit("userStore/loginToken", result.data.data[0]);
-                // 마지막 로그아웃 시점url이 있을경우
-                console.log(
-                  "★★★★★★★★★★마지막 URL:★★★★★★★★★★★★★",
-                  this.userStore_referer
-                );
-                if (this.userStore_referer != "") {
-                  this.$router.push(this.userStore_referer).catch(() => {});
-                }
+  })
+  export default class LoginForm extends Vue {
+    public userid = "";
+    public userpw = "";
+    public userStore_referer!: string;
+    public goToLecture() {
+      this.$EventBus.$emit("GoToLecture", true);
+    }
+    public goToPath(url: string) {
+      this.$router.push(url).catch(() => {});
+      this.$store.commit("toggleStore/Toggle", {
+        login_modal: false,
+        mask: false,
+      });
+    }
+    public login() {
+      const data = {
+        action: "login",
+        userid: this.userid,
+        userpw: this.userpw,
+      };
+      if (this.userid.trim().length == 0 || this.userpw.trim().length == 0) {
+        this.$noticeMessage("아이디 또는 비밀번호를 입력해주세요");
+      } else {
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log(result);
+            if (result.data.error) {
+              this.$noticeMessage(result.data.message);
+            } else {
+              this.$cookies.set("user_info", result.data.data[0]);
+              this.$store.commit("userStore/loginToken", result.data.data[0]);
+              // 마지막 로그아웃 시점url이 있을경우
+              console.log(
+                "★★★★★★★★★★마지막 URL:★★★★★★★★★★★★★",
+                this.userStore_referer
+              );
+              if (this.userStore_referer != "") {
+                this.$router.push(this.userStore_referer).catch(() => {});
               }
-            })
-            .catch((err) => {});
-        }
-      },
-    },
-    mounted() {},
+            }
+          })
+          .catch((err) => {});
+      }
+    }
+    mounted() {}
     created() {
       this.$EventBus.$on("login from signUpComplete", (result) => {
         this.userid = result.email;
         this.userpw = result.password;
         this.login();
       });
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .blue_btn {

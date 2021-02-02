@@ -100,7 +100,9 @@
   })
   export default class Player extends mixin {
     video_set = false;
-    info = {};
+    playerStore_check_time!: number | undefined | string;
+    playerStore_current_item_id!: number;
+    info: any = {};
     isActive = 0;
     type = "Tab1";
     types = [
@@ -124,8 +126,8 @@
     @Watch("info")
     onPropertyChanged() {
       if (
-        this.info["current_item"][0].lp_type == "document" &&
-        this.info["current_item"][0].custom_type == "video"
+        this.info.current_item[0].lp_type == "document" &&
+        this.info.current_item[0].custom_type == "video"
       ) {
         this.$nextTick(() => {
           videojs(this.$refs.videoPlayer, this.videoOptions).fluid(true);
@@ -133,7 +135,7 @@
         });
       }
     }
-    isVtt() {
+    public isVtt(): void {
       interface VttData<T> {
         data: T extends "" ? "" : { data: { srtFileLink: string } };
       }
@@ -142,7 +144,7 @@
         action: "get_srt_file",
         course_id: Number(this.$route.query.course_id),
         lp_id: Number(this.$route.query.lp_id),
-        item_id: Number(this["playerStore_current_item_id"]),
+        item_id: Number(this.playerStore_current_item_id),
         idx: Number(this.$store.state.playerStore.current_index),
       };
       this.$axios
@@ -162,7 +164,7 @@
             this.videoOptions,
             function onPlayerReady() {
               videojs(self.$refs.videoPlayer).src({
-                src: self.info["current_item"][0].link,
+                src: self.info.current_item[0].link,
               });
               videojs(self.$refs.videoPlayer).addRemoteTextTrack(
                 captionOption,
@@ -170,17 +172,17 @@
               );
               // 북마크 시간 있는지 없는지 검사
               if (
-                self["playerStore_check_time"] != undefined &&
-                self["playerStore_check_time"] != ""
+                self.playerStore_check_time != undefined &&
+                self.playerStore_check_time != ""
               ) {
                 videojs(self.$refs.videoPlayer).currentTime(
-                  self["playerStore_check_time"]
+                  self.playerStore_check_time
                 );
                 videojs(self.$refs.videoPlayer).autoplay("muted");
               }
               if (self.$route.query.linkType != undefined) {
                 videojs(self.$refs.videoPlayer).currentTime(
-                  self["playerStore_check_time"]
+                  self.playerStore_check_time
                 );
               }
             }
@@ -190,7 +192,7 @@
           });
         });
     }
-    getPlayInfo<T, U>(id: T, linkType: U) {
+    public getPlayInfo<T, U>(id: T, linkType: U): void {
       interface PlayerResultedData {
         data: {
           data: {};
@@ -210,38 +212,35 @@
         .then((result: PlayerResultedData) => {
           console.log("플레이어 정보", result);
           this.info = result.data.data;
-          this.videoOptions.sources[0].src = this.info["current_item"][0].link;
+          this.videoOptions.sources[0].src = this.info.current_item[0].link;
           let current_link;
           // rel 있을경우 제거해주기. 이거때문에 start 옵션이 제대로 작동안함
           // 스타트 옵션때문에 분기 처리해줘야함
-          if (
-            this.info["current_item"][0].link.split("start=")[1] == undefined
-          ) {
+          if (this.info.current_item[0].link.split("start=")[1] == undefined) {
             current_link =
-              this.info["current_item"][0].link +
+              this.info.current_item[0].link +
               "?html5=1&playsinline=1&fs=0&start=1";
           } else {
             current_link =
-              this.info["current_item"][0].link +
-              `&html5=1&playsinline=1&fs=0&`;
+              this.info.current_item[0].link + `&html5=1&playsinline=1&fs=0&`;
           }
           this.$store.commit("playerStore/playerState", {
-            current_index: this.info["current_item"][0].idx,
-            current_item_id: this.info["current_item"][0].item_id,
+            current_index: this.info.current_item[0].idx,
+            current_item_id: this.info.current_item[0].item_id,
             current_link: current_link,
-            list: this.info["list"][0],
-            custom_type: this.info["current_item"][0].custom_type,
-            lp_type: this.info["current_item"][0].lp_type,
-            nextBtn: this.info["current_item"][0].last_item_chk,
-            nextItem: this.info["current_item"][0].next_item,
+            list: this.info.list[0],
+            custom_type: this.info.current_item[0].custom_type,
+            lp_type: this.info.current_item[0].lp_type,
+            nextBtn: this.info.current_item[0].last_item_chk,
+            nextItem: this.info.current_item[0].next_item,
           });
           this.video_set = true;
         });
     }
-    newTab(link: string) {
+    public newTab(link: string): void {
       window.open(link);
     }
-    toggle(type: string, index: number) {
+    public toggle(type: string, index: number): void {
       this.type = type;
       this.isActive = index;
     }
