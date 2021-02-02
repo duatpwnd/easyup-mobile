@@ -238,7 +238,7 @@
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from "vue-property-decorator";
+  import { Component, Vue } from "vue-property-decorator";
   import LecItem from "@/components/common/LectureItem.vue";
   // import CategoryLec from "@/components/main/MainCategory.vue";
   import Slide from "@/components/common/Slide.vue";
