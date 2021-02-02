@@ -305,101 +305,107 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
     </form>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Component, Vue } from "vue-property-decorator";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import CheckBox from "@/components/common/BaseCheckBox.vue";
-  export default {
+  @Component({
     components: { CheckBox, BlueBtn },
-    data() {
-      return {
-        lastname: "",
-        firstname: "",
-        email: "",
-        pw1: "",
-        pw2: "",
-        phone: "",
-        agree: "",
-      };
-    },
-    methods: {
-      validationCheck() {
-        let err;
-        return new Promise((resolve, reject) => {
-          if (this.lastname.trim().length == 0) {
-            this.$noticeMessage("성을 입력하세요");
-            err = new Error("성을 입력하세요");
-            err.name = "enter your firstname";
-            throw err;
-          } else if (this.firstname.trim().length == 0) {
-            this.$noticeMessage("이름을 입력하세요");
-            err = new Error("이름을 입력하세요");
-            err.name = "enter your name";
-            throw err;
-          } else if (this.email.trim().length == 0) {
-            this.$noticeMessage("이메일을 입력하세요");
-            err = new Error("이메일을 입력하세요");
-            err.name = "enter your email";
-            throw err;
-          } else if (this.pw1.trim().length == 0) {
-            this.$noticeMessage("비밀번호를 입력하세요");
-            err = new Error("비밀번호를 입력하세요");
-            err.name = "enter your password";
-            throw err;
-          } else if (this.pw2.trim().length == 0) {
-            this.$noticeMessage("비밀번호확인을 입력하세요");
-            err = new Error("비밀번호확인을 입력하세요");
-            err.name = "confirm your password";
-            throw err;
-          } else if (this.pw1.trim() != this.pw2.trim()) {
-            this.$noticeMessage("비밀번호가 서로 다릅니다");
-            err = new Error("비밀번호가 서로 다릅니다");
-            err.name = "wrong password";
-            throw err;
-          } else if (this.agree == false) {
-            this.$noticeMessage("약관 내용에 동의 해주세요");
-            err = new Error("약관 내용에 동의 해주세요");
-            err.name = "Agreement to terms and conditions";
-            throw err;
-          } else {
-            resolve("success");
+  })
+  export default class SignUp extends Vue {
+    public lastname = "";
+    public firstname = "";
+    public email = "";
+    public pw1 = "";
+    public pw2 = "";
+    public phone: number | string = "";
+    public agree = false;
+    public validationCheck() {
+      let err;
+      return new Promise((resolve, reject) => {
+        if (this.lastname.trim().length == 0) {
+          this.$noticeMessage("성을 입력하세요");
+          err = new Error("성을 입력하세요");
+          err.name = "enter your firstname";
+          throw err;
+        } else if (this.firstname.trim().length == 0) {
+          this.$noticeMessage("이름을 입력하세요");
+          err = new Error("이름을 입력하세요");
+          err.name = "enter your name";
+          throw err;
+        } else if (this.email.trim().length == 0) {
+          this.$noticeMessage("이메일을 입력하세요");
+          err = new Error("이메일을 입력하세요");
+          err.name = "enter your email";
+          throw err;
+        } else if (this.pw1.trim().length == 0) {
+          this.$noticeMessage("비밀번호를 입력하세요");
+          err = new Error("비밀번호를 입력하세요");
+          err.name = "enter your password";
+          throw err;
+        } else if (this.pw2.trim().length == 0) {
+          this.$noticeMessage("비밀번호확인을 입력하세요");
+          err = new Error("비밀번호확인을 입력하세요");
+          err.name = "confirm your password";
+          throw err;
+        } else if (this.pw1.trim() != this.pw2.trim()) {
+          this.$noticeMessage("비밀번호가 서로 다릅니다");
+          err = new Error("비밀번호가 서로 다릅니다");
+          err.name = "wrong password";
+          throw err;
+        } else if (this.agree == false) {
+          this.$noticeMessage("약관 내용에 동의 해주세요");
+          err = new Error("약관 내용에 동의 해주세요");
+          err.name = "Agreement to terms and conditions";
+          throw err;
+        } else {
+          resolve("success");
+        }
+      });
+    }
+    public register() {
+      interface UserData {
+        action: string;
+        firstname: string;
+        lastname: string;
+        email: string;
+        password: string;
+        password_confirm: string;
+        phone: number | string;
+      }
+      try {
+        this.validationCheck().then((result) => {
+          if (result == "success") {
+            const data: UserData = {
+              action: "join",
+              firstname: this.firstname, //필수
+              lastname: this.lastname, //필수
+              email: this.email, //필수, 이메일 형식체크, 이미 사용중인 계정인지는 백단에서 체크하고 있음
+              password: this.pw1, //필수
+              password_confirm: this.pw2, //필수, 비밀번호란과 동일여부 체크
+              phone: this.phone, //옵션, 입력할 경우 숫자만 입력
+            };
+            this.$axios
+              .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+              .then((result) => {
+                console.log(result);
+                if (result.data.error) {
+                  this.$noticeMessage(result.data.message);
+                } else {
+                  this.$EventBus.$emit("login from signUpComplete", data);
+                  this.$router.push("/signupComplete").catch(() => {});
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           }
         });
-      },
-      register() {
-        try {
-          this.validationCheck().then((result) => {
-            if (result == "success") {
-              const data = {
-                action: "join",
-                firstname: this.firstname, //필수
-                lastname: this.lastname, //필수
-                email: this.email, //필수, 이메일 형식체크, 이미 사용중인 계정인지는 백단에서 체크하고 있음
-                password: this.pw1, //필수
-                password_confirm: this.pw2, //필수, 비밀번호란과 동일여부 체크
-                phone: this.phone, //옵션, 입력할 경우 숫자만 입력
-              };
-              this.$axios
-                .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-                .then((result) => {
-                  console.log(result);
-                  if (result.data.error) {
-                    this.$noticeMessage(result.data.message);
-                  } else {
-                    this.$EventBus.$emit("login from signUpComplete", data);
-                    this.$router.push("/signupComplete").catch(() => {});
-                  }
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            }
-          });
-        } catch (e) {
-          console.log(e);
-        }
-      },
-    },
-  };
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }
 </script>
 <style scoped lang="scss">
   #signup {

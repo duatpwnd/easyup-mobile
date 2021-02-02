@@ -81,7 +81,7 @@
           <div class="statistics" v-if="userStore_userinfo.info.status == 1">
             <span class="date">{{ list.approve_date.split(" ")[0] }}</span>
             <span class="count">{{ list.count_users }}명</span>
-            <span class="price">
+            <!-- <span class="price">
               <del class="final_price">{{
                 list.price.final
                   .toString()
@@ -92,7 +92,7 @@
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }}</span>
-            </span>
+            </span> -->
           </div>
           <div class="compile_wrap">
             <div class="video_wrap">

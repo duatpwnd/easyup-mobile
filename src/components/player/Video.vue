@@ -43,9 +43,10 @@
   }
   @Component({
     computed: {
-      current_link() {
+      current_link(): string {
         return this.$store.getters["playerStore/getCurrentLink"];
       },
+
       ...mapState("playerStore", {
         playerStore_stopTime: "stop_time",
         playerStore_checkTime: "check_time",
@@ -166,6 +167,7 @@
         stop_time: this.youtubeExternalSubtitle["onTimeChange"],
       });
     }
+
     // 자막파일 유무
     isSrtFile() {
       this.validationCheck();
@@ -183,11 +185,11 @@
           console.log(result);
           if (result.data != "") {
             // 자막파일이 있는경우
-            this.srtParsing(result.data);
+            this.srtParsing<string>(result.data);
             this.is_srt = true;
           } else {
             // 자막파일이 없는경우
-            this.srtParsing([]);
+            this.srtParsing<null[]>([]);
             this.is_srt = false;
           }
         });
