@@ -258,7 +258,7 @@
       } else {
         this.getPlayInfo(undefined, undefined);
       }
-      this.$EventBus.$on("switch_item", (result) => {
+      this.$EventBus.$on("switch_item", (result: boolean) => {
         this.getPlayInfo(undefined, undefined);
       });
     }

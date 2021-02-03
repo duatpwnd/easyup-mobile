@@ -88,18 +88,18 @@
         @click="couponDownload()"
         v-if="detail.price.is_free"
       >
-        <span class="txt" v-if="detail.coupon.discount_type == 'price'"
+        <!-- <span class="txt" v-if="detail.coupon.discount_type == 'price'"
           >{{ discount_price }}원 할인 쿠폰 받기</span
         >
         <span class="txt" v-else
           >{{ detail.coupon.discount_price }}% 할인 쿠폰 받기</span
-        >
-        <span class="coupon_section">
+        > -->
+        <!-- <span class="coupon_section">
           <span class="get_coupon"></span>
         </span>
         <div class="quantity">
           <span class="count">수량 : {{ quantity }}개</span>
-        </div>
+        </div> -->
       </div>
       <div id="subscribe">
         <div>
