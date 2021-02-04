@@ -250,12 +250,11 @@
                     return el.cart_id == data.cart_id;
                   });
                   if (filter != -1) {
-                    const s = this.checked_list.splice(filter, 1);
+                    const removeChecked = this.checked_list.splice(filter, 1);
                   }
                 } else {
                   this.checked_list = [];
                 }
-
                 if (this.checked_list.length == 0) {
                   this.all();
                 }
@@ -267,7 +266,6 @@
                 } else {
                   this.allCheck = true;
                 }
-                console.log(this.checked_list);
               });
             });
         }
