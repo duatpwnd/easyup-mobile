@@ -42,7 +42,7 @@
         </div>
       </template>
       <template slot="list_info">
-        <BaseButton class="right" @click.native="cartRemove([li.cart_id])">
+        <BaseButton class="right" @click.native="cartRemove([li])">
           <button slot="blue_btn">
             삭제
           </button>
@@ -75,7 +75,7 @@
           <input
             type="checkbox"
             @click="all_check()"
-            @change="all(checked_list)"
+            @change="all()"
             v-model="allCheck"
             slot="check"
         /></CheckBox>
@@ -156,7 +156,7 @@
       },
     },
     methods: {
-      all(info) {
+      all() {
         let allList = [...this.list.courses, ...this.list.sessions];
         if (this.allCheck == false) {
           allList = [];
@@ -174,22 +174,20 @@
             original: originalSum,
           },
         };
-        this.format_sum_discount = { info: info, sum: finalSum };
+        this.format_sum_discount = { info: allList, sum: finalSum };
       },
       // 전체체크
       all_check() {
         this.allCheck = !this.allCheck;
         if (this.allCheck) {
-          const allList = [...this.list.courses, ...this.list.sessions];
-          allList.forEach((el, index) => {
-            this.checked_list.push(el);
-          });
+          this.checked_list = [...this.list.courses, ...this.list.sessions];
         } else {
           this.checked_list = [];
         }
       },
       // 부분체크
       partial_check(info) {
+        console.log(this.checked_list);
         const sum = this.checked_list.reduce((acc, current) => {
           return (acc += current.price.final);
         }, 0);
@@ -212,40 +210,65 @@
           action: "check_cart_items",
           cart_items: map,
         };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            if (result.data.data.result) {
-              this.$router.push({
-                path: "/order",
-                query: {
-                  cart_id: this.checked_list.toString(),
-                },
-              });
-            }
-          });
-        // if (this.checked_list.length == 0) {
-        //   this.list.list.forEach((el, index) => {
-        //     this.checked_list.push(el.type + "_" + el.cart_id);
-        //   });
-        // }
+        if (map.length == 0) {
+          this.$noticeMessage("구매할 강의를 선핵해주세요.");
+        } else {
+          this.$axios
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+            .then((result) => {
+              console.log(result);
+              if (result.data.data.result) {
+                this.$router.push({
+                  path: "/order",
+                  query: {
+                    cart_id: this.checked_list.toString(),
+                  },
+                });
+              }
+            });
+        }
       },
       cartRemove(id) {
+        console.log(id, typeof id);
         if (id.length == 0) {
           this.$noticeMessage("삭제할 강의를 선택해주세요.");
         } else {
           const data = {
             action: "delete_cart",
-            cart_id: id,
+            cart_id: id.map((el) => {
+              return el.cart_id;
+            }),
           };
-          console.log(data);
+          console.log(data.cart_id);
           this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {
-              console.log(result);
-              this.getList();
+              this.getList().then((result) => {
+                //삭제할 인덱스 찾기
+                if (id.length == 1) {
+                  const filter = this.checked_list.findIndex((el) => {
+                    return el.cart_id == data.cart_id;
+                  });
+                  if (filter != -1) {
+                    const s = this.checked_list.splice(filter, 1);
+                  }
+                } else {
+                  this.checked_list = [];
+                }
+
+                if (this.checked_list.length == 0) {
+                  this.all();
+                }
+                if (
+                  this.list.courses.length + this.list.sessions.length !=
+                  this.checked_list.length
+                ) {
+                  this.allCheck = false;
+                } else {
+                  this.allCheck = true;
+                }
+                console.log(this.checked_list);
+              });
             });
         }
       },
@@ -253,18 +276,19 @@
         const data = {
           action: "cart_list",
         };
-
-        this.$axios
+        return this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result);
             this.list = result.data.data;
-            this.all_check();
+            return true;
           });
       },
     },
     created() {
-      this.getList(this.$route.query.pageCurrent);
+      this.getList(this.$route.query.pageCurrent).then((result) => {
+        this.all_check();
+      });
     },
   };
 </script>
