@@ -65,10 +65,10 @@
   })
   export default class Video extends Vue {
     youtubeExternalSubtitle!: YoutubeSubtitle;
-    is_srt = false;
     playerStore_current_link!: string;
     playerStore_checkTime!: number | undefined | string;
     playerStore_current_item_id!: number;
+    is_srt = false;
     @Watch("current_link")
     onPropertyChanged(newValue: string, oldValue: string) {
       if (newValue != oldValue) {
@@ -125,7 +125,7 @@
           }
         });
     }
-    validationCheck() {
+    validationCheck(): void {
       const link = this.playerStore_current_link;
       // 북마크 시간 있는지 없는지
       if (this.playerStore_checkTime != "") {
@@ -142,7 +142,7 @@
       }
     }
     // 자막파일 파싱
-    srtParsing<T>(link: T) {
+    srtParsing<T>(link: T): void {
       if (typeof link === "string" && link.length > 0) {
         const subtitles: {
           start: number;
@@ -173,7 +173,7 @@
     }
 
     // 자막파일 유무
-    isSrtFile() {
+    isSrtFile(): void {
       this.validationCheck();
       const data: BodyData = {
         action: "get_srt_file",

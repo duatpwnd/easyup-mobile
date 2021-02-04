@@ -86,9 +86,30 @@
     </ul>
   </div>
 </template>
-<script>
+<script lang="ts">
   import { mapState } from "vuex";
-  export default {
+  import { Component, Watch, Vue } from "vue-property-decorator";
+  interface MenuType {
+    title: string;
+    path: string;
+    name: string;
+    active: string;
+    status?: number;
+    query?: {
+      type?: string;
+      keyword?: string;
+      pageCurrent?: number;
+      order?: string;
+      start_date?: string;
+      end_date?: string;
+    };
+  }
+  interface UserInfo {
+    info: {
+      status: number;
+    };
+  }
+  @Component({
     computed: {
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
@@ -100,155 +121,149 @@
         return this.$store.getters["userStore/status"];
       },
     },
-    data() {
-      return {
-        gnb_mask: false,
-        top_menu: [
+  })
+  export default class GnbMenu extends Vue {
+    @Watch("detect_status")
+    onPropertyChanged(newValue: number, oldValue: number) {
+      if (newValue != oldValue) {
+        this.bottom_menu.splice(3, 3);
+        this.menuSet();
+      }
+    }
+    $dateFormat!: Function;
+    userStore_userinfo!: UserInfo;
+    gnb_mask = false;
+    top_menu: MenuType[] = [
+      {
+        title: "공지사항",
+        path: "/notice/list",
+        name: require("@/assets/images/common/notice_ico.png"),
+        active: require("@/assets/images/common/notice_active_ico.png"),
+        query: {
+          keyword: "",
+          pageCurrent: 1,
+          order: "all",
+        },
+      },
+      {
+        title: "자료공유",
+        path: "/dataShare/sent",
+        name: require("@/assets/images/common/share_ico.png"),
+        active: require("@/assets/images/common/share_active_ico.png"),
+        query: {
+          keyword: "",
+          pageCurrent: 1,
+          order: "all",
+        },
+      },
+      {
+        title: "과제게시판",
+        path: "/dataShare/sent",
+        name: require("@/assets/images/common/learning_ico.png"),
+        active: require("@/assets/images/common/learning_active_ico.png"),
+        query: {
+          // keyword: "",
+          // pageCurrent: 1,
+          // order: "all",
+        },
+      },
+    ];
+    bottom_menu: MenuType[] = [
+      {
+        title: "내 강좌/코스",
+        path: "/myClass/lecture",
+        name: require("@/assets/images/common/lec_course_ico.png"),
+        active: require("@/assets/images/common/lec_course_active_ico.png"),
+        query: {
+          keyword: "",
+          pageCurrent: 1,
+          order: "",
+        },
+      },
+      {
+        title: "학습관리",
+        path: "/learning",
+        name: require("@/assets/images/common/learning_ico.png"),
+        active: require("@/assets/images/common/learning_active_ico.png"),
+      },
+      {
+        title: "쿠폰관리",
+        path: "/couponManage/student",
+        query: {
+          type: "available",
+          pageCurrent: 1,
+        },
+        name: require("@/assets/images/common/coupon_ico.png"),
+        active: require("@/assets/images/common/coupon_active_ico.png"),
+      },
+    ];
+    removeMask(): void {
+      this.gnb_mask = false;
+      this.$store.commit("toggleStore/Toggle", {
+        more_view: false,
+      });
+    }
+    toggle(): void {
+      this.gnb_mask = true;
+      this.$store.commit("toggleStore/Toggle", {
+        more_view: true,
+      });
+    }
+    menuSet(): void {
+      if (this.userStore_userinfo.info.status == 5) {
+        this.bottom_menu.push(
           {
-            title: "공지사항",
-            path: "/notice/list",
-            name: require("@/assets/images/common/notice_ico.png"),
-            active: require("@/assets/images/common/notice_active_ico.png"),
+            title: "구매내역",
+            path: "/purchase/list",
+            name: require("@/assets/images/common/purchase_ico.png"),
+            active: require("@/assets/images/common/purchase_active_ico.png"),
+            status: 5,
             query: {
               keyword: "",
               pageCurrent: 1,
-              order: "all",
+              order: "",
+              start_date: this.$dateFormat(),
+              end_date: this.$dateFormat(),
             },
           },
           {
-            title: "자료공유",
-            path: "/dataShare/sent",
-            name: require("@/assets/images/common/share_ico.png"),
-            active: require("@/assets/images/common/share_active_ico.png"),
-            query: {
-              keyword: "",
-              pageCurrent: 1,
-              order: "all",
-            },
-          },
-          {
-            title: "과제게시판",
-            path: "/dataShare/sent",
-            name: require("@/assets/images/common/learning_ico.png"),
-            active: require("@/assets/images/common/learning_active_ico.png"),
-            query: {
-              // keyword: "",
-              // pageCurrent: 1,
-              // order: "all",
-            },
-          },
-        ],
-        bottom_menu: [
-          {
-            title: "내 강좌/코스",
-            path: "/myClass/lecture",
-            name: require("@/assets/images/common/lec_course_ico.png"),
-            active: require("@/assets/images/common/lec_course_active_ico.png"),
+            title: "책갈피 관리",
+            path: "/bookmarkManage/list",
+            name: require("@/assets/images/common/bookmark_ico.png"),
+            active: require("@/assets/images/common/bookmark_active_ico.png"),
+            status: 5,
             query: {
               keyword: "",
               pageCurrent: 1,
               order: "",
             },
-          },
-          {
-            title: "학습관리",
-            path: "/learning",
-            name: require("@/assets/images/common/learning_ico.png"),
-            active: require("@/assets/images/common/learning_active_ico.png"),
-          },
-          {
-            title: "쿠폰관리",
-            path: "/couponManage/student",
-            query: {
-              type: "available",
-              pageCurrent: 1,
-            },
-            name: require("@/assets/images/common/coupon_ico.png"),
-            active: require("@/assets/images/common/coupon_active_ico.png"),
-          },
-        ],
-      };
-    },
-    watch: {
-      detect_status(a, b) {
-        console.log(a, b);
-        if (a != b) {
-          this.bottom_menu.splice(3, 3);
-          this.menuSet();
-        }
-      },
-    },
-    methods: {
-      removeMask() {
-        this.gnb_mask = false;
-        this.$store.commit("toggleStore/Toggle", {
-          more_view: false,
-        });
-      },
-      toggle() {
-        console.log("toggle");
-        this.gnb_mask = true;
-        this.$store.commit("toggleStore/Toggle", {
-          more_view: true,
-        });
-      },
-      menuSet() {
-        if (this.userStore_userinfo.info.status == 5) {
-          this.bottom_menu.push(
-            {
-              title: "구매내역",
-              path: "/purchase/list",
-              name: require("@/assets/images/common/purchase_ico.png"),
-              active: require("@/assets/images/common/purchase_active_ico.png"),
-              status: 5,
-              query: {
-                keyword: "",
-                pageCurrent: 1,
-                order: "",
-                start_date: this.$dateFormat(),
-                end_date: this.$dateFormat(),
-              },
-            },
-            {
-              title: "책갈피 관리",
-              path: "/bookmarkManage/list",
-              name: require("@/assets/images/common/bookmark_ico.png"),
-              active: require("@/assets/images/common/bookmark_active_ico.png"),
-              status: 5,
-              query: {
-                keyword: "",
-                pageCurrent: 1,
-                order: "",
-              },
-            }
-          );
-        } else {
-          this.bottom_menu[2].path = "/couponManageTeacher/list";
-          this.bottom_menu[2].query = {
-            order: "",
+          }
+        );
+      } else {
+        this.bottom_menu[2].path = "/couponManageTeacher/list";
+        this.bottom_menu[2].query = {
+          order: "",
+          pageCurrent: 1,
+          keyword: "",
+        };
+        this.bottom_menu.push({
+          title: "정산/결제",
+          path: "/settlementAndPayment/settleList",
+          name: require("@/assets/images/common/payment_ico.png"),
+          active: require("@/assets/images/common/payment_active_ico.png"),
+          status: 1,
+          query: {
             pageCurrent: 1,
-            keyword: "",
-          };
-          this.bottom_menu.push({
-            title: "정산/결제",
-            path: "/settlementAndPayment/settleList",
-            name: require("@/assets/images/common/payment_ico.png"),
-            active: require("@/assets/images/common/payment_active_ico.png"),
-            status: 1,
-            query: {
-              pageCurrent: 1,
-              start_date: this.$dateFormat(),
-              end_date: this.$dateFormat(),
-            },
-          });
-        }
-      },
-    },
-    mounted() {},
+            start_date: this.$dateFormat(),
+            end_date: this.$dateFormat(),
+          },
+        });
+      }
+    }
     created() {
       this.menuSet();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   #gnb_bottom_menu {

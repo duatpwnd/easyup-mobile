@@ -411,7 +411,7 @@
       this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
     }
     // 쿠폰다운
-    couponDownload() {
+    couponDownload(): void {
       const data: { action: string; course_id: number; c_id: number } = {
         action: "download_coupon",
         course_id: (this.$route.query.id as unknown) as number,
@@ -424,7 +424,7 @@
           this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
         });
     }
-    video(course_id: number, lp_id: number) {
+    video(course_id: number, lp_id: number): void {
       console.log(typeof course_id, lp_id);
       this.$router.push({
         path: "/play",
@@ -435,7 +435,7 @@
       });
     }
     // 강의평가 모달
-    scoreModal() {
+    scoreModal(): void {
       const obj: {
         score_modal: boolean;
         score: number;
@@ -449,7 +449,7 @@
     }
 
     // 강의 상세 조회
-    async getLectureDetail() {
+    async getLectureDetail(): void {
       const data: { action: string; course_id: number } = {
         action: "get_course_info",
         course_id: (this.$route.query.id as unknown) as number,

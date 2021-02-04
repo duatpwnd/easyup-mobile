@@ -5,20 +5,20 @@ export default {
   install(Vue: any) {
     Vue.noticeMessage = (msg: string): void => {
       store.commit("toggleStore/Toggle", {
-        notice_modal: true
+        notice_modal: true,
       });
       store.commit("toggleStore/noticeMessage", msg);
     };
     Vue.logOut = (): void => {
       router
         .push({
-          path: "/"
+          path: "/",
         })
         .catch(() => {});
       VueCookies.remove("user_info");
       store.commit("userStore/loginToken", {
         access_token: null,
-        info: ""
+        info: "",
       });
     };
 
@@ -28,25 +28,25 @@ export default {
     //   },
     // });
     Vue.mixin({
-      created: function() {}
+      created: function() {},
     });
     // 로그인 모달 닫기
     Vue.prototype.$loginModalClose = (): void => {
       store.commit("toggleStore/Toggle", {
-        login_modal: false
+        login_modal: false,
       });
     };
     // 경고 메시지
     Vue.prototype.$noticeMessage = (msg: string): void => {
       store.commit("toggleStore/Toggle", {
-        notice_modal: true
+        notice_modal: true,
       });
       store.commit("toggleStore/noticeMessage", msg);
     };
     // 안내 메시지
     Vue.prototype.$confirmMessage = (msg: string): void => {
       store.commit("toggleStore/Toggle", {
-        confirm_modal: true
+        confirm_modal: true,
       });
       store.commit("toggleStore/noticeMessage", msg);
     };
@@ -76,20 +76,22 @@ export default {
     Vue.prototype.$logOut = () => {
       router
         .push({
-          path: "/"
+          path: "/",
         })
         .catch(() => {});
       VueCookies.remove("user_info");
       store.commit("userStore/referer", "");
       store.commit("userStore/loginToken", {
         access_token: null,
-        info: ""
+        info: "",
       });
     };
     // 데이트 포맷
-    Vue.prototype.$dateFormat = (a: string): String => {
-      let date: Date = new Date(a);
-      if (a == undefined) {
+    Vue.prototype.$dateFormat = <T>(a: T): String => {
+      let date;
+      if (typeof a === "string") {
+        date = new Date(a);
+      } else {
         date = new Date();
       }
       const year: number = date.getFullYear();
@@ -103,5 +105,5 @@ export default {
       }
       return year + "-" + month + "-" + day;
     };
-  }
+  },
 };
