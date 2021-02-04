@@ -30,21 +30,16 @@ d. 보안에 따른 활용
 회사의 개인정보처리방침에도 불구하고, 아래와 같은 관련법령에 의하여 보관하여야 하는 정보는 법령이 정한 기간 동안 보관됩니다.</pre
   >
 </template>
-<script>
-export default {
-  components: {},
-  data() {
-    return {};
-  },
-  methods: {}
-};
+<script lang="ts">
+  import { Vue } from "vue-property-decorator";
+  export default class Privacy extends Vue {}
 </script>
 <style scoped lang="scss">
-pre {
-  padding: 4.445%;
-  font-family: "NotoSansCJKkr-DemiLight";
-  white-space: pre-wrap;
-  color: #666666;
-  font-size: 1.125rem;
-}
+  pre {
+    padding: 4.445%;
+    font-family: "NotoSansCJKkr-DemiLight";
+    white-space: pre-wrap;
+    color: #666666;
+    font-size: 1.125rem;
+  }
 </style>

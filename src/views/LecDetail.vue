@@ -449,7 +449,7 @@
     }
 
     // 강의 상세 조회
-    async getLectureDetail(): void {
+    async getLectureDetail(): Promise<void> {
       const data: { action: string; course_id: number } = {
         action: "get_course_info",
         course_id: (this.$route.query.id as unknown) as number,
