@@ -41,15 +41,7 @@
     <h2 class="supply_number">고객지원 Support@easyupclass.com</h2>
   </footer>
 </template>
-<script>
-  export default {
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-  };
-</script>
+<script lang="ts"></script>
 <style scoped lang="scss">
   footer {
     padding: 14px;
