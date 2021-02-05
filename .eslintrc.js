@@ -8,6 +8,7 @@ module.exports = {
     parser: "babel-eslint",
   },
   rules: {
+    "prettier/prettier": 0,
     "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-prototype-builtins": "off",
     "no-undef": "off",
