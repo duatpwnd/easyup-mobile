@@ -75,6 +75,8 @@
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import { mapState } from "vuex";
   import BlueBtn from "@/components/common/BaseButton.vue";
+  import { ResultData } from "@/assets/js/util.ts";
+
   @Component({
     components: {
       BlueBtn,
@@ -88,13 +90,12 @@
   })
   export default class MsgRead extends Vue {
     view = "";
-    download(filename: string, file_id: string): void {
+    download(filename: string, file_id: number): void {
       const data = {
         action: "download_message_attach",
         type: this.$route.query.type,
         file_id: file_id,
       };
-      console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, data, {
           responseType: "blob",
@@ -104,8 +105,7 @@
               : null,
           },
         })
-        .then((result) => {
-          console.log(result, filename);
+        .then((result: ResultData) => {
           // 로컬서버에서는 작동하지 않음
           if (window.navigator.msSaveOrOpenBlob) {
             // IE 10+
@@ -125,9 +125,6 @@
       this.$confirmMessage("삭제하시겠습니까?");
     }
     deleteMessage(type: string): void {
-      interface Dictionary {
-        [key: string]: any;
-      }
       const data = {
         action: "delete_message",
         type: this.$route.query.type,
@@ -135,16 +132,16 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: ResultData) => {
           this.$router.push({
             path:
               this.$route.query.type == "received"
                 ? "/msg/receivedList"
                 : "/msg/sentList",
             query: {
-              pageCurrent: 1,
+              pageCurrent: 1 as any,
               keyword: "",
-            } as Dictionary,
+            },
           });
         });
     }
@@ -157,7 +154,7 @@
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: ResultData) => {
           console.log(result);
           this.view = result.data.data.info;
         });

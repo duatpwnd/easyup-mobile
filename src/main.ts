@@ -12,6 +12,7 @@ import GlobalPlugin from "@/plugin/global_plugin.ts";
 import axios from "axios";
 import VueRouterBackButton from "vue-router-back-button";
 import Clipboard from "v-clipboard";
+import { ResultData } from "@/assets/js/util.ts";
 Vue.use(Clipboard);
 Vue.prototype.$EventBus = new Vue();
 Vue.prototype.$ApiUrl = ApiUrl;

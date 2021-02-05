@@ -105,25 +105,32 @@
               : null,
           },
         })
-        .then((result) => {
-          if (window.navigator.msSaveOrOpenBlob) {
-            // IE 10+
-            window.navigator.msSaveOrOpenBlob(
-              result.data,
-              this.getFileName(result.headers["content-disposition"]) as string
-            );
-          } else {
-            // not IE
-            let link = document.createElement("a");
-            link.href = window.URL.createObjectURL(result.data);
-            link.target = "_self";
-            link.download = this.getFileName(
-              result.headers["content-disposition"]
-            ) as string;
-            link.click();
-            window.URL.revokeObjectURL(result.data);
+        .then(
+          (result: {
+            data: string;
+            headers: { "content-disposition": string };
+          }) => {
+            if (window.navigator.msSaveOrOpenBlob) {
+              // IE 10+
+              window.navigator.msSaveOrOpenBlob(
+                result.data,
+                this.getFileName(
+                  result.headers["content-disposition"]
+                ) as string
+              );
+            } else {
+              // not IE
+              let link = document.createElement("a");
+              link.href = window.URL.createObjectURL(result.data);
+              link.target = "_self";
+              link.download = this.getFileName(
+                result.headers["content-disposition"]
+              ) as string;
+              link.click();
+              window.URL.revokeObjectURL(result.data);
+            }
           }
-        });
+        );
     }
     validationCheck(): void {
       const link = this.playerStore_current_link;
@@ -144,11 +151,7 @@
     // 자막파일 파싱
     srtParsing<T>(link: T): void {
       if (typeof link === "string" && link.length > 0) {
-        const subtitles: {
-          start: number;
-          end: number;
-          text: string;
-        }[] = parser.fromSrt(link, true);
+        const subtitles: any[] = parser.fromSrt(link, true);
         for (let i in subtitles) {
           subtitles[i] = {
             start: subtitles[i]["startTime"] / 1000,

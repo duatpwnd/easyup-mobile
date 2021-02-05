@@ -55,7 +55,7 @@
           });
         "
       >
-        기술블로그
+        이지타임
       </button>
       <button
         @click="
@@ -89,7 +89,7 @@
         "
         class="lnb"
       >
-        유니잡
+        이지잡
       </button>
       <button
         class="lnb"

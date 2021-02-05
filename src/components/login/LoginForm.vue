@@ -142,33 +142,39 @@
       } else {
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            if (result.data.error) {
-              this.$noticeMessage(result.data.message);
-            } else {
-              this.$cookies.set("user_info", result.data.data[0]);
-              this.$store.commit("userStore/loginToken", result.data.data[0]);
-              // 마지막 로그아웃 시점url이 있을경우
-              console.log(
-                "★★★★★★★★★★마지막 URL:★★★★★★★★★★★★★",
-                this.userStore_referer
-              );
-              if (this.userStore_referer != "") {
-                this.$router.push(this.userStore_referer).catch(() => {});
+          .then(
+            (result: {
+              data: { error: boolean; message: string; data: object[] };
+            }) => {
+              console.log(result);
+              if (result.data.error) {
+                this.$noticeMessage(result.data.message);
+              } else {
+                this.$cookies.set("user_info", result.data.data[0]);
+                this.$store.commit("userStore/loginToken", result.data.data[0]);
+                // 마지막 로그아웃 시점url이 있을경우
+                console.log(
+                  "★★★★★★★★★★마지막 URL:★★★★★★★★★★★★★",
+                  this.userStore_referer
+                );
+                if (this.userStore_referer != "") {
+                  this.$router.push(this.userStore_referer).catch(() => {});
+                }
               }
             }
-          })
-          .catch((err) => {});
+          );
       }
     }
     mounted() {}
     created() {
-      this.$EventBus.$on("login from signUpComplete", (result) => {
-        this.userid = result.email;
-        this.userpw = result.password;
-        this.login();
-      });
+      this.$EventBus.$on(
+        "login from signUpComplete",
+        (result: { email: string; password: string }) => {
+          this.userid = result.email;
+          this.userpw = result.password;
+          this.login();
+        }
+      );
     }
   }
 </script>

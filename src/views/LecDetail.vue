@@ -402,10 +402,14 @@
   export default class LecDetail extends mixin {
     public url: string = window.document.location.href;
     get discount_price() {
-      return this.$numberWithCommas(this.detail["coupon"].discount_price);
+      return this.$numberWithCommas(
+        (this.detail as { [key: string]: any }).coupon.discount_price
+      );
     }
     get quantity() {
-      return this.$numberWithCommas(this.detail["coupon"].quantity);
+      return this.$numberWithCommas(
+        (this.detail as { [key: string]: any }).coupon.quantity
+      );
     }
     isWatch() {
       this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
@@ -414,23 +418,21 @@
     couponDownload(): void {
       const data: { action: string; course_id: number; c_id: number } = {
         action: "download_coupon",
-        course_id: (this.$route.query.id as unknown) as number,
-        c_id: (this.detail["coupon"].coupon_id as unknown) as number,
+        course_id: Number(this.$route.query.id),
+        c_id: (this.detail as { [key: string]: any }).coupon.coupon_id,
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result: any) => {
-          console.log(result);
+        .then((result: object) => {
           this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
         });
     }
-    video(course_id: number, lp_id: number): void {
-      console.log(typeof course_id, lp_id);
+    video(course_id: any, lp_id: any): void {
       this.$router.push({
         path: "/play",
         query: {
-          course_id: Number(course_id).toFixed(0),
-          lp_id: Number(lp_id).toFixed(0),
+          course_id: course_id,
+          lp_id: lp_id,
         },
       });
     }

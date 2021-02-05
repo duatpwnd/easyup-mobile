@@ -1,4 +1,8 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { Module, VuexModule, Mutation } from "vuex-module-decorators";
+interface KeysType {
+  check_time: string;
+}
+
 @Module({ namespaced: true, name: "PlayStore" })
 export default class PlayStore extends VuexModule {
   check_time = ""; // 즐겨찾기 추가 시간
@@ -17,9 +21,9 @@ export default class PlayStore extends VuexModule {
     return this.current_link.split("?")[0];
   }
   @Mutation
-  playerState(param) {
-    Object.keys(param).forEach((el, index) => {
-      this[el] = Object.values(param)[index];
+  playerState(param: object) {
+    Object.keys(param).forEach((el, index: number) => {
+      this[el as keyof KeysType] = Object.values(param)[index];
     });
   }
 }
