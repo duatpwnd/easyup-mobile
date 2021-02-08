@@ -170,43 +170,38 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import { mapState } from "vuex";
-  export default {
+  @Component({
     components: {
       BlueBtn,
-    },
-    data() {
-      return {
-        userid: "",
-        userpw: "",
-        env: "",
-      };
     },
     computed: {
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
       }),
     },
-    methods: {
-      logout() {
-        console.log("로그아웃호출");
-        this.$logOut();
-      },
-      goToPath(url, obj) {
-        this.$router.push(url).catch(() => {});
-        this.$store.commit("toggleStore/Toggle", obj);
-      },
-
-      goToLecture() {
-        this.$EventBus.$emit("GoToLecture", true);
-      },
-    },
+  })
+  export default class LoginInfo extends Vue {
+    userid = "";
+    userpw = "";
+    env = "";
+    logout(): void {
+      this.$logOut();
+    }
+    goToPath(url: string, obj: object): void {
+      this.$router.push(url).catch(() => {});
+      this.$store.commit("toggleStore/Toggle", obj);
+    }
+    goToLecture(): void {
+      this.$EventBus.$emit("GoToLecture", true);
+    }
     mounted() {
-      this.env = process.env.NODE_ENV;
-    },
-  };
+      this.env = String(process.env.NODE_ENV);
+    }
+  }
 </script>
 <style scoped lang="scss">
   .blue_btn {
