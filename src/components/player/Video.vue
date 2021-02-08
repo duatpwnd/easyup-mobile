@@ -29,13 +29,10 @@
   import { Component, Watch, Vue } from "vue-property-decorator";
   import parser from "@/assets/js/youtube/subtitles.parser.js";
   import external_subtitle from "@/assets/js/youtube/youtube_external_subtitle.js";
-  import { mapState, mapMutations } from "vuex";
+  import { mapState } from "vuex";
   import BaseBtn from "@/components/common/BaseButton.vue";
-  interface ResultedData<T> {
-    data: T;
-  }
-  interface BodyData {
-    action: string;
+  import { ResultData, BodyData } from "@/assets/js/util.ts";
+  interface ExtendedBodyData extends BodyData {
     course_id: number;
     lp_id: number;
     item_id?: number;
@@ -49,7 +46,6 @@
       current_link(): string {
         return this.$store.getters["playerStore/getCurrentLink"];
       },
-
       ...mapState("playerStore", {
         playerStore_stopTime: "stop_time",
         playerStore_checkTime: "check_time",
@@ -90,7 +86,7 @@
       return fileName[0] ? fileName[0] : null;
     }
     download(item_id: Number): void {
-      const data: BodyData = {
+      const data: ExtendedBodyData = {
         action: "download_lecture_data",
         course_id: Number(this.$route.query.course_id),
         lp_id: Number(this.$route.query.lp_id),
@@ -133,10 +129,9 @@
         );
     }
     validationCheck(): void {
-      const link = this.playerStore_current_link;
+      const link: string = this.playerStore_current_link;
       // 북마크 시간 있는지 없는지
       if (this.playerStore_checkTime != "") {
-        console.log(link, this.playerStore_checkTime);
         // 스타트 옵션
         this.$store.commit("playerStore/playerState", {
           current_link:
@@ -178,7 +173,7 @@
     // 자막파일 유무
     isSrtFile(): void {
       this.validationCheck();
-      const data: BodyData = {
+      const data: ExtendedBodyData = {
         action: "get_srt_file",
         course_id: Number(this.$route.query.course_id),
         lp_id: Number(this.$route.query.lp_id),
@@ -188,7 +183,7 @@
 
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, data)
-        .then((result: ResultedData<string | "">) => {
+        .then((result: ResultData) => {
           console.log(result);
           if (result.data != "") {
             // 자막파일이 있는경우

@@ -7,7 +7,7 @@ let GroupMixin = class GroupMixin extends Vue {
         this.is_subscribe = false;
         this.subscribe_btn = false;
         this.detail = {};
-        this.score_info = ""; // 각 별점의 개수
+        this.score_info = {}; // 각 별점의 개수
         this.url = window.document.location.href; // 클립보드 현재 url
     }
     onPropertyChanged(value, oldValue) {
@@ -15,16 +15,18 @@ let GroupMixin = class GroupMixin extends Vue {
     }
     // 구독하기
     subscribe() {
-        let data = {};
+        let data = {
+            action: this.$route.name == "lecDetail"
+                ? "subscribe_course"
+                : "subscribe_session",
+        };
         if (this.$route.name == "lecDetail") {
-            data["action"] = "subscribe_course";
-            data["course_id"] = Number(this.$route.query.id);
+            data.course_id = Number(this.$route.query.id);
         }
         else {
-            data["action"] = "subscribe_session";
-            data["session_id"] = Number(this.$route.query.id);
+            data.session_id = Number(this.$route.query.id);
         }
-        console.log(data);
+        console.log("data", data);
         this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {
@@ -34,17 +36,17 @@ let GroupMixin = class GroupMixin extends Vue {
     }
     // 구독 여부 조회
     async isSubscribe() {
-        let data = {};
-        console.log(data);
+        let data = {
+            action: this.$route.name == "lecDetail"
+                ? "check_subscribe_course"
+                : "check_subscribe_session",
+        };
         if (this.$route.name == "lecDetail") {
-            data["action"] = "check_subscribe_course";
-            data["course_id"] = Number(this.$route.query.id);
+            data.course_id = Number(this.$route.query.id);
         }
         else {
-            data["action"] = "check_subscribe_session";
-            data["session_id"] = Number(this.$route.query.id);
+            data.session_id = Number(this.$route.query.id);
         }
-        console.log(data);
         await this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {
@@ -56,7 +58,6 @@ let GroupMixin = class GroupMixin extends Vue {
         });
     }
     scoreCount(result) {
-        console.log(result);
         this.score_info = result;
     }
     subscribe_btn_toggle() {
@@ -84,11 +85,9 @@ let GroupMixin = class GroupMixin extends Vue {
             type: this.$route.name == "lecDetail" ? "course" : "session",
             id: this.$route.query.id,
         };
-        console.log(data);
         this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {
-            console.log(result);
             this.$noticeMessage("강의바구니에 담았습니다.");
         });
     }
@@ -107,9 +106,8 @@ GroupMixin = __decorate([
             detect_token() {
                 return this.$store.getters["userStore/isToken"];
             },
-        }
+        },
     })
 ], GroupMixin);
 export default GroupMixin;
-;
 //# sourceMappingURL=lec_course_detail.js.map

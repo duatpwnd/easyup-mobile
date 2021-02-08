@@ -380,6 +380,8 @@
   import ProgressBar from "@/components/common/ProgressBar.vue";
   import mixin from "@/views/mixins/lec_course_detail.ts";
   import { mapState, mapMutations } from "vuex";
+  import { ResultData } from "@/assets/js/util.ts";
+
   @Component({
     components: {
       ConfirmModal,
@@ -423,7 +425,7 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result: object) => {
+        .then((result: ResultData) => {
           this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
         });
     }
@@ -458,12 +460,11 @@
       };
       await this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result: any) => {
+        .then((result: ResultData) => {
           console.log(result);
           this.detail = result.data.data;
         });
     }
-
     mounted() {
       this.$EventBus.$on("commentReload", () => {
         this.getLectureDetail();

@@ -44,7 +44,13 @@
 <script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
   import { Component, Vue } from "vue-property-decorator";
-  import { ResultData } from "@/assets/js/util.ts";
+  import { ResultData, BodyData } from "@/assets/js/util.ts";
+  interface ExtendedBodyData extends BodyData {
+    code: string;
+    recipients?: string[];
+    file?: File;
+  }
+
   @Component({
     components: {
       BlueBtn,
@@ -67,15 +73,14 @@
       this.file_obj = selected_file;
     }
     upload(): void {
-      interface DataType {
-        [key: string]: string | Blob;
-      }
       const formData = new FormData();
-      const data: DataType = {
+      const data: ExtendedBodyData = {
         action: "upload_dropbox_file",
         code: this.selected,
-        recipients: (this.shared_recipients as unknown) as string,
-        file: this.file_obj,
+        recipients: this.shared_recipients,
+        file: new File([this.file_obj], (this.file_obj as any).name, {
+          type: (this.file_obj as any).type,
+        }),
       };
       for (var key in data) {
         formData.append(key, JSON.stringify(data[key]));
@@ -101,7 +106,7 @@
         });
     }
     targetSelect(): void {
-      const data = {
+      const data: ExtendedBodyData = {
         action: "get_dropbox_target_select",
         code: this.selected,
       };

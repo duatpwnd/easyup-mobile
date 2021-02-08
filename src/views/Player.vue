@@ -81,14 +81,15 @@
   import { mapState, mapMutations } from "vuex";
   import mixin from "@/components/player/player_mixin.ts";
   import videojs from "video.js";
-  interface BodyData {
-    action: string;
+  import { ResultData, BodyData } from "@/assets/js/util.ts";
+  interface ExtendedBodyData extends BodyData {
     course_id: number;
     lp_id: number;
     item_id?: number;
     idx?: number;
+    linkType?: string;
+    iid?: number;
   }
-
   @Component({
     components: { BookmarkListModal, Tab1, Tab2, Video, Scorm, BookmarkModal },
     computed: {
@@ -136,11 +137,11 @@
       }
     }
     public isVtt(): void {
+      const self = this;
       interface VttData<T> {
         data: T extends "" ? "" : { data: { srtFileLink: string } };
       }
-      const self = this;
-      const data: BodyData = {
+      const data: ExtendedBodyData = {
         action: "get_srt_file",
         course_id: Number(this.$route.query.course_id),
         lp_id: Number(this.$route.query.lp_id),
@@ -193,23 +194,19 @@
         });
     }
     public getPlayInfo<T, U>(id: T, linkType: U): void {
-      interface PlayerResultedData {
-        data: {
-          data: {};
-        };
-      }
       this.video_set = false;
-      const data = {
+      let data: ExtendedBodyData = {
         action: "get_player_info",
-        course_id: this.$route.query.course_id,
-        lp_id: this.$route.query.lp_id,
-        linkType: typeof linkType === "undefined" ? null : linkType,
-        iid: typeof id === "undefined" ? null : id,
+        course_id: Number(this.$route.query.course_id),
+        lp_id: Number(this.$route.query.lp_id),
       };
-      console.log(data);
+      if (typeof linkType !== "undefined" && typeof id !== "undefined") {
+        data.linkType = String(linkType);
+        data.iid = Number(id);
+      }
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result: PlayerResultedData) => {
+        .then((result: ResultData) => {
           console.log("플레이어 정보", result);
           this.info = result.data.data;
           this.videoOptions.sources[0].src = this.info.current_item[0].link;

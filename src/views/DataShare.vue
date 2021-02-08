@@ -13,6 +13,7 @@
       }"
       ><span class="active_bar"></span>공유한 파일
     </router-link>
+
     <router-link
       class="tab"
       :to="{
@@ -29,7 +30,7 @@
   </div>
 </template>
 <script lang="ts">
-  import { Component, Watch, Vue } from "vue-property-decorator";
+  import { Vue } from "vue-property-decorator";
   export default class DataShare extends Vue {}
 </script>
 <style scoped lang="scss">
