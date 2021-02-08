@@ -31,7 +31,8 @@ d. 보안에 따른 활용
   >
 </template>
 <script lang="ts">
-  import { Vue } from "vue-property-decorator";
+  import { Vue, Component } from "vue-property-decorator";
+  @Component
   export default class Privacy extends Vue {}
 </script>
 <style scoped lang="scss">

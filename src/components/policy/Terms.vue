@@ -28,7 +28,8 @@ h. 위 항에서 정의되지 않은 약관 상의 용어의 의미는 일반적
   >
 </template>
 <script lang="ts">
-  import { Vue } from "vue-property-decorator";
+  import { Vue, Component } from "vue-property-decorator";
+  @Component
   export default class Terms extends Vue {}
 </script>
 <style scoped lang="scss">
