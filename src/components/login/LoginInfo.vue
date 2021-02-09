@@ -34,7 +34,6 @@
         코스
       </button>
       <button
-        v-if="env == 'development'"
         class="lnb"
         @click="
           $router.push({
