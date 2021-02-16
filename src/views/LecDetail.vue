@@ -132,7 +132,7 @@
                   $router.push({
                     path: 'order',
                     query: {
-                      cart_id: [$route.query.id].toString(),
+                      cart_id: $route.query.id,
                     },
                   })
                 "
@@ -177,7 +177,7 @@
               @click="
                 $router.push({
                   path: 'order',
-                  query: { cart_id: [$route.query.id].toString() },
+                  query: { cart_id: $route.query.id },
                 })
               "
             >

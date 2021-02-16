@@ -92,79 +92,89 @@
     </Pagination>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BaseButton from "@/components/common/BaseButton.vue";
   import Search from "@/components/common/Search.vue";
   import DatePicker from "@/components/common/DatePicker.vue";
   import Pagination from "@/components/common/Pagination.vue";
   import Row from "@/components/common/Row.vue";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  import { BodyData } from "@/assets/js/util.ts";
+
+  @Component({
     components: { BaseButton, Search, DatePicker, Pagination, Row },
-    data() {
-      return {
-        keyword: "",
-        order: "",
-        current: "",
-        list: "",
+  })
+  export default class List extends Vue {
+    $dateFormat!: Function;
+    keyword = "";
+    order = "";
+    current = 1;
+    list = "";
+    datePick(result: [object, object]): void {
+      this.$router
+        .push({
+          query: {
+            keyword: this.$route.query.keyword,
+            pageCurrent: 1 as any,
+            order: this.$route.query.order,
+            start_date: this.$dateFormat(result[0]),
+            end_date: this.$dateFormat(result[1]),
+            view: this.$route.query.view,
+          },
+        })
+        .catch(() => {});
+      this.getList(
+        1,
+        this.$route.query.order as string,
+        this.$route.query.keyword as string
+      );
+    }
+    getList(num: number, order: string, keyword: string): void {
+      interface ReqData extends BodyData {
+        current: number;
+        keyword: string;
+        search_status: string;
+        search_start_date: string;
+        search_end_date: string;
+      }
+      const data: ReqData = {
+        action: "order_list",
+        current: num,
+        keyword: keyword,
+        search_status: order,
+        search_start_date: this.$route.query.start_date as string,
+        search_end_date: this.$route.query.end_date as string,
       };
-    },
-    methods: {
-      datePick(result) {
-        this.$router
-          .push({
-            query: {
-              keyword: this.$route.query.keyword,
-              pageCurrent: 1,
-              order: this.$route.query.order,
-              start_date: this.$dateFormat(result[0]),
-              end_date: this.$dateFormat(result[1]),
-              view: this.$route.query.view,
-            },
-          })
-          .catch(() => {});
-        this.getList(1, this.$route.query.order, this.$route.query.keyword);
-      },
-      getList(num, order, keyword) {
-        const data = {
-          action: "order_list",
-          current: num,
-          keyword: keyword,
-          search_status: order,
-          search_start_date: this.$route.query.start_date,
-          searh_end_date: this.$route.query.end_date,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.list = result.data.data;
-            this.$router
-              .push({
-                query: {
-                  keyword: keyword,
-                  pageCurrent: num,
-                  order: order,
-                  start_date: this.$route.query.start_date,
-                  end_date: this.$route.query.end_date,
-                  view: this.$route.query.view,
-                },
-              })
-              .catch(() => {});
-            this.order = order;
-            this.keyword = keyword;
-            this.current = num;
-          });
-      },
-    },
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          console.log(result);
+          this.list = result.data.data;
+          this.$router
+            .push({
+              query: {
+                keyword: keyword,
+                pageCurrent: num as any,
+                order: order,
+                start_date: this.$route.query.start_date,
+                end_date: this.$route.query.end_date,
+                view: this.$route.query.view,
+              },
+            })
+            .catch(() => {});
+          this.order = order;
+          this.keyword = keyword;
+          this.current = num;
+        });
+    }
     created() {
       this.getList(
-        this.$route.query.pageCurrent,
-        this.$route.query.order,
-        this.$route.query.keyword
+        (this.$route.query.pageCurrent as unknown) as number,
+        this.$route.query.order as string,
+        this.$route.query.keyword as string
       );
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .filter {

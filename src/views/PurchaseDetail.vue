@@ -4,27 +4,19 @@
     <router-view></router-view>
   </div>
 </template>
-<script>
-export default {
-  data() {
-    return {
-      keyword: "",
-      order: ""
-    };
-  },
-  watch: {
-    $route(to, from) {}
-  },
-  methods: {},
-  mounted() {}
-};
+<script lang="ts">
+  import { Vue } from "vue-property-decorator";
+  export default class Purcahse extends Vue {
+    keyword = "";
+    order = "";
+  }
 </script>
 <style scoped lang="scss">
-.purchase_warp {
-  padding-bottom: 65px;
-  .title {
-    font-size: 18px;
-    padding: 0 4.445%;
+  .purchase_warp {
+    padding-bottom: 65px;
+    .title {
+      font-size: 18px;
+      padding: 0 4.445%;
+    }
   }
-}
 </style>

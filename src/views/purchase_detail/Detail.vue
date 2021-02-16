@@ -209,13 +209,14 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Row from "@/components/common/Row.vue";
   import BaseButton from "@/components/common/BaseButton.vue";
   import { mapState, mapMutations } from "vuex";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import CancelLecture from "@/components/modal/CancelLecture.vue";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       CancelLecture,
       ConfirmModal,
@@ -227,36 +228,30 @@
         toggleStore_confirmModal: "confirm_modal",
       }),
     },
-    data() {
-      return {
-        list: "",
-        cancelLecture: false,
+  })
+  export default class Detail extends Vue {
+    list = "";
+    cancelLecture = false;
+    isCancel(): void {
+      this.$confirmMessage(
+        "구매하신 강의를 취소 하시겠습니까?<br>취소 신청 시 강의 시청이 불가 합니다."
+      );
+    }
+    getList(): void {
+      const data = {
+        action: "order_info",
+        order_id: String(this.$route.query.order_id),
       };
-    },
-    methods: {
-      isCancel() {
-        this.$confirmMessage(
-          "구매하신 강의를 취소 하시겠습니까?<br>취소 신청 시 강의 시청이 불가 합니다."
-        );
-      },
-      getList() {
-        const data = {
-          action: "order_info",
-          order_id: this.$route.query.order_id,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.list = result.data.data;
-          });
-      },
-    },
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          this.list = result.data.data;
+        });
+    }
     created() {
       this.getList();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .detail_wrap {
