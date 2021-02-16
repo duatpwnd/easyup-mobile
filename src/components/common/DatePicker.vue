@@ -29,8 +29,6 @@
     },
     methods: {
       set() {
-        console.log(this.$route.query.view);
-
         this.$emit("emitDatePick", this.value1);
       },
       // 모바일에서 키보드 안나오게

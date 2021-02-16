@@ -44,13 +44,13 @@
 <script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
   import { Component, Vue } from "vue-property-decorator";
-  import { ResultData, BodyData } from "@/assets/js/util.ts";
-  interface ExtendedBodyData extends BodyData {
+  import { ResultData } from "@/assets/js/util.ts";
+  interface BodyData {
+    action: string;
     code: string;
     recipients?: string[];
     file?: File;
   }
-
   @Component({
     components: {
       BlueBtn,
@@ -74,7 +74,7 @@
     }
     upload(): void {
       const formData = new FormData();
-      const data: ExtendedBodyData = {
+      const data: BodyData = {
         action: "upload_dropbox_file",
         code: this.selected,
         recipients: this.shared_recipients,
@@ -107,7 +107,7 @@
         });
     }
     targetSelect(): void {
-      const data: ExtendedBodyData = {
+      const data: BodyData = {
         action: "get_dropbox_target_select",
         code: this.selected,
       };

@@ -81,14 +81,15 @@
   import { mapState, mapMutations } from "vuex";
   import mixin from "@/components/player/player_mixin.ts";
   import videojs from "video.js";
-  import { ResultData, BodyData } from "@/assets/js/util.ts";
-  interface ExtendedBodyData extends BodyData {
+  import { ResultData } from "@/assets/js/util.ts";
+  interface BodyData {
+    action: string;
     course_id: number;
     lp_id: number;
-    item_id?: number;
-    idx?: number;
-    linkType?: string;
-    iid?: number;
+    item_id: number;
+    idx: number;
+    linkType: string;
+    iid: number;
   }
   @Component({
     components: { BookmarkListModal, Tab1, Tab2, Video, Scorm, BookmarkModal },
@@ -141,12 +142,12 @@
       interface VttData<T> {
         data: T extends "" ? "" : { data: { srtFileLink: string } };
       }
-      const data: ExtendedBodyData = {
+      const data: Omit<BodyData, "linkType" | "iid"> = {
         action: "get_srt_file",
-        course_id: Number(this.$route.query.course_id),
-        lp_id: Number(this.$route.query.lp_id),
-        item_id: Number(this.playerStore_current_item_id),
-        idx: Number(this.$store.state.playerStore.current_index),
+        course_id: (this.$route.query.course_id as unknown) as number,
+        lp_id: (this.$route.query.lp_id as unknown) as number,
+        item_id: this.playerStore_current_item_id,
+        idx: this.$store.state.playerStore.current_index,
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, data)
@@ -193,16 +194,21 @@
           });
         });
     }
-    public getPlayInfo<T, U>(id: T, linkType: U): void {
+    getPlayInfo<T, U>(id: T, linkType: U): void {
       this.video_set = false;
-      let data: ExtendedBodyData = {
+      type ReqData1 = Pick<
+        BodyData,
+        "action" | "course_id" | "lp_id" | "linkType" | "iid"
+      >;
+      type ReqData2 = Omit<ReqData1, "linkType" | "iid">;
+      let data: ReqData1 | ReqData2 = {
         action: "get_player_info",
         course_id: Number(this.$route.query.course_id),
         lp_id: Number(this.$route.query.lp_id),
       };
       if (typeof linkType !== "undefined" && typeof id !== "undefined") {
-        data.linkType = String(linkType);
-        data.iid = Number(id);
+        (data as ReqData1).linkType = (linkType as unknown) as string;
+        (data as ReqData1).iid = (id as unknown) as number;
       }
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))

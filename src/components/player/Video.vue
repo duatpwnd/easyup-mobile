@@ -31,12 +31,13 @@
   import external_subtitle from "@/assets/js/youtube/youtube_external_subtitle.js";
   import { mapState } from "vuex";
   import BaseBtn from "@/components/common/BaseButton.vue";
-  import { ResultData, BodyData } from "@/assets/js/util.ts";
-  interface ExtendedBodyData extends BodyData {
+  import { ResultData } from "@/assets/js/util.ts";
+  interface BodyData {
+    action: string;
     course_id: number;
     lp_id: number;
-    item_id?: number;
-    idx?: number;
+    item_id: number;
+    idx: number;
   }
   interface YoutubeSubtitle {
     onTimeChange: Function;
@@ -86,7 +87,7 @@
       return fileName[0] ? fileName[0] : null;
     }
     download(item_id: Number): void {
-      const data: ExtendedBodyData = {
+      const data: Omit<BodyData, "idx"> = {
         action: "download_lecture_data",
         course_id: Number(this.$route.query.course_id),
         lp_id: Number(this.$route.query.lp_id),
@@ -173,12 +174,12 @@
     // 자막파일 유무
     isSrtFile(): void {
       this.validationCheck();
-      const data: ExtendedBodyData = {
+      const data: BodyData = {
         action: "get_srt_file",
-        course_id: Number(this.$route.query.course_id),
-        lp_id: Number(this.$route.query.lp_id),
-        item_id: Number(this.playerStore_current_item_id),
-        idx: Number(this.$store.state.playerStore.current_index),
+        course_id: (this.$route.query.course_id as unknown) as number,
+        lp_id: (this.$route.query.lp_id as unknown) as number,
+        item_id: this.playerStore_current_item_id,
+        idx: this.$store.state.playerStore.current_index,
       };
 
       this.$axios

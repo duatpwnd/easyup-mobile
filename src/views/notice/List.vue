@@ -65,76 +65,80 @@
     </Pagination>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Search from "@/components/common/Search.vue";
   import BoardTitle from "@/components/common/BoardTitle.vue";
   import BoardList from "@/components/common/BoardList.vue";
   import Pagination from "@/components/common/Pagination.vue";
-
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  interface BodyData {
+    action: string;
+    current: number;
+    search_status: string;
+    keyword: string;
+  }
+  @Component({
     components: {
       Pagination,
-
       BoardTitle,
       BoardList,
       Search,
     },
-    data() {
-      return {
-        current: "", //현재번호
-        order: "",
-        keyword: "",
-        notice_list: "",
+  })
+  export default class List extends Vue {
+    current = 1; //현재번호
+    order = "";
+    keyword = "";
+    notice_list = "";
+    read(id: number, c_id: number): void {
+      this.$router.push({
+        path: "/notice/read",
+        query: {
+          id: id as any,
+          c_id: c_id as any,
+          view: String(this.$route.query.view),
+        },
+      });
+    }
+    go_to_path(): void {
+      this.$router.push("/notice/noticeRegister");
+    }
+    getNoticeList(num: number, order: string, keyword: string): void {
+      const data: BodyData = {
+        action: "get_my_notice_list",
+        current: num == undefined ? 1 : num,
+        search_status: order == undefined ? "all" : order,
+        keyword: keyword == undefined ? "" : keyword,
       };
-    },
-    methods: {
-      read(id, c_id) {
-        this.$router.push({
-          path: "/notice/read",
-          query: { id: id, c_id: c_id, view: this.$route.query.view },
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          console.log(result);
+          this.notice_list = result.data.data;
+          this.$router
+            .push({
+              query: {
+                pageCurrent: num as any,
+                order: order,
+                keyword: keyword,
+                view: String(this.$route.query.view),
+              },
+            })
+            .catch(() => {});
+          this.order = order;
+          this.keyword = keyword;
+          this.current = num;
         });
-      },
-      go_to_path() {
-        this.$router.push("/notice/noticeRegister");
-      },
-      getNoticeList(num, order, keyword) {
-        console.log(num, order, keyword);
-        const data = {
-          action: "get_my_notice_list",
-          current: num == undefined ? 1 : num,
-          search_status: order == undefined ? "all" : order,
-          keyword: keyword == undefined ? "" : keyword,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.notice_list = result.data.data;
-            this.$router
-              .push({
-                query: {
-                  pageCurrent: num,
-                  order: order,
-                  keyword: keyword,
-                  view: this.$route.query.view,
-                },
-              })
-              .catch(() => {});
-            this.order = order;
-            this.keyword = keyword;
-            this.current = num;
-          });
-      },
-    },
+    }
     created() {
       this.getNoticeList(
-        this.$route.query.pageCurrent,
-        this.$route.query.order,
-        this.$route.query.keyword
+        (this.$route.query.pageCurrent as unknown) as number,
+        this.$route.query.order as string,
+        this.$route.query.keyword as string
       );
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .search_area {

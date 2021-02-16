@@ -245,8 +245,6 @@
               keyword: "",
               pageCurrent: 1,
               order: "",
-              start_date: this.$dateFormat(),
-              end_date: this.$dateFormat(),
               view: this.$route.query.view as string,
             },
           },

@@ -99,8 +99,14 @@
   import Pagination from "@/components/common/Pagination.vue";
   import Row from "@/components/common/Row.vue";
   import { Vue, Component } from "vue-property-decorator";
-  import { BodyData } from "@/assets/js/util.ts";
-
+  interface BodyData {
+    action: string;
+    current: number;
+    keyword: string;
+    search_status: string;
+    search_start_date: string;
+    search_end_date: string;
+  }
   @Component({
     components: { BaseButton, Search, DatePicker, Pagination, Row },
   })
@@ -130,14 +136,7 @@
       );
     }
     getList(num: number, order: string, keyword: string): void {
-      interface ReqData extends BodyData {
-        current: number;
-        keyword: string;
-        search_status: string;
-        search_start_date: string;
-        search_end_date: string;
-      }
-      const data: ReqData = {
+      const data: BodyData = {
         action: "order_list",
         current: num,
         keyword: keyword,
@@ -145,6 +144,7 @@
         search_start_date: this.$route.query.start_date as string,
         search_end_date: this.$route.query.end_date as string,
       };
+      console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result) => {

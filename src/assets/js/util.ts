@@ -2,6 +2,3 @@
 export interface ResultData {
   [key: string]: any;
 }
-export interface BodyData {
-  action: string;
-}
