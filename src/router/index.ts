@@ -122,8 +122,8 @@ const routes = [
     meta: { GnbBottomMenu: true },
   },
   {
-    path: "/studentClaasRoom",
-    name: "studentClaasRoom",
+    path: "/studentClassRoom",
+    name: "studentClassRoom",
     component: () => import("../views/StudentRoom.vue"),
     meta: { GnbBottomMenu: true },
   },

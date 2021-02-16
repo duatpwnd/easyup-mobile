@@ -102,6 +102,7 @@
       order?: string;
       start_date?: string;
       end_date?: string;
+      view?: string;
     };
   }
   interface UserInfo {
@@ -123,16 +124,19 @@
     },
   })
   export default class GnbMenu extends Vue {
-    @Watch("detect_status")
-    onPropertyChanged(newValue: number, oldValue: number) {
-      if (newValue != oldValue) {
-        this.bottom_menu.splice(3, 3);
+    @Watch("view")
+    onPropertyChanged(newValue: string, oldValue: string) {
+      // 다른페이지로 이동할떄
+      console.log("Watch:", this.bottom_menu);
+      if (newValue != oldValue && newValue != undefined) {
+        this.bottom_menu.splice(2, 3);
         this.menuSet();
       }
     }
     $dateFormat!: Function;
     userStore_userinfo!: UserInfo;
     gnb_mask = false;
+    view = "";
     top_menu: MenuType[] = [
       {
         title: "공지사항",
@@ -186,16 +190,17 @@
         name: require("@/assets/images/common/learning_ico.png"),
         active: require("@/assets/images/common/learning_active_ico.png"),
       },
-      {
-        title: "쿠폰관리",
-        path: "/couponManage/student",
-        query: {
-          type: "available",
-          pageCurrent: 1,
-        },
-        name: require("@/assets/images/common/coupon_ico.png"),
-        active: require("@/assets/images/common/coupon_active_ico.png"),
-      },
+      // {
+      //   title: "쿠폰관리",
+      //   path: "/couponManage/student",
+      //   query: {
+      //     type: "available",
+      //     pageCurrent: 1,
+      //     view: this.$route.query.view as string,
+      //   },
+      //   name: require("@/assets/images/common/coupon_ico.png"),
+      //   active: require("@/assets/images/common/coupon_active_ico.png"),
+      // },
     ];
     removeMask(): void {
       this.gnb_mask = false;
@@ -210,8 +215,26 @@
       });
     }
     menuSet(): void {
-      if (this.userStore_userinfo.info.status == 5) {
+      (this.top_menu[0] as { [key: string]: any }).query.view = this.$route
+        .query.view as string;
+      (this.top_menu[1] as { [key: string]: any }).query.view = this.$route
+        .query.view as string;
+      (this.bottom_menu[0] as { [key: string]: any }).query.view = this.$route
+        .query.view as string;
+      // 학생
+      if (this.$route.query.view == "student") {
         this.bottom_menu.push(
+          {
+            title: "쿠폰관리",
+            path: "/couponManage/student",
+            query: {
+              type: "available",
+              pageCurrent: 1,
+              view: this.$route.query.view as string,
+            },
+            name: require("@/assets/images/common/coupon_ico.png"),
+            active: require("@/assets/images/common/coupon_active_ico.png"),
+          },
           {
             title: "구매내역",
             path: "/purchase/list",
@@ -224,6 +247,7 @@
               order: "",
               start_date: this.$dateFormat(),
               end_date: this.$dateFormat(),
+              view: this.$route.query.view as string,
             },
           },
           {
@@ -236,32 +260,51 @@
               keyword: "",
               pageCurrent: 1,
               order: "",
+              view: this.$route.query.view as string,
             },
           }
         );
       } else {
-        this.bottom_menu[2].path = "/couponManageTeacher/list";
-        this.bottom_menu[2].query = {
-          order: "",
-          pageCurrent: 1,
-          keyword: "",
-        };
-        this.bottom_menu.push({
-          title: "정산/결제",
-          path: "/settlementAndPayment/settleList",
-          name: require("@/assets/images/common/payment_ico.png"),
-          active: require("@/assets/images/common/payment_active_ico.png"),
-          status: 1,
-          query: {
-            pageCurrent: 1,
-            start_date: this.$dateFormat(),
-            end_date: this.$dateFormat(),
+        // 관리자
+        this.bottom_menu.push(
+          {
+            title: "쿠폰관리",
+            path: "/couponManageTeacher/list",
+            query: {
+              order: "",
+              pageCurrent: 1,
+              keyword: "",
+              view: this.$route.query.view as string,
+            },
+            name: require("@/assets/images/common/coupon_ico.png"),
+            active: require("@/assets/images/common/coupon_active_ico.png"),
           },
-        });
+          {
+            title: "정산/결제",
+            path: "/settlementAndPayment/settleList",
+            name: require("@/assets/images/common/payment_ico.png"),
+            active: require("@/assets/images/common/payment_active_ico.png"),
+            status: 1,
+            query: {
+              pageCurrent: 1,
+              start_date: this.$dateFormat(),
+              end_date: this.$dateFormat(),
+              view: this.$route.query.view as string,
+            },
+          }
+        );
       }
     }
-    created() {
-      this.menuSet();
+    updated() {
+      this.$nextTick(() => {
+        this.view = this.$route.query.view as string;
+      });
+    }
+    mounted() {
+      // updated 호출후 다시 뒤로가기 버튼누르고 앞으로 가기버튼 누르면 쿼리값이 찍힘 그러나 updated는 호출안됨
+      if (this.$route.query.view != undefined) {
+        this.view = this.$route.query.view as string;
+      }
     }
   }
 </script>

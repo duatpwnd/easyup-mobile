@@ -87,8 +87,8 @@
                   start_date: $dateFormat(),
                   end_date: $dateFormat(),
                   c_id: li.id,
-                  coupon_id: li.c_id
-                }
+                  coupon_id: li.c_id,
+                },
               })
             "
           >
@@ -125,216 +125,217 @@
   </div>
 </template>
 <script>
-import Search from "@/components/common/Search.vue";
-import CheckBox from "@/components/common/BaseCheckBox.vue";
-import BlueBtn from "@/components/common/BaseButton.vue";
-import ConfirmModal from "@/components/common/ConfirmModal.vue";
-import Pagination from "@/components/common/Pagination.vue";
-import { mapState, mapMutations } from "vuex";
-export default {
-  components: { BlueBtn, Search, CheckBox, ConfirmModal, Pagination },
-  computed: {
-    ...mapState("toggleStore", {
-      toggleStore_confirmModal: "confirm_modal"
-    })
-  },
-  data() {
-    return {
-      current: "",
-      order: "",
-      keyword: "",
-      list: "",
-      checked_list: []
-    };
-  },
-  methods: {
-    isRemove() {
-      this.$confirmMessage(
-        "선택한 쿠폰을 삭제 하시겠습니까?<br>쿠폰을 삭제해도 사전에 발행된 쿠폰은 사용이<br> 가능하며 상세 내역 확인은 불가 합니다."
-      );
+  import Search from "@/components/common/Search.vue";
+  import CheckBox from "@/components/common/BaseCheckBox.vue";
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import Pagination from "@/components/common/Pagination.vue";
+  import { mapState, mapMutations } from "vuex";
+  export default {
+    components: { BlueBtn, Search, CheckBox, ConfirmModal, Pagination },
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_confirmModal: "confirm_modal",
+      }),
     },
-    couponRemove() {
-      if (this.checked_list.length == 0) {
-        this.$noticeMessage("삭제할 쿠폰을 선택해주세요.");
-      } else {
+    data() {
+      return {
+        current: "",
+        order: "",
+        keyword: "",
+        list: "",
+        checked_list: [],
+      };
+    },
+    methods: {
+      isRemove() {
+        this.$confirmMessage(
+          "선택한 쿠폰을 삭제 하시겠습니까?<br>쿠폰을 삭제해도 사전에 발행된 쿠폰은 사용이<br> 가능하며 상세 내역 확인은 불가 합니다."
+        );
+      },
+      couponRemove() {
+        if (this.checked_list.length == 0) {
+          this.$noticeMessage("삭제할 쿠폰을 선택해주세요.");
+        } else {
+          const data = {
+            action: "delete_coupon",
+            coupon_id: this.checked_list,
+          };
+          console.log(data);
+          this.$axios
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+            .then((result) => {
+              console.log(result);
+              this.getList();
+            });
+        }
+      },
+      getList(num, order, keyword) {
         const data = {
-          action: "delete_coupon",
-          coupon_id: this.checked_list
+          action: "get_course_coupon_list",
+          search_status: order,
+          current: num,
+          keyword: keyword,
         };
         console.log(data);
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then(result => {
+          .then((result) => {
             console.log(result);
-            this.getList();
+            this.list = result.data.data;
+            this.order = order;
+            this.keyword = keyword;
+            this.current = num;
+            this.$router
+              .push({
+                query: {
+                  order: order,
+                  pageCurrent: num,
+                  keyword: keyword,
+                  view: this.$route.query.view,
+                },
+              })
+              .catch(() => {});
           });
-      }
+      },
     },
-    getList(num, order, keyword) {
-      const data = {
-        action: "get_course_coupon_list",
-        search_status: order,
-        current: num,
-        keyword: keyword
-      };
-      console.log(data);
-      this.$axios
-        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then(result => {
-          console.log(result);
-          this.list = result.data.data;
-          this.order = order;
-          this.keyword = keyword;
-          this.current = num;
-          this.$router
-            .push({
-              query: {
-                order: order,
-                pageCurrent: num,
-                keyword: keyword
-              }
-            })
-            .catch(() => {});
-        });
-    }
-  },
-  created() {
-    this.getList(
-      this.$route.query.pageCurrent,
-      this.$route.query.order,
-      this.$route.query.keyword
-    );
-  }
-};
+    created() {
+      this.getList(
+        this.$route.query.pageCurrent,
+        this.$route.query.order,
+        this.$route.query.keyword
+      );
+    },
+  };
 </script>
 <style scoped lang="scss">
-.counpon_list {
-  padding: 4.445%;
-  padding-bottom: 65px;
-  .h2_title {
-    font-size: 18px;
-  }
-  .btn_wrap {
-    margin-top: 10px;
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
+  .counpon_list {
+    padding: 4.445%;
+    padding-bottom: 65px;
+    .h2_title {
+      font-size: 18px;
     }
-    .blue_btn {
-      width: 48%;
-      button {
-        height: 40px;
-        line-height: 28px;
-        font-size: 18px;
-        font-family: unset;
+    .btn_wrap {
+      margin-top: 10px;
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
+      }
+      .blue_btn {
+        width: 48%;
+        button {
+          height: 40px;
+          line-height: 28px;
+          font-size: 18px;
+          font-family: unset;
+        }
+      }
+      .left {
+        float: left;
+      }
+      .right {
+        float: right;
+        button {
+          background: white;
+          color: #114fff;
+        }
       }
     }
-    .left {
-      float: left;
-    }
-    .right {
-      float: right;
-      button {
-        background: white;
-        color: #114fff;
+    .coupon {
+      margin-top: 15px;
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
       }
-    }
-  }
-  .coupon {
-    margin-top: 15px;
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
-    }
-    .left {
-      width: 15%;
-      display: inline-block;
-      position: relative;
-      vertical-align: middle;
-      ::v-deep .container-checkbox {
-        position: unset;
-        width: unset;
-        height: 24px;
+      .left {
+        width: 15%;
         display: inline-block;
-        .checkmark {
+        position: relative;
+        vertical-align: middle;
+        ::v-deep .container-checkbox {
           position: unset;
-          width: 24px;
-          display: inline-block;
+          width: unset;
           height: 24px;
-          padding: 0;
-          box-sizing: border-box;
-        }
-      }
-    }
-    .right {
-      display: inline-block;
-      border: 1px solid #333333;
-      vertical-align: middle;
-      box-sizing: border-box;
-      width: 85%;
-      .top_section {
-        padding: 10px;
-        .title {
-          font-size: 14px;
-        }
-        .row1 {
-          .name {
-            font-size: 12px;
+          display: inline-block;
+          .checkmark {
+            position: unset;
+            width: 24px;
+            display: inline-block;
+            height: 24px;
+            padding: 0;
+            box-sizing: border-box;
           }
         }
-        .row2 {
-          .date {
-            font-size: 12px;
+      }
+      .right {
+        display: inline-block;
+        border: 1px solid #333333;
+        vertical-align: middle;
+        box-sizing: border-box;
+        width: 85%;
+        .top_section {
+          padding: 10px;
+          .title {
+            font-size: 14px;
+          }
+          .row1 {
+            .name {
+              font-size: 12px;
+            }
+          }
+          .row2 {
+            .date {
+              font-size: 12px;
+              color: #999999;
+            }
+          }
+        }
+
+        .row3 {
+          padding: 10px;
+          &:after {
+            display: block;
+            content: "";
+            clear: both;
+          }
+          .status {
+            float: left;
+            font-size: 16px;
+          }
+          .ing {
+            color: white;
+            font-family: unset;
+            line-height: 28px;
+          }
+          .end {
             color: #999999;
           }
-        }
-      }
-
-      .row3 {
-        padding: 10px;
-        &:after {
-          display: block;
-          content: "";
-          clear: both;
-        }
-        .status {
-          float: left;
-          font-size: 16px;
-        }
-        .ing {
-          color: white;
-          font-family: unset;
-          line-height: 28px;
-        }
-        .end {
-          color: #999999;
-        }
-        .modify,
-        .list {
-          width: 26%;
-          float: right;
-          button {
-            background: white;
-            color: #114fff;
-            border: 0;
-            font-family: unset;
+          .modify,
+          .list {
+            width: 26%;
+            float: right;
+            button {
+              background: white;
+              color: #114fff;
+              border: 0;
+              font-family: unset;
+            }
+          }
+          .list {
+            margin-left: 5px;
           }
         }
-        .list {
-          margin-left: 5px;
-        }
-      }
-      .end_line {
-        .list,
-        .modify {
-          button {
-            color: #666666;
+        .end_line {
+          .list,
+          .modify {
+            button {
+              color: #666666;
+            }
           }
         }
       }
     }
   }
-}
 </style>

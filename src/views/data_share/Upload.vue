@@ -101,6 +101,7 @@
               keyword: "",
               pageCurrent: 1 as any,
               order: "all",
+              view: this.$route.query.view,
             },
           });
         });

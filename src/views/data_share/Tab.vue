@@ -138,7 +138,12 @@
     },
     methods: {
       upload() {
-        this.$router.push("/dataShare/upload");
+        this.$router.push({
+          path: "/dataShare/upload",
+          query: {
+            view: this.$route.query.view,
+          },
+        });
       },
       fileDownload(id, course_id, file_name) {
         const data = {
@@ -232,6 +237,7 @@
                     pageCurrent: num,
                     order: order,
                     keyword: keyword,
+                    view: this.$route.query.view,
                   },
                 })
                 .catch(() => {});

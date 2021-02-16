@@ -9,6 +9,7 @@
           keyword: '',
           pageCurrent: 1,
           order: 'all',
+          view: this.$route.query.view,
         },
       }"
       ><span class="active_bar"></span>공유한 파일
@@ -22,6 +23,7 @@
           keyword: '',
           pageCurrent: 1,
           order: 'all',
+          view: this.$route.query.view,
         },
       }"
       ><span class="active_bar"></span>공유받은 파일</router-link

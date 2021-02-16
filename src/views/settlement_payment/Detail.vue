@@ -10,12 +10,13 @@
               $router.push({
                 path: '/settlementAndPayment/paymentDetail',
                 query: {
-                  trans_id: li.trans_id
-                }
+                  order_id: li.order_id,
+                  view: $route.query.view,
+                },
               })
             "
           >
-            <button slot="blue_btn">{{ li.trans_id }}</button>
+            <button slot="blue_btn">{{ li.order_id }}</button>
           </BaseButton>
         </div>
         <div class="row">
@@ -100,71 +101,72 @@
   </div>
 </template>
 <script>
-import Row from "@/components/common/Row.vue";
-import BaseButton from "@/components/common/BaseButton.vue";
-import Pagination from "@/components/common/Pagination.vue";
-export default {
-  components: {
-    Row,
-    BaseButton,
-    Pagination
-  },
-  data() {
-    return {
-      list: "",
-      current: ""
-    };
-  },
-  methods: {
-    getList(num) {
-      const data = {
-        action: "get_settlement_detail",
-        current: num,
-        search_start_date: this.$route.query.start_date,
-        search_end_date: this.$route.query.end_date
+  import Row from "@/components/common/Row.vue";
+  import BaseButton from "@/components/common/BaseButton.vue";
+  import Pagination from "@/components/common/Pagination.vue";
+  export default {
+    components: {
+      Row,
+      BaseButton,
+      Pagination,
+    },
+    data() {
+      return {
+        list: "",
+        current: "",
       };
-      console.log(data);
-      this.$axios
-        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then(result => {
-          console.log(result);
-          this.list = result.data.data;
-          this.$router
-            .push({
-              query: {
-                pageCurrent: num,
-                start_date: this.$route.query.start_date,
-                end_date: this.$route.query.end_date
-              }
-            })
-            .catch(() => {});
-          this.current = num;
-        });
-    }
-  },
-  beforeDestroy() {
-    this.$EventBus.$off(`detail_datePick`);
-  },
-  created() {
-    this.$EventBus.$on(`detail_datePick`, () => {
-      this.getList(1);
-    });
-    this.getList(this.$route.query.pageCurrent);
-  }
-};
+    },
+    methods: {
+      getList(num) {
+        const data = {
+          action: "get_settlement_detail",
+          current: num,
+          search_start_date: this.$route.query.start_date,
+          search_end_date: this.$route.query.end_date,
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log(result);
+            this.list = result.data.data;
+            this.$router
+              .push({
+                query: {
+                  pageCurrent: num,
+                  start_date: this.$route.query.start_date,
+                  end_date: this.$route.query.end_date,
+                  view: this.$route.query.view,
+                },
+              })
+              .catch(() => {});
+            this.current = num;
+          });
+      },
+    },
+    beforeDestroy() {
+      this.$EventBus.$off(`detail_datePick`);
+    },
+    created() {
+      this.$EventBus.$on(`detail_datePick`, () => {
+        this.getList(1);
+      });
+      this.getList(this.$route.query.pageCurrent);
+    },
+  };
 </script>
 <style scoped lang="scss">
-.detail_contents {
-  .h2_title {
-    font-size: 16px;
-    padding: 0 4.445%;
-    margin-top: 24px;
+  .detail_contents {
+    .h2_title {
+      font-size: 16px;
+      padding: 0 4.445%;
+      margin-top: 24px;
+    }
+    .li {
+      padding: 4.445%;
+      padding-top: 0;
+      margin-top: 24px;
+      border-bottom: 4px solid #f8f8f8;
+    }
   }
-  .li {
-    padding: 4.445%;
-    padding-top: 0;
-    margin-top: 24px;
-    border-bottom: 4px solid #f8f8f8;
-  }
-}
 </style>

@@ -13,7 +13,7 @@
       <template slot="row">
         <div class="section">
           <div class="row">
-            <h2 class="title">결제번호 {{ list.trans_id }}</h2>
+            <h2 class="title">결제번호 {{ list.order_id }}</h2>
           </div>
         </div>
         <!-- 구매자 정보 :: S -->
@@ -45,16 +45,8 @@
             >
             <div class="clear_both">
               <span class="dt">{{ li.teacher_name }}</span>
-              <del class="dt final_price">{{
-                li.price.original
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}</del>
-              <span class="dt ori_price">{{
-                li.price.discount
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}</span>
+              <del class="dt final_price">{{ li.price.format_original }}</del>
+              <span class="dt ori_price">{{ li.price.format_final }}</span>
             </div>
           </div>
         </div>
@@ -84,32 +76,25 @@
             <span class="dd" v-else-if="list.pay_info.method == 'phone'"
               >휴대폰</span
             >
+            <span class="dd" v-else-if="list.pay_info.method == 'bank'"
+              >무통장 입금</span
+            >
           </div>
           <div class="row">
             <span class="dt">
               강의비용
             </span>
             <span class="dd">
-              {{
-                list.pay_info.price.original
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원
+              {{ list.pay_info.price.format_original }}원
             </span>
           </div>
           <div class="row">
             <span class="dt">
               패키지 할인
             </span>
-            <span class="dd">
-              {{
-                list.pay_info.price.discount_pkg
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원
-            </span>
+            <span class="dd"> {{ list.pay_info.price.format_pkg }}원 </span>
           </div>
-          <div class="row">
+          <!-- <div class="row">
             <span class="dt">
               쿠폰
             </span>
@@ -120,30 +105,24 @@
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }}원
             </span>
-          </div>
+          </div> -->
           <div class="row">
             <span class="dt">
               결제금액
             </span>
-            <span class="dd">
-              {{
-                list.pay_info.price.final
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원
-            </span>
+            <span class="dd"> {{ list.pay_info.price.format_final }}원 </span>
           </div>
         </div>
         <!-- 결제 정보 :: E -->
 
         <!-- 취소 요청 :: S -->
-        <div class="section">
+        <!-- <div class="section">
           <h2 class="title">취소 요청</h2>
-        </div>
+        </div> -->
         <!-- 취소 요청 :: E -->
 
         <!-- 환불 계좌 :: S -->
-        <div class="section">
+        <!-- <div class="section">
           <h2 class="title">환불 계좌</h2>
           <div class="row">
             <span class="dt">예금주</span> <span class="dd">염세종</span>
@@ -154,11 +133,11 @@
           <div class="row">
             <span class="dt">계좌번호</span> <span class="dd"> </span>
           </div>
-        </div>
+        </div> -->
         <!-- 환불 계좌 :: E -->
 
         <!-- 환불 정보 :: S -->
-        <div class="section">
+        <!-- <div class="section">
           <h2 class="title">환불 정보</h2>
           <div class="row">
             <span class="dt">
@@ -185,12 +164,12 @@
               }}원
             </span>
           </div>
-        </div>
+        </div> -->
         <!-- 환불 정보 :: E -->
       </template>
     </Row>
     <div class="btn_wrap">
-      <BaseButton class="left">
+      <!-- <BaseButton class="left">
         <button
           slot="blue_btn"
           v-if="list.cancel_btn_status == 'request'"
@@ -208,7 +187,7 @@
         <button slot="blue_btn" v-if="list.cancel_btn_status == 'ing'">
           취소 진행
         </button>
-      </BaseButton>
+      </BaseButton> -->
       <BaseButton class="right">
         <button
           slot="blue_btn"
@@ -218,8 +197,9 @@
               query: {
                 keyword: '',
                 pageCurrent: 1,
-                order: ''
-              }
+                order: '',
+                view: $route.query.view,
+              },
             })
           "
         >
@@ -230,110 +210,110 @@
   </div>
 </template>
 <script>
-import Row from "@/components/common/Row.vue";
-import BaseButton from "@/components/common/BaseButton.vue";
-import { mapState, mapMutations } from "vuex";
-import ConfirmModal from "@/components/common/ConfirmModal.vue";
-import CancelLecture from "@/components/modal/CancelLecture.vue";
-export default {
-  components: {
-    CancelLecture,
-    ConfirmModal,
-    Row,
-    BaseButton
-  },
-  computed: {
-    ...mapState("toggleStore", {
-      toggleStore_confirmModal: "confirm_modal"
-    })
-  },
-  data() {
-    return {
-      list: "",
-      cancelLecture: false
-    };
-  },
-  methods: {
-    isCancel() {
-      this.$confirmMessage(
-        "구매하신 강의를 취소 하시겠습니까?<br>취소 신청 시 강의 시청이 불가 합니다."
-      );
+  import Row from "@/components/common/Row.vue";
+  import BaseButton from "@/components/common/BaseButton.vue";
+  import { mapState, mapMutations } from "vuex";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import CancelLecture from "@/components/modal/CancelLecture.vue";
+  export default {
+    components: {
+      CancelLecture,
+      ConfirmModal,
+      Row,
+      BaseButton,
     },
-    getList() {
-      const data = {
-        action: "order_info",
-        trans_id: this.$route.query.trans_id
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_confirmModal: "confirm_modal",
+      }),
+    },
+    data() {
+      return {
+        list: "",
+        cancelLecture: false,
       };
-      console.log(data);
-      this.$axios
-        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then(result => {
-          console.log(result);
-          this.list = result.data.data;
-        });
-    }
-  },
-  created() {
-    this.getList();
-  }
-};
+    },
+    methods: {
+      isCancel() {
+        this.$confirmMessage(
+          "구매하신 강의를 취소 하시겠습니까?<br>취소 신청 시 강의 시청이 불가 합니다."
+        );
+      },
+      getList() {
+        const data = {
+          action: "order_info",
+          order_id: this.$route.query.order_id,
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log(result);
+            this.list = result.data.data;
+          });
+      },
+    },
+    created() {
+      this.getList();
+    },
+  };
 </script>
 <style scoped lang="scss">
-.detail_wrap {
-  .section {
-    padding: 4.445%;
-    border-bottom: 4px solid #f8f8f8;
-  }
-  .clear_both {
-    clear: both;
-    line-height: 20px;
-    &:after {
-      display: block;
-      content: "";
+  .detail_wrap {
+    .section {
+      padding: 4.445%;
+      border-bottom: 4px solid #f8f8f8;
+    }
+    .clear_both {
       clear: both;
-    }
-    .final_price {
-      font-size: 14px;
-      color: #bdbdbd;
-      margin-left: 4px;
-    }
-    .ori_price {
-      font-weight: bold;
-      margin-left: 5px;
-      font-size: 14px;
-      color: #114fff;
-    }
-  }
-  .btn_wrap {
-    padding: 4.445%;
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
-    }
-    .blue_btn {
-      width: 48%;
-      button {
-        height: 40px;
-        line-height: 31px;
-        font-size: 16px;
+      line-height: 20px;
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
       }
-    }
-    .left {
-      float: left;
-    }
-    .right {
-      float: right;
-      button {
-        background: white;
+      .final_price {
+        font-size: 14px;
+        color: #bdbdbd;
+        margin-left: 4px;
+      }
+      .ori_price {
+        font-weight: bold;
+        margin-left: 5px;
+        font-size: 14px;
         color: #114fff;
       }
     }
-    .cancel_req_btn {
-      border: 1px solid #dbdbdb;
-      background: #dbdbdb;
-      color: white;
+    .btn_wrap {
+      padding: 4.445%;
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
+      }
+      .blue_btn {
+        width: 100%;
+        button {
+          height: 40px;
+          line-height: 31px;
+          font-size: 16px;
+        }
+      }
+      .left {
+        float: left;
+      }
+      .right {
+        float: right;
+        button {
+          background: white;
+          color: #114fff;
+        }
+      }
+      .cancel_req_btn {
+        border: 1px solid #dbdbdb;
+        background: #dbdbdb;
+        color: white;
+      }
     }
   }
-}
 </style>

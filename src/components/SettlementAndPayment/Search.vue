@@ -11,31 +11,27 @@
       placeholder="강의명을 검색하세요."
       :value="keyword"
       v-on:input="keyword = $event.target.value"/>
-    <button
-      slot="search_btn"
-      class="search_btn"
-      @click="getList(1, 'type_date', keyword)"
-    ></button
+    <button slot="search_btn" class="search_btn" @click="search()"></button
   ></Search>
 </template>
 <script>
-import Search from "@/components/common/Search.vue";
+  import Search from "@/components/common/Search.vue";
 
-export default {
-  components: {
-    Search
-  },
-  data() {
-    return { order: "", keyword: "" };
-  },
-  methods: {
-    search() {
-      this.$EventBus.$emit(`search`, {
-        order: this.order,
-        keyword: this.keyword
-      });
-    }
-  }
-};
+  export default {
+    components: {
+      Search,
+    },
+    data() {
+      return { order: "", keyword: "" };
+    },
+    methods: {
+      search() {
+        this.$EventBus.$emit(`search`, {
+          order: this.order,
+          keyword: this.keyword,
+        });
+      },
+    },
+  };
 </script>
 <style scoped lang="scss"></style>

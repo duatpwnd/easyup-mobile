@@ -89,8 +89,8 @@ export default {
     // 데이트 포맷
     Vue.prototype.$dateFormat = <T>(a: T): String => {
       let date;
-      if (typeof a === "string") {
-        date = new Date(a);
+      if (typeof a === "object") {
+        date = new Date(a as any);
       } else {
         date = new Date();
       }
@@ -103,6 +103,7 @@ export default {
       if (day.length == 1) {
         day = "0" + day;
       }
+      console.log(year + "-" + month + "-" + day);
       return year + "-" + month + "-" + day;
     };
   },

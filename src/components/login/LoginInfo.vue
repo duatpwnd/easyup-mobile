@@ -59,7 +59,15 @@
       </button>
       <button
         @click="
-          $router.push('/studentClaasRoom').catch(() => {});
+          $router
+            .push({
+              path: '/studentClassRoom',
+              query: {
+                view:
+                  userStore_userinfo.info.status === 1 ? 'student' : 'teacher',
+              },
+            })
+            .catch(() => {});
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
             mask: false,

@@ -14,6 +14,7 @@
           start_date: this.$dateFormat(),
           end_date: this.$dateFormat(),
           pageCurrent: 1,
+          view: this.$route.query.view,
         },
       }"
       ><span class="active_bar"></span>정산
@@ -29,6 +30,7 @@
           keyword: '',
           pageCurrent: 1,
           order: '',
+          view: this.$route.query.view,
         },
       }"
       ><span class="active_bar"></span>결제</router-link
@@ -64,6 +66,7 @@
                 keyword: this.$route.query.keyword,
                 start_date: this.$dateFormat(result[0]),
                 end_date: this.$dateFormat(result[1]),
+                view: this.$route.query.view,
               },
             })
             .catch(() => {});
@@ -74,6 +77,7 @@
                 pageCurrent: 1,
                 start_date: this.$dateFormat(result[0]),
                 end_date: this.$dateFormat(result[1]),
+                view: this.$route.query.view,
               },
             })
             .catch(() => {});

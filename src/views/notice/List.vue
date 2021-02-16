@@ -17,7 +17,7 @@
         <button
           slot="search_btn"
           class="search_btn"
-          @click="getDropBoxList($route.query.type, 1, order, keyword)"
+          @click="getNoticeList(1, order, keyword)"
         ></button>
       </Search>
     </div>
@@ -91,13 +91,14 @@
       read(id, c_id) {
         this.$router.push({
           path: "/notice/read",
-          query: { id: id, c_id: c_id },
+          query: { id: id, c_id: c_id, view: this.$route.query.view },
         });
       },
       go_to_path() {
         this.$router.push("/notice/noticeRegister");
       },
       getNoticeList(num, order, keyword) {
+        console.log(num, order, keyword);
         const data = {
           action: "get_my_notice_list",
           current: num == undefined ? 1 : num,
@@ -116,6 +117,7 @@
                   pageCurrent: num,
                   order: order,
                   keyword: keyword,
+                  view: this.$route.query.view,
                 },
               })
               .catch(() => {});
