@@ -105,6 +105,10 @@
           $router
             .push({
               path: '/profileModify',
+              query: {
+                view:
+                  userStore_userinfo.info.status === 1 ? 'student' : 'teacher',
+              },
             })
             .catch(() => {});
           $store.commit('toggleStore/Toggle', {

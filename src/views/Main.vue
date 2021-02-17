@@ -12,7 +12,7 @@
     <!-- 배너 :: E -->
 
     <!-- 인기강의 :: S -->
-    <div class="section">
+    <div class="section" v-if="list.popular_lecture.length > 0">
       <h2 class="title">인기 강의</h2>
       <p class="suggest">이지업의 가장 인기가 많은 강의를 확인해보세요</p>
       <div class="lec_list_wrap">
@@ -53,7 +53,7 @@
     <!-- 인기강의 :: E-->
 
     <!-- 인기 코스 :: S -->
-    <div class="section swiper_section">
+    <div class="section swiper_section" v-if="list.popular_course.length > 0">
       <h2 class="title">인기 코스</h2>
       <p class="suggest">
         초심자 과정부터 전문가 과정까지, 전 과정을 합리적인 가격에 마스터하세요
@@ -91,7 +91,7 @@
     <!-- 인기코스 :: E -->
 
     <!-- 최신강의 ::  S -->
-    <div class="section swiper_section">
+    <div class="section swiper_section" v-if="list.latest_lecture.length > 0">
       <h2 class="title">최신 강의</h2>
       <p class="suggest">
         최근 트렌드를 반영한 강의 정보를 확인하세요
@@ -146,7 +146,10 @@
     <!-- 최신강의 ::  E -->
 
     <!-- 번역강의 :: S -->
-    <div class="section swiper_section">
+    <div
+      class="section swiper_section"
+      v-if="list.translation_lecture.length > 0"
+    >
       <h2 class="title">
         번역 강의<router-link
           tag="button"
@@ -305,6 +308,7 @@
           this.list = result.data.data;
         });
     }
+
     created() {
       this.getLectureList();
     }

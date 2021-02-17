@@ -17,7 +17,7 @@
           </div>
         </div>
         <!-- 구매자 정보 :: S -->
-        <div class="section">
+        <div class="section user_info">
           <h2 class="title">구매자 정보</h2>
           <div class="row">
             <span class="dt">{{ list.pay_user_info.name }}</span>
@@ -32,7 +32,7 @@
         <!-- 구매자 정보 :: E -->
 
         <!-- 강의 정보 :: S -->
-        <div class="section">
+        <div class="section lecture_info">
           <h2 class="title">강의 정보</h2>
           <div
             class="row"
@@ -46,24 +46,57 @@
             <div class="clear_both">
               <span class="dt">{{ li.teacher_name }}</span>
               <del class="dt final_price">{{ li.price.format_original }}</del>
-              <span class="dt ori_price">{{ li.price.format_final }}</span>
+              <span class="dt ori_price">{{
+                li.price.format_sum_purchased
+              }}</span>
             </div>
           </div>
         </div>
         <!-- 강의 정보 :: E -->
-
+        <!-- 이미 구매한 강의 :: S-->
+        <div class="section purchased" v-if="list.purchased_item">
+          <h2 class="title">이미 구매한 강의</h2>
+          <div class="left_box">
+            <div>주문번호</div>
+            <div>강의명</div>
+            <div>총금액</div>
+          </div>
+          <div
+            class="right_box"
+            v-for="(li, key) in list.purchased_item"
+            :key="key"
+          >
+            <div>{{ li.order_id }}</div>
+            <div>{{ li.item_title }}</div>
+            <div>{{ list.pay_info.price.format_purchased }}</div>
+          </div>
+          <!-- <table>
+            <colgroup>
+              <col width="50%" />
+              <col width="25%" />
+              <col width="25%" />
+            </colgroup>
+            <tr>
+              <th>주문번호</th>
+              <th>강의명</th>
+              <th>총금액</th>
+            </tr>
+            <tr v-for="(li, index) in list.purchased_item" :key="index">
+              <td>{{ li.order_id }}</td>
+              <td>{{ li.item_title }}</td>
+              <td>{{ list.pay_info.price.format_purchased }}</td>
+            </tr>
+          </table> -->
+        </div>
+        <!-- 이미 구매한 강의 :: E -->
         <!-- 결제 정보 :: S -->
-        <div class="section">
+        <div class="section payment_info">
           <h2 class="title">결제 정보</h2>
           <div class="row">
-            <span class="dt">
-              {{ list.pay_info.pay_date.split(" ")[0] }}
-            </span>
+            <span class="dt">{{ list.pay_info.pay_date.split(" ")[0] }}</span>
           </div>
           <div class="row">
-            <span class="dt">
-              결제수단
-            </span>
+            <span class="dt">결제수단</span>
             <span class="dd" v-if="list.pay_info.method == 'card'"
               >신용카드</span
             >
@@ -81,18 +114,12 @@
             >
           </div>
           <div class="row">
-            <span class="dt">
-              강의비용
-            </span>
-            <span class="dd">
-              {{ list.pay_info.price.format_original }}원
-            </span>
+            <span class="dt">강의비용</span>
+            <span class="dd">{{ list.pay_info.price.format_original }}원</span>
           </div>
           <div class="row">
-            <span class="dt">
-              패키지 할인
-            </span>
-            <span class="dd"> {{ list.pay_info.price.format_pkg }}원 </span>
+            <span class="dt">패키지 할인</span>
+            <span class="dd">{{ list.pay_info.price.format_pkg }}원</span>
           </div>
           <!-- <div class="row">
             <span class="dt">
@@ -107,10 +134,10 @@
             </span>
           </div> -->
           <div class="row">
-            <span class="dt">
-              결제금액
-            </span>
-            <span class="dd"> {{ list.pay_info.price.format_final }}원 </span>
+            <span class="dt">결제금액</span>
+            <span class="dd"
+              >{{ list.pay_info.price.format_sum_purchased }}원</span
+            >
           </div>
         </div>
         <!-- 결제 정보 :: E -->
@@ -212,7 +239,7 @@
 <script lang="ts">
   import Row from "@/components/common/Row.vue";
   import BaseButton from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
+  import { mapState } from "vuex";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import CancelLecture from "@/components/modal/CancelLecture.vue";
   import { Vue, Component } from "vue-property-decorator";
@@ -245,6 +272,7 @@
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result) => {
+          console.log(result);
           this.list = result.data.data;
         });
     }
@@ -258,6 +286,29 @@
     .section {
       padding: 4.445%;
       border-bottom: 4px solid #f8f8f8;
+    }
+    .user_info,
+    .payment_info,
+    .purchased {
+      .title {
+        margin-bottom: 10px;
+      }
+    }
+    .lecture_info {
+      .row {
+        margin-top: 10px;
+      }
+    }
+    .purchased {
+      font-family: "NotoSansCJKkr-Regular";
+      .left_box,
+      .right_box {
+        display: inline-block;
+        font-size: 14px;
+      }
+      .left_box {
+        width: 17%;
+      }
     }
     .clear_both {
       clear: both;

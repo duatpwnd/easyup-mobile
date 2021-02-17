@@ -105,7 +105,7 @@
         <div>
           <div class="subscribe_wrap">
             <!-- 강의를 구매한경우 -->
-            <BlueBtn v-if="is_subscribe && detail.price.is_free">
+            <BlueBtn v-if="is_subscribe">
               <button
                 ref="subs_btn"
                 class="active_subscribe"
@@ -132,6 +132,7 @@
                   $router.push({
                     path: 'order',
                     query: {
+                      type: 'course',
                       cart_id: $route.query.id,
                     },
                   })
@@ -145,7 +146,7 @@
         <div class="fixed_subs_btn" v-if="subscribe_btn">
           <!-- 강의를 구매한경우 -->
           <button
-            v-if="is_subscribe && detail.price.is_free == false"
+            v-if="is_subscribe"
             class="active_subscribe"
             @click="video($route.query.id, detail.lp_id)"
           >
@@ -177,7 +178,7 @@
               @click="
                 $router.push({
                   path: 'order',
-                  query: { cart_id: $route.query.id },
+                  query: { type: 'course', cart_id: $route.query.id },
                 })
               "
             >
@@ -187,12 +188,24 @@
         </div>
       </div>
       <div class="add_share">
-        <BlueBtn class="add" @click.native="cartAdd()">
+        <BlueBtn
+          class="add"
+          @click.native="cartAdd()"
+          v-if="detail.price.is_free == false"
+        >
           <button slot="blue_btn">
             강의담기
           </button>
         </BlueBtn>
-        <BlueBtn class="share" @click.native="share()">
+        <BlueBtn
+          class="share"
+          @click.native="share()"
+          :style="[
+            detail.price.is_free == false
+              ? { 'margin-left': '2%' }
+              : { 'margin-left': 0, width: '100%' },
+          ]"
+        >
           <button slot="blue_btn" v-clipboard="url" v-clipboard:success="share">
             공유하기
           </button>

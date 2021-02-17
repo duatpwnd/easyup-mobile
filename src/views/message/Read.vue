@@ -40,6 +40,7 @@
               query: {
                 pageCurrent: 1,
                 keyword: '',
+                view: $route.query.view,
               },
             })
           "
@@ -141,6 +142,7 @@
             query: {
               pageCurrent: 1 as any,
               keyword: "",
+              view: this.$route.query.view,
             },
           });
         });

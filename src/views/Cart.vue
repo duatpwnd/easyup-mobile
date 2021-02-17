@@ -27,7 +27,10 @@
             <span class="ori_price">{{ li.price.format_final }}</span>
           </div>
           <div>
-            <span class="limit">수강기한 : {{ li.access_limit }}</span>
+            <span class="limit" v-if="li.type == 'course'"
+              >수강기한 : {{ li.access_limit }}</span
+            >
+            <span class="limit" v-else>{{ li.first_course }}</span>
           </div>
         </div>
         <div class="chk">
@@ -204,14 +207,14 @@
       },
       goToOrder() {
         const map = this.checked_list.map((el) => {
-          return el.type + "_" + el.cart_id;
+          return el.type + "_" + el.item_id;
         });
         const data = {
           action: "check_cart_items",
           cart_items: map,
         };
         if (map.length == 0) {
-          this.$noticeMessage("구매할 강의를 선핵해주세요.");
+          this.$noticeMessage("구매할 강의를 선택해주세요.");
         } else {
           this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
@@ -221,15 +224,19 @@
                 this.$router.push({
                   path: "/order",
                   query: {
-                    cart_id: this.checked_list.toString(),
+                    cart_id: this.checked_list.map((el) => el.cart_id),
                   },
                 });
               }
+            })
+            .catch((err) => {
+              this.$noticeMessage(
+                "선택된 코스 및 강의가 중복돼 구매 진행이 불가하니 확인해 주세요."
+              );
             });
         }
       },
       cartRemove(id) {
-        console.log(id, typeof id);
         if (id.length == 0) {
           this.$noticeMessage("삭제할 강의를 선택해주세요.");
         } else {
@@ -239,10 +246,11 @@
               return el.cart_id;
             }),
           };
-          console.log(data.cart_id);
+          console.log(data);
           this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {
+              console.log(result);
               this.getList().then((result) => {
                 //삭제할 인덱스 찾기
                 if (id.length == 1) {
@@ -309,10 +317,10 @@
       clear: both;
     }
     .list_left {
-      width: 20%;
+      width: 35%;
     }
     .list_right {
-      width: 80%;
+      width: 65%;
       padding: 0 10px;
       .center,
       .chk {

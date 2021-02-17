@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="view">
     <div class="head">
       <span class="title">[{{ view.course_name }}]</span>
       <span>{{ view.subject }}</span>
@@ -49,6 +49,7 @@
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
+            console.log("fff", result);
             this.view = result.data.data;
           });
       },

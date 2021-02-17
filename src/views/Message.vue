@@ -8,6 +8,7 @@
           query: {
             pageCurrent: 1,
             keyword: '',
+            view: $route.query.view,
           },
         }"
         ><span class="active_bar"></span>수신
@@ -24,6 +25,7 @@
           query: {
             pageCurrent: 1,
             keyword: '',
+            view: $route.query.view,
           },
         }"
         ><span class="active_bar"></span>발신</router-link

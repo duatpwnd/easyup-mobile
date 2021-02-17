@@ -91,7 +91,8 @@
                   $router.push({
                     path: 'order',
                     query: {
-                      cart_id: [$route.query.id].toString(),
+                      type: 'session',
+                      cart_id: $route.query.id,
                     },
                   })
                 "
@@ -125,7 +126,8 @@
                 $router.push({
                   path: 'order',
                   query: {
-                    cart_id: [$route.query.id].toString(),
+                    type: 'session',
+                    cart_id: $route.query.id,
                   },
                 })
               "
