@@ -117,13 +117,9 @@
     <!--  카카오페이 주소 -->
     <input type="hidden" name="sndStoreAddress" value="" />
     <!-- DB저장용 상품명 -->
-    <input
-      type="hidden"
-      name="product_name"
-      :value="info.info.big_title_no_cut"
-    />
+    <input type="hidden" name="ECHA" :value="info.info.big_title_no_cut" />
     <!-- 결과페이지 DB저장 시 필요 -->
-    <input type="hidden" name="item_string" :value="info.info.string" />
+    <input type="hidden" name="ECHB" :value="info.info.string" />
     <input
       type="hidden"
       name="sum_original"
@@ -141,28 +137,21 @@
     />
   </form>
 </template>
-<script>
+<script lang="ts">
+  import { Vue, Prop, Component } from "vue-property-decorator";
   import { mapState } from "vuex";
-  export default {
-    props: {
-      // 결제수단
-      value: {
-        type: String,
-      },
-      // 결제정보
-      info: {
-        type: Object,
-      },
-    },
+  @Component({
     computed: {
       ...mapState("userStore", {
         userStore_info: "userinfo",
       }),
     },
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+  })
+  export default class OrderForm extends Vue {
+    // 결제수단
+    @Prop(String) private value!: String;
+    // 결제정보
+    @Prop(Object) private info!: Object;
+  }
 </script>
 <style scoped lang="scss"></style>

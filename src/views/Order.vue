@@ -176,7 +176,7 @@
     ></OrderForm>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Row from "@/components/common/Row.vue";
   import BaseButton from "@/components/common/BaseButton.vue";
   import LectureCourseList from "@/components/common/LectureCourseList.vue";
@@ -186,7 +186,8 @@
   import Terms from "@/components/policy/Terms.vue";
   import Privacy from "@/components/policy/Privacy.vue";
   import OrderForm from "@/components/order/OrderForm.vue";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       Policy,
       CheckBox,
@@ -198,79 +199,81 @@
       Privacy,
       OrderForm,
     },
-    data() {
-      return {
-        policyModal: false, // 약관동의 모달
-        list: "", // 결제할 리스트
-        modal: false, // 쿠폰조회 모달
-        isAgree: false, // 동의 여부
-        isActive: 0,
-        type: "Terms",
-        types: [
-          { name: "이용약관", target: "Terms" },
-          { name: "개인정보 취급방침", target: "Privacy" },
-        ],
-        payMethod: "1000000000", // 결제수단
-        formData: false, //form 가리기
-      };
-    },
-    methods: {
-      toggle(type, index) {
-        this.type = type;
-        this.isActive = index;
-      },
-      close() {
-        this.modal = false;
-      },
-      getList() {
-        let data = null;
-        // 강의 상세에서 들어온경우
-        if (this.$route.query.type != undefined) {
-          data = {
-            action: "get_order_item_code",
-            type: this.$route.query.type,
-            code: this.$route.query.cart_id,
-          };
-        } else {
-          // 강의 바구니에서 들어온경우
-          data = {
-            action: "get_order_item_cart",
-            items: [...this.$route.query.cart_id],
-          };
-        }
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.list = result.data.data;
-          });
-      },
-      _pay(_frm) {
-        if (this.isAgree == false) {
-          this.$noticeMessage(
-            "구매조건 확인 및 결제대행 서비스 약관에 동의해주세요"
-          );
-        } else {
-          // sndReply는 kspay_wh_rcv.php (결제승인 후 결과값들을 본창의 KSPayWeb Form에 넘겨주는 페이지)의 절대경로를 넣어줍니다.
-          _frm.sndReply.value =
-            "http://develop.hell0world.net/main/order/mobile_order_result.php";
+  })
+  export default class Order extends Vue {
+    policyModal = false; // 약관동의 모달
+    list = ""; // 결제할 리스트
+    modal = false; // 쿠폰조회 모달
+    isAgree = false; // 동의 여부
+    isActive = 0;
+    type = "Terms";
+    types = [
+      { name: "이용약관", target: "Terms" },
+      { name: "개인정보 취급방침", target: "Privacy" },
+    ];
+    payMethod = "1000000000"; // 결제수단
+    formData = false; //form 가리기
+    toggle(type: string, index: number): void {
+      this.type = type;
+      this.isActive = index;
+    }
+    close(): void {
+      this.modal = false;
+    }
+    getList(): void {
+      interface ReqData {
+        action: string;
+        type: string;
+        code: number;
+        items: number[];
+      }
+      let data: Omit<ReqData, "items"> | Omit<ReqData, "type" | "code">;
+      // 강의 상세에서 들어온경우
+      if (this.$route.query.type != undefined) {
+        data = {
+          action: "get_order_item_code",
+          type: this.$route.query.type as string,
+          code: (this.$route.query.cart_id as unknown) as number,
+        };
+      } else {
+        // 강의 바구니에서 들어온경우
+        data = {
+          action: "get_order_item_cart",
+          items: ([...this.$route.query.cart_id] as unknown) as number[],
+        };
+      }
+      console.log("결제하기 리스트 데이터:", data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          console.log("결제하기 리스트 결과:", result);
+          this.list = result.data.data;
+        });
+    }
+    _pay(_frm): void {
+      if (this.isAgree == false) {
+        this.$noticeMessage(
+          "구매조건 확인 및 결제대행 서비스 약관에 동의해주세요"
+        );
+      } else {
+        // sndReply는 kspay_wh_rcv.php (결제승인 후 결과값들을 본창의 KSPayWeb Form에 넘겨주는 페이지)의 절대경로를 넣어줍니다.
+        _frm.sndReply.value =
+          "http://develop.hell0world.net/main/order/mobile_order_result.php";
+        const agent: string = navigator.userAgent;
+        const midx: number = agent.indexOf("MSIE");
+        const out_size = midx != -1 && agent.charAt(midx + 5) < "7";
+        //_frm.target = '_blank';
+        _frm.action =
+          "https://kspay.ksnet.to/store/KSPayMobileV1.4/KSPayPWeb.jsp"; //리얼
+        //_frm.action ='http://210.181.28.134/store/KSPayMobileV1.4/KSPayPWeb.jsp';  //테스트
+        _frm.submit();
+      }
+    }
 
-          var agent = navigator.userAgent;
-          var midx = agent.indexOf("MSIE");
-          var out_size = midx != -1 && agent.charAt(midx + 5) < "7";
-          //_frm.target = '_blank';
-          _frm.action =
-            "https://kspay.ksnet.to/store/KSPayMobileV1.4/KSPayPWeb.jsp"; //리얼
-          //_frm.action ='http://210.181.28.134/store/KSPayMobileV1.4/KSPayPWeb.jsp';  //테스트
-          _frm.submit();
-        }
-      },
-    },
     created() {
       this.getList();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .h2_title {
