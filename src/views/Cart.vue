@@ -52,11 +52,12 @@
         </BaseButton>
       </template>
     </LectureCourseList>
-    <Row>
+    <Row v-if="list.calculate_price">
       <template slot="row">
         <div class="row order">
           <span class="dt">주문시 금액</span>
         </div>
+
         <div class="row">
           <span class="dt">강의 비용</span>
           <span class="dd">{{ format_sum_original }}원</span>
@@ -72,7 +73,7 @@
         </div>
       </template>
     </Row>
-    <div class="btn_wrap">
+    <div class="btn_wrap" v-if="list.calculate_price">
       <div class="chk">
         <CheckBox>
           <input

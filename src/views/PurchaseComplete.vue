@@ -1,5 +1,5 @@
 <template>
-  <div class="complete_msg">
+  <div class="complete_msg" v-if="list">
     <h1 class="big_title">구매 신청이 완료되었습니다.</h1>
     <p class="notice_msg">
       내 강의실에서 구매 신청 내역을 확인하세요.<br />
@@ -9,36 +9,61 @@
     <ul class="info">
       <li>
         <span class="th">구매자</span>
-        <span class="td">이지업</span>
+        <span class="td">{{ list.pay_user_info.name }}</span>
       </li>
       <li>
-        <span class="th">구매자</span>
-        <span class="td">이지업</span>
+        <span class="th">강의/코스</span>
+        <span class="td">{{ list.pay_info.product_name }}</span>
       </li>
       <li>
-        <span class="th">구매자</span>
-        <span class="td">이지업</span>
+        <span class="th">결제 비용</span>
+        <span class="td">{{ list.pay_info.price.format_sum_purchased }}</span>
       </li>
       <li>
-        <span class="th">구매자</span>
-        <span class="td">이지업</span>
+        <span class="th">결제 수단</span>
+        <span class="td" v-if="list.pay_info.method == 'card'">신용카드</span>
+        <span class="td" v-else-if="list.pay_info.method == 'transfer'"
+          >계좌이체</span
+        >
+        <span class="td" v-else-if="list.pay_info.method == 'simple'"
+          >간편결제</span
+        >
+        <span class="td" v-else-if="list.pay_info.method == 'phone'"
+          >휴대폰</span
+        >
+        <span class="td" v-else-if="list.pay_info.method == 'bank'"
+          >무통장</span
+        >
       </li>
-      <li>
-        <span class="th">구매자</span>
-        <span class="td">이지업</span>
+      <li v-if="list.pay_info.method == 'bank'">
+        <span class="th">입금 계좌</span>
+        <span class="td">신한은행 28690114975422 이지업</span>
       </li>
-      <li>
-        <span class="th">구매자</span>
-        <span class="td">이지업</span>
+      <li v-if="list.pay_info.method == 'bank'">
+        <span class="th">입금 기한</span>
+        <span class="td">{{ list.pay_info.pay_date }}</span>
       </li>
     </ul>
     <div class="btn_wrap">
-      <BlueBtn class="left" @click.native="$router.push('/')">
+      <BlueBtn class="left" @click.native="$router.push('/').catch(() => {})">
         <button slot="blue_btn">
           홈으로 이동
         </button>
       </BlueBtn>
-      <BlueBtn class="right">
+      <BlueBtn
+        class="right"
+        @click.native="
+          $router
+            .push({
+              path: '/studentClassRoom',
+              query: {
+                view:
+                  userStore_userinfo.info.status === 1 ? 'student' : 'teacher',
+              },
+            })
+            .catch(() => {})
+        "
+      >
         <button slot="blue_btn">
           내 강의실 입장
         </button>
@@ -49,9 +74,15 @@
 <script lang="ts">
   import { Vue, Component } from "vue-property-decorator";
   import BlueBtn from "@/components/common/BaseButton.vue";
+  import { mapState } from "vuex";
   @Component({
     components: {
       BlueBtn,
+    },
+    computed: {
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
     },
   })
   export default class PurchaseComplete extends Vue {

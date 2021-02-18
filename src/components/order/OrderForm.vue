@@ -117,7 +117,7 @@
     <!--  카카오페이 주소 -->
     <input type="hidden" name="sndStoreAddress" value="" />
     <!-- DB저장용 상품명 -->
-    <input type="hidden" name="ECHA" :value="info.info.big_title_no_cut" />
+    <!-- <input type="hidden" name="ECHA" :value="info.info.big_title_no_cut" /> -->
     <!-- 결과페이지 DB저장 시 필요 -->
     <input type="hidden" name="ECHB" :value="info.info.string" />
     <input type="hidden" name="ECHC" :value="info.user_info_string" />
