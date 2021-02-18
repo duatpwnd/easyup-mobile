@@ -91,6 +91,7 @@
   })
   export default class MsgRead extends Vue {
     view = "";
+
     download(filename: string, file_id: number): void {
       const data = {
         action: "download_message_attach",

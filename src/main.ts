@@ -12,6 +12,11 @@ import GlobalPlugin from "@/plugin/global_plugin.ts";
 import axios from "axios";
 import VueRouterBackButton from "vue-router-back-button";
 import Clipboard from "v-clipboard";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+library.add(faTimes);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.use(Clipboard);
 Vue.prototype.$EventBus = new Vue();
 Vue.prototype.$ApiUrl = ApiUrl;
@@ -32,7 +37,8 @@ Vue.use(VueAwesomeSwiper);
 Vue.config.productionTip = true;
 // NODE_ENV = '앱실행모드'
 if (process.env.NODE_ENV == "development") {
-  axios.defaults.baseURL = "http://develop.hell0world.net";
+  axios.defaults.baseURL = "http://develop.hell0world.net:5580";
+  // pg http://develop.hell0world.net:5580/
   // ApiUrl.mobileAPI_v1 = "http://develop.hell0world.net/main/mobileAPI/v1.php";
   // ApiUrl.mobileAPI_v2 = "http://develop.hell0world.net/main/mobileAPI/v2.php";
 } else if (process.env.NODE_ENV == "production") {

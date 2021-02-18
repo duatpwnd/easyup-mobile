@@ -313,14 +313,14 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
     components: { CheckBox, BlueBtn },
   })
   export default class SignUp extends Vue {
-    public lastname = "";
-    public firstname = "";
-    public email = "";
-    public pw1 = "";
-    public pw2 = "";
-    public phone: number | string = "";
-    public agree = false;
-    public validationCheck() {
+    lastname = "";
+    firstname = "";
+    email = "";
+    pw1 = "";
+    pw2 = "";
+    phone: number | string = "";
+    agree = false;
+    validationCheck() {
       let err;
       return new Promise((resolve, reject) => {
         if (this.lastname.trim().length == 0) {

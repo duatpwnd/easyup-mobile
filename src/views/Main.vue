@@ -310,6 +310,7 @@
     }
 
     created() {
+      console.log(this.$cookies);
       this.getLectureList();
     }
   }

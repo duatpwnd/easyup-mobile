@@ -257,8 +257,7 @@
         );
       } else {
         // sndReply는 kspay_wh_rcv.php (결제승인 후 결과값들을 본창의 KSPayWeb Form에 넘겨주는 페이지)의 절대경로를 넣어줍니다.
-        _frm.sndReply.value =
-          "http://develop.hell0world.net/main/order/mobile_order_result.php";
+        _frm.sndReply.value = `${process.env.VUE_APP_API_URL}/main/order/mobile_order_result.php`;
         const agent: string = navigator.userAgent;
         const midx: number = agent.indexOf("MSIE");
         const out_size = midx != -1 && agent.charAt(midx + 5) < "7";

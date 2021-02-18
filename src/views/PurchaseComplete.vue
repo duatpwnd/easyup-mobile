@@ -54,7 +54,24 @@
       BlueBtn,
     },
   })
-  export default class PurchaseComplete extends Vue {}
+  export default class PurchaseComplete extends Vue {
+    list = "";
+    getList(): void {
+      const data = {
+        action: "order_info",
+        order_id: String(this.$route.query.order_id),
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          console.log(result);
+          this.list = result.data.data;
+        });
+    }
+    created() {
+      this.getList();
+    }
+  }
 </script>
 <style scoped lang="scss">
   .complete_msg {

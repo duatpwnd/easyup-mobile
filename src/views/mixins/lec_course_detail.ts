@@ -15,12 +15,12 @@ type OptionalData = Partial<Data>;
   },
 })
 export default class GroupMixin extends Vue {
-  public isPossibleReview = false;
-  public is_subscribe = false;
-  public subscribe_btn = false;
-  public detail = {};
-  public score_info = {}; // 각 별점의 개수
-  public url = window.document.location.href; // 클립보드 현재 url
+  isPossibleReview = false;
+  is_subscribe = false;
+  subscribe_btn = false;
+  detail = {};
+  score_info = {}; // 각 별점의 개수
+  url = window.document.location.href; // 클립보드 현재 url
   @Watch("detect_token")
   onPropertyChanged(value: string, oldValue: string) {
     this.isSubscribe();

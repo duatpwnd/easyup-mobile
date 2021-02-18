@@ -120,6 +120,12 @@
     <input type="hidden" name="ECHA" :value="info.info.big_title_no_cut" />
     <!-- 결과페이지 DB저장 시 필요 -->
     <input type="hidden" name="ECHB" :value="info.info.string" />
+    <input type="hidden" name="ECHC" :value="info.user_info_string" />
+    <input
+      type="hidden"
+      name="ECHD"
+      :value="info.info.calculate_price_info.sum_final"
+    />
     <input
       type="hidden"
       name="sum_original"

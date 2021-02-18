@@ -11,9 +11,9 @@
       >
         <span class="title pull-left">{{ li.title }}</span
         ><span class="time pull-left">{{ li.check_point }}</span
-        ><span class="delete pull-right" @click.stop="bookmark_remove(li.id)"
-          ><img src="http://develop.hell0world.net/main/img/close_bt.png"
-        /></span>
+        ><span class="delete pull-right" @click.stop="bookmark_remove(li.id)">
+          <font-awesome-icon :icon="['fa', 'times']" />
+        </span>
       </li>
     </ul>
   </div>
@@ -121,6 +121,7 @@
       max-height: 288px;
       overflow: auto;
       padding-right: 10px;
+
       .clearfix {
         font-size: 18px;
         &:after {
@@ -142,9 +143,8 @@
           text-align: right;
           float: right;
           width: 3%;
-          img {
-            width: 10px;
-            height: 10px;
+          .fa-times {
+            color: #e0e0e0;
           }
         }
       }

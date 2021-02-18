@@ -415,7 +415,7 @@
     },
   })
   export default class LecDetail extends mixin {
-    public url: string = window.document.location.href;
+    url: string = window.document.location.href;
     get discount_price() {
       return this.$numberWithCommas(
         (this.detail as { [key: string]: any }).coupon.discount_price

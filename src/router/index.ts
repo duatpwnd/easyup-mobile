@@ -411,6 +411,12 @@ const routes = [
       },
     ],
   },
+  // 구매완료
+  {
+    path: "/purchaseComplete",
+    name: "purchaseComplete",
+    component: () => import("@/views/PurchaseComplete.vue"),
+  },
   // 쿠폰관리 학생
   {
     path: "/couponManage/student",
