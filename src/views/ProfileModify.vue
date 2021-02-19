@@ -83,28 +83,31 @@
     </form>
   </div>
 </template>
-<script>
-import BlueBtn from "@/components/common/BaseButton.vue";
-import { mapState, mapMutations } from "vuex";
-
-export default {
-  components: { BlueBtn },
-  computed: {
-    ...mapState("userStore", {
-      userStore_userinfo: "userinfo"
-    })
-  },
-  data() {
-    return {
-      phone: "",
-      current_password: "",
-      new_password: "",
-      new_password_confirm: "",
-      file_obj: ""
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import { mapState } from "vuex";
+  @Component({
+    components: {
+      BlueBtn,
+    },
+    computed: {
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
+    },
+  })
+  export default class ProfileModify extends Vue {
+    $refs!: {
+      upload: HTMLFormElement;
     };
-  },
-  methods: {
-    validationCheck() {
+    userStore_userinfo!: { [key: string]: any };
+    phone = "";
+    current_password = "";
+    new_password = "";
+    new_password_confirm = "";
+    file_obj = {};
+    validationCheck(): Promise<string> {
       return new Promise((resolve, reject) => {
         if (this.new_password != this.new_password_confirm) {
           this.$noticeMessage("비밀 번호가 서로 다릅니다.");
@@ -112,13 +115,13 @@ export default {
           resolve("success");
         }
       });
-    },
-    fileSelect() {
+    }
+    fileSelect(): void {
       const selected_file = this.$refs.upload.files[0];
       this.file_obj = selected_file;
-    },
-    editProfile() {
-      this.validationCheck().then(result => {
+    }
+    editProfile(): void {
+      this.validationCheck().then((result) => {
         if (result == "success") {
           const formData = new FormData();
           const data = {
@@ -127,7 +130,7 @@ export default {
             password0: this.current_password,
             new_password: this.new_password,
             new_password_confirm: this.new_password_confirm,
-            picture: this.file_obj
+            picture: this.file_obj,
           };
           for (var key in data) {
             formData.append(key, data[key]);
@@ -139,10 +142,10 @@ export default {
                 "Content-Type": "multipart/form-data",
                 Authorization: this.$cookies.get("user_info")
                   ? "Bearer " + this.$cookies.get("user_info").access_token
-                  : null
-              }
+                  : null,
+              },
             })
-            .then(result => {
+            .then((result) => {
               console.log(result);
               if (result.data.error) {
                 this.$noticeMessage(result.data.message);
@@ -158,77 +161,74 @@ export default {
         }
       });
     }
-  },
-  created() {
-    console.log(this.userStore_userinfo.info);
-    this.unijob_id = this.userStore_userinfo.info.unijob_id;
-    this.phone = this.userStore_userinfo.info.phone;
+    created() {
+      this.phone = this.userStore_userinfo.info.phone;
+    }
   }
-};
 </script>
 <style scoped lang="scss">
-#profile_modify {
-  padding: 4.445%;
-  .blue_btn {
-    margin-top: 5%;
-  }
-  .row {
-    margin-top: 2%;
-    clear: both;
-    .readonly {
-      border: 0;
-      outline: none;
+  #profile_modify {
+    padding: 4.445%;
+    .blue_btn {
+      margin-top: 5%;
     }
-    .email_column {
-      font-family: "NotoSansCJKkr-Regular";
-      font-size: 1.5rem;
-      white-space: pre-wrap;
-      display: inline-block;
-      width: 65%;
-      word-break: break-all;
-      vertical-align: middle;
-    }
-    input[type="file"] {
-      display: none;
-    }
-    input {
-      vertical-align: middle;
-      font-size: 1.5rem;
-      font-family: "NotoSansCJKkr-Regular";
-      width: calc(100% - 35%);
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      outline: none;
-      padding: 1%;
-    }
-    .noti {
-      float: right;
-      width: calc(100% - 35%);
-      color: #666666;
-      margin: 2% 0;
-      font-size: 1.125rem;
-      font-family: "NotoSansCJKkr-Regular";
-    }
+    .row {
+      margin-top: 2%;
+      clear: both;
+      .readonly {
+        border: 0;
+        outline: none;
+      }
+      .email_column {
+        font-family: "NotoSansCJKkr-Regular";
+        font-size: 1.5rem;
+        white-space: pre-wrap;
+        display: inline-block;
+        width: 65%;
+        word-break: break-all;
+        vertical-align: middle;
+      }
+      input[type="file"] {
+        display: none;
+      }
+      input {
+        vertical-align: middle;
+        font-size: 1.5rem;
+        font-family: "NotoSansCJKkr-Regular";
+        width: calc(100% - 35%);
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+        padding: 1%;
+      }
+      .noti {
+        float: right;
+        width: calc(100% - 35%);
+        color: #666666;
+        margin: 2% 0;
+        font-size: 1.125rem;
+        font-family: "NotoSansCJKkr-Regular";
+      }
 
-    label {
-      width: 35%;
-      vertical-align: middle;
-      display: inline-block;
-      font-size: 1.5rem;
-      font-family: "NotoSansCJKkr-Regular";
-    }
-    .file {
-      width: auto;
-      color: #114fff;
-      border: 1px solid #114fff;
-      border-radius: 5px;
-      font-size: 1.5rem;
-      padding: 0.763% 5.946%;
-    }
-    .file_name {
-      margin-left: 10px;
+      label {
+        width: 35%;
+        vertical-align: middle;
+        display: inline-block;
+        font-size: 1.5rem;
+        font-family: "NotoSansCJKkr-Regular";
+      }
+      .file {
+        width: auto;
+        color: #114fff;
+        border: 1px solid #114fff;
+        border-radius: 5px;
+        font-size: 1.5rem;
+        padding: 0.763% 5.946%;
+      }
+      .file_name {
+        margin-left: 10px;
+      }
     }
   }
-}
 </style>
