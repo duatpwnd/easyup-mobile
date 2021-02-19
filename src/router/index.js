@@ -111,8 +111,8 @@ const routes = [
         meta: { GnbBottomMenu: true },
     },
     {
-        path: "/studentClaasRoom",
-        name: "studentClaasRoom",
+        path: "/studentClassRoom",
+        name: "studentClassRoom",
         component: () => import("../views/StudentRoom.vue"),
         meta: { GnbBottomMenu: true },
     },
@@ -396,6 +396,12 @@ const routes = [
                 meta: { GnbBottomMenu: true },
             },
         ],
+    },
+    // 구매완료
+    {
+        path: "/purchaseComplete",
+        name: "purchaseComplete",
+        component: () => import("@/views/PurchaseComplete.vue"),
     },
     // 쿠폰관리 학생
     {

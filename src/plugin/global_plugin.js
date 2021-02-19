@@ -21,14 +21,6 @@ export default {
                 info: "",
             });
         };
-        // Vue.directive("my-directive", {
-        //   bind(el, binding, vnode, oldVnode) {
-        //     el.style.color = "red";
-        //   },
-        // });
-        Vue.mixin({
-            created: function () { },
-        });
         // 로그인 모달 닫기
         Vue.prototype.$loginModalClose = () => {
             store.commit("toggleStore/Toggle", {
@@ -90,7 +82,7 @@ export default {
         // 데이트 포맷
         Vue.prototype.$dateFormat = (a) => {
             let date;
-            if (typeof a === "string") {
+            if (typeof a === "object") {
                 date = new Date(a);
             }
             else {
@@ -105,6 +97,7 @@ export default {
             if (day.length == 1) {
                 day = "0" + day;
             }
+            console.log(year + "-" + month + "-" + day);
             return year + "-" + month + "-" + day;
         };
     },
