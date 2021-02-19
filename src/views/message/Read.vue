@@ -141,7 +141,7 @@
                 ? "/msg/receivedList"
                 : "/msg/sentList",
             query: {
-              pageCurrent: 1 as any,
+              pageCurrent: 1,
               keyword: "",
               view: this.$route.query.view,
             },

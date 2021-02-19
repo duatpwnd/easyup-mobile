@@ -94,8 +94,8 @@
       this.$router.push({
         path: "/notice/read",
         query: {
-          id: id as any,
-          c_id: c_id as any,
+          id: id,
+          c_id: c_id,
           view: String(this.$route.query.view),
         },
       });
@@ -119,7 +119,7 @@
           this.$router
             .push({
               query: {
-                pageCurrent: num as any,
+                pageCurrent: num,
                 order: order,
                 keyword: keyword,
                 view: String(this.$route.query.view),

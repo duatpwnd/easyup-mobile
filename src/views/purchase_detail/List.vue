@@ -119,7 +119,7 @@
         .push({
           query: {
             keyword: this.$route.query.keyword,
-            pageCurrent: 1 as any,
+            pageCurrent: 1,
             order: this.$route.query.order,
             start_date: this.$dateFormat(result[0]),
             end_date: this.$dateFormat(result[1]),
@@ -152,7 +152,7 @@
             .push({
               query: {
                 keyword: keyword,
-                pageCurrent: num as any,
+                pageCurrent: num,
                 order: order,
                 start_date: this.$route.query.start_date,
                 end_date: this.$route.query.end_date,

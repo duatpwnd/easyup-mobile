@@ -106,7 +106,7 @@
     current_password = "";
     new_password = "";
     new_password_confirm = "";
-    file_obj = {};
+    file_obj: { [key: string]: any } = {};
     validationCheck(): Promise<string> {
       return new Promise((resolve, reject) => {
         if (this.new_password != this.new_password_confirm) {

@@ -151,7 +151,7 @@
           this.$router
             .push({
               query: {
-                pageCurrent: num as any,
+                pageCurrent: num,
                 keyword: keyword,
               },
             })
@@ -168,7 +168,7 @@
             path: "/uniJob/read",
             query: {
               type: this.$route.name,
-              id: id as any,
+              id: id,
             },
           })
           .catch(() => {});

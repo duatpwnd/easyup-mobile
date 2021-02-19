@@ -49,7 +49,7 @@
     action: string;
     code: string;
     recipients?: string[];
-    file?: File;
+    file?: { [key: string]: any };
   }
   @Component({
     components: {
@@ -60,7 +60,7 @@
     $refs!: {
       upload: HTMLFormElement;
     };
-    file_obj = "";
+    file_obj: { [key: string]: any } = {};
     select_list = {}; // 강의선택 리스트
     selected = ""; // 강의선택 v-model
     share_list = {}; // 공유 받을사람
@@ -78,9 +78,7 @@
         action: "upload_dropbox_file",
         code: this.selected,
         recipients: this.shared_recipients,
-        file: new File([this.file_obj], (this.file_obj as any).name, {
-          type: (this.file_obj as any).type,
-        }),
+        file: this.file_obj,
       };
       for (var key in data) {
         formData.append(key, JSON.stringify(data[key]));
@@ -99,7 +97,7 @@
             path: "/dataShare",
             query: {
               keyword: "",
-              pageCurrent: 1 as any,
+              pageCurrent: 1,
               order: "all",
               view: this.$route.query.view,
             },
