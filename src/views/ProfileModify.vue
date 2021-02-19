@@ -132,19 +132,11 @@
             new_password_confirm: this.new_password_confirm,
             picture: this.file_obj,
           };
-          for (var key in data) {
+          for (let key in data) {
             formData.append(key, data[key]);
           }
-
           this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, formData, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: this.$cookies.get("user_info")
-                  ? "Bearer " + this.$cookies.get("user_info").access_token
-                  : null,
-              },
-            })
+            .post(this.$ApiUrl.mobileAPI_v1, formData)
             .then((result) => {
               console.log(result);
               if (result.data.error) {

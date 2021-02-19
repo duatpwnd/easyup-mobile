@@ -80,16 +80,9 @@
         recipients: this.shared_recipients,
         file: this.file_obj,
       };
-      for (var key in data) {
-        formData.append(key, JSON.stringify(data[key]));
+      for (let key in data) {
+        formData.append(key, data[key]);
       }
-      // for (let key of formData.keys()) {
-      //   console.log(key);
-      // }
-      // // FormData의 value 확인
-      // for (let value of formData.values()) {
-      //   console.log(value);
-      // }
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, formData)
         .then((result: ResultData) => {
