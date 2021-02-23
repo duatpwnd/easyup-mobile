@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="list_wrap" v-if="list">
     <div class="filter">
       <Search>
         <select
@@ -28,7 +28,10 @@
       </Search>
       <DatePicker @emitDatePick="datePick"></DatePicker>
     </div>
-    <Row v-for="(li, index) in list.list" :key="index">
+    <p class="no_result" v-if="list.list.length == 0">
+      구매 내역 리스트가 없습니다.
+    </p>
+    <Row v-for="(li, index) in list.list" :key="index" v-else>
       <template slot="row">
         <div class="row contain_btn">
           <h2 class="date">
@@ -61,6 +64,10 @@
         <div class="row">
           <span class="dt">결제 금액</span>
           <span class="dd">{{ li.price.format_final }}원</span>
+        </div>
+        <div class="row">
+          <span class="dt">상태</span>
+          <span class="dd">{{ li.status }}</span>
         </div>
         <div class="row">
           <span class="status" v-if="li.status == 'success'">결제완료</span>
@@ -175,17 +182,24 @@
   }
 </script>
 <style scoped lang="scss">
-  .filter {
+  .list_wrap {
     padding: 0 4.445%;
-    .box {
+    .filter {
+      .box {
+        margin-top: 15px;
+      }
+    }
+    .no_result {
+      text-align: center;
+      font-size: 16px;
       margin-top: 15px;
     }
-  }
-  .li {
-    padding: 4.445%;
-    border-bottom: 4px solid #f8f8f8;
-    .contain_btn {
-      margin-bottom: 10px;
+    .li {
+      padding: 4.445% 0;
+      border-bottom: 4px solid #f8f8f8;
+      .contain_btn {
+        margin-bottom: 10px;
+      }
     }
   }
 </style>

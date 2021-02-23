@@ -84,9 +84,9 @@
         </template>
         <template slot="list_info">
           <div class="statistics" v-if="$route.query.view == 'teacher'">
-            <span class="date">{{ list.approve_date.split(" ")[0] }}</span>
+            <span class="date">{{ list.approve_date }}</span>
             <span class="count">{{ list.count_users }}명</span>
-            <span class="price">
+            <!-- <span class="price">
               <del class="final_price">{{
                 list.price.final
                   .toString()
@@ -97,7 +97,7 @@
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }}</span>
-            </span>
+            </span> -->
           </div>
           <div class="progress">
             <div class="compile_wrap">
@@ -158,7 +158,9 @@
             class="prev"
             @click="
               getMyCourse(
-                'get_my_course',
+                $route.query.view == 'teacher'
+                  ? 'get_my_course_teacher'
+                  : 'get_my_course',
                 Number(current) - 1,
                 order,
                 $route.query.keyword
@@ -176,7 +178,9 @@
             "
             @click="
               getMyCourse(
-                'get_my_course',
+                $route.query.view == 'teacher'
+                  ? 'get_my_course_teacher'
+                  : 'get_my_course',
                 Number(current) + 1,
                 order,
                 $route.query.keyword
@@ -220,6 +224,7 @@
           id: id,
           type: "course",
         };
+        console.log(obj);
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {

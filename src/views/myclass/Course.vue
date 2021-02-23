@@ -79,7 +79,7 @@
         </template>
         <template slot="list_info">
           <div class="statistics" v-if="$route.query.view == 'teacher'">
-            <span class="date">{{ list.approve_date.split(" ")[0] }}</span>
+            <span class="date">{{ list.approve_date }}</span>
             <span class="count">{{ list.count_users }}명</span>
             <!-- <span class="price">
               <del class="final_price">{{
@@ -121,6 +121,18 @@
                     v-else-if="list.approve_status == 'reject'"
                     >반려</span
                   >
+                  <router-link
+                    tag="span"
+                    :to="{
+                      path: '/courseDetail',
+                      query: {
+                        id: list.id,
+                      },
+                    }"
+                    class="ing_ico review"
+                    v-if="list.show_btn_review"
+                    >리뷰관리</router-link
+                  >
                 </template>
               </VideoList>
             </div>
@@ -141,7 +153,9 @@
             class="prev"
             @click="
               getMyCourse(
-                'get_my_course',
+                $route.query.view == 'teacher'
+                  ? 'get_my_session_teacher'
+                  : 'get_my_session',
                 Number(current) - 1,
                 order,
                 $route.query.keyword
@@ -159,7 +173,9 @@
             "
             @click="
               getMyCourse(
-                'get_my_course',
+                $route.query.view == 'teacher'
+                  ? 'get_my_session_teacher'
+                  : 'get_my_session',
                 Number(current) + 1,
                 order,
                 $route.query.keyword

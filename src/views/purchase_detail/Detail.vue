@@ -1,5 +1,5 @@
 <template>
-  <div class="detail_wrap" v-if="list">
+  <div class="detail_wrap" v-if="Object.keys(list).length > 0">
     <ConfirmModal
       @ok="cancelLecture = true"
       v-if="toggleStore_confirmModal"
@@ -7,8 +7,10 @@
     <CancelLecture
       v-if="cancelLecture"
       @emitClose="cancelLecture = false"
-      :lecture_info="list.lecture_info"
+      :lecture_info="list"
     ></CancelLecture>
+    <!-- 무통장 환불 은행 정보 -->
+    <RefundBankInfo></RefundBankInfo>
     <Row>
       <template slot="row">
         <div class="section">
@@ -143,24 +145,73 @@
         <!-- 결제 정보 :: E -->
 
         <!-- 취소 요청 :: S -->
-        <!-- <div class="section">
+        <div
+          class="section"
+          v-if="list.status_code == 3 || list.status_code == 5"
+        >
           <h2 class="title">취소 요청</h2>
-        </div> -->
+          <div class="row">
+            <span class="dt">강의 비용</span>
+            <span class="dd">{{
+              list.pay_info.price.format_sum_purchased
+            }}</span>
+          </div>
+          <div class="row">
+            <span class="dt">할인 금액</span>
+            <span class="dd">{{ list.pay_info.price.format_purchased }}</span>
+          </div>
+          <div class="row">
+            <span class="dt">취소 요청 금액</span>
+            <span class="dd">{{ list.pay_info.price.format_cancel }}</span>
+          </div>
+          <div class="row">
+            <span class="dt">취소 사유</span>
+            <span class="dd">{{ list.cancel.cancel_reason }}</span>
+          </div>
+          <div
+            class="row cancel_req_list"
+            v-for="(li, index) in list.lecture_info.filter((el) => {
+              return el.state == 3 || el.state == 5;
+            })"
+            :key="index"
+          >
+            <span class="dt"
+              ><span class="lec" v-if="li.type == 'course'">강의</span>
+              <span class="course" v-else>코스</span>{{ li.title }}</span
+            >
+            <div class="clear_both">
+              <span class="dt">{{ li.teacher_name }}</span>
+              <del class="dt final_price">{{ li.price.format_original }}</del>
+              <span class="dt ori_price">{{
+                li.price.format_sum_purchased
+              }}</span>
+            </div>
+          </div>
+        </div>
         <!-- 취소 요청 :: E -->
 
         <!-- 환불 계좌 :: S -->
-        <!-- <div class="section">
+        <div
+          class="section"
+          v-if="
+            list.status_code == 3 ||
+              (list.status_code == 5 && list.pay_info.method == 'bank')
+          "
+        >
           <h2 class="title">환불 계좌</h2>
           <div class="row">
-            <span class="dt">예금주</span> <span class="dd">염세종</span>
+            <span class="dt">예금주</span>
+            <span class="dd">{{ list.cancel.bank_account_name }}</span>
           </div>
           <div class="row">
-            <span class="dt">은행명</span> <span class="dd"> </span>
+            <span class="dt">은행명</span>
+            <span class="dd">{{ list.cancel.bank_name }}</span>
           </div>
           <div class="row">
-            <span class="dt">계좌번호</span> <span class="dd"> </span>
+            <span class="dt">계좌번호</span>
+            <span class="dd">{{ list.cancel.bank_account_number }}</span>
           </div>
-        </div> -->
+        </div>
         <!-- 환불 계좌 :: E -->
 
         <!-- 환불 정보 :: S -->
@@ -196,26 +247,40 @@
       </template>
     </Row>
     <div class="btn_wrap">
-      <!-- <BaseButton class="left">
-        <button
-          slot="blue_btn"
-          v-if="list.cancel_btn_status == 'request'"
-          @click="isCancel()"
-        >
+      <BaseButton
+        class="left"
+        v-if="list.is_possible_cancel && list.status_code == 1"
+        @click.native="isCancel()"
+      >
+        <button slot="blue_btn">
           취소 요청
         </button>
-        <button
-          slot="blue_btn"
-          class="cancel_req_btn"
-          v-else-if="list.cancel_btn_status == 'exceeded'"
-        >
+      </BaseButton>
+      <BaseButton
+        @click.native="
+          $noticeMessage('취소 신청 가능 일이 지난<br>구매 내역입니다.')
+        "
+        class="left"
+        v-else-if="list.is_possible_cancel == false"
+      >
+        <button slot="blue_btn" class="cancel_req_btn">
           취소 요청
         </button>
-        <button slot="blue_btn" v-if="list.cancel_btn_status == 'ing'">
+      </BaseButton>
+      <BaseButton
+        @click.native="$noticeMessage('취소 신청 내역을 확인 중입니다.')"
+        class="left"
+        v-else-if="list.is_possible_cancel && list.status_code == 5"
+      >
+        <button slot="blue_btn">
           취소 진행
         </button>
-      </BaseButton> -->
-      <BaseButton class="right">
+      </BaseButton>
+
+      <BaseButton
+        class="right"
+        :style="[{ width: list.status_code == 4 ? '100%' : '49%' }]"
+      >
         <button
           slot="blue_btn"
           @click="
@@ -242,6 +307,7 @@
   import { mapState } from "vuex";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import CancelLecture from "@/components/modal/CancelLecture.vue";
+  import RefundBankInfo from "@/components/modal/RefundBankInfo.vue";
   import { Vue, Component } from "vue-property-decorator";
   @Component({
     components: {
@@ -249,6 +315,7 @@
       ConfirmModal,
       Row,
       BaseButton,
+      RefundBankInfo,
     },
     computed: {
       ...mapState("toggleStore", {
@@ -257,17 +324,19 @@
     },
   })
   export default class Detail extends Vue {
-    list = "";
+    list: { [key: string]: any } = {};
     cancelLecture = false;
+    refundBankInfo = false;
     isCancel(): void {
       this.$confirmMessage(
         "구매하신 강의를 취소 하시겠습니까?<br>취소 신청 시 강의 시청이 불가 합니다."
       );
     }
+
     getList(): void {
       const data = {
         action: "order_info",
-        order_id: String(this.$route.query.order_id),
+        order_id: this.$route.query.order_id,
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
@@ -298,6 +367,9 @@
       .row {
         margin-top: 10px;
       }
+    }
+    .cancel_req_list {
+      margin-top: 10px;
     }
     .purchased {
       font-family: "NotoSansCJKkr-Regular";
@@ -338,7 +410,7 @@
         clear: both;
       }
       .blue_btn {
-        width: 100%;
+        width: 49%;
         button {
           height: 40px;
           line-height: 31px;

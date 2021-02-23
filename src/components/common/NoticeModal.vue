@@ -1,9 +1,7 @@
 <template>
   <div class="mask1">
     <div class="notice_modal">
-      <p class="contents">
-        {{ toggleStore_noticeMessage }}
-      </p>
+      <p class="contents" v-html="toggleStore_noticeMessage"></p>
       <BlueBtn>
         <button class="ok" slot="blue_btn" @click="ok()">확인</button>
       </BlueBtn>
