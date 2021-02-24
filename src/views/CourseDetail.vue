@@ -45,7 +45,11 @@
       </div>
       <h2 class="free" v-if="detail.price.is_free">무료</h2>
       <div class="price" v-else>
-        <del class="original">{{ detail.price.format_original }}</del>
+        <del
+          class="original"
+          v-if="detail.price.format_original != detail.price.format_final"
+          >{{ detail.price.format_original }}</del
+        >
         <span class="final">{{ detail.price.format_final }}원</span>
       </div>
       <div id="tag_wrap">

@@ -59,7 +59,11 @@
             FREE
           </h1>
           <span class="price" v-else slot="free">
-            <del class="original">{{ list.price.format_original }}</del>
+            <del
+              class="original"
+              v-if="list.price.format_original != list.price.format_final"
+              >{{ list.price.format_original }}</del
+            >
             <span class="final">{{ list.price.format_final }}</span>
           </span>
         </LecItem>

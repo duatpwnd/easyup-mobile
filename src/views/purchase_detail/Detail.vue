@@ -47,7 +47,11 @@
             >
             <div class="clear_both">
               <span class="dt">{{ li.teacher_name }}</span>
-              <del class="dt final_price">{{ li.price.format_original }}</del>
+              <del
+                class="dt final_price"
+                v-if="li.price.format_original != li.price.format_final"
+                >{{ li.price.format_original }}</del
+              >
               <span class="dt ori_price">{{
                 li.price.format_sum_purchased
               }}</span>
@@ -181,7 +185,11 @@
             >
             <div class="clear_both">
               <span class="dt">{{ li.teacher_name }}</span>
-              <del class="dt final_price">{{ li.price.format_original }}</del>
+              <del
+                class="dt final_price"
+                v-if="li.price.format_original != li.price.format_final"
+                >{{ li.price.format_original }}</del
+              >
               <span class="dt ori_price">{{
                 li.price.format_sum_purchased
               }}</span>

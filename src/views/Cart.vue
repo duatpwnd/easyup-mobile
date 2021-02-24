@@ -23,7 +23,11 @@
             {{ li.title }}
           </h2>
           <div class="price">
-            <del class="final_price">{{ li.price.format_original }}</del>
+            <del
+              class="final_price"
+              v-if="li.price.format_original != li.price.format_final"
+              >{{ li.price.format_original }}</del
+            >
             <span class="ori_price">{{ li.price.format_final }}</span>
           </div>
           <div>
