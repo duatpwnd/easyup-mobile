@@ -27,11 +27,9 @@
 <style scoped lang="scss">
   .slide {
     position: relative;
+    margin-top: 8px;
     .swiper-slide {
       margin: 0 auto;
-    }
-    .swiper {
-      margin-top: 8px;
     }
   }
 </style>
