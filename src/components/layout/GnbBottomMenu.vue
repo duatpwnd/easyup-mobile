@@ -174,7 +174,7 @@
     ];
     bottom_menu: MenuType[] = [
       {
-        title: "내 강좌/코스",
+        title: "내 강의/코스",
         path: "/myClass/lecture",
         name: require("@/assets/images/common/lec_course_ico.png"),
         active: require("@/assets/images/common/lec_course_active_ico.png"),
