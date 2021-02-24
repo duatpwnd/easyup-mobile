@@ -1,5 +1,9 @@
 <template>
   <div>
+    <ConfirmModal
+      @ok="lectureDelete()"
+      v-if="toggleStore_confirmModal"
+    ></ConfirmModal>
     <div class="search_area">
       <Search>
         <select slot="option" class="select" v-model="order">
@@ -143,7 +147,7 @@
                 >리뷰관리</router-link
               >
               <span
-                @click="lectureDelete(list.id)"
+                @click="confirm(list.id)"
                 class="ing_ico lecture_remove"
                 v-if="list.show_btn_delete"
                 >강의삭제</span
@@ -199,32 +203,42 @@
   import LectureCourseList from "@/components/common/LectureCourseList.vue";
   import Search from "@/components/common/Search.vue";
   import Pagination from "@/components/common/Pagination.vue";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import mixin from "./mixin.js";
-  import { mapState, mapMutations } from "vuex";
+  import { mapState } from "vuex";
   export default {
     mixins: [mixin],
     components: {
+      ConfirmModal,
       Pagination,
       ProgressBar,
       Search,
       LectureCourseList,
     },
     computed: {
+      ...mapState("toggleStore", {
+        toggleStore_confirmModal: "confirm_modal",
+      }),
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
       }),
     },
     data() {
-      return {};
+      return {
+        delete_id: "", // 강의 삭제 아이디
+      };
     },
     methods: {
-      lectureDelete(id) {
+      confirm(id) {
+        this.delete_id = id;
+        this.$confirmMessage("삭제하시겠습니까?");
+      },
+      lectureDelete() {
         const obj = {
           action: "change_visibility",
-          id: id,
+          id: this.delete_id,
           type: "course",
         };
-        console.log(obj);
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {
