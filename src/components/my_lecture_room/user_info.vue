@@ -17,11 +17,11 @@
           <p class="email">duatpwnd1@naver.com</p>
         </slot>
         <slot name="convert"> </slot>
-        <slot name="update_date">
+        <!-- <slot name="update_date">
           <p class="update_date">
             2019년 8월 29일(업데이트일자:2019년 9월 1일)
           </p>
-        </slot>
+        </slot> -->
       </div>
     </div>
     <ul class="course_info">

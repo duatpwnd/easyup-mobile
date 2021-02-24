@@ -23,9 +23,9 @@
         <span class="report" @click="profile_modal = true">프로필</span>
         <span class="convert" @click="convert('student')">학생전환</span>
       </template>
-      <p class="update_date" slot="update_date">
+      <!-- <p class="update_date" slot="update_date">
         최근 접속일: {{ userStore_userinfo.info.last_login }}
-      </p>
+      </p> -->
       <template slot="info">
         <li>
           <h3>진행중인 강의</h3>
