@@ -1,12 +1,18 @@
 <template>
   <div>
     <div class="user_info">
-      <span class="profile">
-        <img
+      <span
+        class="profile"
+        :style="{
+          background: `url(${userStore_userinfo.info.profile_image}) no-repeat 
+      center / 100% 100%`,
+        }"
+      >
+        <!-- <img
           :src="userStore_userinfo.info.profile_image"
           alt="프로필"
           title="프로필"
-        />
+        /> -->
       </span>
       <div class="info">
         <slot name="user_name">
