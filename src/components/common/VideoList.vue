@@ -89,6 +89,10 @@
       background: #dbdbdb;
       color: #999999;
     }
+    .reject_ico {
+      background: black;
+      color: white;
+    }
     .toggle_btn {
       width: 22%;
       border: 1px solid #114fff;

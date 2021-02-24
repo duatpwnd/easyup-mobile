@@ -137,7 +137,7 @@
           </div> -->
           <div class="row">
             <span class="dt">결제금액</span>
-            <span class="dd"
+            <span class="dd final-price"
               >{{ list.pay_info.price.format_sum_purchased }}원</span
             >
           </div>
@@ -355,6 +355,11 @@
     .section {
       padding: 4.445%;
       border-bottom: 4px solid #f8f8f8;
+      .row {
+        .final-price {
+          font-weight: bold;
+        }
+      }
     }
     .user_info,
     .payment_info,

@@ -63,7 +63,7 @@
         </div>
         <div class="row">
           <span class="dt">결제 금액</span>
-          <span class="dd">{{ li.price.format_final }}원</span>
+          <span class="dd final-price">{{ li.price.format_final }}원</span>
         </div>
         <div class="row">
           <span class="dt">상태</span>
@@ -199,6 +199,11 @@
       border-bottom: 4px solid #f8f8f8;
       .contain_btn {
         margin-bottom: 10px;
+      }
+      .row {
+        .final-price {
+          font-weight: bold;
+        }
       }
     }
   }
