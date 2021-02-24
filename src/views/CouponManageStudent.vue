@@ -32,6 +32,7 @@
           query: {
             type: 'available',
             pageCurrent: 1,
+            view: this.$route.query.view,
           },
         }"
         ><span class="active_bar"></span>사용가능
@@ -42,6 +43,7 @@
           query: {
             type: 'used',
             pageCurrent: 1,
+            view: this.$route.query.view,
           },
         }"
         ><span class="active_bar"></span>사용완료/기간만료</router-link
