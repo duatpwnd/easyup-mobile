@@ -1,0 +1,5 @@
+{
+    "env":{
+        "VUE_APP_API_URL" :"http://develop.hell0world.net:5580" 
+    }
+}
