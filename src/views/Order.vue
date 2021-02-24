@@ -57,7 +57,7 @@
         <div class="row ">
           <span class="dt">강의 할인</span>
           <span class="dd"
-            >-{{
+            >{{
               list.info.calculate_price_info.format_sum_discount_course
             }}원</span
           >
@@ -65,7 +65,7 @@
         <div class="row ">
           <span class="dt">코스 할인</span>
           <span class="dd"
-            >-{{
+            >{{
               list.info.calculate_price_info.format_sum_discount_session
             }}원</span
           >
