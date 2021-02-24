@@ -11,91 +11,89 @@
     </Slide>
     <!-- 배너 :: E -->
 
-    <!-- 인기강의 :: S -->
-    <div class="section" v-if="list.popular_lecture.length > 0">
-      <h2 class="title">인기 강의</h2>
-      <p class="suggest">이지업의 가장 인기가 많은 강의를 확인해보세요</p>
-      <div class="lec_list_wrap">
-        <div
-          class="li"
-          v-for="(list, index) in list.popular_lecture"
-          :key="index"
-          @click="
-            $router.push({
-              path: '/lecDetail',
-              query: {
-                id: list.id,
-              },
-            })
-          "
-        >
-          <LecItem>
-            <span
-              class="lec_list"
-              slot="router"
-              :style="{ 'background-image': `url(${list.image_url})` }"
-            >
-            </span>
-            <h4 slot="teacher">{{ list.teachers }}</h4>
-            <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
-            <span slot="grade" class="score">{{ list.ranking }}</span>
-            <h1 class="free" slot="free" v-if="list.price.is_free">
-              FREE
-            </h1>
-            <span class="price" v-else slot="free">
-              <del class="original">{{ list.price.format_original }}</del>
-              <span class="final">{{ list.price.format_final }}</span>
-            </span>
-          </LecItem>
-        </div>
-      </div>
+    <!-- 강의 검색 :: S-->
+    <div class="section search-section">
+      <h2 class="title">이지업에서 쉽고 빠르게 성장하세요!</h2>
+      <Search>
+        <input
+          slot="slot_input"
+          class="search_contents"
+          placeholder="배우고 싶은 강의를 입력해보세요."
+          :value="keyword"
+          v-on:input="keyword = $event.target.value"
+        />
+        <button
+          slot="search_btn"
+          class="search_btn"
+          @click="lectureSearch()"
+        ></button>
+      </Search>
     </div>
-    <!-- 인기강의 :: E-->
+    <!-- 강의 검색 :: E -->
 
-    <!-- 인기 코스 :: S -->
-    <div class="section swiper_section" v-if="list.popular_course.length > 0">
-      <h2 class="title">인기 코스</h2>
-      <p class="suggest">
-        초심자 과정부터 전문가 과정까지, 전 과정을 합리적인 가격에 마스터하세요
-      </p>
-      <Slide :swiper_option="slide_option.popular_course">
+    <!-- 카테고리별 강의 :: S -->
+    <CategoryLec></CategoryLec>
+    <!-- 카테고리별 강의 :: E -->
+
+    <!-- 추천강의 :: S -->
+    <div class="section swiper_section" v-if="list.popular_lecture.length > 0">
+      <h2 class="title">추천 강의</h2>
+      <!-- <p class="suggest">이지업의 가장 인기가 많은 강의를 확인해보세요</p> -->
+      <Slide :swiper_option="slide_option.recommand_lecture">
         <template slot="list">
           <swiper-slide
-            slot="list"
-            v-for="(list, index) in list.popular_course"
+            v-for="(list, index) in list.popular_lecture"
             :key="index"
-            ><router-link
-              :to="{
-                path: '/courseDetail',
-                query: {
-                  id: list.id,
-                },
-              }"
-              ><img :src="list.image_url"/></router-link
-          ></swiper-slide>
+          >
+            <LecItem>
+              <router-link
+                class="lec_list"
+                slot="router"
+                :to="{
+                  path: '/lecDetail',
+                  query: {
+                    id: list.id,
+                  },
+                }"
+                :style="{ 'background-image': `url(${list.image_url})` }"
+              >
+              </router-link>
+              <h4 slot="teacher">{{ list.teachers }}</h4>
+
+              <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+              <span slot="grade" class="score">{{ list.ranking }}</span>
+              <h1 class="free" slot="free" v-if="list.price.is_free">
+                FREE
+              </h1>
+              <span class="price" v-else slot="free">
+                <del class="original">{{ list.price.format_original }}</del>
+                <span class="final">{{ list.price.format_final }}</span>
+              </span>
+            </LecItem>
+          </swiper-slide>
         </template>
         <template slot="nav_btn">
           <div
-            class="swiper-button-prev swiper-button-prev-0"
+            class="swiper-button-prev swiper-button-prev-3"
             slot="button-prev"
             @click.stop=""
           ></div>
           <div
-            class="swiper-button-next swiper-button-next-0"
+            class="swiper-button-next swiper-button-next-3"
             slot="button-next"
             @click.stop=""
           ></div>
         </template>
       </Slide>
     </div>
-    <!-- 인기코스 :: E -->
+    <!-- 추천강의 :: E-->
 
     <!-- 최신강의 ::  S -->
     <div class="section swiper_section" v-if="list.latest_lecture.length > 0">
       <h2 class="title">최신 강의</h2>
-      <p class="suggest">
+      <!-- <p class="suggest">
         최근 트렌드를 반영한 강의 정보를 확인하세요
-      </p>
+      </p> -->
       <Slide :swiper_option="slide_option.latest_lecture">
         <template slot="list">
           <swiper-slide
@@ -144,7 +142,43 @@
       </Slide>
     </div>
     <!-- 최신강의 ::  E -->
-
+    <!-- 인기 코스 :: S -->
+    <div class="section swiper_section" v-if="list.popular_course.length > 0">
+      <h2 class="title">인기 코스</h2>
+      <!-- <p class="suggest">
+        초심자 과정부터 전문가 과정까지, 전 과정을 합리적인 가격에 마스터하세요
+      </p> -->
+      <Slide :swiper_option="slide_option.popular_course">
+        <template slot="list">
+          <swiper-slide
+            slot="list"
+            v-for="(list, index) in list.popular_course"
+            :key="index"
+            ><router-link
+              :to="{
+                path: '/courseDetail',
+                query: {
+                  id: list.id,
+                },
+              }"
+              ><img :src="list.image_url"/></router-link
+          ></swiper-slide>
+        </template>
+        <template slot="nav_btn">
+          <div
+            class="swiper-button-prev swiper-button-prev-0"
+            slot="button-prev"
+            @click.stop=""
+          ></div>
+          <div
+            class="swiper-button-next swiper-button-next-0"
+            slot="button-next"
+            @click.stop=""
+          ></div>
+        </template>
+      </Slide>
+    </div>
+    <!-- 인기코스 :: E -->
     <!-- 번역강의 :: S -->
     <div
       class="section swiper_section"
@@ -167,9 +201,9 @@
           >더보기</router-link
         >
       </h2>
-      <p class="suggest">
+      <!-- <p class="suggest">
         한글 자막이 제공되는 외국 우수 강의를 구독하세요
-      </p>
+      </p> -->
       <Slide :swiper_option="slide_option.translation_lecture">
         <template slot="list">
           <swiper-slide
@@ -220,8 +254,7 @@
     <!-- 번역강의 :: E -->
 
     <!-- 카테고리별강의 :: S -->
-    <!-- <div class="section category_section">
-      <CategoryLec></CategoryLec>
+    <div class="section category_section">
       <div class="notice_wrap">
         <span class="notice_title">공지사항</span>
         <router-link
@@ -236,14 +269,15 @@
           >{{ list.recent_notice.title }}</router-link
         >
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script lang="ts">
   import { Component, Vue } from "vue-property-decorator";
   import LecItem from "@/components/common/LectureItem.vue";
-  // import CategoryLec from "@/components/main/MainCategory.vue";
+  import Search from "@/components/common/Search.vue";
+  import CategoryLec from "@/components/main/MainCategory.vue";
   import Slide from "@/components/common/Slide.vue";
   interface ResultedData {
     data: {
@@ -254,11 +288,13 @@
     components: {
       Slide,
       LecItem,
-      // CategoryLec,
+      Search,
+      CategoryLec,
     },
   })
   export default class Main extends Vue {
-    private slide_option = {
+    keyword = "";
+    slide_option = {
       banner: {
         autoplay: {
           delay: 2500,
@@ -295,9 +331,32 @@
           prevEl: ".swiper-button-prev-2",
         },
       },
+      recommand_lecture: {
+        spaceBetween: 8,
+        slidesPerView: 2,
+        direction: "horizontal",
+        navigation: {
+          nextEl: ".swiper-button-next-3",
+          prevEl: ".swiper-button-prev-3",
+        },
+      },
     };
-    private list = {};
-    private getLectureList(): void {
+    list = {};
+    lectureSearch(): void {
+      this.$router
+        .push({
+          path: "/category",
+          query: {
+            action: "get_course_list",
+            pageCurrent: 1,
+            order: "type_date",
+            keyword: this.keyword,
+            category_code: "ALL",
+          },
+        })
+        .catch(() => {});
+    }
+    getLectureList(): void {
       const data = {
         action: "main_page_list",
       };
@@ -377,7 +436,6 @@
         background: #f4f4f4;
         border-radius: 30px;
         padding: 4px 4.88%;
-        margin-top: 24px;
         position: relative;
         height: 30px;
         box-sizing: border-box;
@@ -401,9 +459,46 @@
         }
       }
     }
+    .search-section {
+      padding-bottom: 0;
+      .title {
+        text-align: center;
+        font-size: 16px;
+      }
+      .search {
+        margin-top: 20px;
+        border: 2px solid #333333;
+        border-radius: 50px;
+        overflow: hidden;
+        padding: 0 20px;
+        .search_contents {
+          float: none;
+          border: 0;
+          padding: 0;
+          margin: 0;
+          width: 90%;
+          vertical-align: middle;
+          &::placeholder {
+            color: #bdbdbd;
+            font-size: 14px;
+          }
+        }
+        .search_btn {
+          float: none;
+          position: unset;
+          vertical-align: middle;
+          width: 10%;
+          height: 18px;
+          background: url("~@/assets/images/lec_list/search_btn.png") no-repeat
+            95% center / 18px 18px;
+        }
+      }
+    }
     .swiper_section {
       padding-top: 0;
       .slide {
+        border-radius: 10px;
+        overflow: hidden;
         .swiper-button-prev.swiper-button-disabled,
         .swiper-button-next.swiper-button-disabled {
           pointer-events: unset;
@@ -435,7 +530,6 @@
     }
     .category_section {
       padding-top: 0;
-      padding-bottom: 15px;
     }
     ::v-deep .vue-star-rating {
       display: unset;

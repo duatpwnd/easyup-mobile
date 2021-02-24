@@ -35,6 +35,8 @@
 </script>
 <style scoped lang="scss">
   .item {
+    border-radius: 10px;
+    overflow: hidden;
     h4 {
       font-size: 0.9375rem;
       margin-top: 3.5px;

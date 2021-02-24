@@ -52,8 +52,8 @@
           <span class="lec_list" slot="router">
             <img :src="list.thumbnail" alt="이지업" title="이지업" />
           </span>
-          <h4 slot="teacher">{{ list.teacher }}</h4>
-          <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+          <h4 slot="teacher" v-html="list.teacher"></h4>
+          <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
           <span slot="grade" class="score">{{ list.rating }}</span>
           <h1 class="free" slot="free" v-if="list.price.is_free">
             FREE
