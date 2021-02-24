@@ -485,6 +485,7 @@
           text-align: center;
         }
         .add_btn {
+          border-right: 1px solid #ccc;
           background: #333333
             url("~@/assets/images/lec_detail/fixed_lecture_add_ico.png")
             no-repeat center / 28px 27px;
