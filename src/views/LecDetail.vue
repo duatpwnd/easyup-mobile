@@ -1,5 +1,18 @@
 <template>
   <div id="lec_detail" v-if="Object.keys(detail).length > 0">
+    <PurchaseApply
+      v-if="toggleStore_purchase_apply"
+      @goToOrder="
+        $router.push({
+          path: 'order',
+          query: {
+            type: 'course',
+            cart_id: $route.query.id,
+          },
+        })
+      "
+      :lecture_info="detail"
+    ></PurchaseApply>
     <ConfirmModal
       @ok="video($route.query.id, detail.lp_id)"
       v-if="toggleStore_confirmModal"
@@ -129,19 +142,7 @@
             <BlueBtn
               v-else-if="is_subscribe == false && detail.price.is_free == false"
             >
-              <button
-                ref="subs_btn"
-                slot="blue_btn"
-                @click="
-                  $router.push({
-                    path: 'order',
-                    query: {
-                      type: 'course',
-                      cart_id: $route.query.id,
-                    },
-                  })
-                "
-              >
+              <button ref="subs_btn" slot="blue_btn" @click="isPurchase()">
                 구매하기
               </button>
             </BlueBtn>
@@ -177,15 +178,7 @@
             >
               공유하기
             </button>
-            <button
-              class="purchase_btn"
-              @click="
-                $router.push({
-                  path: 'order',
-                  query: { type: 'course', cart_id: $route.query.id },
-                })
-              "
-            >
+            <button class="purchase_btn" @click="isPurchase()">
               구매하기
             </button>
           </div>
@@ -398,7 +391,7 @@
   import mixin from "@/views/mixins/lec_course_detail.ts";
   import { mapState, mapMutations } from "vuex";
   import { ResultData } from "@/assets/js/util.ts";
-
+  import PurchaseApply from "@/components/modal/PurchaseApply.vue";
   @Component({
     components: {
       ConfirmModal,
@@ -407,11 +400,13 @@
       StarRating,
       ProgressBar,
       CommentWrap,
+      PurchaseApply,
     },
     computed: {
       ...mapState("toggleStore", {
         toggleStore_score_info: "score_info",
         toggleStore_confirmModal: "confirm_modal",
+        toggleStore_purchase_apply: "purchase_apply",
       }),
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
@@ -429,6 +424,11 @@
       return this.$numberWithCommas(
         (this.detail as { [key: string]: any }).coupon.quantity
       );
+    }
+    isPurchase() {
+      this.$store.commit("toggleStore/Toggle", {
+        purchase_apply: true,
+      });
     }
     isWatch() {
       this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");

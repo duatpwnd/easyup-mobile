@@ -1,5 +1,18 @@
 <template>
   <div id="course_detail" v-if="Object.keys(detail).length > 0">
+    <PurchaseApply
+      v-if="toggleStore_purchase_apply"
+      @goToOrder="
+        $router.push({
+          path: 'order',
+          query: {
+            type: 'session',
+            cart_id: $route.query.id,
+          },
+        })
+      "
+      :lecture_info="detail"
+    ></PurchaseApply>
     <img
       :src="detail.course_image"
       alt="파이썬 코딩 기본편"
@@ -89,19 +102,7 @@
               </button>
             </BlueBtn>
             <BlueBtn v-else>
-              <button
-                ref="subs_btn"
-                slot="blue_btn"
-                @click="
-                  $router.push({
-                    path: 'order',
-                    query: {
-                      type: 'session',
-                      cart_id: $route.query.id,
-                    },
-                  })
-                "
-              >
+              <button ref="subs_btn" slot="blue_btn" @click="isPurchase()">
                 구매하기
               </button>
             </BlueBtn>
@@ -125,18 +126,7 @@
             >
               공유하기
             </button>
-            <button
-              class="purchase_btn"
-              @click="
-                $router.push({
-                  path: 'order',
-                  query: {
-                    type: 'session',
-                    cart_id: $route.query.id,
-                  },
-                })
-              "
-            >
+            <button class="purchase_btn" @click="isPurchase()">
               구매하기
             </button>
           </div>
@@ -305,6 +295,7 @@
   import CourseItem from "@/components/common/LectureItem.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import mixin from "@/views/mixins/lec_course_detail.js";
+  import PurchaseApply from "@/components/modal/PurchaseApply.vue";
   import { mapState, mapMutations } from "vuex";
   export default {
     mixins: [mixin],
@@ -314,10 +305,12 @@
       CommentWrap,
       BlueBtn,
       CourseItem,
+      PurchaseApply,
     },
     computed: {
       ...mapState("toggleStore", {
         toggleStore_score_info: "score_info",
+        toggleStore_purchase_apply: "purchase_apply",
       }),
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
@@ -327,6 +320,11 @@
       return {};
     },
     methods: {
+      isPurchase() {
+        this.$store.commit("toggleStore/Toggle", {
+          purchase_apply: true,
+        });
+      },
       goToPath() {
         this.$router.push({
           path: "/myClass/course",

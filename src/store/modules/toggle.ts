@@ -16,6 +16,7 @@ export default class Toggle extends VuexModule {
   confirm_modal = false; // 각종 확인 모달
   notice_modal = false; // 각종 경고 모달
   notice_message = ""; // 각종 경고 메세지
+  purchase_apply = false; // 강의 상세페이지 구매하기 버튼 클릭시 모달
   bookmark_modal = false; // 책갈피 모달
   bookmark_list_info = {
     current_id: "",
