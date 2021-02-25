@@ -18,7 +18,6 @@
         <slot name="user_name">
           <span class="name">강동원</span>
         </slot>
-        <span class="class">님의 강의실</span>
         <slot name="user_email">
           <p class="email">duatpwnd1@naver.com</p>
         </slot>
@@ -75,26 +74,26 @@
 <style scoped lang="scss">
   .user_info {
     background: #343536;
-    display: table;
     width: 100%;
     padding: 4.167% 8.333%;
     box-sizing: border-box;
-
     .profile {
-      width: 26.6%;
-      display: table-cell;
-      vertical-align: middle;
       border-radius: 50%;
       overflow: hidden;
+      width: 80px;
+      height: 80px;
+      display: inline-block;
+      vertical-align: middle;
     }
     .info {
-      display: table-cell;
+      width: calc(100% - 110px);
       vertical-align: middle;
-      padding-left: 10%;
+      display: inline-block;
+      margin-left: 30px;
       .name {
         color: #ffffff;
         font-weight: 500;
-        font-size: 2rem;
+        font-size: 18px;
       }
       .class {
         @extend .name;

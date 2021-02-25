@@ -188,7 +188,7 @@
         <BlueBtn
           class="add"
           @click.native="cartAdd()"
-          v-if="detail.price.is_free == false"
+          v-if="detail.price.is_free == false && is_subscribe == false"
         >
           <button slot="blue_btn">
             강의담기
@@ -198,7 +198,7 @@
           class="share"
           @click.native="share()"
           :style="[
-            detail.price.is_free == false
+            detail.price.is_free == false && is_subscribe == false
               ? { 'margin-left': '2%' }
               : { 'margin-left': 0, width: '100%' },
           ]"

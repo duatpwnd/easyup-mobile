@@ -6,8 +6,8 @@
     ></Profile>
     <UserInfo v-if="top_count">
       <span slot="user_name" class="name"
-        >{{ userStore_userinfo.info.username }}
-      </span>
+        >{{ userStore_userinfo.info.username }}님의 강의실</span
+      >
       <p slot="user_email" class="email">
         {{ userStore_userinfo.info.email }}
       </p>
@@ -257,7 +257,7 @@
   .contents {
     padding: 4.445%;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
       &:not(:first-child) {
         margin-top: 20px;
       }
