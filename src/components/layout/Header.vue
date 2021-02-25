@@ -81,7 +81,6 @@
     top: 0;
     background: white;
     z-index: 4;
-
     .back_btn {
       position: absolute;
       top: 0;

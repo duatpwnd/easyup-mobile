@@ -16,6 +16,12 @@
           class="thumb"
           :alt="li.title"
           :title="li.title"
+          @click="
+            $router.push({
+              path: li.type == 'course' ? '/lecDetail' : '/courseDetail',
+              query: { id: li.id },
+            })
+          "
         />
       </template>
       <template slot="info">

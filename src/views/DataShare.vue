@@ -37,11 +37,11 @@
 </script>
 <style scoped lang="scss">
   .file_wrap {
-    margin-top: 2%;
     padding-bottom: 65px;
+    margin-top: 13px;
     h2 {
       font-size: 18px;
-      padding: 0 4.445%;
+      padding: 0 16px;
       margin-bottom: 13px;
     }
     .tab {

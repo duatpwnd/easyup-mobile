@@ -133,12 +133,23 @@
         </div>
       </div>
       <div class="add_share">
-        <BlueBtn class="add" @click.native="cartAdd()">
+        <BlueBtn
+          class="add"
+          @click.native="cartAdd()"
+          v-if="detail.price.is_free == false && is_subscribe == false"
+        >
           <button slot="blue_btn">
             코스담기
           </button>
         </BlueBtn>
-        <BlueBtn class="share">
+        <BlueBtn
+          class="share"
+          :style="[
+            detail.price.is_free == false && is_subscribe == false
+              ? { 'margin-left': '2%' }
+              : { 'margin-left': 0, width: '100%' },
+          ]"
+        >
           <button slot="blue_btn" v-clipboard="url" v-clipboard:success="share">
             공유하기
           </button>

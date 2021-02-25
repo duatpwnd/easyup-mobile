@@ -236,11 +236,11 @@
           v-html="detail.description[0].content"
         ></div>
       </div>
-      <div v-if="typeof detail.description[1] != 'undefined'">
-        <h2 class="title title2" v-if="detail.description[1].underline">
+      <div class="example" v-if="typeof detail.description[1] != 'undefined'">
+        <h2 class="title " v-if="detail.description[1].underline">
           {{ detail.description[1].title }}
         </h2>
-        <h2 class="title2" v-else>{{ detail.description[1].title }}</h2>
+        <h2 v-else>{{ detail.description[1].title }}</h2>
         <div
           class="recommand_list"
           v-html="detail.description[1].content"
@@ -254,12 +254,17 @@
         <div
           class="description_contents"
           v-html="detail.description[2].content"
-        >
-          다양한 주제의 파이썬 계산기 실전 프로젝트를 이용해서 단 100분동 안
-          파이썬의 핵심요소 10 가지를 배울 수 있는 좋은 강의입니다. 향후에
-          사물인터넷(IoT), 딥러닝, 데이터 분석 등 관련 프로젝트를 해 도 쉽게
-          적용하실 수 있을 겁니다.
-        </div>
+        ></div>
+      </div>
+      <div class="example" v-if="typeof detail.description[3] != 'undefined'">
+        <h2 class="title" v-if="detail.description[3].underline">
+          {{ detail.description[3].title }}
+        </h2>
+        <h2 v-else>{{ detail.description[3].title }}</h2>
+        <div
+          class="description_contents"
+          v-html="detail.description[3].content"
+        ></div>
       </div>
     </div>
     <div class="curriculum">

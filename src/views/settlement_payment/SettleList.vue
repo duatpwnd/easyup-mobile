@@ -173,15 +173,14 @@
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
-            console.log(result);
-            console.log(this.$route.query.view);
+            console.log(result, data);
             this.list = result.data.data;
             this.$router
               .push({
                 query: {
                   pageCurrent: num,
-                  start_date: this.$route.query.start_date,
-                  end_date: this.$route.query.end_date,
+                  start_date: data.search_start_date,
+                  end_date: data.search_end_date,
                   view: this.$route.query.view,
                 },
               })
