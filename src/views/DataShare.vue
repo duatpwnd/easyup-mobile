@@ -40,12 +40,12 @@
     margin-top: 2%;
     padding-bottom: 65px;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
       padding: 0 4.445%;
       margin-bottom: 13px;
     }
     .tab {
-      font-size: 2rem;
+      font-size: 18px;
       font-weight: 600;
       width: 50%;
       display: inline-block;

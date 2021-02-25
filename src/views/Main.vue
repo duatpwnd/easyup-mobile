@@ -37,7 +37,7 @@
             >
             </span>
             <h4 slot="teacher">{{ list.teachers }}</h4>
-            <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+            <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
             <span slot="grade" class="score">{{ list.ranking }}</span>
             <h1 class="free" slot="free" v-if="list.price.is_free">
               FREE
@@ -121,7 +121,7 @@
               </router-link>
               <h4 slot="teacher">{{ list.teachers }}</h4>
 
-              <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+              <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
               <span slot="grade" class="score">{{ list.ranking }}</span>
               <h1 class="free" slot="free" v-if="list.price.is_free">
                 FREE
@@ -199,7 +199,7 @@
               </router-link>
               <h4 slot="teacher">{{ list.teachers }}</h4>
 
-              <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+              <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
               <span slot="grade" class="score">{{ list.ranking }}</span>
               <h1 class="free" slot="free" v-if="list.price.is_free">
                 FREE

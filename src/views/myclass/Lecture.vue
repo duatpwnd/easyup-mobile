@@ -49,9 +49,11 @@
       >
         <template slot="thumbnail">
           <img
+            v-if="list.lp_id != null"
             :src="list.thumbnail"
             class="thumb"
-            alt=""
+            :alt="list.title"
+            :title="list.title"
             @click="
               $router.push({
                 path: '/play',
@@ -62,7 +64,9 @@
               })
             "
           />
+          <img v-else :src="list.thumbnail" class="thumb" alt="" />
           <img
+            v-if="list.lp_id != null"
             src="@/assets/images/common/playing_ico.png"
             class="playing_ico"
             @click="
