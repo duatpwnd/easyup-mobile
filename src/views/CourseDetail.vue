@@ -172,6 +172,10 @@
       </div>
       <span class="name">{{ detail.teachers }}</span>
     </section>
+    <section class="section3">
+      <h2 class="title">코스개요</h2>
+      <div class="description_contents" v-html="detail.description"></div>
+    </section>
     <div class="course_info">
       <h2 class="course_list">
         <span>코스 별 강좌 안내</span>
@@ -184,7 +188,8 @@
         v-for="(list, index) in detail.course_list"
         :key="index"
       >
-        <h2 class="title">{{ index + 1 }}강.</h2>
+        <h2 class="title" v-if="index + 1 < 10">STEP 0{{ index + 1 }}.</h2>
+        <h2 class="title" v-else>STEP {{ index + 1 }}.</h2>
         <CourseItem>
           <span class="lec_list" slot="router">
             <img :src="list.thumbnail" alt="이지업" title="이지업" />
@@ -531,6 +536,22 @@
       font-size: 14px;
     }
   }
+  .section3 {
+    padding: 4.445%;
+    border-bottom: 4px solid #f8f8f8;
+    .title {
+      font-size: 18px;
+      display: inline;
+      background: linear-gradient(#ffffff 60%, rgba(94, 244, 255, 0.34) 40%);
+    }
+    .description_contents {
+      margin-top: 10px;
+      color: #666666;
+      font-size: 14px;
+      text-align: justify;
+      font-family: "NotoSansCJKkr-Regular";
+    }
+  }
   .add_share {
     .blue_btn {
       display: inline-block;
@@ -581,7 +602,7 @@
       // width: 48.782%;
       margin-top: 5%;
       .title {
-        font-size: 1.6875rem;
+        font-size: 18px;
       }
       ::v-deep .item {
         h4 {
@@ -619,6 +640,7 @@
           }
         }
         .confirm_btn {
+          width: 100%;
           ::v-deep button {
             background: white;
             color: #114fff;
