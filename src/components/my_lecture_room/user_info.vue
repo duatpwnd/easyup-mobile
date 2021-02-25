@@ -21,7 +21,7 @@
         <slot name="user_email">
           <p class="email">duatpwnd1@naver.com</p>
         </slot>
-        <slot name="convert"> </slot>
+        <slot name="convert"></slot>
         <!-- <slot name="update_date">
           <p class="update_date">
             2019년 8월 29일(업데이트일자:2019년 9월 1일)
@@ -75,7 +75,7 @@
   .user_info {
     background: #343536;
     width: 100%;
-    padding: 4.167% 8.333%;
+    padding: 15px 30px;
     box-sizing: border-box;
     .profile {
       border-radius: 50%;
@@ -102,8 +102,8 @@
       }
       .email {
         color: #999999;
-        font-size: 1.375rem;
-        margin-bottom: 3%;
+        font-size: 16px;
+        margin-bottom: 5px;
       }
       .report {
         font-size: 12px;
