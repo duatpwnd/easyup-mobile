@@ -160,17 +160,17 @@
           order: "all",
         },
       },
-      {
-        title: "과제게시판",
-        path: "/dataShare/sent",
-        name: require("@/assets/images/common/learning_ico.png"),
-        active: require("@/assets/images/common/learning_active_ico.png"),
-        query: {
-          // keyword: "",
-          // pageCurrent: 1,
-          // order: "all",
-        },
-      },
+      // {
+      //   title: "과제게시판",
+      //   path: "/dataShare/sent",
+      //   name: require("@/assets/images/common/learning_ico.png"),
+      //   active: require("@/assets/images/common/learning_active_ico.png"),
+      //   query: {
+      // keyword: "",
+      // pageCurrent: 1,
+      // order: "all",
+      //   },
+      // },
     ];
     bottom_menu: MenuType[] = [
       {
