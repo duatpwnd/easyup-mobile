@@ -269,12 +269,12 @@
     }
     .subscribed_lec {
       .td_wrap {
-        width: 37%;
+        width: 40%;
         text-align: right;
         vertical-align: middle;
         display: inline-block;
         ::v-deep .progress_bar {
-          width: 55%;
+          width: 45%;
           margin-left: 5px;
           margin-right: 0;
           height: 16px;
