@@ -23,8 +23,8 @@
     </div>
     <section class="section1">
       <div class="lecture_title">
-        <h3 class="sub_title">{{ detail.category }}</h3>
-        <h2 class="title">{{ detail.title }}</h2>
+        <h3 class="sub_title" v-html="detail.category"></h3>
+        <h2 class="title" v-html="detail.title"></h2>
       </div>
       <div class="star_rating">
         <StarRating
@@ -159,16 +159,15 @@
     <section class="section2">
       <div class="user_intro">
         <span class="total_lec"
-          >총<span class="color">{{ detail.course_list.length }}</span
-          >강</span
+          ><span class="color">{{ detail.course_list.length }}</span
+          >개 클래스</span
         >
         <div
           class="ol_list"
           v-for="(list, index) in detail.course_list"
           :key="index"
         >
-          <span class="title">{{ index + 1 }}강</span>
-          <span> {{ list.title }}</span>
+          <span v-html="list.title"></span>
         </div>
       </div>
       <span class="name">{{ detail.teachers }}</span>
@@ -177,7 +176,7 @@
       <h2 class="course_list">
         <span>코스 별 강좌 안내</span>
         <span class="all_lecture_num"
-          >총 {{ detail.course_list.length }}강</span
+          >{{ detail.course_list.length }}개 클래스</span
         >
       </h2>
       <div
@@ -191,7 +190,7 @@
             <img :src="list.thumbnail" alt="이지업" title="이지업" />
           </span>
           <h4 slot="teacher">{{ list.teacher }}</h4>
-          <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+          <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
           <span slot="grade" class="score">{{ list.ranking }}</span>
           <h1 class="free" slot="free" v-if="list.is_free == 'Y'">
             FREE

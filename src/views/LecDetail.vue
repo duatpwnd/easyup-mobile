@@ -216,8 +216,8 @@
         </div>
         <div>
           <span class="total_lec"
-            >총<span class="color"> {{ detail.total_lecture }}</span
-            >강</span
+            ><span class="color"> {{ detail.total_lecture }}</span
+            >개 레슨</span
           >
         </div>
         <div>
@@ -279,7 +279,7 @@
         </button>
         <button class="subscribe_btn" v-else>강의 구독</button>
         <span class="total_lec"
-          >총 {{ detail.curriculum_list.count_detail }} 강</span
+          >{{ detail.curriculum_list.count_detail }}개 레슨</span
         >
       </div>
       <ul
