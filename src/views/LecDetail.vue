@@ -227,9 +227,11 @@
     </section>
     <div id="intro">
       <div v-if="typeof detail.description[0] != 'undefined'">
-        <h2 class="title" v-if="detail.description[0].underline">
-          {{ detail.description[0].title }}
-        </h2>
+        <h2
+          class="title"
+          v-if="detail.description[0].underline"
+          v-html="detail.description[0].title"
+        ></h2>
         <h2 v-else>{{ detail.description[0].title }}</h2>
         <div
           class="description_contents"
@@ -758,11 +760,11 @@
   #intro {
     padding: 4.445%;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
     }
     .title {
-      display: inline-block;
-      border-bottom: 8px solid #5ef4ff;
+      display: inline;
+      background: linear-gradient(#ffffff 60%, rgba(94, 244, 255, 0.34) 40%);
     }
     .title2 {
       margin-top: 50px;
