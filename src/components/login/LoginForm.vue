@@ -51,6 +51,26 @@
       >
         코스
       </button>
+      <button
+        class="blog"
+        @click="
+          $router
+            .push({
+              path: '/techBlog',
+              query: {
+                pageCurrent: 1,
+                keyword: '',
+              },
+            })
+            .catch(() => {});
+          $store.commit('toggleStore/Toggle', {
+            login_modal: false,
+            mask: false,
+          });
+        "
+      >
+        이지타임
+      </button>
     </div>
     <div class="support">
       <button
@@ -228,6 +248,9 @@
       .course {
         @extend .lec;
         margin-top: 4%;
+      }
+      .blog {
+        @extend .course;
       }
     }
     .support {

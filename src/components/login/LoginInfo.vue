@@ -37,7 +37,6 @@
         코스
       </button>
       <button
-        v-if="env == 'development'"
         class="lnb"
         @click="
           $router
@@ -199,7 +198,7 @@
   export default class LoginInfo extends Vue {
     userid = "";
     userpw = "";
-    env = "";
+
     logout(): void {
       this.$logOut();
     }
@@ -209,9 +208,6 @@
     }
     goToLecture(): void {
       this.$EventBus.$emit("GoToLecture", true);
-    }
-    mounted() {
-      this.env = String(process.env.NODE_ENV);
     }
   }
 </script>
