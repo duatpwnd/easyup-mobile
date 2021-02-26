@@ -2,9 +2,10 @@
   <div id="lec_list">
     <div class="breadcrumb">
       <span v-if="$route.query.title || $route.query.tag"
-        >강의 >{{ $route.query.title }}{{ $route.query.tag }}</span
+        >{{ $route.meta.title }} > {{ $route.query.title
+        }}{{ $route.query.tag }}</span
       >
-      <span v-else>강의 > 전체</span>
+      <span v-else>{{ $route.meta.title }} > 전체</span>
     </div>
     <Search>
       <select

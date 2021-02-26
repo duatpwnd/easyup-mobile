@@ -107,13 +107,13 @@ const routes = [
     path: "/category",
     name: "category",
     component: () => import("../views/LectureList.vue"),
-    meta: { isFooter: true, unauthorized: true },
+    meta: { isFooter: true, unauthorized: true, title: "강의" },
   },
   {
     path: "/course",
     name: "course",
     component: () => import("../views/LectureList.vue"),
-    meta: { isFooter: true, unauthorized: true },
+    meta: { isFooter: true, unauthorized: true, title: "코스" },
   },
   {
     path: "/teacherClassRoom",

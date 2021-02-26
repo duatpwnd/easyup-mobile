@@ -181,7 +181,7 @@
     </section>
     <div class="course_info">
       <h2 class="course_list">
-        <span>코스 별 강좌 안내</span>
+        <span>코스 별 강의 안내</span>
         <span class="all_lecture_num"
           >{{ detail.course_list.length }}개 클래스</span
         >
@@ -594,7 +594,7 @@
   .course_info {
     padding: 4.445%;
     .course_list {
-      font-size: 2rem;
+      font-size: 18px;
       position: relative;
       .all_lecture_num {
         font-size: 14px;
@@ -661,11 +661,10 @@
     margin-top: 30px;
     padding: 0 4.445%;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
     }
     .section_wrap {
       margin-top: 10px;
-
       .left_sec {
         width: 41%;
         text-align: center;

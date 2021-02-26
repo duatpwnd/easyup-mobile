@@ -226,7 +226,7 @@
       </div>
     </section>
     <div id="intro">
-      <div v-if="typeof detail.description[0] != 'undefined'">
+      <div v-if="detail.description[0] != 'undefined'">
         <h2
           class="title"
           v-if="detail.description[0].underline"
@@ -238,7 +238,7 @@
           v-html="detail.description[0].content"
         ></div>
       </div>
-      <div class="example" v-if="typeof detail.description[1] != 'undefined'">
+      <div class="example" v-if="detail.description[1] != 'undefined'">
         <h2 class="title " v-if="detail.description[1].underline">
           {{ detail.description[1].title }}
         </h2>
@@ -248,7 +248,7 @@
           v-html="detail.description[1].content"
         ></div>
       </div>
-      <div class="example" v-if="typeof detail.description[2] != 'undefined'">
+      <div class="example" v-if="detail.description[2] != 'undefined'">
         <h2 class="title" v-if="detail.description[2].underline">
           {{ detail.description[2].title }}
         </h2>
@@ -258,7 +258,7 @@
           v-html="detail.description[2].content"
         ></div>
       </div>
-      <div class="example" v-if="typeof detail.description[3] != 'undefined'">
+      <div class="example" v-if="detail.description[3] != 'undefined'">
         <h2 class="title" v-if="detail.description[3].underline">
           {{ detail.description[3].title }}
         </h2>
@@ -272,14 +272,14 @@
     <div class="curriculum">
       <div class="curriculum_header">
         <h2 class="curriculum_title">커리큘럼</h2>
-        <button
+        <!-- <button
           class="subscribe_btn"
           v-if="is_subscribe"
           @click="video($route.query.id, detail.lp_id)"
         >
           PLAY ▶
         </button>
-        <button class="subscribe_btn" v-else>강의 구독</button>
+        <button class="subscribe_btn" v-else>강의 구독</button> -->
         <span class="total_lec"
           >{{ detail.curriculum_list.count_detail }}개 레슨</span
         >
@@ -798,7 +798,7 @@
       .curriculum_title {
         display: inline-block;
         vertical-align: middle;
-        font-size: 2rem;
+        font-size: 18px;
       }
       .subscribe_btn {
         vertical-align: middle;
@@ -866,7 +866,7 @@
     margin-top: 30px;
     padding: 0 4.445%;
     .intro {
-      font-size: 2rem;
+      font-size: 18px;
     }
     .name {
       font-size: 1.5rem;
@@ -881,7 +881,7 @@
     margin-top: 30px;
     padding: 0 4.445%;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
     }
     .section_wrap {
       margin-top: 10px;
