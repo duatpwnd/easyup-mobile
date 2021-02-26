@@ -168,6 +168,9 @@
           :key="index"
         >
           <span v-html="list.title"></span>
+          <div class="limit-date">
+            <span>{{ list.limit }}</span>
+          </div>
         </div>
       </div>
       <span class="name">{{ detail.teachers }}</span>
@@ -530,6 +533,11 @@
       .total_lec {
         margin-bottom: 7px;
         display: block;
+      }
+      .ol_list {
+        .limit-date {
+          color: #999999;
+        }
       }
     }
     .name {

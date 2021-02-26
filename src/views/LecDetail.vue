@@ -212,7 +212,7 @@
     <section class="section2">
       <div class="user_intro">
         <div>
-          <span class="access_limit">{{ detail.access_limit }}</span>
+          <span class="access_limit">{{ detail.access_limit.basic }}</span>
         </div>
         <div>
           <span class="total_lec"

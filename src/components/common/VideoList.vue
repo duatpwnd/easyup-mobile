@@ -115,7 +115,7 @@
       }
       .center {
         background: white;
-        width: 69%;
+        width: 68%;
         margin: 0 2%;
         padding: 1.296% 4%;
         border-top-left-radius: 15px;
@@ -125,7 +125,7 @@
         text-overflow: ellipsis;
       }
       .right {
-        width: 22%;
+        width: 23%;
         background: white;
         padding: 1.296% 4%;
         border-top-right-radius: 15px;

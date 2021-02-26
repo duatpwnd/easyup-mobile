@@ -312,7 +312,7 @@
 <style scoped lang="scss">
   .h2_title {
     font-size: 18px;
-    padding: 4.445%;
+    padding: 16px;
     border-bottom: 4px solid #f8f8f8;
   }
   .h3_title {
@@ -320,7 +320,7 @@
     margin-bottom: 10px;
   }
   ::v-deep .list_wrap {
-    padding: 4.445%;
+    padding: 16px;
     border-bottom: 4px solid #f8f8f8;
     &:after {
       display: block;
@@ -388,7 +388,7 @@
     }
   }
   .li {
-    padding: 4.445%;
+    padding: 16px;
     border-bottom: 4px solid #f8f8f8;
     .line {
       border-bottom: 1px solid black;
@@ -411,7 +411,7 @@
   }
   .btn_wrap {
     margin-top: 15px;
-    padding: 0 4.445%;
+    padding: 0 16px;
     padding-bottom: 40px;
     .chk {
       width: 14%;

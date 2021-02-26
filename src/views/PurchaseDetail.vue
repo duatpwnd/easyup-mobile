@@ -13,10 +13,11 @@
 </script>
 <style scoped lang="scss">
   .purchase_warp {
+    margin-top: 13px;
     padding-bottom: 65px;
     .title {
       font-size: 18px;
-      padding: 0 4.445%;
+      padding: 0 16px 13px 16px;
     }
   }
 </style>

@@ -183,10 +183,14 @@
 </script>
 <style scoped lang="scss">
   .list_wrap {
-    padding: 0 4.445%;
+    padding: 0 16px;
+
     .filter {
       .box {
         margin-top: 15px;
+      }
+      .search {
+        margin-top: 0;
       }
     }
     .no_result {

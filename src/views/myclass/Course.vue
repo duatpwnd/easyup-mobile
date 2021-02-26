@@ -117,7 +117,8 @@
                   <span
                     class="ing_ico non_ing_ico"
                     v-else-if="
-                      list.approve_status == 'end' || list.status == 'end'
+                      list.approve_status == 'not active' ||
+                        list.status == 'end'
                     "
                     >비활성</span
                   >
