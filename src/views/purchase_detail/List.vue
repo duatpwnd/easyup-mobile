@@ -49,9 +49,7 @@
           </BaseButton>
         </div>
         <div class="row">
-          <span class="dt lec" v-if="li.type == 'course'">강의</span>
-          <span class="dt course" v-else>코스</span>
-          <span class="dd">{{ li.product_name }}</span>
+          <span class="dt product-name">{{ li.product_name }}</span>
         </div>
         <div class="row">
           <span class="dt">강의 비용</span>
@@ -206,6 +204,9 @@
       }
       .row {
         .final-price {
+          font-weight: bold;
+        }
+        .product-name {
           font-weight: bold;
         }
       }
