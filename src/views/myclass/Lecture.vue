@@ -105,9 +105,9 @@
           <div class="progress">
             <div class="compile_wrap">
               <span class="ing_ico" v-if="list.status == 'ing'">진행중</span>
-              <span class="ing_ico non_ing_ico" v-else-if="list.status == 'end'"
+              <!-- <span class="ing_ico non_ing_ico" v-else-if=""
                 >비활성</span
-              >
+              > -->
               <ProgressBar
                 v-if="$route.query.view == 'student'"
                 :max="100"
@@ -122,7 +122,9 @@
               >
               <span
                 class="ing_ico not_active_ico"
-                v-else-if="list.approve_status == 'not active'"
+                v-else-if="
+                  list.approve_status == 'not active' || list.status == 'end'
+                "
                 >비활성</span
               >
               <span

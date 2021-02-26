@@ -100,19 +100,21 @@
                   <span class="btn ing_ico" v-if="list.status == 'ing'"
                     >진행중</span
                   >
-                  <span
+                  <!-- <span
                     class="ing_ico non_ing_ico"
                     v-else-if="list.status == 'end'"
                     >비활성</span
-                  >
+                  > -->
                   <span
                     class="ing_ico"
                     v-else-if="list.approve_status == 'active'"
                     >활성</span
                   >
                   <span
-                    class="ing_ico not_active_ico"
-                    v-else-if="list.approve_status == 'end'"
+                    class="ing_ico non_ing_ico"
+                    v-else-if="
+                      list.approve_status == 'end' || list.status == 'end'
+                    "
                     >비활성</span
                   >
                   <span
