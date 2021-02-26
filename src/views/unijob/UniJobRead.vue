@@ -32,8 +32,8 @@
                 action: 'reply',
                 type: $route.query.type,
                 is_notice: view.is_notice,
-                id: $route.query.id
-              }
+                id: $route.query.id,
+              },
             })
           "
         >
@@ -50,8 +50,8 @@
                 action: 'write',
                 type: $route.query.type,
                 is_notice: view.is_notice,
-                id: $route.query.id
-              }
+                id: $route.query.id,
+              },
             })
           "
         >
@@ -84,170 +84,170 @@
   </div>
 </template>
 <script>
-import ConfirmModal from "@/components/common/ConfirmModal.vue";
-import { mapState, mapMutations } from "vuex";
-import BlueBtn from "@/components/common/BaseButton.vue";
-import mixin from "./unijob_mixin.js";
-export default {
-  mixins: [mixin],
-  components: {
-    BlueBtn,
-    ConfirmModal
-  },
-  computed: {
-    ...mapState("toggleStore", {
-      toggleStore_confirmModal: "confirm_modal"
-    })
-  },
-  data() {
-    return {
-      view: ""
-    };
-  },
-  methods: {
-    download(filename) {
-      const data = {
-        action: "download_attach_file",
-        type: this.$route.query.type,
-        id: this.$route.query.id,
-        filename: filename
-      };
-      this.$axios
-        .post(this.$ApiUrl.mobileAPI_v1, data, {
-          responseType: "blob",
-          headers: {
-            Authorization: this.$cookies.get("user_info")
-              ? "Bearer " + this.$cookies.get("user_info").access_token
-              : null
-          }
-        })
-        .then(result => {
-          console.log(result);
-          // 로컬서버에서는 작동하지 않음
-          if (window.navigator.msSaveOrOpenBlob) {
-            // IE 10+
-            window.navigator.msSaveOrOpenBlob(result.data, filename);
-          } else {
-            // not IE
-            let link = document.createElement("a");
-            link.href = window.URL.createObjectURL(result.data);
-            link.target = "_self";
-            if (filename) link.download = filename;
-            link.click();
-            window.URL.revokeObjectURL(result.data);
-          }
-        });
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import { mapState, mapMutations } from "vuex";
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import mixin from "./unijob_mixin.js";
+  export default {
+    mixins: [mixin],
+    components: {
+      BlueBtn,
+      ConfirmModal,
     },
-    confirm() {
-      this.$confirmMessage("삭제하시겠습니까?");
+    computed: {
+      ...mapState("toggleStore", {
+        toggleStore_confirmModal: "confirm_modal",
+      }),
     },
-    deleteUnijob() {
-      const data = {
-        action: "delete_unijob",
-        type: this.$route.query.type,
-        id: this.$route.query.id
+    data() {
+      return {
+        view: "",
       };
-      this.$axios
-        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then(result => {
-          console.log(result);
-          this.$router.push({
-            path: `/unijob/${this.$route.query.type}`,
-            query: {
-              pageCurrent: 1,
-              keyword: ""
+    },
+    methods: {
+      download(filename) {
+        const data = {
+          action: "download_attach_file",
+          type: this.$route.query.type,
+          id: this.$route.query.id,
+          filename: filename,
+        };
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, data, {
+            responseType: "blob",
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result) => {
+            console.log(result);
+            // 로컬서버에서는 작동하지 않음
+            if (window.navigator.msSaveOrOpenBlob) {
+              // IE 10+
+              window.navigator.msSaveOrOpenBlob(result.data, filename);
+            } else {
+              // not IE
+              let link = document.createElement("a");
+              link.href = window.URL.createObjectURL(result.data);
+              link.target = "_self";
+              if (filename) link.download = filename;
+              link.click();
+              window.URL.revokeObjectURL(result.data);
             }
           });
-        });
-    }
-  },
-  created() {
-    this.read(this.$route.query.id);
-  }
-};
+      },
+      confirm() {
+        this.$confirmMessage("삭제하시겠습니까?");
+      },
+      deleteUnijob() {
+        const data = {
+          action: "delete_unijob",
+          type: this.$route.query.type,
+          id: this.$route.query.id,
+        };
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log(result);
+            this.$router.push({
+              path: `/uniJob/${this.$route.query.type}`,
+              query: {
+                pageCurrent: 1,
+                keyword: "",
+              },
+            });
+          });
+      },
+    },
+    created() {
+      this.read(this.$route.query.id);
+    },
+  };
 </script>
 <style scoped lang="scss">
-.read {
-  padding: 4.445%;
-  h2 {
-    font-size: 2rem;
-  }
-  .head {
-    margin-top: 5%;
-    span {
-      font-size: 1.375rem;
+  .read {
+    padding: 4.445%;
+    h2 {
+      font-size: 2rem;
     }
-  }
-  .contents {
-    border-top: 2px solid #333333;
-    border-bottom: 2px solid #333333;
-    padding: 2% 0;
-    margin: 2% 0;
-    font-size: 1.25rem;
-    color: #666666;
-    white-space: pre-wrap;
-    font-family: "NotoSansCJKkr-Regular";
-    word-break: break-all;
-    .contents_head {
+    .head {
+      margin-top: 5%;
+      span {
+        font-size: 1.375rem;
+      }
+    }
+    .contents {
+      border-top: 2px solid #333333;
+      border-bottom: 2px solid #333333;
+      padding: 2% 0;
+      margin: 2% 0;
+      font-size: 1.25rem;
+      color: #666666;
+      white-space: pre-wrap;
+      font-family: "NotoSansCJKkr-Regular";
+      word-break: break-all;
+      .contents_head {
+        &:after {
+          display: block;
+          content: "";
+          clear: both;
+        }
+        .writer {
+          font-size: 1.25rem;
+
+          float: left;
+        }
+        .wdate {
+          font-size: 1.25rem;
+
+          float: right;
+        }
+      }
+      .view {
+        margin: 5px 0;
+      }
+    }
+    .file {
+      .file_list {
+        .attach {
+          background: url("~@/assets/images/common/attach_file_ico.png")
+            no-repeat left / 17px 16px;
+          padding-left: 25px;
+          display: inline-block;
+          font-size: 14px;
+          color: #999999;
+        }
+      }
+    }
+    .button_wrap {
+      display: table;
+      width: 100%;
+      button {
+        border: 1px solid #114fff;
+        background: white;
+        color: #114fff;
+        height: 24px;
+        line-height: 16px;
+        font-size: 12px;
+      }
       &:after {
         display: block;
         content: "";
         clear: both;
       }
-      .writer {
-        font-size: 1.25rem;
-
-        float: left;
+      .left_btn {
+        display: table-cell;
+        width: 20%;
+        &:not(:last-child) {
+          padding-right: 2%;
+        }
       }
-      .wdate {
-        font-size: 1.25rem;
-
+      .right_btn {
         float: right;
-      }
-    }
-    .view {
-      margin: 5px 0;
-    }
-  }
-  .file {
-    .file_list {
-      .attach {
-        background: url("~@/assets/images/common/attach_file_ico.png") no-repeat
-          left / 17px 16px;
-        padding-left: 25px;
-        display: inline-block;
-        font-size: 14px;
-        color: #999999;
+        width: 23.172%;
       }
     }
   }
-  .button_wrap {
-    display: table;
-    width: 100%;
-    button {
-      border: 1px solid #114fff;
-      background: white;
-      color: #114fff;
-      height: 24px;
-      line-height: 16px;
-      font-size: 12px;
-    }
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
-    }
-    .left_btn {
-      display: table-cell;
-      width: 20%;
-      &:not(:last-child) {
-        padding-right: 2%;
-      }
-    }
-    .right_btn {
-      float: right;
-      width: 23.172%;
-    }
-  }
-}
 </style>

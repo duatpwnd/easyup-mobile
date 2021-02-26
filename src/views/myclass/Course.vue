@@ -147,7 +147,7 @@
                   <span
                     @click="confirm(list.id)"
                     class="ing_ico lecture_remove"
-                    v-if="list.show_btn_delete == false"
+                    v-if="list.show_btn_delete"
                     >코스삭제</span
                   >
                 </template>
