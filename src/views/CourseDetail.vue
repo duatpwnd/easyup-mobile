@@ -530,6 +530,7 @@
     padding: 4.445%;
     border-bottom: 4px solid #f8f8f8;
     .user_intro {
+      font-size: 14px;
       .total_lec {
         margin-bottom: 7px;
         display: block;
