@@ -95,7 +95,11 @@
             <span class="date">{{ list.approve_date }}</span>
             <span class="count">{{ list.count_users }}명</span>
             <span class="price" v-if="list.price.is_free == false">
-              <del class="ori_price">{{ list.price.format_original }}</del>
+              <del
+                class="ori_price"
+                v-if="list.price.format_original != list.price.format_final"
+                >{{ list.price.format_original }}</del
+              >
               <span class="final_price">{{ list.price.format_final }}</span>
             </span>
             <span class="price" v-else>
