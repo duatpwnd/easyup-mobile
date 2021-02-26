@@ -13,7 +13,7 @@
           <span class="dd" v-if="$route.name == 'courseDetail'">
             {{ lecture_info.course_list.length }}개
           </span>
-          <span class="dd" v-else> {{ lecture_info.access_limit }}</span>
+          <span class="dd" v-else> {{ lecture_info.access_limit.basic }}</span>
         </div>
         <div class="row">
           <span class="dt">총 비용</span
