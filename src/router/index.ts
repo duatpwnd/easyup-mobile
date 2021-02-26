@@ -93,7 +93,7 @@ const routes = [
     name: "lecDetail",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/LecDetail.vue"),
-    meta: { isFooter: true, unauthorized: true },
+    meta: { isFooter: true, unauthorized: true, title: "강의" },
   },
 
   {
@@ -101,7 +101,7 @@ const routes = [
     name: "courseDetail",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/CourseDetail.vue"),
-    meta: { isFooter: true, unauthorized: true },
+    meta: { isFooter: true, unauthorized: true, title: "코스" },
   },
   {
     path: "/category",

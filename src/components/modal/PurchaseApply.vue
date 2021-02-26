@@ -3,13 +3,13 @@
     <div class="lecture-info">
       <h2 class="title">
         <span v-if="$route.name == 'courseDetail'">코스</span
-        ><span v-else>강의</span> 구독 신청
+        ><span v-else>강의</span> 구매 신청
       </h2>
       <h3 class="lecture-title">{{ lecture_info.title }}</h3>
       <div class="row-wrap">
         <div class="row">
           <span class="dt" v-if="$route.name == 'courseDetail'">총 클래스</span
-          ><span class="dt" v-else>구독기간</span>
+          ><span class="dt" v-else>수강 기간</span>
           <span class="dd" v-if="$route.name == 'courseDetail'">
             {{ lecture_info.course_list.length }}개
           </span>
@@ -31,9 +31,8 @@
         </BlueBtn>
       </div>
       <p class="notice-msg">
-        *<span v-if="$route.name == 'courseDetail'">코스</span
-        ><span v-else>강의</span> 구독 후 구독 취소 및 환불 정보는 고객센터에
-        문의해주세요.
+        *<span>{{ $route.meta.title }}</span> 구매 후 구매 취소 및 환불 정보는
+        고객센터에 문의해주세요.
       </p>
     </div>
   </div>
@@ -54,7 +53,6 @@
   })
   export default class PurchaseApply extends Vue {
     @Prop({ required: true, type: Object }) private lecture_info!: Object;
-    title = "강의";
     confirmOk() {
       this.$emit("goToOrder");
       this.cancel();
