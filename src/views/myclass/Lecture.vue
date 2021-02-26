@@ -94,22 +94,20 @@
           <div class="statistics" v-if="$route.query.view == 'teacher'">
             <span class="date">{{ list.approve_date }}</span>
             <span class="count">{{ list.count_users }}명</span>
-            <!-- <span class="price">
-              <del class="final_price">{{
-                list.price.final
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}</del>
-              <span class="ori_price">{{
-                list.price.original
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}</span>
-            </span> -->
+            <span class="price" v-if="list.price.is_free == false">
+              <del class="ori_price">{{ list.price.format_original }}</del>
+              <span class="final_price">{{ list.price.format_final }}</span>
+            </span>
+            <span class="price" v-else>
+              <span class="final_price">FREE</span>
+            </span>
           </div>
           <div class="progress">
             <div class="compile_wrap">
               <span class="ing_ico" v-if="list.status == 'ing'">진행중</span>
+              <span class="ing_ico non_ing_ico" v-else-if="list.status == 'end'"
+                >비활성</span
+              >
               <ProgressBar
                 v-if="$route.query.view == 'student'"
                 :max="100"
@@ -318,16 +316,15 @@
       .price {
         width: 50%;
         text-align: right;
+        font-weight: bold;
         .final_price {
-          font-size: 14px;
-          color: #bdbdbd;
-          margin-left: 4px;
-        }
-        .ori_price {
-          font-weight: bold;
           margin-left: 5px;
           font-size: 18px;
           color: #114fff;
+        }
+        .ori_price {
+          font-size: 14px;
+          color: #bdbdbd;
         }
       }
     }

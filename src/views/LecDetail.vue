@@ -35,8 +35,8 @@
     </div>
     <section class="section1">
       <div class="lecture_title">
-        <h3 class="sub_title">{{ detail.category }}</h3>
-        <h2 class="title">{{ detail.title }}</h2>
+        <h3 class="sub_title" v-html="detail.category"></h3>
+        <h2 class="title" v-html="detail.title"></h2>
       </div>
       <div class="star_rating">
         <StarRating
@@ -212,7 +212,7 @@
     <section class="section2">
       <div class="user_intro">
         <div>
-          <span>{{ detail.access_limit }}</span>
+          <span class="access_limit">{{ detail.access_limit }}</span>
         </div>
         <div>
           <span class="total_lec"
@@ -517,11 +517,11 @@
     border-bottom: 4px solid #f8f8f8;
     .lecture_title {
       .sub_title {
-        font-size: 12px;
+        font-size: 14px;
         color: #999999;
       }
       .title {
-        font-size: 16px;
+        font-size: 18px;
         color: #333333;
       }
     }
@@ -718,7 +718,8 @@
     padding: 4.445%;
     border-bottom: 4px solid #f8f8f8;
     .user_intro {
-      .total_lec {
+      .total_lec,
+      .access_limit {
         font-size: 14px;
       }
     }

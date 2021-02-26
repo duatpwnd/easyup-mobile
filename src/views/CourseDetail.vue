@@ -387,11 +387,11 @@
     border-bottom: 4px solid #f8f8f8;
     .lecture_title {
       .sub_title {
-        font-size: 12px;
+        font-size: 14px;
         color: #999999;
       }
       .title {
-        font-size: 16px;
+        font-size: 18px;
         color: #333333;
       }
     }
