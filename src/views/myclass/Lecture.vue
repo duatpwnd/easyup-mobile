@@ -82,9 +82,17 @@
         </template>
         <template slot="info">
           <span class="name">{{ list.teacher }}</span>
-          <h2>
-            {{ list.title }}
-          </h2>
+          <h2
+            v-html="list.title"
+            @click="
+              $router.push({
+                path: '/lecDetail',
+                query: {
+                  id: list.id,
+                },
+              })
+            "
+          ></h2>
           <div class="list_right_bottom">
             <span class="star_cell"> </span>
             <span class="num">{{ list.ranking }}</span>

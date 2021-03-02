@@ -226,7 +226,8 @@
         </div>
         <div>
           <span class="total_lec"
-            ><span class="color"> {{ detail.total_lecture }}</span
+            ><span class="color">
+              {{ detail.curriculum_list.count_detail }}</span
             >개 레슨</span
           >
         </div>
