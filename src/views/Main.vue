@@ -6,7 +6,18 @@
         slot="list"
         v-for="(list, index) in list.banner"
         :key="index"
-        ><img :src="list.image_url" @click="noticeRead(list.id)"
+        ><img
+          :src="list.image_url"
+          @click="
+            $router
+              .push({
+                path: list.id == null ? '' : '/help/notice/read',
+                query: {
+                  id: list.id,
+                },
+              })
+              .catch(() => {})
+          "
       /></swiper-slide>
     </Slide>
     <!-- 배너 :: E -->

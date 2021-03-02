@@ -211,6 +211,16 @@
     </section>
     <section class="section2">
       <div class="user_intro">
+        <div class="teacher-profile-info">
+          <span
+            class="name teacher-profile"
+            :style="{
+              background: `url(${detail.teachers.profile_image}) no-repeat 
+      center / 100% 100%`,
+            }"
+          ></span>
+          <span class="teacher-name" v-html="detail.teachers.name"></span>
+        </div>
         <div>
           <span class="access_limit">{{ detail.access_limit.basic }}</span>
         </div>
@@ -219,9 +229,6 @@
             ><span class="color"> {{ detail.total_lecture }}</span
             >개 레슨</span
           >
-        </div>
-        <div>
-          <span class="name">{{ detail.teachers }}</span>
         </div>
       </div>
     </section>
@@ -298,16 +305,18 @@
         </li>
       </ul>
     </div>
-    <div class="teacher_intro">
+    <!-- 강사 소개 :: S -->
+    <!-- <div class="teacher_intro">
       <h2 class="intro">강사소개</h2>
       <div
         class="name"
         v-if="detail.teacher_introduce.length !== 0"
         v-html="detail.teacher_introduce[0].content"
       ></div>
-      <!-- <h3 class="career">현:아이티윌 전임 강사</h3>
-        <h3 class="career">전:EBS 1타 강사</h3> -->
-    </div>
+      <h3 class="career">현:아이티윌 전임 강사</h3>
+      <h3 class="career">전:EBS 1타 강사</h3>
+    </div> -->
+    <!-- 강사 소개 :: E -->
     <!-- description :: E  -->
 
     <div id="lec_eval">
@@ -721,6 +730,21 @@
       .total_lec,
       .access_limit {
         font-size: 14px;
+      }
+      .teacher-profile-info {
+        margin-bottom: 10px;
+        .teacher-profile {
+          width: 60px;
+          height: 60px;
+          display: inline-block;
+          border-radius: 50px;
+          vertical-align: middle;
+        }
+        .teacher-name {
+          font-size: 14px;
+          margin-left: 15px;
+          vertical-align: middle;
+        }
       }
     }
     .name {
