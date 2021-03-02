@@ -487,6 +487,7 @@
       .title {
         font-size: 18px;
         color: #333333;
+        word-wrap: break-word;
       }
     }
     .star_rating {
