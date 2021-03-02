@@ -233,47 +233,14 @@
       </div>
     </section>
     <div id="intro">
-      <div v-if="detail.description[0] != 'undefined'">
-        <h2
-          class="title"
-          v-if="detail.description[0].underline"
-          v-html="detail.description[0].title"
-        ></h2>
-        <h2 v-else>{{ detail.description[0].title }}</h2>
-        <div
-          class="description_contents"
-          v-html="detail.description[0].content"
-        ></div>
-      </div>
-      <div class="example" v-if="detail.description[1] != 'undefined'">
-        <h2 class="title " v-if="detail.description[1].underline">
-          {{ detail.description[1].title }}
-        </h2>
-        <h2 v-else>{{ detail.description[1].title }}</h2>
-        <div
-          class="recommand_list"
-          v-html="detail.description[1].content"
-        ></div>
-      </div>
-      <div class="example" v-if="detail.description[2] != 'undefined'">
-        <h2 class="title" v-if="detail.description[2].underline">
-          {{ detail.description[2].title }}
-        </h2>
-        <h2 v-else>{{ detail.description[2].title }}</h2>
-        <div
-          class="description_contents"
-          v-html="detail.description[2].content"
-        ></div>
-      </div>
-      <div class="example" v-if="detail.description[3] != 'undefined'">
-        <h2 class="title" v-if="detail.description[3].underline">
-          {{ detail.description[3].title }}
-        </h2>
-        <h2 v-else>{{ detail.description[3].title }}</h2>
-        <div
-          class="description_contents"
-          v-html="detail.description[3].content"
-        ></div>
+      <div
+        class="example"
+        v-for="(li, index) in detail.description"
+        :key="index"
+      >
+        <h2 class="title" v-if="li.underline" v-html="li.title"></h2>
+        <h2 v-else v-html="li.title"></h2>
+        <div class="description_contents" v-html="li.content"></div>
       </div>
     </div>
     <div class="curriculum">
@@ -298,7 +265,7 @@
       >
         <li v-if="list.children_count != null">
           <span class="lec_title" v-html="list.title"> </span>
-          <span class="lec_num"> {{ list.children_count }}강</span>
+          <span class="lec_num"> {{ list.children_count }}레슨</span>
         </li>
         <li v-else>
           <span class="lec_title else_lec_title" v-html="list.title"> </span>
@@ -794,8 +761,9 @@
       font-family: "NotoSansCJKkr-Regular";
     }
     .example {
-      margin-top: 50px;
-
+      &:not(:first-child) {
+        margin-top: 50px;
+      }
       img {
         margin-top: 20px;
       }

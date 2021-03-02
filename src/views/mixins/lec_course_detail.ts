@@ -15,6 +15,9 @@ type OptionalData = Partial<Data>;
   },
 })
 export default class GroupMixin extends Vue {
+  $refs!: {
+    subs_btn: HTMLButtonElement;
+  };
   isPossibleReview = false;
   is_subscribe = false;
   subscribe_btn = false;
@@ -75,12 +78,15 @@ export default class GroupMixin extends Vue {
   }
   subscribe_btn_toggle(): void {
     if (this.$refs.subs_btn != undefined) {
-      const el = this.$refs.subs_btn as HTMLElement;
+      const el = this.$refs.subs_btn;
       const btn_offset_top = el.offsetTop;
       const btn_h = el.clientHeight;
       const scroll_top = window.scrollY;
       if (scroll_top > btn_offset_top + btn_h) {
         this.subscribe_btn = true;
+        // footer
+        (this.$root.$el.children[2] as HTMLElement).style.cssText =
+          "padding-bottom : 78px; position: unset;";
       } else {
         this.subscribe_btn = false;
       }
@@ -109,7 +115,9 @@ export default class GroupMixin extends Vue {
         console.log(err);
       });
   }
-
+  destroyed() {
+    (this.$root.$el.children[2] as HTMLElement).removeAttribute("style");
+  }
   created() {
     window.onscroll = () => {
       this.subscribe_btn_toggle();

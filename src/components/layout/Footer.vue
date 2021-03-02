@@ -51,7 +51,6 @@
     max-width: 720px;
     width: 100%;
     box-sizing: border-box;
-
     h1 {
       color: #dadada;
       font-size: 15px;
@@ -68,7 +67,6 @@
         margin: 0 15px;
       }
     }
-
     address {
       font-style: normal;
       color: #7a7a7a;
