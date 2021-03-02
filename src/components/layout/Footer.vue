@@ -47,24 +47,24 @@
     padding: 14px;
     background: #333333;
     position: absolute;
-    bottom: -128px;
+    bottom: -145px;
     max-width: 720px;
     width: 100%;
     box-sizing: border-box;
-    height: 128px;
 
     h1 {
       color: #dadada;
-      font-size: 13px;
+      font-size: 15px;
       font-weight: bold;
     }
     .gnb {
-      margin: 2.5px 0;
-      span {
+      margin: 3px 0;
+      font-size: 12px;
+      a {
         color: #7a7a7a;
-        font-size: 10px;
       }
       .bar {
+        color: #7a7a7a;
         margin: 0 15px;
       }
     }
@@ -74,12 +74,12 @@
       color: #7a7a7a;
       pre {
         font-family: "NotoSansCJKkr-Regular";
-        font-size: 9px;
+        font-size: 11px;
       }
     }
     .supply_number {
       color: #7a7a7a;
-      font-size: 12px;
+      font-size: 14px;
     }
   }
 </style>
