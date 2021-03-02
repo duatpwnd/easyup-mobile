@@ -305,20 +305,7 @@
         </li>
       </ul>
     </div>
-    <!-- 강사 소개 :: S -->
-    <!-- <div class="teacher_intro">
-      <h2 class="intro">강사소개</h2>
-      <div
-        class="name"
-        v-if="detail.teacher_introduce.length !== 0"
-        v-html="detail.teacher_introduce[0].content"
-      ></div>
-      <h3 class="career">현:아이티윌 전임 강사</h3>
-      <h3 class="career">전:EBS 1타 강사</h3>
-    </div> -->
-    <!-- 강사 소개 :: E -->
     <!-- description :: E  -->
-
     <div id="lec_eval">
       <h2>강의평가</h2>
       <div class="section_wrap">
