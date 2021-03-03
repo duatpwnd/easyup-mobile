@@ -819,7 +819,7 @@
         }
         .lec_title {
           display: inline-block;
-          width: 78%;
+          width: 74%;
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;
           overflow: hidden;
@@ -832,7 +832,7 @@
           border-radius: 100px;
         }
         .lec_num {
-          width: 20%;
+          width: 24%;
           border-top-left-radius: 0;
           border-bottom-left-radius: 0;
           margin-left: 2%;

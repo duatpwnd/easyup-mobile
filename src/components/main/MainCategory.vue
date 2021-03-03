@@ -1,156 +1,214 @@
 <template>
   <div id="category_lec">
-    <h2>카테고리별 강의</h2>
-    <p>관심 있는 분야의 강의를 한눈에 확인하세요</p>
-
     <div class="category_list">
       <router-link
         :to="{
           path: '/category',
           query: {
-            title: '프로그래밍',
+            title: '코딩베이비',
             category_code: 'PROGRAMMING',
             action: 'get_course_list',
             keyword: '',
             pageCurrent: 1,
-            order: 'type_date'
-          }
+            order: 'type_date',
+          },
         }"
       >
         <img
-          style="height:15px;"
           class="lec1_ico"
-          src="@/assets/images/main/category_lec1_ico.png"
-          alt="프로그래밍"
-          title="프로그래밍"
+          src="@/assets/images/main/main_category_ico1.png"
+          alt="코딩베이비"
+          title="코딩베이비"
         />
-        <h3>프로그래밍</h3>
+        <h3>코딩베이비</h3>
       </router-link>
 
       <router-link
         :to="{
           path: '/category',
           query: {
-            title: '머신러닝/딥러닝',
+            title: '코딩언어',
             category_code: 'AI',
             action: 'get_course_list',
             keyword: '',
             pageCurrent: 1,
-            order: 'type_date'
-          }
+            order: 'type_date',
+          },
         }"
       >
         <img
-          style="height:16.5px;"
           class="lec2_ico"
-          src="@/assets/images/main/category_lec2_ico.png"
-          alt="머신러닝/딥러닝"
-          title="머신러닝/딥러닝"
+          src="@/assets/images/main/main_category_ico2.png"
+          alt="코딩언어"
+          title="코딩언어"
         />
-        <h3>머신러닝/딥러닝</h3>
+        <h3>코딩언어</h3>
       </router-link>
 
       <router-link
         :to="{
           path: '/category',
           query: {
-            title: '전산이론',
+            title: '웹',
             category_code: 'BASIC',
             action: 'get_course_list',
             pageCurrent: 1,
             keyword: '',
-            order: 'type_date'
-          }
+            order: 'type_date',
+          },
         }"
       >
         <img
-          style="height:17px;"
           class="lec3_ico"
-          src="@/assets/images/main/category_lec5_ico.png"
-          alt="전산이론"
-          title="전산이론"
+          src="@/assets/images/main/main_category_ico3.png"
+          alt="웹"
+          title="웹"
         />
-        <h3>전산이론</h3>
+        <h3>웹</h3>
       </router-link>
 
       <router-link
         :to="{
           path: '/category',
           query: {
-            title: '알고리즘',
+            title: '모바일·게임',
             category_code: 'ALGORITHM',
             action: 'get_course_list',
             keyword: '',
             pageCurrent: 1,
-            order: 'type_date'
-          }
+            order: 'type_date',
+          },
         }"
       >
         <img
-          style="height:15px;"
           class="lec4_ico"
-          src="@/assets/images/main/category_lec6_ico.png"
-          alt="알고리즘"
-          title="알고리즘"
+          src="@/assets/images/main/main_category_ico4.png"
+          alt="모바일·게임"
+          title="모바일·게임"
         />
-        <h3>알고리즘</h3>
+        <h3>모바일·게임</h3>
+      </router-link>
+    </div>
+    <div class="category_list">
+      <router-link
+        :to="{
+          path: '/category',
+          query: {
+            title: '데이터·AI',
+            category_code: 'PROGRAMMING',
+            action: 'get_course_list',
+            keyword: '',
+            pageCurrent: 1,
+            order: 'type_date',
+          },
+        }"
+      >
+        <img
+          class="lec1_ico"
+          src="@/assets/images/main/main_category_ico5.png"
+          alt="데이터·AI"
+          title="데이터·AI"
+        />
+        <h3>데이터·AI</h3>
+      </router-link>
+
+      <router-link
+        :to="{
+          path: '/category',
+          query: {
+            title: '정보보안',
+            category_code: 'AI',
+            action: 'get_course_list',
+            keyword: '',
+            pageCurrent: 1,
+            order: 'type_date',
+          },
+        }"
+      >
+        <img
+          class="lec2_ico"
+          src="@/assets/images/main/main_category_ico6.png"
+          alt="정보보안"
+          title="정보보안"
+        />
+        <h3>정보보안</h3>
+      </router-link>
+
+      <router-link
+        :to="{
+          path: '/category',
+          query: {
+            title: '기초학세미나',
+            category_code: 'BASIC',
+            action: 'get_course_list',
+            pageCurrent: 1,
+            keyword: '',
+            order: 'type_date',
+          },
+        }"
+      >
+        <img
+          class="lec3_ico"
+          src="@/assets/images/main/main_category_ico7.png"
+          alt="기초학세미나"
+          title="기초학세미나"
+        />
+        <h3>기초학세미나</h3>
+      </router-link>
+
+      <router-link
+        :to="{
+          path: '/category',
+          query: {
+            title: '커리어부스터',
+            category_code: 'ALGORITHM',
+            action: 'get_course_list',
+            keyword: '',
+            pageCurrent: 1,
+            order: 'type_date',
+          },
+        }"
+      >
+        <img
+          class="lec4_ico"
+          src="@/assets/images/main/main_category_ico8.png"
+          alt="커리어부스터"
+          title="커리어부스터"
+        />
+        <h3>커리어부스터</h3>
       </router-link>
     </div>
   </div>
 </template>
 <script>
-export default {
-  components: {}
-};
+  export default {
+    components: {},
+  };
 </script>
 <style scoped lang="scss">
-#category_lec {
-  margin-top: 24px;
-  h2 {
-    font-size: 2rem;
-    position: relative;
-  }
-  h3 {
-    font-size: 10px;
-    color: #333333;
-    white-space: pre-wrap;
-    position: absolute;
-    top: 35px;
-    left: 0;
-    right: 0;
-    margin: auto;
-    letter-spacing: -1px;
-  }
-  p {
-    margin-top: 5px;
-    font-size: 1.125rem;
-    color: #999999;
-  }
-  .category_list {
-    margin-top: 8px;
-
-    a {
-      border: 1px solid #666666;
-      vertical-align: middle;
-      text-align: center;
-      display: inline-block;
-      width: 23.17%;
-      height: 60px;
-      position: relative;
-      box-sizing: border-box;
-      &:not(:last-child) {
-        margin-right: 2%;
+  #category_lec {
+    padding: 40px 0;
+    h3 {
+      font-size: 12px;
+      color: #333333;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .category_list {
+      &:last-child {
+        padding-top: 25px;
       }
-
-      img {
-        position: absolute;
-        width: unset;
-        top: 15px;
-        left: 0;
-        right: 0;
-        margin: auto;
+      a {
+        vertical-align: middle;
+        text-align: center;
+        display: inline-block;
+        width: 25%;
+        img {
+          width: 36px;
+          height: 36px;
+        }
       }
     }
   }
-}
 </style>

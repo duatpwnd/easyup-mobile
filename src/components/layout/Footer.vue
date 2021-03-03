@@ -47,13 +47,13 @@
     padding: 14px;
     background: #333333;
     position: absolute;
-    bottom: -145px;
+    bottom: -146px;
     max-width: 720px;
     width: 100%;
     box-sizing: border-box;
     h1 {
       color: #dadada;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: bold;
     }
     .gnb {
@@ -72,7 +72,7 @@
       color: #7a7a7a;
       pre {
         font-family: "NotoSansCJKkr-Regular";
-        font-size: 11px;
+        font-size: 12px;
       }
     }
     .supply_number {
