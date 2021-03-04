@@ -49,7 +49,7 @@
       >
         <template slot="thumbnail">
           <img
-            v-if="list.lp_id != null"
+            v-if="list.status != 'end'"
             :src="list.thumbnail"
             class="thumb"
             :alt="list.title"
@@ -66,7 +66,7 @@
           />
           <img v-else :src="list.thumbnail" class="thumb" alt="" />
           <img
-            v-if="list.lp_id != null"
+            v-if="list.status != 'end'"
             src="@/assets/images/common/playing_ico.png"
             class="playing_ico"
             @click="
@@ -117,18 +117,6 @@
           <div class="progress">
             <div class="compile_wrap">
               <span class="ing_ico" v-if="list.status == 'ing'">진행중</span>
-              <!-- <span class="ing_ico non_ing_ico" v-else-if=""
-                >비활성</span
-              > -->
-              <ProgressBar
-                v-if="$route.query.view == 'student'"
-                :max="100"
-                :value="Number(list.progress)"
-              >
-                <span class="percent" slot="percent_txt">{{
-                  list.progress + "%"
-                }}</span>
-              </ProgressBar>
               <span class="ing_ico" v-else-if="list.approve_status == 'active'"
                 >활성</span
               >
@@ -149,6 +137,15 @@
                 v-else-if="list.approve_status == 'reject'"
                 >반려</span
               >
+              <ProgressBar
+                v-if="$route.query.view == 'student'"
+                :max="100"
+                :value="Number(list.progress)"
+              >
+                <span class="percent" slot="percent_txt">{{
+                  list.progress + "%"
+                }}</span>
+              </ProgressBar>
               <span>{{ list.expired_on }}</span>
               <router-link
                 tag="span"
