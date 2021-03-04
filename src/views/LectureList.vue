@@ -51,7 +51,7 @@
       >
         <LecItem>
           <span class="lec_list" slot="router">
-            <img :src="list.thumbnail" alt="이지업" title="이지업" />
+            <img :src="list.thumbnail" :alt="list.title" :title="list.title" />
           </span>
           <h4 slot="teacher">{{ list.teacher }}</h4>
           <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>

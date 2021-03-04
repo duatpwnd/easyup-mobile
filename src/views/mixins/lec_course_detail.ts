@@ -1,6 +1,5 @@
 import { Component, Watch, Vue } from "vue-property-decorator";
 import { ResultData } from "@/assets/js/util.ts";
-
 interface Data {
   action: string;
   course_id: number;
@@ -106,9 +105,14 @@ export default class GroupMixin extends Vue {
     this.$axios
       .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
       .then((result: ResultData) => {
-        console.log(result);
         if (result.data.error == false) {
-          this.$noticeMessage("강의바구니에 담았습니다.");
+          this.$store.commit("toggleStore/Toggle", {
+            cart_modal: true,
+          });
+          this.$store.commit(
+            "toggleStore/noticeMessage",
+            "강의 바구니에 담았습니다.<br> 강의 바구니로 이동하시겠습니까?"
+          );
         }
       })
       .catch((err) => {

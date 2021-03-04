@@ -1,45 +1,23 @@
-<template>
-  <div class="mask">
-    <div class="notice_modal">
-      <p class="contents" v-html="toggleStore_noticeMessage"></p>
-      <div class="btn_wrap" v-if="toggleStore_confirm_modal">
-        <BlueBtn>
-          <slot name="btn1">
-            <button class="confirm_ok" slot="blue_btn" @click="confirmOk()">
-              확인
-            </button>
-          </slot>
-        </BlueBtn>
-        <BlueBtn>
-          <button class="cancel" slot="blue_btn" @click="cancel()">취소</button>
-        </BlueBtn>
-      </div>
-    </div>
-  </div>
-</template>
 <script lang="ts">
-  import BlueBtn from "@/components/common/BaseButton.vue";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import { Component } from "vue-property-decorator";
   import { mapState } from "vuex";
-  import { Component, Vue } from "vue-property-decorator";
   @Component({
-    components: {
-      BlueBtn,
-    },
     computed: {
       ...mapState("toggleStore", {
-        toggleStore_noticeMessage: "notice_message",
-        toggleStore_confirm_modal: "confirm_modal",
+        toggleStore_confirm_modal: "cart_modal",
       }),
     },
   })
-  export default class ConfirmModal extends Vue {
+  // extends 시에는 template 사용 안해도됨
+  export default class GoToCart extends ConfirmModal {
     confirmOk(): void {
-      this.$emit("ok");
+      this.$emit("goToCart");
       this.cancel();
     }
     cancel(): void {
       this.$store.commit("toggleStore/Toggle", {
-        confirm_modal: false,
+        cart_modal: false,
       });
     }
   }

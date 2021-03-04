@@ -91,9 +91,10 @@ let GroupMixin = class GroupMixin extends Vue {
         this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {
-            console.log(result);
             if (result.data.error == false) {
-                this.$noticeMessage("강의바구니에 담았습니다.");
+                this.$store.commit("toggleStore/Toggle", {
+                    cart_modal: true,
+                });
             }
         })
             .catch((err) => {

@@ -17,6 +17,10 @@
       @ok="video($route.query.id, detail.lp_id)"
       v-if="toggleStore_confirmModal"
     ></ConfirmModal>
+    <GoToCart
+      @goToCart="$router.push('cart')"
+      v-if="toggleStore_cartModal"
+    ></GoToCart>
     <StarScoreModal
       :score_info="toggleStore_score_info"
       v-if="toggleStore_score_info.score_modal"
@@ -266,7 +270,7 @@
       >
         <li v-if="list.children_count != null">
           <span class="lec_title" v-html="list.title"> </span>
-          <span class="lec_num"> {{ list.children_count }}레슨</span>
+          <span class="lec_num"> {{ list.children_count }}개</span>
         </li>
         <li v-else>
           <span class="lec_title else_lec_title" v-html="list.title"> </span>
@@ -352,7 +356,8 @@
   </div>
 </template>
 <script lang="ts">
-  import { Component, Prop, Vue } from "vue-property-decorator";
+  import { Component } from "vue-property-decorator";
+  import GoToCart from "@/components/modal/GotoCart.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import StarScoreModal from "@/components/lecture_detail/StarScoreModal.vue";
   import CommentWrap from "@/components/lecture_detail/CommentWrap.vue";
@@ -365,6 +370,7 @@
   import PurchaseApply from "@/components/modal/PurchaseApply.vue";
   @Component({
     components: {
+      GoToCart,
       ConfirmModal,
       StarScoreModal,
       BlueBtn,
@@ -377,6 +383,7 @@
       ...mapState("toggleStore", {
         toggleStore_score_info: "score_info",
         toggleStore_confirmModal: "confirm_modal",
+        toggleStore_cartModal: "cart_modal",
         toggleStore_purchase_apply: "purchase_apply",
       }),
       ...mapState("userStore", {

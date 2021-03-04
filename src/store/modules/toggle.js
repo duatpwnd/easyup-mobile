@@ -16,6 +16,7 @@ let Toggle = class Toggle extends VuexModule {
             score_contents: "",
         };
         this.confirm_modal = false; // 각종 확인 모달
+        this.cart_modal = false; // 장바구니 이동 모달
         this.notice_modal = false; // 각종 경고 모달
         this.notice_message = ""; // 각종 경고 메세지
         this.purchase_apply = false; // 강의 상세페이지 구매하기 버튼 클릭시 모달

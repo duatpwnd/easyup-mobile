@@ -6,7 +6,7 @@
           path: '/category',
           query: {
             title: '코딩베이비',
-            category_code: 'PROGRAMMING',
+            category_code: 'INTRODUCTION',
             action: 'get_course_list',
             keyword: '',
             pageCurrent: 1,
@@ -28,7 +28,7 @@
           path: '/category',
           query: {
             title: '코딩언어',
-            category_code: 'AI',
+            category_code: 'LANGUAGE',
             action: 'get_course_list',
             keyword: '',
             pageCurrent: 1,
@@ -50,7 +50,7 @@
           path: '/category',
           query: {
             title: '웹',
-            category_code: 'BASIC',
+            category_code: 'WEB',
             action: 'get_course_list',
             pageCurrent: 1,
             keyword: '',
@@ -72,7 +72,7 @@
           path: '/category',
           query: {
             title: '모바일·게임',
-            category_code: 'ALGORITHM',
+            category_code: 'MOBILEGAME',
             action: 'get_course_list',
             keyword: '',
             pageCurrent: 1,
@@ -94,7 +94,7 @@
         :to="{
           path: '/category',
           query: {
-            title: '데이터·AI',
+            title: 'DATASCIENCE',
             category_code: 'PROGRAMMING',
             action: 'get_course_list',
             keyword: '',
@@ -117,7 +117,7 @@
           path: '/category',
           query: {
             title: '정보보안',
-            category_code: 'AI',
+            category_code: 'SECURITY',
             action: 'get_course_list',
             keyword: '',
             pageCurrent: 1,
@@ -139,7 +139,7 @@
           path: '/category',
           query: {
             title: '기초학세미나',
-            category_code: 'BASIC',
+            category_code: 'BASICS',
             action: 'get_course_list',
             pageCurrent: 1,
             keyword: '',
@@ -161,7 +161,7 @@
           path: '/category',
           query: {
             title: '커리어부스터',
-            category_code: 'ALGORITHM',
+            category_code: 'CAREER',
             action: 'get_course_list',
             keyword: '',
             pageCurrent: 1,

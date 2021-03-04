@@ -1,6 +1,11 @@
 <template>
   <footer>
-    <h1>EASYUP</h1>
+    <img
+      class="logo"
+      src="@/assets/images//main/footer_logo.png"
+      alt="EASYUP"
+      title="EASYUP"
+    />
     <div class="gnb">
       <router-link
         :to="{
@@ -47,17 +52,18 @@
     padding: 14px;
     background: #333333;
     position: absolute;
-    bottom: -146px;
+    bottom: -154px;
     max-width: 720px;
     width: 100%;
     box-sizing: border-box;
-    h1 {
-      color: #dadada;
-      font-size: 14px;
-      font-weight: bold;
+
+    .logo {
+      width: 101px;
+      height: 17px;
     }
+
     .gnb {
-      margin: 3px 0;
+      margin: 10px 0px 3px 0;
       font-size: 12px;
       a {
         color: #7a7a7a;

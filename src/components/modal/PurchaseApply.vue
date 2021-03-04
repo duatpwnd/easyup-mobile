@@ -83,20 +83,21 @@
       color: #114fff;
       font-size: 16px;
       margin-top: 10px;
+      border-bottom: 1px solid black;
+      padding-bottom: 5px;
     }
     .row-wrap {
-      margin-top: 10px;
       .row {
-        &:last-child {
-          margin-top: 10px;
-        }
+        border-bottom: 1px solid black;
+        padding: 5px 0;
         .dt,
         .dd {
           display: inline-block;
           font-size: 14px;
         }
         .dt {
-          width: 20%;
+          font-weight: bold;
+          width: 30%;
         }
         .total {
           color: #114fff;

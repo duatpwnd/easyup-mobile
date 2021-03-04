@@ -21,7 +21,12 @@
       >
       <template v-else slot="convert">
         <span class="report" @click="profile_modal = true">프로필</span>
-        <span class="convert" @click="convert('student')">학생전환</span>
+        <span
+          class="convert"
+          @click="convert('student')"
+          v-if="userStore_userinfo.info.status == 1"
+          >학생전환</span
+        >
       </template>
       <!-- <p class="update_date" slot="update_date">
         최근 접속일: {{ userStore_userinfo.info.last_login }}

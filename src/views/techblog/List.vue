@@ -115,5 +115,12 @@
   .list {
     border-bottom: 4px solid #f8f8f8;
     padding: 10px 0;
+    .blog-li {
+      img {
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+    }
   }
 </style>
