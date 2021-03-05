@@ -304,6 +304,7 @@
     },
     created() {
       this.getList(this.$route.query.pageCurrent).then((result) => {
+        console.log(result);
         this.all_check();
       });
     },

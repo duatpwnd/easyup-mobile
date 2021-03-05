@@ -134,6 +134,9 @@
           color: #114fff;
           line-height: 24px;
         }
+        .lecture-remove-student {
+          margin-left: 10px;
+        }
         .not_approved_ico {
           background: #ff114a;
         }

@@ -160,6 +160,12 @@
                 >리뷰관리</router-link
               >
               <span
+                @click="confirm(list.code)"
+                class="ing_ico lecture_remove lecture-remove-student"
+                v-if="list.status == 'end'"
+                >강의삭제</span
+              >
+              <span
                 @click="confirm(list.id)"
                 class="ing_ico lecture_remove"
                 v-if="list.show_btn_delete"
@@ -246,12 +252,24 @@
         this.delete_id = id;
         this.$confirmMessage("삭제하시겠습니까?");
       },
+      // 강사 버전
       lectureDelete() {
-        const obj = {
-          action: "change_visibility",
-          id: this.delete_id,
-          type: "course",
-        };
+        let obj;
+        if (this.$route.query.view == "teacher") {
+          // 강사
+          obj = {
+            action: "change_visibility",
+            id: this.delete_id,
+            type: "course",
+          };
+        } else {
+          // 학생
+          obj = {
+            action: "delete_myclass_item",
+            code: this.delete_id,
+            type: "course",
+          };
+        }
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {

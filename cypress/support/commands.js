@@ -7,12 +7,43 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
+// 로그인 처리
+Cypress.Commands.add("login", (userType) => {
+  const types = {
+    teacher: {
+      action: "login",
+      userid: "admin",
+      userpw: "dnlwmvpdl#0119",
+    },
+    student: {
+      action: "login",
+      userid: "jcyoum912@naver.com",
+      userpw: "duadksk9!!",
+    },
+  };
+  cy.get(".easyup_menu_btn").click();
+  cy.get(".user_id").type(types[userType].userid);
+  cy.get(".user_pw").type(types[userType].userpw);
+  cy.get(".login_form .blue_btn").click();
+  cy.request({
+    url: Cypress.env("VUE_APP_API_URL"),
+    method: "POST",
+    body: types[userType],
+  })
+    .its("body")
+    .then((body) => {
+      cy.get(".mask").click();
+      // 쿠키 설정
+      cy.setCookie("user_info", JSON.stringify(body.data[0]));
+    });
+});
+// 로그아웃 처리
+Cypress.Commands.add("logout", () => {
+  cy.get(".easyup_menu_btn").click();
+  cy.get(".logout .blue_btn").click();
+  // 쿠키 제거
+  cy.clearCookie("user_info").should("be.null");
+});
 // -- This is a child command --
 // Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
 //

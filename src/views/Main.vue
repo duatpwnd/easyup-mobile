@@ -159,7 +159,7 @@
     <!-- 추천강의 :: E -->
 
     <!-- 이지채널 :: S -->
-    <div class="section swiper_section">
+    <div class="section swiper_section blog-section">
       <div class="title-header">
         <h2 class="title">이지채널</h2>
         <span
@@ -769,6 +769,16 @@
           background: url("~@/assets/images/main/next_btn.png") no-repeat center
             center / 100% 100%;
           right: 0;
+        }
+      }
+    }
+    .blog-section {
+      .swiper-slide {
+        .item {
+          img {
+            height: 250px;
+            object-fit: cover;
+          }
         }
       }
     }
