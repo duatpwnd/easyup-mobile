@@ -101,6 +101,9 @@
     },
   })
   export default class Player extends mixin {
+    $refs!: {
+      videoPlayer: HTMLVideoElement;
+    };
     video_set = false;
     playerStore_check_time!: number | undefined | string;
     playerStore_current_item_id!: number;
@@ -273,7 +276,7 @@
     height: 100%;
     overflow: hidden;
     .tab {
-      font-size: 2rem;
+      font-size: 18px;
       font-weight: 600;
       width: 50%;
       display: inline-block;
