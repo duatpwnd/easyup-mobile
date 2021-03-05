@@ -13,6 +13,10 @@
       "
       :lecture_info="detail"
     ></PurchaseApply>
+    <GoToCart
+      @goToCart="$router.push('cart')"
+      v-if="toggleStore_cartModal"
+    ></GoToCart>
     <img
       :src="detail.course_image"
       alt="파이썬 코딩 기본편"
@@ -308,6 +312,7 @@
 </template>
 <script>
   import StarRating from "vue-star-rating";
+  import GoToCart from "@/components/modal/GotoCart.vue";
   import CommentWrap from "@/components/lecture_detail/CommentWrap";
   import ProgressBar from "@/components/common/ProgressBar.vue";
   import CourseItem from "@/components/common/LectureItem.vue";
@@ -318,6 +323,7 @@
   export default {
     mixins: [mixin],
     components: {
+      GoToCart,
       ProgressBar,
       StarRating,
       CommentWrap,
@@ -327,6 +333,7 @@
     },
     computed: {
       ...mapState("toggleStore", {
+        toggleStore_cartModal: "cart_modal",
         toggleStore_score_info: "score_info",
         toggleStore_purchase_apply: "purchase_apply",
       }),

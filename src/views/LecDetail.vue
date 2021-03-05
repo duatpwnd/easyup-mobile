@@ -356,7 +356,7 @@
   </div>
 </template>
 <script lang="ts">
-  import { Component } from "vue-property-decorator";
+  import { Component, Vue } from "vue-property-decorator";
   import GoToCart from "@/components/modal/GotoCart.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import StarScoreModal from "@/components/lecture_detail/StarScoreModal.vue";
@@ -364,11 +364,12 @@
   import BlueBtn from "@/components/common/BaseButton.vue";
   import StarRating from "vue-star-rating";
   import ProgressBar from "@/components/common/ProgressBar.vue";
-  import mixin from "@/views/mixins/lec_course_detail.ts";
+  import mixin from "@/views/mixins/lec_course_detail";
   import { mapState, mapMutations } from "vuex";
-  import { ResultData } from "@/assets/js/util.ts";
+  import { ResultData } from "@/assets/js/util";
   import PurchaseApply from "@/components/modal/PurchaseApply.vue";
   @Component({
+    mixins: [mixin],
     components: {
       GoToCart,
       ConfirmModal,
@@ -391,17 +392,15 @@
       }),
     },
   })
-  export default class LecDetail extends mixin {
+  export default class LecDetail extends Vue {
     url: string = window.document.location.href;
+    detail: { [key: string]: any } = {};
+    isSubscribe!: Function;
     get discount_price() {
-      return this.$numberWithCommas(
-        (this.detail as { [key: string]: any }).coupon.discount_price
-      );
+      return this.$numberWithCommas(this.detail.coupon.discount_price);
     }
     get quantity() {
-      return this.$numberWithCommas(
-        (this.detail as { [key: string]: any }).coupon.quantity
-      );
+      return this.$numberWithCommas(this.detail.coupon.quantity);
     }
     isPurchase() {
       this.$store.commit("toggleStore/Toggle", {
@@ -416,7 +415,7 @@
       const data: { action: string; course_id: number; c_id: number } = {
         action: "download_coupon",
         course_id: Number(this.$route.query.id),
-        c_id: (this.detail as { [key: string]: any }).coupon.coupon_id,
+        c_id: this.detail.coupon.coupon_id,
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))

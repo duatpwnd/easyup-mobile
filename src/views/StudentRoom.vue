@@ -11,21 +11,18 @@
       <p slot="user_email" class="email">
         {{ userStore_userinfo.info.email }}
       </p>
-      <template slot="convert"> </template>
-      <span
+      <template
         slot="convert"
-        v-if="$route.query.view == 'student'"
-        @click="convert('teacher')"
-        class="convert"
-        >강사전환</span
+        v-if="
+          $route.query.view == 'teacher' || userStore_userinfo.info.status == 1
+        "
       >
-      <template v-else slot="convert">
         <span class="report" @click="profile_modal = true">프로필</span>
-        <span
-          class="convert"
-          @click="convert('student')"
-          v-if="userStore_userinfo.info.status == 1"
+        <span class="convert" @click="convert('student')" v-if="mode"
           >학생전환</span
+        >
+        <span slot="convert" @click="convert('teacher')" v-else class="convert"
+          >강사전환</span
         >
       </template>
       <!-- <p class="update_date" slot="update_date">
@@ -207,6 +204,7 @@
     },
     data() {
       return {
+        mode: true, // true 일때 강사
         profile_modal: false,
         top_count: "",
         dashboard_list: "",
@@ -214,7 +212,7 @@
     },
     methods: {
       convert(type) {
-        console.log(type);
+        this.mode = !this.mode;
         this.$router
           .push({
             query: {
@@ -222,15 +220,6 @@
             },
           })
           .catch(() => {});
-        // 학생전환 강사전환
-        // this.$EventBus.$emit("typeConversion", true);
-        // let userinfo = this.userStore_userinfo;
-        // if (type == "student") {
-        //   userinfo.info.status = 5;
-        // } else {
-        //   userinfo.info.status = 1;
-        // }
-        // this.$store.commit("userStore/loginToken", this.userStore_userinfo);
       },
 
       getMyLecture(action) {

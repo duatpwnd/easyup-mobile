@@ -44,7 +44,7 @@
 <script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
   import { Component, Vue } from "vue-property-decorator";
-  import { ResultData } from "@/assets/js/util.ts";
+  import { ResultData } from "@/assets/js/util";
   interface BodyData {
     action: string;
     code: string;

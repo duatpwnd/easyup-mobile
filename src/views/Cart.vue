@@ -156,6 +156,7 @@
           if (value.info.length == 0) {
             this.list.calculate_price.sum_discount = 0;
           } else {
+            console.log(this.format_sum_original.replace(/,/g, ""), value);
             this.list.calculate_price.sum_discount =
               this.format_sum_original.replace(/,/g, "") - value.sum;
           }
@@ -163,9 +164,11 @@
       },
       // 총금액
       format_sum_final() {
+        console.log(this.list.calculate_price.format_purchased_price);
         return this.$numberWithCommas(
           this.format_sum_original.replace(/,/g, "") -
-            this.format_sum_discount.replace(/,/g, "")
+            this.format_sum_discount.replace(/,/g, "") -
+            this.list.calculate_price.format_purchased_price.replace(/,/g, "")
         );
       },
     },
@@ -205,6 +208,7 @@
         const sum = this.checked_list.reduce((acc, current) => {
           return (acc += current.price.final);
         }, 0);
+        console.log(sum);
         this.format_sum_original = info;
         this.format_sum_discount = { info: info, sum: sum };
         if (

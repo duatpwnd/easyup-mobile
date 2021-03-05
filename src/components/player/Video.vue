@@ -31,7 +31,7 @@
   import external_subtitle from "@/assets/js/youtube/youtube_external_subtitle.js";
   import { mapState } from "vuex";
   import BaseBtn from "@/components/common/BaseButton.vue";
-  import { ResultData } from "@/assets/js/util.ts";
+  import { ResultData } from "@/assets/js/util";
   interface BodyData {
     action: string;
     course_id: number;

@@ -76,7 +76,7 @@
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import { mapState } from "vuex";
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import { ResultData } from "@/assets/js/util.ts";
+  import { ResultData } from "@/assets/js/util";
 
   @Component({
     components: {

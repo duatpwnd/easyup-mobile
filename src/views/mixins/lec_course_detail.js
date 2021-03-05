@@ -3,10 +3,11 @@ import { Component, Watch, Vue } from "vue-property-decorator";
 let GroupMixin = class GroupMixin extends Vue {
     constructor() {
         super(...arguments);
+        this.detail = {}; //코스는 지금 타입스크립트 적용안되서 지금 일딴 써놨음 코스도 타입스크립트 적용시키면 제거 시키기
         this.isPossibleReview = false;
         this.is_subscribe = false;
         this.subscribe_btn = false;
-        this.detail = {};
+        this.test = "염세중";
         this.score_info = {}; // 각 별점의 개수
         this.url = window.document.location.href; // 클립보드 현재 url
     }
@@ -95,6 +96,7 @@ let GroupMixin = class GroupMixin extends Vue {
                 this.$store.commit("toggleStore/Toggle", {
                     cart_modal: true,
                 });
+                this.$store.commit("toggleStore/noticeMessage", "강의 바구니에 담았습니다.<br> 강의 바구니로 이동하시겠습니까?");
             }
         })
             .catch((err) => {

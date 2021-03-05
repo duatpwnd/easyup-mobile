@@ -453,7 +453,6 @@ const router = new VueRouter({
     routes,
     scrollBehavior(to, from, savedPosition) {
         if (to.name == "lecDetail" && from.name == "myClassLecture") {
-            console.log("이다");
             return { x: 0, y: 99999 };
         }
         else {

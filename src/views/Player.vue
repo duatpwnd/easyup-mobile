@@ -79,9 +79,9 @@
   import BookmarkModal from "@/components/player/BookmarkModal.vue";
   import BookmarkListModal from "@/components/player/BookMarkListModal.vue";
   import { mapState, mapMutations } from "vuex";
-  import mixin from "@/components/player/player_mixin.ts";
+  import mixin from "@/components/player/player_mixin";
   import videojs from "video.js";
-  import { ResultData } from "@/assets/js/util.ts";
+  import { ResultData } from "@/assets/js/util";
   interface BodyData {
     action: string;
     course_id: number;
@@ -92,6 +92,7 @@
     iid: number;
   }
   @Component({
+    mixins: [mixin],
     components: { BookmarkListModal, Tab1, Tab2, Video, Scorm, BookmarkModal },
     computed: {
       ...mapState("playerStore", {
@@ -100,7 +101,7 @@
       }),
     },
   })
-  export default class Player extends mixin {
+  export default class Player extends Vue {
     $refs!: {
       videoPlayer: HTMLVideoElement;
     };

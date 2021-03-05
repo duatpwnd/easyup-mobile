@@ -17,10 +17,11 @@ export default class GroupMixin extends Vue {
   $refs!: {
     subs_btn: HTMLButtonElement;
   };
+  detail = {}; //코스는 지금 타입스크립트 적용안되서 지금 일딴 써놨음 코스도 타입스크립트 적용시키면 제거 시키기
   isPossibleReview = false;
   is_subscribe = false;
   subscribe_btn = false;
-  detail = {};
+  test = "염세중";
   score_info = {}; // 각 별점의 개수
   url = window.document.location.href; // 클립보드 현재 url
   @Watch("detect_token")
