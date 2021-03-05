@@ -100,7 +100,7 @@
         >
       </div>
       <!-- <p class="suggest">
-        최근 트렌드를 반영한 강의 정보를 확인하세요
+        이지업이 추천하는 검증된 강의!
       </p> -->
       <Slide :swiper_option="slide_option.recommand_lecture">
         <template slot="list">
@@ -178,6 +178,9 @@
           >전체보기 ></span
         >
       </div>
+      <!-- <p class="suggest">
+        간단하고 쉽게 개발 정보를 얻을 수 있는 블로그!
+      </p> -->
       <Slide :swiper_option="slide_option.easy_channel">
         <template slot="list">
           <swiper-slide
@@ -365,9 +368,9 @@
           >더보기</router-link
         >
       </h2>
-      <p class="suggest">
+      <!-- <p class="suggest">
         한글 자막이 제공되는 외국 우수 강의를 구독하세요
-      </p>
+      </p> -->
       <Slide :swiper_option="slide_option.translation_lecture">
         <template slot="list">
           <swiper-slide
