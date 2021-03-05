@@ -779,7 +779,7 @@
       .swiper-slide {
         .item {
           img {
-            height: 250px;
+            height: 270px;
             object-fit: cover;
           }
         }
