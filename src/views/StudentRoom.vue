@@ -1,7 +1,7 @@
 <template>
   <div id="my_lecture" v-if="dashboard_list">
     <Profile
-      v-show="profile_modal"
+      v-if="profile_modal"
       @profileModalClose="profile_modal = false"
     ></Profile>
     <UserInfo v-if="top_count">

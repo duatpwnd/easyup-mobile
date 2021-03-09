@@ -32,6 +32,27 @@
       };
     },
     methods: {
+      createCaretPlacer(atStart) {
+        return function(el) {
+          el.focus();
+          if (
+            typeof window.getSelection != "undefined" &&
+            typeof document.createRange != "undefined"
+          ) {
+            var range = document.createRange();
+            range.selectNodeContents(el);
+            range.collapse(atStart);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+          } else if (typeof document.body.createTextRange != "undefined") {
+            var textRange = document.body.createTextRange();
+            textRange.moveToElementText(el);
+            textRange.collapse(atStart);
+            textRange.select();
+          }
+        };
+      },
       updateHTML(e) {
         this.contents = e.target.innerHTML;
       },
@@ -44,8 +65,9 @@
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {
             this.contents = result.data.data.profile;
-            console.log(this.$refs.contents, this.contents);
             this.$refs.contents.innerHTML = this.contents;
+            const placeCaretAtStart = this.createCaretPlacer(true);
+            placeCaretAtStart(this.$refs.contents);
           });
       },
       register() {
@@ -57,12 +79,13 @@
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {
-            console.log(result);
             this.$noticeMessage("프로필이 등록되었습니다.");
             this.cancel();
           });
       },
       cancel() {
+        this.$refs.contents.blur();
+        window.getSelection().removeAllRanges();
         this.$emit("profileModalClose");
       },
     },
@@ -72,6 +95,15 @@
   };
 </script>
 <style scoped lang="scss">
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
   .mask {
     .profileModal {
       background: white;
