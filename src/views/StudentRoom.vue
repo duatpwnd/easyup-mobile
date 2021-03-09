@@ -18,7 +18,10 @@
         "
       >
         <span class="report" @click="profile_modal = true">프로필</span>
-        <span class="convert" @click="convert('student')" v-if="mode"
+        <span
+          class="convert"
+          @click="convert('student')"
+          v-if="$route.query.view == 'teacher'"
           >학생전환</span
         >
         <span slot="convert" @click="convert('teacher')" v-else class="convert"
@@ -204,7 +207,6 @@
     },
     data() {
       return {
-        mode: true, // true 일때 강사
         profile_modal: false,
         top_count: "",
         dashboard_list: "",
@@ -212,7 +214,6 @@
     },
     methods: {
       convert(type) {
-        this.mode = !this.mode;
         this.$router
           .push({
             query: {

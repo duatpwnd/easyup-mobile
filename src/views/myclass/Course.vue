@@ -1,7 +1,7 @@
 <template>
   <div>
     <ConfirmModal
-      @ok="lectureDelete()"
+      @ok="courseDelete()"
       v-if="toggleStore_confirmModal"
     ></ConfirmModal>
     <div class="search_area">
@@ -57,6 +57,7 @@
                 path: '/courseDetail',
                 query: {
                   id: list.id,
+                  view: $route.query.view,
                 },
               })
             "
@@ -70,6 +71,7 @@
                 path: '/courseDetail',
                 query: {
                   id: list.id,
+                  view: $route.query.view,
                 },
               })
             "
@@ -99,7 +101,7 @@
           </div>
           <div class="compile_wrap">
             <div class="video_wrap">
-              <VideoList :list="list.courses">
+              <VideoList :list="list">
                 <template slot="btn_list">
                   <span class="btn ing_ico" v-if="list.status == 'ing'"
                     >진행중</span
@@ -127,11 +129,7 @@
                     v-else-if="list.approve_status == 'not approved'"
                     >심사중</span
                   >
-                  <span
-                    class="ing_ico reject_ico"
-                    v-else-if="list.approve_status == 'reject'"
-                    >반려</span
-                  >
+
                   <router-link
                     tag="span"
                     :to="{
@@ -144,10 +142,22 @@
                     v-if="list.show_btn_review"
                     >리뷰관리</router-link
                   >
+                  <!-- 학생버전 삭제 -->
+
                   <span
                     @click="confirm(list.id)"
                     class="ing_ico lecture_remove"
-                    v-if="list.show_btn_delete"
+                    v-if="list.price.is_free && $route.query.view == 'student'"
+                    >코스삭제</span
+                  >
+                  <!-- 강사버전 삭제 -->
+                  <span
+                    @click="confirm(list.id)"
+                    class="ing_ico lecture_remove"
+                    v-if="
+                      list.approve_status == 'reject' ||
+                        list.approve_status == 'not active'
+                    "
                     >코스삭제</span
                   >
                 </template>
@@ -233,20 +243,41 @@
     },
     data() {
       return {
+        reason_tab: [], // 거절 사유 탭
         delete_id: "", // 코스 삭제 아이디
       };
     },
     methods: {
+      rejectToggle(index) {
+        const currentNum = this.reason_tab.indexOf(index);
+        if (currentNum >= 0) {
+          // 현재 배열안에있음
+          this.reason_tab.splice(currentNum, 1);
+        } else {
+          this.reason_tab.push(index);
+        }
+      },
       confirm(id) {
         this.delete_id = id;
         this.$confirmMessage("삭제하시겠습니까?");
       },
-      lectureDelete() {
-        const obj = {
-          action: "change_visibility",
-          id: this.delete_id,
-          type: "session",
-        };
+      courseDelete() {
+        let obj;
+        if (this.$route.query.view == "teacher") {
+          // 강사
+          obj = {
+            action: "change_visibility",
+            id: this.delete_id,
+            type: "session",
+          };
+        } else {
+          // 학생
+          obj = {
+            action: "delete_myclass_item",
+            code: this.delete_id,
+            type: "session",
+          };
+        }
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {

@@ -95,7 +95,11 @@
       <div id="subscribe">
         <div>
           <div class="subscribe_wrap">
-            <BlueBtn v-if="is_subscribe">
+            <BlueBtn
+              v-if="
+                is_subscribe || (is_subscribe == false && detail.is_teacher)
+              "
+            >
               <button
                 ref="subs_btn"
                 class="active_subscribe"
@@ -105,6 +109,7 @@
                 코스 보러가기
               </button>
             </BlueBtn>
+
             <BlueBtn v-else>
               <button ref="subs_btn" slot="blue_btn" @click="isPurchase()">
                 구매하기
@@ -114,12 +119,13 @@
         </div>
         <div class="fixed_subs_btn" v-if="subscribe_btn">
           <button
-            v-if="is_subscribe"
+            v-if="is_subscribe || (is_subscribe == false && detail.is_teacher)"
             class="active_subscribe"
             @click="goToPath()"
           >
             코스 보러가기
           </button>
+
           <div v-else>
             <button class="add_btn" @click="cartAdd()">코스담기</button>
             <button
@@ -140,7 +146,11 @@
         <BlueBtn
           class="add"
           @click.native="cartAdd()"
-          v-if="detail.price.is_free == false && is_subscribe == false"
+          v-if="
+            detail.price.is_free == false &&
+              is_subscribe == false &&
+              detail.is_teacher == false
+          "
         >
           <button slot="blue_btn">
             코스담기
@@ -149,7 +159,9 @@
         <BlueBtn
           class="share"
           :style="[
-            detail.price.is_free == false && is_subscribe == false
+            detail.price.is_free == false &&
+            is_subscribe == false &&
+            detail.is_teacher == false
               ? { 'margin-left': '2%' }
               : { 'margin-left': 0, width: '100%' },
           ]"
@@ -357,6 +369,12 @@
             keyword: "",
             pageCurrent: 1,
             order: "",
+            view:
+              this.$route.query.view === undefined
+                ? this.userStore_userinfo.info.status == 1
+                  ? "teacher"
+                  : "student"
+                : this.$route.query.view,
           },
         });
       },

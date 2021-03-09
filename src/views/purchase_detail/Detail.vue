@@ -156,17 +156,17 @@
           <h2 class="title">취소 요청</h2>
           <div class="row">
             <span class="dt">강의 비용</span>
-            <span class="dd">{{
-              list.pay_info.price.format_sum_purchased
-            }}</span>
+            <span class="dd"
+              >{{ list.pay_info.price.format_sum_purchased }}원</span
+            >
           </div>
           <div class="row">
             <span class="dt">할인 금액</span>
-            <span class="dd">{{ list.pay_info.price.format_purchased }}</span>
+            <span class="dd">-원</span>
           </div>
           <div class="row">
             <span class="dt">취소 요청 금액</span>
-            <span class="dd">{{ list.pay_info.price.format_cancel }}</span>
+            <span class="dd">{{ list.pay_info.price.format_cancel }}원</span>
           </div>
           <div class="row">
             <span class="dt">취소 사유</span>
@@ -257,7 +257,7 @@
     <div class="btn_wrap">
       <BaseButton
         class="left"
-        v-if="list.is_possible_cancel && list.status_code == 1"
+        v-if="list.is_possible_cancel.result && list.status_code == 1"
         @click.native="isCancel()"
       >
         <button slot="blue_btn">
@@ -265,11 +265,9 @@
         </button>
       </BaseButton>
       <BaseButton
-        @click.native="
-          $noticeMessage('취소 신청 가능 일이 지난<br>구매 내역입니다.')
-        "
+        @click.native="$noticeMessage(list.is_possible_cancel.false_reason)"
         class="left"
-        v-else-if="list.is_possible_cancel == false"
+        v-else-if="list.is_possible_cancel.result == false"
       >
         <button slot="blue_btn" class="cancel_req_btn">
           취소 요청
@@ -278,13 +276,12 @@
       <BaseButton
         @click.native="$noticeMessage('취소 신청 내역을 확인 중입니다.')"
         class="left"
-        v-else-if="list.is_possible_cancel && list.status_code == 5"
+        v-else-if="list.is_possible_cancel.result && list.status_code == 5"
       >
         <button slot="blue_btn">
           취소 진행
         </button>
       </BaseButton>
-
       <BaseButton
         class="right"
         :style="[{ width: list.status_code == 4 ? '100%' : '49%' }]"

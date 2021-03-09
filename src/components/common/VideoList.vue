@@ -1,11 +1,27 @@
 <template>
   <div class="video_list">
+    <span
+      class="ing_ico reject_ico"
+      @click="
+        reason_toggle = !reason_toggle;
+        toggle = false;
+      "
+      v-if="list.approve_status == 'reject'"
+      >반려</span
+    >
     <slot name="btn_list"></slot>
-    <span class="ing_ico toggle_btn" @click="toggle = !toggle">강의목록</span>
+    <span
+      class="ing_ico toggle_btn"
+      @click="
+        toggle = !toggle;
+        reason_toggle = false;
+      "
+      >강의목록</span
+    >
     <div
       class="list"
       v-show="toggle"
-      v-for="(list, index) in list"
+      v-for="(list, index) in list.courses"
       :key="index"
     >
       <span class="left"
@@ -30,19 +46,25 @@
       >
       <span class="right">{{ list.limit }}</span>
     </div>
+    <div
+      class="reason"
+      v-if="list.approve_status == 'reject' && reason_toggle"
+      v-html="list.reject_reason"
+    ></div>
   </div>
 </template>
 <script>
   export default {
     props: {
       list: {
-        type: Array,
+        type: Object,
         required: true,
       },
     },
     components: {},
     data() {
       return {
+        reason_toggle: false,
         toggle: false,
       };
     },
@@ -99,6 +121,11 @@
       background: white;
       color: #114fff;
       line-height: 24px;
+    }
+    .reason {
+      font-family: "NotoSansCJKkr-Regular";
+      font-size: 14px;
+      word-wrap: break-word;
     }
     .list {
       margin-top: 6px;

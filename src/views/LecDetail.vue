@@ -126,7 +126,11 @@
         <div>
           <div class="subscribe_wrap">
             <!-- 강의를 구매한경우 -->
-            <BlueBtn v-if="is_subscribe">
+            <BlueBtn
+              v-if="
+                is_subscribe || (is_subscribe == false && detail.is_teacher)
+              "
+            >
               <button
                 ref="subs_btn"
                 class="active_subscribe"
@@ -136,6 +140,7 @@
                 강의 보러가기
               </button>
             </BlueBtn>
+
             <!-- 무료강의인경우 -->
             <BlueBtn v-else-if="detail.price.is_free" @click.native="isWatch()">
               <button ref="subs_btn" slot="blue_btn">
@@ -155,7 +160,7 @@
         <div class="fixed_subs_btn" v-if="subscribe_btn">
           <!-- 강의를 구매한경우 -->
           <button
-            v-if="is_subscribe"
+            v-if="is_subscribe || (is_subscribe == false && detail.is_teacher)"
             class="active_subscribe"
             @click="video($route.query.id, detail.lp_id)"
           >
@@ -192,7 +197,11 @@
         <BlueBtn
           class="add"
           @click.native="cartAdd()"
-          v-if="detail.price.is_free == false && is_subscribe == false"
+          v-if="
+            detail.price.is_free == false &&
+              is_subscribe == false &&
+              detail.is_teacher == false
+          "
         >
           <button slot="blue_btn">
             강의담기
@@ -202,7 +211,9 @@
           class="share"
           @click.native="share()"
           :style="[
-            detail.price.is_free == false && is_subscribe == false
+            detail.price.is_free == false &&
+            is_subscribe == false &&
+            detail.is_teacher == false
               ? { 'margin-left': '2%' }
               : { 'margin-left': 0, width: '100%' },
           ]"

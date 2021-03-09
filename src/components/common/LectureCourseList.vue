@@ -145,6 +145,10 @@
           background: #dbdbdb;
           color: #999999;
         }
+        .reject_ico {
+          background: #333333;
+          color: white;
+        }
         ::v-deep .progress_bar {
           progress::-webkit-progress-value {
             background: #ecedee;
@@ -169,6 +173,11 @@
           right: 4.445%;
           height: 15px;
           margin: auto;
+        }
+        .reason {
+          font-family: "NotoSansCJKkr-Regular";
+          font-size: 14px;
+          word-wrap: break-word;
         }
       }
     }

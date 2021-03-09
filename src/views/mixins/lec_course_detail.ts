@@ -1,5 +1,5 @@
 import { Component, Watch, Vue } from "vue-property-decorator";
-import { ResultData } from "@/assets/js/util.ts";
+import { ResultData } from "@/assets/js/util";
 interface Data {
   action: string;
   course_id: number;
@@ -63,6 +63,8 @@ export default class GroupMixin extends Vue {
     } else {
       data.session_id = Number(this.$route.query.id);
     }
+    console.log("dddd", data);
+
     await this.$axios
       .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
       .then((result: ResultData) => {

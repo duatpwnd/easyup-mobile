@@ -80,6 +80,15 @@
             }}원</span
           >
         </div>
+        <div
+          class="row "
+          v-if="list.info.calculate_price_info.format_purchased_price != 0"
+        >
+          <span class="dt">이미 구매한 강의</span>
+          <span class="dd"
+            >{{ list.info.calculate_price_info.format_purchased_price }}원</span
+          >
+        </div>
         <!-- <div class="row line contain_btn">
           <span class="dt">쿠폰 할인</span>
           <span class="dt">

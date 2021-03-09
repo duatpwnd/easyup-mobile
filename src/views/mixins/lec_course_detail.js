@@ -48,6 +48,7 @@ let GroupMixin = class GroupMixin extends Vue {
         else {
             data.session_id = Number(this.$route.query.id);
         }
+        console.log("dddd", data);
         await this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {

@@ -133,10 +133,12 @@
                 >심사중</span
               >
               <span
+                @click="rejectToggle(index)"
                 class="ing_ico reject_ico"
                 v-else-if="list.approve_status == 'reject'"
                 >반려</span
               >
+
               <ProgressBar
                 v-if="$route.query.view == 'student'"
                 :max="100"
@@ -162,15 +164,24 @@
               <span
                 @click="confirm(list.code)"
                 class="ing_ico lecture_remove lecture-remove-student"
-                v-if="list.status == 'end'"
+                v-if="list.status == 'end' || list.price.is_free"
                 >강의삭제</span
               >
+              <!-- 강사버전 삭제 -->
               <span
                 @click="confirm(list.id)"
                 class="ing_ico lecture_remove"
                 v-if="list.show_btn_delete"
                 >강의삭제</span
               >
+              <div
+                class="reason"
+                v-if="
+                  list.approve_status == 'reject' &&
+                    reason_tab.indexOf(index) >= 0
+                "
+                v-html="list.reject_reason"
+              ></div>
             </div>
           </div>
         </template>
@@ -244,10 +255,20 @@
     },
     data() {
       return {
+        reason_tab: [], // 거절 사유 탭
         delete_id: "", // 강의 삭제 아이디
       };
     },
     methods: {
+      rejectToggle(index) {
+        const currentNum = this.reason_tab.indexOf(index);
+        if (currentNum >= 0) {
+          // 현재 배열안에있음
+          this.reason_tab.splice(currentNum, 1);
+        } else {
+          this.reason_tab.push(index);
+        }
+      },
       confirm(id) {
         this.delete_id = id;
         this.$confirmMessage("삭제하시겠습니까?");
