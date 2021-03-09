@@ -1,5 +1,6 @@
 <template>
   <div class="list_wrap">
+    <slot name="title"></slot>
     <div class="list list_left">
       <slot name="thumbnail">
         <img
@@ -79,7 +80,7 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         margin-bottom: 4px;
-        word-break: keep-all;
+        word-wrap: break-word;
       }
       .name {
         color: #999999;
@@ -89,24 +90,9 @@
         display: table;
         width: 100%;
 
-        .ing_ico {
-          width: 32%;
-          vertical-align: middle;
-          display: table-cell;
-          background: #114fff;
-          font-size: 12px;
-          color: white;
-          border-radius: 4px;
-          text-align: center;
-          height: 20px;
-        }
-        .non_ing_ico {
-          background: #dbdbdb;
-          color: #999999;
-        }
         .star_cell {
           display: table-cell;
-          width: 66%;
+          width: 95%;
           background: url("~@/assets/images/common/big_star.png") no-repeat 98%
             center / 17px 16px;
         }
@@ -118,16 +104,50 @@
       }
     }
     .progress {
-      margin-top: 10px;
+      margin-top: 5px;
       .compile_wrap {
-        padding: 0 4.445%;
+        padding: 4px 4.445%;
         position: relative;
         background: #f8f8f8;
         box-sizing: border-box;
         span {
           display: inline-block;
           vertical-align: middle;
-          font-size: 12px;
+          font-size: 14px;
+        }
+        .ing_ico {
+          width: 20%;
+          margin-right: 10px;
+          background: #114fff;
+          line-height: 25px;
+          color: white;
+          border-radius: 4px;
+          text-align: center;
+          height: 24px;
+          font-family: unset;
+          box-sizing: border-box;
+        }
+        .review,
+        .lecture_remove {
+          border: 1px solid #114fff;
+          background: white;
+          color: #114fff;
+          line-height: 24px;
+        }
+        .lecture-remove-student {
+          margin-left: 10px;
+        }
+        .not_approved_ico {
+          background: #ff114a;
+        }
+        .non_ing_ico,
+        .not_active_ico {
+          background: #dbdbdb;
+          color: #999999;
+        }
+        .reject_ico {
+          background: #333333;
+          color: white;
         }
         ::v-deep .progress_bar {
           progress::-webkit-progress-value {
@@ -153,6 +173,11 @@
           right: 4.445%;
           height: 15px;
           margin: auto;
+        }
+        .reason {
+          font-family: "NotoSansCJKkr-Regular";
+          font-size: 14px;
+          word-wrap: break-word;
         }
       }
     }

@@ -46,7 +46,7 @@
 </script>
 <style scoped lang="scss">
   .tab {
-    font-size: 2rem;
+    font-size: 18px;
     font-weight: 600;
     width: 33.333%;
     display: inline-block;

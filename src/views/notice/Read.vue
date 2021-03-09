@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="view">
     <div class="head">
       <span class="title">[{{ view.course_name }}]</span>
       <span>{{ view.subject }}</span>
@@ -17,45 +17,43 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
   import BlueBtn from "@/components/common/BaseButton.vue";
-  export default {
+  @Component({
     components: {
       BlueBtn,
     },
-    data() {
-      return {
-        view: "",
+  })
+  export default class Read extends Vue {
+    view = "";
+    goToList(): void {
+      this.$router.push({
+        path: "/notice",
+        query: {
+          keyword: "",
+          pageCurrent: 1,
+          order: "all",
+          view: this.$route.query.view,
+        },
+      });
+    }
+    read(): void {
+      const data: { action: string; id: number; course_id: number } = {
+        action: "get_my_notice_info",
+        id: this.$route.query.id,
+        course_id: this.$route.query.c_id,
       };
-    },
-    methods: {
-      goToList() {
-        this.$router.push({
-          path: "/notice",
-          query: {
-            keyword: "",
-            pageCurrent: 1,
-            order: "all",
-          },
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          this.view = result.data.data;
         });
-      },
-      read() {
-        const data = {
-          action: "get_my_notice_info",
-          id: this.$route.query.id,
-          course_id: this.$route.query.c_id,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            this.view = result.data.data;
-          });
-      },
-    },
+    }
     created() {
       this.read();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .head {

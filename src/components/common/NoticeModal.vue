@@ -1,9 +1,7 @@
 <template>
-  <div class="mask">
+  <div class="mask1">
     <div class="notice_modal">
-      <p class="contents">
-        {{ toggleStore_noticeMessage }}
-      </p>
+      <p class="contents" v-html="toggleStore_noticeMessage"></p>
       <BlueBtn>
         <button class="ok" slot="blue_btn" @click="ok()">확인</button>
       </BlueBtn>
@@ -36,14 +34,15 @@
   };
 </script>
 <style scoped lang="scss">
-  .mask {
+  .mask1 {
     position: fixed;
+    max-width: 720px;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 5;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 6;
     .notice_modal {
       background: white;
       max-width: 720px;

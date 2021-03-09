@@ -37,7 +37,7 @@
             slot="check"
           />
         </CheckBox>
-        <span>강좌명</span>
+        <span>강의명</span>
         <span>파일명</span>
       </template>
     </BoardTitle>
@@ -120,7 +120,6 @@
   export default {
     components: {
       Pagination,
-
       CheckBox,
       BoardList,
       BoardTitle,
@@ -139,7 +138,12 @@
     },
     methods: {
       upload() {
-        this.$router.push("/dataShare/upload");
+        this.$router.push({
+          path: "/dataShare/upload",
+          query: {
+            view: this.$route.query.view,
+          },
+        });
       },
       fileDownload(id, course_id, file_name) {
         const data = {
@@ -233,6 +237,7 @@
                     pageCurrent: num,
                     order: order,
                     keyword: keyword,
+                    view: this.$route.query.view,
                   },
                 })
                 .catch(() => {});
@@ -266,14 +271,17 @@
 </script>
 <style scoped lang="scss">
   .tab1 {
-    padding: 4.445%;
-    padding-top: 0;
+    padding: 16px;
     .no_result {
       text-align: center;
       padding: 15px;
       font-size: 16px;
     }
+    .search {
+      margin-top: 0;
+    }
     .btn_wrap {
+      margin-top: 10px;
       &:after {
         display: block;
         content: "";
@@ -293,9 +301,7 @@
         }
       }
     }
-    .search {
-      margin: 2% 0;
-    }
+
     .file_list {
       &:nth-child(odd) {
         background: #f8f8f8;

@@ -4,7 +4,7 @@ let unijob_common = {
       view: "",
       title: "",
       editorData: "", // 에디터 v-model
-      file_list: "",
+      file_list: ""
     };
   },
   methods: {
@@ -12,17 +12,17 @@ let unijob_common = {
       const data = {
         action: "get_unijob_info",
         type: this.$route.query.type,
-        id: id,
+        id: id
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
           headers: {
             Authorization: this.$cookies.get("user_info")
               ? "Bearer " + this.$cookies.get("user_info").access_token
-              : null,
-          },
+              : null
+          }
         })
-        .then((result) => {
+        .then(result => {
           this.view = result.data.data.info;
           // 답글 수정일때는 re:를 치환하지 않아도 되기때문에 나누어줌
 
@@ -35,8 +35,8 @@ let unijob_common = {
               .push({
                 query: {
                   type: this.$route.query.type,
-                  id: id,
-                },
+                  id: id
+                }
               })
               .catch(() => {});
             const re = this.view.title.match(/re:/);
@@ -58,9 +58,9 @@ let unijob_common = {
           }
           this.editorData = this.view.content;
         });
-    },
+    }
   },
   mounted() {},
-  created() {},
+  created() {}
 };
 export default unijob_common;

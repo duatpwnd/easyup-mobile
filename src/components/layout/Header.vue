@@ -11,20 +11,15 @@
       <!-- 학생인지 강사인지  -->
       <router-link
         :to="{
-          path: '/bookmarkManage/list',
-          query: {
-            keyword: '',
-            pageCurrent: 1,
-            order: '',
-          },
+          path: '/cart',
         }"
         class="myclass"
         v-if="userStore_userinfo.access_token"
       >
         <img
-          src="@/assets/images/common/myclass_ico.png"
-          alt="책갈피"
-          title="책갈피"
+          src="@/assets/images/common/cart_ico.png"
+          alt="장바구니"
+          title="장바구니"
         />
       </router-link>
       <router-link
@@ -33,6 +28,12 @@
           query: {
             pageCurrent: 1,
             keyword: '',
+            view:
+              typeof $route.query.view == 'undefined'
+                ? userStore_userinfo.info.status === 1
+                  ? 'student'
+                  : 'teacher'
+                : $route.query.view,
           },
         }"
         class="msg"
@@ -47,36 +48,39 @@
     </div>
   </div>
 </template>
-<script>
-  import { mapState, mapMutations } from "vuex";
-  export default {
-    components: {},
-    data() {
-      return {};
-    },
+<script lang="ts">
+  import { mapState } from "vuex";
+  import { Component, Vue } from "vue-property-decorator";
+  @Component({
     computed: {
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
       }),
       ...mapState("toggleStore", {
         toggleStore_loginModal: "login_modal",
+        toggleStore_mask: "mask",
       }),
     },
-    methods: {
-      menu_toggle() {
-        this.$store.commit("toggleStore/Toggle", {
-          login_modal: !this.toggleStore_loginModal,
-        });
-      },
-    },
-  };
+  })
+  export default class Header extends Vue {
+    toggleStore_loginModal!: boolean;
+    toggleStore_mask!: boolean;
+    menu_toggle() {
+      this.$store.commit("toggleStore/Toggle", {
+        login_modal: !this.toggleStore_loginModal,
+        mask: !this.toggleStore_mask,
+      });
+    }
+  }
 </script>
 <style scoped lang="scss">
   #nav {
-    position: relative;
-    /* height: 80px; */
+    position: sticky;
     text-align: center;
-    padding: 5.556% 0px;
+    height: 50px;
+    top: 0;
+    background: white;
+    z-index: 4;
     .back_btn {
       position: absolute;
       top: 0;
@@ -86,20 +90,24 @@
       margin: auto;
     }
     .easyup_logo {
-      width: 24.445%;
-      height: 37.5%;
+      height: 19px;
+      width: 114px;
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
       margin: auto;
+      img {
+        vertical-align: unset;
+      }
     }
     .easyup_menu_btn {
-      width: 5.556%;
+      width: 24px;
+      height: 19px;
       position: absolute;
       top: 0;
-      left: 4.445%;
+      left: 16px;
       bottom: 0;
       margin: auto;
     }
@@ -107,20 +115,26 @@
       .myclass {
         position: absolute;
         top: 0;
-        right: 15%;
+        right: 48px;
         bottom: 0;
         margin: auto;
-        height: 37.5%;
-        width: 5.417%;
+        width: 24px;
+        height: 19px;
+        img {
+          vertical-align: unset;
+        }
       }
       .msg {
-        width: 4.584%;
         position: absolute;
         top: 0;
-        right: 4.445%;
+        right: 16px;
         bottom: 0;
         margin: auto;
-        height: 40%;
+        width: 24px;
+        height: 19px;
+        img {
+          vertical-align: unset;
+        }
       }
     }
   }

@@ -79,7 +79,7 @@
   .timeLine {
     margin-top: 20px;
     .title {
-      font-size: 2rem;
+      font-size: 18px;
     }
     .timeline_txt {
       font-size: 15px;

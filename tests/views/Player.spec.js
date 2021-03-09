@@ -19,19 +19,19 @@ describe.skip("Player.vue", () => {
         percent: [
           //진도율 퍼센터
           "27",
-          "%",
+          "%"
         ],
         total_items: 26, //총 강의수
         complete_items: 7, //현재까지 진행한 강의 수
         is_possible_review: false, //강의평가 가능여부
-        progress_date: "무제한", //기간
+        progress_date: "무제한" //기간
       },
       list: [
         //둘다 데이터가 있을수도있고 하나만 있을수도 있음.
         {
           are_parents: "섹션으로 구성된 강의리스트",
-          not_parents: "섹션없이 일반으로 등록된 강의",
-        },
+          not_parents: "섹션없이 일반으로 등록된 강의"
+        }
       ],
       current_item: [
         //처음세팅될 아이템
@@ -44,10 +44,10 @@ describe.skip("Player.vue", () => {
           iframe_src:
             "http://develop.hell0world.net/courses/PY05/document/7-1..html?&session_id=0",
           custom_type: "",
-          note_contents: "'강의노트에 해당하는 파라미터",
-        },
-      ],
-    },
+          note_contents: "'강의노트에 해당하는 파라미터"
+        }
+      ]
+    }
   };
   beforeEach(async () => {
     Vue.use(VueRouter);
@@ -57,18 +57,18 @@ describe.skip("Player.vue", () => {
     const router = new VueRouter({
       mode: "history",
       base: process.env.BASE_URL,
-      duplicateNavigationPolicy: "ignore",
+      duplicateNavigationPolicy: "ignore"
     });
     router.push({
       query: {
         course_id: 1,
         lp_id: 1,
-        linkType: undefined,
-      },
+        linkType: undefined
+      }
     });
     wrapper = shallowMount(Player, {
       store,
-      router,
+      router
     });
     const mock = new MockAdapter(axios);
     await mock.onPost(ApiUrl.mobileAPI_v1).reply(200, data);

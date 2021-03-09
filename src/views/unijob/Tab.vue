@@ -111,83 +111,79 @@
     </Pagination>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Pagination from "@/components/common/Pagination.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
-
   import BoardTitle from "@/components/common/BoardTitle.vue";
   import Search from "@/components/common/Search.vue";
-
-  export default {
+  import { Vue, Component, Watch } from "vue-property-decorator";
+  @Component({
     components: { BoardTitle, Search, Pagination, BlueBtn },
-
-    data() {
-      return {
-        list: "",
-        keyword: "",
-        current: "",
+  })
+  export default class Tab extends Vue {
+    @Watch("$route")
+    onPropertyChanged(
+      current: { [key: string]: any },
+      prev: { [key: string]: any }
+    ) {
+      if (current.path != prev.path) {
+        this.getList(
+          current.name,
+          (this.$route.query.pageCurrent as unknown) as number,
+          this.$route.query.keyword as string
+        );
+      }
+    }
+    list = "";
+    keyword = "";
+    current = 1;
+    getList(type: string, num: number, keyword: string): void {
+      const data = {
+        action: "get_unijob_list", //필수
+        current: num, //필수
+        type: type,
+        keyword: keyword, //옵션
       };
-    },
-    methods: {
-      getList(type, num, keyword) {
-        const data = {
-          action: "get_unijob_list", //필수
-          current: num, //필수
-          type: type,
-          keyword: keyword, //옵션
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("유니잡", result.data.data);
-            this.$router
-              .push({
-                query: {
-                  pageCurrent: num,
-                  keyword: keyword,
-                },
-              })
-              .catch(() => {});
-            this.list = result.data.data;
-            this.keyword = keyword;
-            this.current = num;
-          });
-      },
-      goToPath(id, is_possible) {
-        console.log(is_possible);
-        if (is_possible == "normal") {
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          console.log("유니잡", result.data.data);
           this.$router
             .push({
-              path: "/uniJob/read",
               query: {
-                type: this.$route.name,
-                id: id,
+                pageCurrent: num,
+                keyword: keyword,
               },
             })
             .catch(() => {});
-        } else {
-          this.$noticeMessage("해당 글을 조회 할 수 없습니다.");
-        }
-      },
-    },
-    watch: {
-      $route(to, from) {
-        this.getList(
-          to.name,
-          this.$route.query.pageCurrent,
-          this.$route.query.keyword
-        );
-      },
-    },
+          this.list = result.data.data;
+          this.keyword = keyword;
+          this.current = num;
+        });
+    }
+    goToPath(id: number, is_possible: string): void {
+      if (is_possible == "normal") {
+        this.$router
+          .push({
+            path: "/uniJob/read",
+            query: {
+              type: this.$route.name,
+              id: id,
+            },
+          })
+          .catch(() => {});
+      } else {
+        this.$noticeMessage("해당 글을 조회 할 수 없습니다.");
+      }
+    }
     created() {
       this.getList(
-        this.$route.name,
-        this.$route.query.pageCurrent,
-        this.$route.query.keyword
+        this.$route.name as string,
+        (this.$route.query.pageCurrent as unknown) as number,
+        this.$route.query.keyword as string
       );
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .wrap {

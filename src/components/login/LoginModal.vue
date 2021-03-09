@@ -4,9 +4,8 @@
   </keep-alive>
 </template>
 <script>
-  import LoginForm from "./LoginForm";
-
-  import GoToLecture from "./go_to_lecture_list";
+  import LoginForm from "./LoginForm.vue";
+  import GoToLecture from "./go_to_lecture_list.vue";
   export default {
     components: {
       LoginForm,
@@ -21,6 +20,7 @@
     methods: {},
     mounted() {
       this.$EventBus.$on("GoToLecture", () => {
+        console.log("Go");
         this.type = "GoToLecture";
       });
       this.$EventBus.$on("LoginForm", () => {

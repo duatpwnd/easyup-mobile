@@ -11,9 +11,9 @@
       >
         <span class="title pull-left">{{ li.title }}</span
         ><span class="time pull-left">{{ li.check_point }}</span
-        ><span class="delete pull-right" @click.stop="bookmark_remove(li.id)"
-          ><img src="http://develop.hell0world.net/main/img/close_bt.png"
-        /></span>
+        ><span class="delete pull-right" @click.stop="bookmark_remove(li.id)">
+          <font-awesome-icon :icon="['fa', 'times']" />
+        </span>
       </li>
     </ul>
   </div>
@@ -32,15 +32,22 @@
       ...mapState("toggleStore", {
         toggleStore_bookmark_list_info: "bookmark_list_info",
       }),
+      ...mapState("playerStore", {
+        playerStore_video: "video_stop_time",
+        playerStore_custom_type: "custom_type",
+        playerStore_lp_type: "lp_type",
+      }),
     },
 
     methods: {
       goToPlayer(id, check_point) {
         const check = this.$hms_to_s(check_point);
+
         this.$store.commit("playerStore/playerState", {
           check_time: check == 0 ? 1 : check,
         });
         this.$emit("bookmark_move", id, "bookmark");
+
         this.close();
       },
       close() {
@@ -114,6 +121,7 @@
       max-height: 288px;
       overflow: auto;
       padding-right: 10px;
+
       .clearfix {
         font-size: 18px;
         &:after {
@@ -135,9 +143,8 @@
           text-align: right;
           float: right;
           width: 3%;
-          img {
-            width: 10px;
-            height: 10px;
+          .fa-times {
+            color: #e0e0e0;
           }
         }
       }

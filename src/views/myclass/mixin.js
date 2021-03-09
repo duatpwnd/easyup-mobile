@@ -25,7 +25,7 @@ let myLectureCourse = {
           },
         })
         .then((result) => {
-          console.log(result);
+          console.log(result, this.$route.query.view);
           this.lec_course_list = result.data.data;
           this.$router
             .push({
@@ -33,6 +33,7 @@ let myLectureCourse = {
                 pageCurrent: num,
                 order: order,
                 keyword: keyword,
+                view: this.$route.query.view,
               },
             })
             .catch(() => {});

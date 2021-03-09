@@ -8,6 +8,7 @@
           keyword: '',
           pageCurrent: 1,
           order: '',
+          view: this.$route.query.view,
         },
       }"
       ><span class="active_bar"></span>강의
@@ -20,6 +21,7 @@
           keyword: '',
           pageCurrent: 1,
           order: '',
+          view: this.$route.query.view,
         },
       }"
       ><span class="active_bar"></span>코스</router-link
@@ -39,7 +41,7 @@
   .my_lec_course {
     padding-bottom: 65px;
     .tab {
-      font-size: 2rem;
+      font-size: 18px;
       font-weight: 600;
       width: 50%;
       display: inline-block;

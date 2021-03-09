@@ -23,15 +23,15 @@ const data = {
       neiborLink: {
         prevInfo: {
           title: "[테스트2_에디터] 스마트폰을 건전지로 충전하는 법",
-          id: "9",
+          id: "9"
         },
         nextInfo: {
           title: "선형대수학 왜 배워야 할가요?",
-          id: "12",
-        },
+          id: "12"
+        }
       },
       thumbnail_link:
-        "http://develop.hell0world.net/app/upload/techblog/thumb83cce7ef1971cdc69b396fb3d122ee13.jpg",
+        "http://develop.hell0world.net/app/upload/techblog/thumb83cce7ef1971cdc69b396fb3d122ee13.jpg"
     },
     comment: [
       {
@@ -61,12 +61,12 @@ const data = {
             wdate_format: "2020.10.26",
             timeAgo: "12시간 전",
             is_possible_modify: true,
-            is_possible_delete: true,
-          },
-        ],
-      },
-    ],
-  },
+            is_possible_delete: true
+          }
+        ]
+      }
+    ]
+  }
 };
 describe.skip("read.vue", () => {
   let wrapper;
@@ -80,16 +80,16 @@ describe.skip("read.vue", () => {
     const router = new VueRouter({
       mode: "history",
       base: process.env.BASE_URL,
-      duplicateNavigationPolicy: "ignore",
+      duplicateNavigationPolicy: "ignore"
     });
     router.push({
       query: {
-        id: 1,
-      },
+        id: 1
+      }
     });
     wrapper = shallowMount(Read, {
       store,
-      router,
+      router
     });
     await mock.onPost(ApiUrl.mobileAPI_v1).reply(200, data);
     jest.spyOn(wrapper.vm, "write");

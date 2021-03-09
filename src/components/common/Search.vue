@@ -55,6 +55,7 @@
       padding-right: 10%;
       box-sizing: border-box;
       margin-left: 2%;
+      outline: none;
       // background: url("~@/assets/images/lec_list/search_btn.png") no-repeat 95%
       //   center / 12px 12px;
     }

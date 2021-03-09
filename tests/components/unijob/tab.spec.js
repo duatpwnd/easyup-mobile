@@ -20,9 +20,9 @@ describe("Tab.vue", () => {
           is_notice: "yes",
           is_reple: "no",
           is_possible: "normal",
-          is_delete: "yes",
-        },
-      ],
+          is_delete: "yes"
+        }
+      ]
     };
     const mock = new MockAdapter(axios);
     await mock.onPost(ApiUrl.mobileAPI_v1).reply(200, data);
@@ -37,14 +37,14 @@ describe("Tab.vue", () => {
     const router = new VueRouter({
       mode: "history",
       base: process.env.BASE_URL,
-      duplicateNavigationPolicy: "ignore",
+      duplicateNavigationPolicy: "ignore"
     });
     router.push({
       name: "resume",
       query: {
         pageCurrent: 1,
-        keyword: "",
-      },
+        keyword: ""
+      }
     });
     wrapper = shallowMount(Tab, { router });
 

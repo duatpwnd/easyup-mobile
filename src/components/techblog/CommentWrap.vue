@@ -129,206 +129,206 @@
   </div>
 </template>
 <script>
-  import CommentList from "@/components/common/CommentList.vue";
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
+import CommentList from "@/components/common/CommentList.vue";
+import BlueBtn from "@/components/common/BaseButton.vue";
+import { mapState, mapMutations } from "vuex";
 
-  export default {
-    props: {
-      comment: {
-        type: Array,
-        required: true,
-      },
-    },
-    components: {
-      BlueBtn,
-      CommentList,
-    },
-    computed: {
-      ...mapState("userStore", {
-        userStore_info: "userinfo",
-      }),
-    },
-    data() {
-      return {
-        active: false,
-        contents: "",
-        comment_mode: "",
-      };
-    },
-    methods: {
-      // 토글
-      toggle(modify) {
-        if (
-          event.path[2].nextElementSibling.nextElementSibling.style.display ==
-          "none"
-        ) {
-          event.path[2].nextElementSibling.nextElementSibling.style.display =
-            "block";
-          if (modify != undefined) {
-            event.path[2].nextElementSibling.nextElementSibling.children[0].value =
-              event.path[2].nextElementSibling.innerText;
-          } else {
-            event.path[2].nextElementSibling.nextElementSibling.children[0].value =
-              "";
-          }
+export default {
+  props: {
+    comment: {
+      type: Array,
+      required: true
+    }
+  },
+  components: {
+    BlueBtn,
+    CommentList
+  },
+  computed: {
+    ...mapState("userStore", {
+      userStore_info: "userinfo"
+    })
+  },
+  data() {
+    return {
+      active: false,
+      contents: "",
+      comment_mode: ""
+    };
+  },
+  methods: {
+    // 토글
+    toggle(modify) {
+      if (
+        event.path[2].nextElementSibling.nextElementSibling.style.display ==
+        "none"
+      ) {
+        event.path[2].nextElementSibling.nextElementSibling.style.display =
+          "block";
+        if (modify != undefined) {
+          event.path[2].nextElementSibling.nextElementSibling.children[0].value =
+            event.path[2].nextElementSibling.innerText;
         } else {
-          event.path[2].nextElementSibling.nextElementSibling.style.display =
-            "none";
+          event.path[2].nextElementSibling.nextElementSibling.children[0].value =
+            "";
         }
-      },
-      // 토글 일부취소
+      } else {
+        event.path[2].nextElementSibling.nextElementSibling.style.display =
+          "none";
+      }
+    },
+    // 토글 일부취소
 
-      toggle_cancel() {
-        if (event.path[3].style.display == "none") {
-          event.path[3].style.display = "block";
-        } else {
-          event.path[3].style.display = "none";
-        }
-      },
-      // 토글 전체취소
-      toggleOff() {
-        this.$refs.edit.forEach((el, index) => {
+    toggle_cancel() {
+      if (event.path[3].style.display == "none") {
+        event.path[3].style.display = "block";
+      } else {
+        event.path[3].style.display = "none";
+      }
+    },
+    // 토글 전체취소
+    toggleOff() {
+      this.$refs.edit.forEach((el, index) => {
+        el.style.display = "none";
+      });
+      console.log(this.$refs.reply_edit);
+      if (this.$refs.reply_edit != undefined) {
+        this.$refs.reply_edit.forEach((el, index) => {
           el.style.display = "none";
         });
-        console.log(this.$refs.reply_edit);
-        if (this.$refs.reply_edit != undefined) {
-          this.$refs.reply_edit.forEach((el, index) => {
-            el.style.display = "none";
-          });
-        }
-        this.contents = "";
-      },
-      // 답글 추가
-      reply_comment_add(blog_id, list_id) {
-        const data = {
-          action: "add_blog_comment",
-          id: blog_id,
-          parent_id: list_id, // 대댓글인 경우에만 필수
-          contents: this.contents.trim(),
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("답글등록", result);
-            if (result.data.error != true) {
-              this.toggleOff();
-              this.$EventBus.$emit("techblog_list_reload", true);
-            }
-          });
-      },
-      // 답글 수정
-      reply_comment_modify(id, index) {
-        const data = {
-          action: "modify_blog_comment",
-          id: id,
-          contents: event.path[3].children[0].value.trim(),
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("수정등록", result);
-            if (result.data.error != true) {
-              this.$EventBus.$emit("techblog_list_reload", true);
-              this.toggleOff();
-            }
-          });
-      },
-      // 답글 삭제
-      reply_comment_del(id) {
-        const data = {
-          action: "delete_blog_comment",
-          id: id,
-        };
-        console.log("삭제:", data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("삭제완료", result);
+      }
+      this.contents = "";
+    },
+    // 답글 추가
+    reply_comment_add(blog_id, list_id) {
+      const data = {
+        action: "add_blog_comment",
+        id: blog_id,
+        parent_id: list_id, // 대댓글인 경우에만 필수
+        contents: this.contents.trim()
+      };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log("답글등록", result);
+          if (result.data.error != true) {
+            this.toggleOff();
+            this.$EventBus.$emit("techblog_list_reload", true);
+          }
+        });
+    },
+    // 답글 수정
+    reply_comment_modify(id, index) {
+      const data = {
+        action: "modify_blog_comment",
+        id: id,
+        contents: event.path[3].children[0].value.trim()
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log("수정등록", result);
+          if (result.data.error != true) {
             this.$EventBus.$emit("techblog_list_reload", true);
             this.toggleOff();
-          });
-      },
+          }
+        });
     },
-    mounted() {},
-    created() {},
-  };
+    // 답글 삭제
+    reply_comment_del(id) {
+      const data = {
+        action: "delete_blog_comment",
+        id: id
+      };
+      console.log("삭제:", data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then(result => {
+          console.log("삭제완료", result);
+          this.$EventBus.$emit("techblog_list_reload", true);
+          this.toggleOff();
+        });
+    }
+  },
+  mounted() {},
+  created() {}
+};
 </script>
 <style scoped lang="scss">
-  #comment_wrap {
-    padding: 30px 0;
-    ::v-deep .comment_list {
-      .comment_header {
-        .name {
-          margin-left: 0;
-        }
+#comment_wrap {
+  padding: 30px 0;
+  ::v-deep .comment_list {
+    .comment_header {
+      .name {
+        margin-left: 0;
       }
     }
-    .edit_wrap {
-      margin-top: 5px;
+  }
+  .edit_wrap {
+    margin-top: 5px;
 
-      .edit {
-        border: 1px solid #dbdbdb;
-        font-size: 1.375rem;
-        width: 100%;
-        resize: none;
-        box-sizing: border-box;
-        border-radius: 5px;
-        height: 60px;
-        padding: 10px;
-        font-family: "NotoSansCJKkr-DemiLight";
-        font-size: 11px;
-        &::placeholder {
-          color: #b5b5b5;
-        }
-      }
-      .btn_wrap {
-        margin-top: 10px;
-
-        &:after {
-          display: block;
-          content: "";
-          clear: both;
-        }
-        .blue_btn {
-          width: 48%;
-        }
-        .left {
-          float: left;
-        }
-        .right {
-          float: right;
-          button {
-            background: white;
-            color: #114fff;
-          }
-        }
-      }
-    }
-    .more_view_btn {
-      margin-top: 7%;
-      border: 2px solid #114fff;
-      color: #114fff;
+    .edit {
+      border: 1px solid #dbdbdb;
+      font-size: 1.375rem;
       width: 100%;
-      height: 24px;
-      border-radius: 15px;
-      font-family: "NotoSansCJKkr-Medium";
-      font-size: 12px;
+      resize: none;
+      box-sizing: border-box;
+      border-radius: 5px;
+      height: 60px;
+      padding: 10px;
+      font-family: "NotoSansCJKkr-DemiLight";
+      font-size: 11px;
+      &::placeholder {
+        color: #b5b5b5;
+      }
     }
-    .noti {
-      color: #333;
-      font-size: 14px;
-      text-align: center;
-    }
-    .reply_list {
-      margin-top: 15px;
-      margin-left: 10%;
-      ::v-deep .comment_header {
-        .name {
-          margin-left: 0;
+    .btn_wrap {
+      margin-top: 10px;
+
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
+      }
+      .blue_btn {
+        width: 48%;
+      }
+      .left {
+        float: left;
+      }
+      .right {
+        float: right;
+        button {
+          background: white;
+          color: #114fff;
         }
       }
     }
   }
+  .more_view_btn {
+    margin-top: 7%;
+    border: 2px solid #114fff;
+    color: #114fff;
+    width: 100%;
+    height: 24px;
+    border-radius: 15px;
+    font-family: "NotoSansCJKkr-Medium";
+    font-size: 12px;
+  }
+  .noti {
+    color: #333;
+    font-size: 14px;
+    text-align: center;
+  }
+  .reply_list {
+    margin-top: 15px;
+    margin-left: 10%;
+    ::v-deep .comment_header {
+      .name {
+        margin-left: 0;
+      }
+    }
+  }
+}
 </style>

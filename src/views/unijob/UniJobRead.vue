@@ -152,7 +152,7 @@
           .then((result) => {
             console.log(result);
             this.$router.push({
-              path: `/unijob/${this.$route.query.type}`,
+              path: `/uniJob/${this.$route.query.type}`,
               query: {
                 pageCurrent: 1,
                 keyword: "",

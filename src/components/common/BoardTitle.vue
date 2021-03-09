@@ -1,7 +1,7 @@
 <template>
   <div class="title_wrap">
     <slot name="header">
-      <span>강좌명</span>
+      <span>강의명</span>
       <span>제목</span>
     </slot>
   </div>

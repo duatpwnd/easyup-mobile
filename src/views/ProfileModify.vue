@@ -83,88 +83,80 @@
     </form>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
-
-  export default {
-    components: { BlueBtn },
+  import { mapState } from "vuex";
+  @Component({
+    components: {
+      BlueBtn,
+    },
     computed: {
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
       }),
     },
-    data() {
-      return {
-        phone: "",
-        current_password: "",
-        new_password: "",
-        new_password_confirm: "",
-        file_obj: "",
-      };
-    },
-    methods: {
-      validationCheck() {
-        return new Promise((resolve, reject) => {
-          if (this.new_password != this.new_password_confirm) {
-            this.$noticeMessage("비밀 번호가 서로 다릅니다.");
-          } else {
-            resolve("success");
+  })
+  export default class ProfileModify extends Vue {
+    $refs!: {
+      upload: HTMLFormElement;
+    };
+    userStore_userinfo!: { [key: string]: any };
+    phone = "";
+    current_password = "";
+    new_password = "";
+    new_password_confirm = "";
+    file_obj: { [key: string]: any } = {};
+    validationCheck(): Promise<string> {
+      return new Promise((resolve, reject) => {
+        if (this.new_password != this.new_password_confirm) {
+          this.$noticeMessage("비밀 번호가 서로 다릅니다.");
+        } else {
+          resolve("success");
+        }
+      });
+    }
+    fileSelect(): void {
+      const selected_file = this.$refs.upload.files[0];
+      this.file_obj = selected_file;
+    }
+    editProfile(): void {
+      this.validationCheck().then((result) => {
+        if (result == "success") {
+          const formData = new FormData();
+          const data = {
+            action: "edit_profile",
+            phone: this.phone,
+            password0: this.current_password,
+            new_password: this.new_password,
+            new_password_confirm: this.new_password_confirm,
+            picture: this.file_obj,
+          };
+          for (let key in data) {
+            formData.append(key, data[key]);
           }
-        });
-      },
-      fileSelect() {
-        const selected_file = this.$refs.upload.files[0];
-        this.file_obj = selected_file;
-      },
-      editProfile() {
-        this.validationCheck().then((result) => {
-          if (result == "success") {
-            const formData = new FormData();
-            const data = {
-              action: "edit_profile",
-              phone: this.phone,
-              password0: this.current_password,
-              new_password: this.new_password,
-              new_password_confirm: this.new_password_confirm,
-              picture: this.file_obj,
-            };
-            for (var key in data) {
-              formData.append(key, data[key]);
-            }
-
-            this.$axios
-              .post(this.$ApiUrl.mobileAPI_v1, formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                  Authorization: this.$cookies.get("user_info")
-                    ? "Bearer " + this.$cookies.get("user_info").access_token
-                    : null,
-                },
-              })
-              .then((result) => {
-                console.log(result);
-                if (result.data.error) {
-                  this.$noticeMessage(result.data.message);
-                } else {
-                  // this.$cookies.set("user_info", result.data.data[0]);
-                  // this.$store.commit(
-                  //   "userStore/loginToken",
-                  //   result.data.data[0]
-                  // );
-                  this.$noticeMessage("새 프로필이 저장되었습니다.");
-                }
-              });
-          }
-        });
-      },
-    },
+          this.$axios
+            .post(this.$ApiUrl.mobileAPI_v1, formData)
+            .then((result) => {
+              console.log(result);
+              if (result.data.error) {
+                this.$noticeMessage(result.data.message);
+              } else {
+                // this.$cookies.set("user_info", result.data.data[0]);
+                // this.$store.commit(
+                //   "userStore/loginToken",
+                //   result.data.data[0]
+                // );
+                this.$noticeMessage("새 프로필이 저장되었습니다.");
+              }
+            });
+        }
+      });
+    }
     created() {
-      console.log(this.userStore_userinfo.info);
-      this.unijob_id = this.userStore_userinfo.info.unijob_id;
       this.phone = this.userStore_userinfo.info.phone;
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   #profile_modify {

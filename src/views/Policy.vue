@@ -1,63 +1,62 @@
 <template>
-  <div>
-    <span
-      class="tab"
-      v-for="(tab, index) in types"
-      :class="{ active: index == isActive }"
-      :key="index"
-      @click="toggle(tab.target, index)"
-      ><span class="active_bar"></span>{{ tab.name }}</span
-    >
-    <keep-alive>
-      <component v-bind:is="type"></component>
-    </keep-alive>
+  <div class="policy">
+    <slot name="tab">
+      <span
+        class="tab"
+        v-for="(tab, index) in types"
+        :class="{ active: index == isActive }"
+        :key="index"
+        @click="toggle(tab.target, index)"
+        ><span class="active_bar"></span>{{ tab.name }}</span
+      >
+      <keep-alive>
+        <component v-bind:is="type"></component>
+      </keep-alive>
+    </slot>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Terms from "@/components/policy/Terms.vue";
   import Privacy from "@/components/policy/Privacy.vue";
-  export default {
+  import { Vue, Component, Watch } from "vue-property-decorator";
+  @Component({
     components: { Terms, Privacy },
-    data() {
-      return {
-        isActive: 0,
-        type: "Terms",
-        types: [
-          { name: "이용약관", target: "Terms" },
-          { name: "개인정보 취급방침", target: "Privacy" },
-        ],
-      };
-    },
-    methods: {
-      toggle(type, index) {
-        this.$router
-          .push({
-            name: "policy",
-            query: {
-              action: type,
-              active: index,
-            },
-          })
-          .catch(() => {});
-      },
-      compSet() {
-        this.type = this.$route.query.action;
-        this.isActive = this.$route.query.active;
-      },
-    },
-    watch: {
-      $route(to, from) {
-        this.compSet();
-      },
-    },
+  })
+  export default class Policy extends Vue {
+    @Watch("$route")
+    onPropertyChanged(current: object, previous: object) {
+      this.compSet();
+    }
+    isActive = 0;
+    type = "Terms";
+    types = [
+      { name: "이용약관", target: "Terms" },
+      { name: "개인정보 취급방침", target: "Privacy" },
+    ];
+
+    toggle(type, index) {
+      this.$router
+        .push({
+          name: "policy",
+          query: {
+            action: type,
+            active: index,
+          },
+        })
+        .catch(() => {});
+    }
+    compSet() {
+      this.type = String(this.$route.query.action);
+      this.isActive = Number(this.$route.query.active);
+    }
     created() {
       this.compSet();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .tab {
-    font-size: 2rem;
+    font-size: 18px;
     font-weight: 600;
     width: 50%;
     display: inline-block;

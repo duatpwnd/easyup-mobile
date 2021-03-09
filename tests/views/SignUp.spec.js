@@ -15,7 +15,7 @@ describe("SignUp.vue", () => {
     const router = new VueRouter({
       mode: "history",
       base: process.env.BASE_URL,
-      duplicateNavigationPolicy: "ignore",
+      duplicateNavigationPolicy: "ignore"
     });
     wrapper = shallowMount(SignUp, { router });
   });
@@ -55,7 +55,7 @@ describe("SignUp.vue", () => {
       email: "duatpwnd1@naver.com",
       pw1: "123",
       pw2: "123",
-      agree: true,
+      agree: true
     });
     const lastname = wrapper.vm.lastname;
     const firstname = wrapper.vm.firstname;

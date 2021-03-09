@@ -104,6 +104,7 @@
             path: url,
             query: {
               id: id,
+              view: this.$route.query.view,
             },
           })
           .catch(() => {});
@@ -126,6 +127,7 @@
                     pageCurrent: num,
                     order: order,
                     keyword: keyword,
+                    view: this.$route.query.view,
                   },
                 })
                 .catch(() => {});
@@ -146,13 +148,15 @@
   };
 </script>
 <style scoped lang="scss">
-  .search_area {
-    margin: 3.5% 0;
-  }
   .no_result {
     text-align: center;
     font-size: 16px;
     padding: 15px;
+  }
+  .search_area {
+    .search {
+      margin-top: 0;
+    }
   }
   .list {
     &:nth-child(even) {

@@ -27,14 +27,10 @@ h. 위 항에서 정의되지 않은 약관 상의 용어의 의미는 일반적
 </pre
   >
 </template>
-<script>
-  export default {
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
+  @Component
+  export default class Terms extends Vue {}
 </script>
 <style scoped lang="scss">
   pre {

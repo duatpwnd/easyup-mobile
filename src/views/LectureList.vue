@@ -2,9 +2,10 @@
   <div id="lec_list">
     <div class="breadcrumb">
       <span v-if="$route.query.title || $route.query.tag"
-        >강의 >{{ $route.query.title }}{{ $route.query.tag }}</span
+        >{{ $route.meta.title }} > {{ $route.query.title
+        }}{{ $route.query.tag }}</span
       >
-      <span v-else>강의 > 전체</span>
+      <span v-else>{{ $route.meta.title }} > 전체</span>
     </div>
     <Search>
       <select
@@ -30,32 +31,43 @@
         @click="getList(1, 'type_date', keyword)"
       ></button>
     </Search>
-
     <h2 class="total">
       전체 검색 총<span class="count">{{ category_list.total_count }}</span
       >건
     </h2>
     <div class="lec_list_wrap">
-      <div class="li" v-for="(list, index) in category_list.list" :key="index">
+      <div
+        class="li"
+        v-for="(list, index) in category_list.list"
+        :key="index"
+        :style="[{ 'margin-top': index > 1 ? '24px' : 0 }]"
+        @click="
+          $router.push({
+            path: $route.name == 'course' ? '/courseDetail' : '/lecDetail',
+            query: {
+              id: list.id,
+            },
+          })
+        "
+      >
         <LecItem>
-          <router-link
-            class="lec_list"
-            slot="router"
-            :to="{
-              path: $route.name == 'course' ? '/courseDetail' : '/lecDetail',
-              query: {
-                id: list.id,
-              },
-            }"
-          >
-            <img :src="list.thumbnail" alt="이지업" title="이지업" />
-          </router-link>
+          <span class="lec_list" slot="router">
+            <img :src="list.thumbnail" :alt="list.title" :title="list.title" />
+          </span>
           <h4 slot="teacher">{{ list.teacher }}</h4>
-          <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+          <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
           <span slot="grade" class="score">{{ list.rating }}</span>
-          <h1 class="free" slot="free" v-if="list.is_free == 'Y'">
+          <h1 class="free" slot="free" v-if="list.price.is_free">
             FREE
           </h1>
+          <span class="price" v-else slot="free">
+            <del
+              class="original"
+              v-if="list.price.format_original != list.price.format_final"
+              >{{ list.price.format_original }}</del
+            >
+            <span class="final">{{ list.price.format_final }}</span>
+          </span>
         </LecItem>
       </div>
     </div>
@@ -83,7 +95,6 @@
 </template>
 <script>
   import Pagination from "@/components/common/Pagination.vue";
-
   import Search from "@/components/common/Search.vue";
   import LecItem from "@/components/common/LectureItem.vue";
   export default {
@@ -113,7 +124,10 @@
             : null,
           tag: this.$route.query.tag,
         };
-        console.log(data);
+        this.order = order;
+        this.keyword = keyword;
+        this.current = num;
+
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
@@ -126,15 +140,11 @@
                   pageCurrent: num,
                   order: order,
                   keyword: keyword,
-
                   category_code: this.$route.query.category_code,
                   tag: this.$route.query.tag,
                 },
               })
               .catch(() => {});
-            this.order = order;
-            this.keyword = keyword;
-            this.current = num;
           });
       },
     },
@@ -182,7 +192,7 @@
       }
     }
     .lec_list_wrap {
-      margin-top: 3%;
+      margin-top: 24px;
       &:after {
         display: block;
         clear: both;
@@ -191,7 +201,6 @@
       .li {
         float: left;
         width: 48.782%;
-        margin-top: 8px;
         &:nth-child(odd) {
           margin-right: 2.436%;
         }

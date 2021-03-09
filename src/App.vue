@@ -1,5 +1,6 @@
 <template>
   <div id="app" :class="$mq">
+    <div class="mask" v-if="toggleStore_mask" @click="removeMask()"></div>
     <NoticeModal v-if="toggleStore_noticeModal"></NoticeModal>
     <Header @click.native="$loginModalClose()"></Header>
     <transition name="fade" mode="out-in">
@@ -33,7 +34,7 @@
   import GnbBottomMenu from "@/components/layout/GnbBottomMenu.vue";
   // import ProfileMsgTab from "@/components/layout/ProfileMsgTab.vue";
   import NoticeModal from "@/components/common/NoticeModal.vue";
-  import { mapState, mapMutations } from "vuex";
+  import { mapState } from "vuex";
   export default {
     components: {
       NoticeModal,
@@ -46,6 +47,7 @@
     },
     computed: {
       ...mapState("toggleStore", {
+        toggleStore_mask: "mask",
         toggleStore_isFooter: "isFooter",
         toggleStore_profileMsgTab: "ProfileMsgTab",
         toggleStore_gnbBottomMenu: "GnbBottomMenu",
@@ -59,10 +61,15 @@
     data() {
       return {};
     },
-    activated() {
-      console.log("acti");
+    methods: {
+      removeMask() {
+        this.$store.commit("toggleStore/Toggle", {
+          mask: false,
+          more_view: false,
+          login_modal: false,
+        });
+      },
     },
-    methods: {},
     mounted() {
       // 가로모드 세로모드 감지
       window.addEventListener("resize", function() {
@@ -114,6 +121,18 @@
     margin: 0 auto;
     position: relative;
     min-height: 100%;
+    .mask {
+      position: fixed;
+      max-width: 720px;
+      top: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 5;
+    }
   }
   .router-view {
     position: relative;

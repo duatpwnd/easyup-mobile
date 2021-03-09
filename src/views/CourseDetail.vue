@@ -1,106 +1,205 @@
 <template>
-  <div id="course_detail" v-if="detail">
+  <div id="course_detail" v-if="Object.keys(detail).length > 0">
+    <PurchaseApply
+      v-if="toggleStore_purchase_apply"
+      @goToOrder="
+        $router.push({
+          path: 'order',
+          query: {
+            type: 'session',
+            cart_id: $route.query.id,
+          },
+        })
+      "
+      :lecture_info="detail"
+    ></PurchaseApply>
+    <GoToCart
+      @goToCart="$router.push('cart')"
+      v-if="toggleStore_cartModal"
+    ></GoToCart>
     <img
       :src="detail.course_image"
       alt="파이썬 코딩 기본편"
       title="파이썬 코딩 기본편"
     />
-    <div id="tag_wrap">
-      <slot name="title_wrap">
-        <h3 class="sub_title">{{ detail.category }}</h3>
-        <h2 class="title">{{ detail.title }}!</h2>
-        <div class="tag_list">
-          <router-link
-            class="tag"
-            :to="{
-              path: '/course',
-              query: {
-                action: 'get_session_list',
-                pageCurrent: 1,
-                order: 'type_date',
-                keyword: '',
-                tag: list.tag.replace('#', ''),
-              },
-            }"
-            v-for="(list, index) in detail.tags"
-            :key="index"
-          >
-            {{ list.tag }}</router-link
-          >
-        </div>
-      </slot>
-    </div>
     <div class="update_noti">
       <span>{{ detail.creation_date }}</span>
     </div>
-    <div id="subscribe">
-      <div class="subscribe_wrap">
-        <h2>무료</h2>
-        <BlueBtn v-if="is_subscribe">
+    <section class="section1">
+      <div class="lecture_title">
+        <h3 class="sub_title" v-html="detail.category"></h3>
+        <h2 class="title" v-html="detail.title"></h2>
+      </div>
+      <div class="star_rating">
+        <StarRating
+          :rating="detail.ranking"
+          :star-size="16"
+          :read-only="true"
+          :increment="0.01"
+          :star-points="[
+            23,
+            2,
+            14,
+            17,
+            0,
+            19,
+            10,
+            34,
+            7,
+            50,
+            23,
+            43,
+            38,
+            50,
+            36,
+            34,
+            46,
+            19,
+            31,
+            17,
+          ]"
+        ></StarRating>
+      </div>
+      <h2 class="free" v-if="detail.price.is_free">무료</h2>
+      <div class="price" v-else>
+        <del
+          class="original"
+          v-if="detail.price.format_original != detail.price.format_final"
+          >{{ detail.price.format_original }}</del
+        >
+        <span class="final">{{ detail.price.format_final }}원</span>
+      </div>
+      <div id="tag_wrap">
+        <slot name="title_wrap">
+          <div class="tag_list">
+            <router-link
+              class="tag"
+              :to="{
+                path: '/course',
+                query: {
+                  action: 'get_session_list',
+                  pageCurrent: 1,
+                  order: 'type_date',
+                  keyword: '',
+                  tag: list.tag.replace('#', ''),
+                },
+              }"
+              v-for="(list, index) in detail.tags"
+              :key="index"
+            >
+              {{ list.tag }}</router-link
+            >
+          </div>
+        </slot>
+      </div>
+      <div id="subscribe">
+        <div>
+          <div class="subscribe_wrap">
+            <BlueBtn
+              v-if="
+                is_subscribe || (is_subscribe == false && detail.is_teacher)
+              "
+            >
+              <button
+                ref="subs_btn"
+                class="active_subscribe"
+                slot="blue_btn"
+                @click="goToPath()"
+              >
+                코스 보러가기
+              </button>
+            </BlueBtn>
+
+            <BlueBtn v-else>
+              <button ref="subs_btn" slot="blue_btn" @click="isPurchase()">
+                구매하기
+              </button>
+            </BlueBtn>
+          </div>
+        </div>
+        <div class="fixed_subs_btn" v-if="subscribe_btn">
           <button
-            ref="subs_btn"
+            v-if="is_subscribe || (is_subscribe == false && detail.is_teacher)"
             class="active_subscribe"
-            slot="blue_btn"
             @click="goToPath()"
           >
-            구독중
+            코스 보러가기
           </button>
-        </BlueBtn>
-        <BlueBtn v-else>
-          <button ref="subs_btn" slot="blue_btn" @click="subscribe()">
-            구독하기
-          </button>
-        </BlueBtn>
-        <div>
-          <span class="total_lec"
-            >총<span class="color">{{ detail.course_list.length }}</span
-            >강</span
-          >
+
+          <div v-else>
+            <button class="add_btn" @click="cartAdd()">코스담기</button>
+            <button
+              class="share_btn"
+              v-clipboard="url"
+              v-clipboard:success="share"
+              @click="share()"
+            >
+              공유하기
+            </button>
+            <button class="purchase_btn" @click="isPurchase()">
+              구매하기
+            </button>
+          </div>
         </div>
-        <div>
-          <StarRating
-            :rating="detail.ranking"
-            :star-size="16"
-            :read-only="true"
-            :increment="0.01"
-            :star-points="[
-              23,
-              2,
-              14,
-              17,
-              0,
-              19,
-              10,
-              34,
-              7,
-              50,
-              23,
-              43,
-              38,
-              50,
-              36,
-              34,
-              46,
-              19,
-              31,
-              17,
-            ]"
-          ></StarRating>
-        </div>
-        <span class="name">{{ detail.teachers }}</span>
       </div>
-      <button class="fixed_subs_btn" v-if="subscribe_btn">
-        <span v-if="is_subscribe" class="active_subscribe" @click="goToPath()"
-          >구독중</span
+      <div class="add_share">
+        <BlueBtn
+          class="add"
+          @click.native="cartAdd()"
+          v-if="
+            detail.price.is_free == false &&
+              is_subscribe == false &&
+              detail.is_teacher == false
+          "
         >
-        <span v-else @click="subscribe()">구독하기</span>
-      </button>
-    </div>
+          <button slot="blue_btn">
+            코스담기
+          </button>
+        </BlueBtn>
+        <BlueBtn
+          class="share"
+          :style="[
+            detail.price.is_free == false &&
+            is_subscribe == false &&
+            detail.is_teacher == false
+              ? { 'margin-left': '2%' }
+              : { 'margin-left': 0, width: '100%' },
+          ]"
+        >
+          <button slot="blue_btn" v-clipboard="url" v-clipboard:success="share">
+            공유하기
+          </button>
+        </BlueBtn>
+      </div>
+    </section>
+    <section class="section2">
+      <div class="user_intro">
+        <span class="total_lec"
+          ><span class="color">{{ detail.course_list.length }}</span
+          >개 클래스</span
+        >
+        <div
+          class="ol_list"
+          v-for="(list, index) in detail.course_list"
+          :key="index"
+        >
+          <span v-html="list.title"></span>
+          <div class="limit-date">
+            <span>{{ list.limit }}</span>
+          </div>
+        </div>
+      </div>
+      <span class="name">{{ detail.teachers }}</span>
+    </section>
+    <section class="section3">
+      <h2 class="title">코스개요</h2>
+      <div class="description_contents" v-html="detail.description"></div>
+    </section>
     <div class="course_info">
       <h2 class="course_list">
-        <span>코스 별 강좌 안내</span>
+        <span>코스 별 강의 안내</span>
         <span class="all_lecture_num"
-          >총 {{ detail.course_list.length }}강</span
+          >{{ detail.course_list.length }}개 클래스</span
         >
       </h2>
       <div
@@ -108,25 +207,28 @@
         v-for="(list, index) in detail.course_list"
         :key="index"
       >
-        <h2 class="title">{{ index + 1 }}강.</h2>
+        <h2 class="title" v-if="index + 1 < 10">STEP 0{{ index + 1 }}.</h2>
+        <h2 class="title" v-else>STEP {{ index + 1 }}.</h2>
         <CourseItem>
           <span class="lec_list" slot="router">
             <img :src="list.thumbnail" alt="이지업" title="이지업" />
           </span>
           <h4 slot="teacher">{{ list.teacher }}</h4>
-          <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+          <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
           <span slot="grade" class="score">{{ list.ranking }}</span>
           <h1 class="free" slot="free" v-if="list.is_free == 'Y'">
             FREE
           </h1>
         </CourseItem>
         <div class="btn_wrap">
-          <BlueBtn v-if="index > 0">
+          <BlueBtn v-if="list.chk_previous == 1">
             <button slot="blue_btn">
               선행과정 필수
             </button>
           </BlueBtn>
-          <BlueBtn :class="[index == 0 ? 'confirm_btn' : 'right_btn']">
+          <BlueBtn
+            :class="[list.chk_previous == 0 ? 'confirm_btn' : 'right_btn']"
+          >
             <router-link
               slot="blue_btn"
               tag="button"
@@ -222,25 +324,30 @@
 </template>
 <script>
   import StarRating from "vue-star-rating";
+  import GoToCart from "@/components/modal/GotoCart.vue";
   import CommentWrap from "@/components/lecture_detail/CommentWrap";
   import ProgressBar from "@/components/common/ProgressBar.vue";
   import CourseItem from "@/components/common/LectureItem.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import mixin from "@/views/mixins/lec_course_detail.js";
+  import PurchaseApply from "@/components/modal/PurchaseApply.vue";
   import { mapState, mapMutations } from "vuex";
   export default {
     mixins: [mixin],
     components: {
+      GoToCart,
       ProgressBar,
-
       StarRating,
       CommentWrap,
       BlueBtn,
       CourseItem,
+      PurchaseApply,
     },
     computed: {
       ...mapState("toggleStore", {
+        toggleStore_cartModal: "cart_modal",
         toggleStore_score_info: "score_info",
+        toggleStore_purchase_apply: "purchase_apply",
       }),
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
@@ -250,6 +357,11 @@
       return {};
     },
     methods: {
+      isPurchase() {
+        this.$store.commit("toggleStore/Toggle", {
+          purchase_apply: true,
+        });
+      },
       goToPath() {
         this.$router.push({
           path: "/myClass/course",
@@ -257,6 +369,12 @@
             keyword: "",
             pageCurrent: 1,
             order: "",
+            view:
+              this.$route.query.view === undefined
+                ? this.userStore_userinfo.info.status == 1
+                  ? "teacher"
+                  : "student"
+                : this.$route.query.view,
           },
         });
       },
@@ -283,46 +401,201 @@
   };
 </script>
 <style scoped lang="scss">
-  #tag_wrap {
-    padding: 4.445%;
-    .sub_title {
-      font-size: 1.375rem;
-      color: #999999;
-    }
-    .title {
-      font-size: 2rem;
-      color: #333333;
-    }
-    .tag_list {
-      margin-top: 5px;
-      line-height: 35px;
-      .tag {
-        color: #a4a4a4;
-        border: 2px solid #757575;
-        border-radius: 20px;
-        height: 24px;
-        padding: 0 10px;
-        display: inline-block;
-        margin-right: 0.763%;
-        font-size: 12px;
-        text-align: center;
-        line-height: 24px;
-        font-family: unset;
-      }
-    }
-  }
   .update_noti {
     padding: 15px 4.445%;
     background: #f8f8f8;
     span {
       color: #999999;
-      font-size: 1.25rem;
+      font-size: 14px;
     }
   }
-  #subscribe {
+  .section1 {
     padding: 4.445%;
+    padding-bottom: 0;
+    border-bottom: 4px solid #f8f8f8;
+    .lecture_title {
+      .sub_title {
+        font-size: 14px;
+        color: #999999;
+      }
+      .title {
+        font-size: 18px;
+        color: #333333;
+      }
+    }
+    .star_rating {
+      margin: 5px 0;
+      ::v-deep .vue-star-rating {
+        display: unset;
+        .vue-star-rating-rating-text {
+          font-size: 16px;
+          color: #333333;
+          margin-left: 4px;
+          display: inline-block;
+          vertical-align: 1.5px;
+        }
+      }
+    }
+    .price {
+      span {
+        font-weight: bold;
+      }
+      .original {
+        font-size: 14px;
+        color: #bdbdbd;
+      }
+      .final {
+        margin-left: 5px;
+        font-size: 18px;
+        color: #114fff;
+      }
+    }
+    #tag_wrap {
+      .tag_list {
+        margin-top: 5px;
+        line-height: 35px;
+        .tag {
+          color: #a4a4a4;
+          border: 2px solid #757575;
+          border-radius: 20px;
+          height: 24px;
+          padding: 0 10px;
+          display: inline-block;
+          margin-right: 0.763%;
+          font-size: 12px;
+          text-align: center;
+          line-height: 24px;
+          font-family: unset;
+        }
+      }
+    }
+    #subscribe {
+      .subscribe_wrap {
+        .blue_btn {
+          ::v-deep button {
+            border-radius: 10px;
+            margin: 10px 0;
+            height: 40px;
+            line-height: 32px;
+            font-size: 18px;
+          }
+        }
+        .active_subscribe {
+          background-color: #ff114a;
+          border-color: #ff114a;
+        }
+        .total_lec {
+          font-size: 1.375rem;
+          .color {
+            color: #114fff;
+          }
+        }
+        .name {
+          font-size: 1.375rem;
+          color: #666666;
+        }
+
+        .score {
+          font-size: 1.375rem;
+          color: #333333;
+          vertical-align: middle;
+          margin-left: 2%;
+        }
+      }
+      .fixed_subs_btn {
+        position: fixed;
+        bottom: 0;
+        background: #114fff;
+        width: 100%;
+        max-width: 720px;
+        z-index: 2;
+        left: 0;
+        right: 0;
+        margin: auto;
+        .add_btn,
+        .share_btn {
+          white-space: nowrap;
+          text-indent: 100%;
+          overflow: hidden;
+          height: 64px;
+          width: 20%;
+        }
+        .purchase_btn {
+          background: transparent;
+          width: 60%;
+          font-family: "NotoSansCJKkr-Medium";
+          font-size: 20px;
+          vertical-align: middle;
+          color: #ffffff;
+          text-align: center;
+        }
+        .add_btn {
+          border-right: 1px solid #ccc;
+          background: #333333
+            url("~@/assets/images/lec_detail/fixed_lecture_add_ico.png")
+            no-repeat center / 28px 27px;
+        }
+        .share_btn {
+          background: #333333
+            url("~@/assets/images/lec_detail/fixed_share_ico.png") no-repeat
+            center / 28px 27px;
+        }
+        .active_subscribe {
+          background-color: #ff114a;
+          border-color: #ff114a;
+          width: 100%;
+          font-size: 20px;
+          color: white;
+          height: 64px;
+        }
+      }
+    }
+  }
+  .section2 {
+    padding: 4.445%;
+    border-bottom: 4px solid #f8f8f8;
+    .user_intro {
+      font-size: 14px;
+      .total_lec {
+        margin-bottom: 7px;
+        display: block;
+      }
+      .ol_list {
+        .limit-date {
+          color: #999999;
+        }
+      }
+    }
+    .name {
+      font-size: 14px;
+    }
+  }
+  .section3 {
+    padding: 4.445%;
+    border-bottom: 4px solid #f8f8f8;
+    .title {
+      font-size: 18px;
+      display: inline;
+      background: linear-gradient(#ffffff 60%, rgba(94, 244, 255, 0.34) 40%);
+    }
+    .description_contents {
+      margin-top: 10px;
+      color: #666666;
+      font-size: 14px;
+      text-align: justify;
+      font-family: "NotoSansCJKkr-Regular";
+    }
+  }
+  .add_share {
     .blue_btn {
+      display: inline-block;
+      width: 49%;
+
       ::v-deep button {
+        padding-left: 20px;
+        background: white;
+        border: 2px solid black;
+        color: black;
         border-radius: 10px;
         margin: 10px 0;
         height: 40px;
@@ -330,64 +603,24 @@
         font-size: 18px;
       }
     }
-    .active_subscribe {
-      background-color: #ff114a;
-      border-color: #ff114a;
-    }
-    ::v-deep .vue-star-rating {
-      display: unset;
-      .vue-star-rating-rating-text {
-        font-size: 15px;
-        color: #333333;
-        margin-left: 4px;
-        display: inline-block;
-        vertical-align: 1.5px;
+    .add {
+      ::v-deep button {
+        background: url("~@/assets/images/lec_detail/lecture_add_ico.png")
+          no-repeat 14px center / 28px 27px;
       }
     }
-    .subscribe_wrap {
-      .total_lec {
-        font-size: 1.375rem;
-        .color {
-          color: #114fff;
-        }
-      }
-      .name {
-        font-size: 1.375rem;
-        color: #666666;
-      }
-
-      .score {
-        font-size: 1.375rem;
-        color: #333333;
-        vertical-align: middle;
-        margin-left: 2%;
-      }
-    }
-    .fixed_subs_btn {
-      position: fixed;
-      bottom: 0;
-      background: #114fff;
-      color: #ffffff;
-      font-family: "NotoSansCJKkr-Medium";
-      font-size: 20px;
-      width: 100%;
-      max-width: 720px;
-      z-index: 2;
-      left: 0;
-      right: 0;
-      margin: auto;
-      span {
-        width: 100%;
-        display: block;
-        height: 60px;
-        line-height: 60px;
+    .share {
+      margin-left: 2%;
+      ::v-deep button {
+        background: url("~@/assets/images/lec_detail/share_ico.png") no-repeat
+          no-repeat 14px center / 28px 27px;
       }
     }
   }
   .course_info {
     padding: 4.445%;
     .course_list {
-      font-size: 2rem;
+      font-size: 18px;
       position: relative;
       .all_lecture_num {
         font-size: 14px;
@@ -403,14 +636,9 @@
       // width: 48.782%;
       margin-top: 5%;
       .title {
-        font-size: 1.6875rem;
+        font-size: 18px;
       }
       ::v-deep .item {
-        .lec_list {
-          img {
-            width: 48.782%;
-          }
-        }
         h4 {
           font-size: 14px;
           margin-top: 5px;
@@ -446,6 +674,7 @@
           }
         }
         .confirm_btn {
+          width: 100%;
           ::v-deep button {
             background: white;
             color: #114fff;
@@ -458,11 +687,10 @@
     margin-top: 30px;
     padding: 0 4.445%;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
     }
     .section_wrap {
       margin-top: 10px;
-
       .left_sec {
         width: 41%;
         text-align: center;

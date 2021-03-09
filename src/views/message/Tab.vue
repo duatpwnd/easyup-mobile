@@ -19,7 +19,17 @@
     </Search>
     <div class="btn_wrap">
       <BlueBtn class="left">
-        <button slot="blue_btn" @click="$router.push('/msg/newMessage')">
+        <button
+          slot="blue_btn"
+          @click="
+            $router.push({
+              path: '/msg/newMessage',
+              query: {
+                view: $route.query.view,
+              },
+            })
+          "
+        >
           새메시지
         </button>
       </BlueBtn>
@@ -152,6 +162,7 @@
             query: {
               type: this.$route.name,
               id: id,
+              view: this.$route.query.view,
             },
           })
           .catch(() => {});
@@ -196,6 +207,7 @@
                 query: {
                   pageCurrent: num,
                   keyword: keyword,
+                  view: this.$route.query.view,
                 },
               })
               .catch(() => {});

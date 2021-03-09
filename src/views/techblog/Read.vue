@@ -149,8 +149,6 @@
         margin-top: 10px;
         font-size: 1.25rem;
         color: #666666;
-        white-space: pre-wrap;
-        word-break: break-all;
       }
     }
     .comment_title {

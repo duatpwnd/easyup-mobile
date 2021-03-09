@@ -2,7 +2,7 @@
   <div>
     <slot name="title"> </slot>
     <div class="row">
-      <span class="left">강좌 선택</span>
+      <span class="left">강의 선택</span>
       <select class="select" name="" id="">
         <option value="">전체</option>
       </select>

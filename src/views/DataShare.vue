@@ -9,6 +9,7 @@
           keyword: '',
           pageCurrent: 1,
           order: 'all',
+          view: this.$route.query.view,
         },
       }"
       ><span class="active_bar"></span>공유한 파일
@@ -21,6 +22,7 @@
           keyword: '',
           pageCurrent: 1,
           order: 'all',
+          view: this.$route.query.view,
         },
       }"
       ><span class="active_bar"></span>공유받은 파일</router-link
@@ -28,18 +30,22 @@
     <router-view></router-view>
   </div>
 </template>
-<script></script>
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({})
+  export default class DataShare extends Vue {}
+</script>
 <style scoped lang="scss">
   .file_wrap {
-    margin-top: 2%;
     padding-bottom: 65px;
+    margin-top: 13px;
     h2 {
-      font-size: 2rem;
-      padding: 0 4.445%;
+      font-size: 18px;
+      padding: 0 16px;
       margin-bottom: 13px;
     }
     .tab {
-      font-size: 2rem;
+      font-size: 18px;
       font-weight: 600;
       width: 50%;
       display: inline-block;

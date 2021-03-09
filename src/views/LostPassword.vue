@@ -23,47 +23,44 @@
     </form>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
   import BlueBtn from "@/components/common/BaseButton.vue";
-
-  export default {
+  @Component({
     components: { BlueBtn },
-    data() {
-      return {
-        email: "",
+  })
+  export default class FindPw extends Vue {
+    email = "";
+    send() {
+      const data = {
+        action: "reset_password_send_mail",
+        email: this.email,
       };
-    },
-    methods: {
-      send() {
-        const data = {
-          action: "reset_password_send_mail",
-          email: this.email,
-        };
-        if (this.email.trim().length == 0) {
-          this.$noticeMessage("이메일 주소를 입력해주세요.");
-        } else {
-          this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-            .then((result) => {
-              console.log("이메일", result);
-              this.$noticeMessage(result.data.data.msg);
-              this.$router.push("/");
-            });
-        }
-      },
-    },
-  };
+      if (this.email.trim().length == 0) {
+        this.$noticeMessage("이메일 주소를 입력해주세요.");
+      } else {
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log("이메일", result);
+            this.$noticeMessage(result.data.data.msg);
+            this.$router.push("/");
+          });
+      }
+    }
+  }
 </script>
 <style scoped lang="scss">
   #findByEmail {
-    padding: 4.445%;
+    padding: 16px;
+    padding-top: 0;
+    margin-top: 13px;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
+      margin-bottom: 13px;
       color: #333333;
     }
     .form {
-      margin-top: 4%;
-
       .blue_btn {
         margin-top: 5%;
         width: calc(100% - 35%);
@@ -77,7 +74,7 @@
         clear: both;
 
         input {
-          font-size: 1.5rem;
+          font-size: 16px;
           font-family: "NotoSansCJKkr-Regular";
           width: calc(100% - 35%);
           box-sizing: border-box;
@@ -90,7 +87,7 @@
         .dt {
           width: 35%;
           display: inline-block;
-          font-size: 1.5rem;
+          font-size: 16px;
           font-family: "NotoSansCJKkr-Regular";
           .required {
             color: #114fff;

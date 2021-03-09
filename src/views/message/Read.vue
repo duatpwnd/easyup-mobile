@@ -40,6 +40,7 @@
               query: {
                 pageCurrent: 1,
                 keyword: '',
+                view: $route.query.view,
               },
             })
           "
@@ -70,12 +71,14 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Component, Vue } from "vue-property-decorator";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
-  import { mapState, mapMutations } from "vuex";
-
+  import { mapState } from "vuex";
   import BlueBtn from "@/components/common/BaseButton.vue";
-  export default {
+  import { ResultData } from "@/assets/js/util";
+
+  @Component({
     components: {
       BlueBtn,
       ConfirmModal,
@@ -85,85 +88,84 @@
         toggleStore_confirmModal: "confirm_modal",
       }),
     },
-    data() {
-      return {
-        view: "",
+  })
+  export default class MsgRead extends Vue {
+    view = "";
+
+    download(filename: string, file_id: number): void {
+      const data = {
+        action: "download_message_attach",
+        type: this.$route.query.type,
+        file_id: file_id,
       };
-    },
-    methods: {
-      download(filename, file_id) {
-        const data = {
-          action: "download_message_attach",
-          type: this.$route.query.type,
-          file_id: file_id,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, data, {
-            responseType: "blob",
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, data, {
+          responseType: "blob",
+          headers: {
+            Authorization: this.$cookies.get("user_info")
+              ? "Bearer " + this.$cookies.get("user_info").access_token
+              : null,
+          },
+        })
+        .then((result: ResultData) => {
+          // 로컬서버에서는 작동하지 않음
+          if (window.navigator.msSaveOrOpenBlob) {
+            // IE 10+
+            window.navigator.msSaveOrOpenBlob(result.data, filename);
+          } else {
+            // not IE
+            let link = document.createElement("a");
+            link.href = window.URL.createObjectURL(result.data);
+            link.target = "_self";
+            if (filename) link.download = filename;
+            link.click();
+            window.URL.revokeObjectURL(result.data);
+          }
+        });
+    }
+    confirm(): void {
+      this.$confirmMessage("삭제하시겠습니까?");
+    }
+    deleteMessage(type: string): void {
+      const data = {
+        action: "delete_message",
+        type: this.$route.query.type,
+        id: [this.$route.query.id],
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: ResultData) => {
+          this.$router.push({
+            path:
+              this.$route.query.type == "received"
+                ? "/msg/receivedList"
+                : "/msg/sentList",
+            query: {
+              pageCurrent: 1,
+              keyword: "",
+              view: this.$route.query.view,
             },
-          })
-          .then((result) => {
-            console.log(result, filename);
-            // 로컬서버에서는 작동하지 않음
-            if (window.navigator.msSaveOrOpenBlob) {
-              // IE 10+
-              window.navigator.msSaveOrOpenBlob(result.data, filename);
-            } else {
-              // not IE
-              let link = document.createElement("a");
-              link.href = window.URL.createObjectURL(result.data);
-              link.target = "_self";
-              if (filename) link.download = filename;
-              link.click();
-              window.URL.revokeObjectURL(result.data);
-            }
           });
-      },
-      confirm() {
-        this.$confirmMessage("삭제하시겠습니까?");
-      },
-      deleteMessage(type) {
-        const data = {
-          action: "delete_message",
-          type: this.$route.query.type,
-          id: [this.$route.query.id],
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            this.$router.push({
-              path: "/msg/receivedList",
-              query: {
-                pageCurrent: 1,
-                keyword: "",
-              },
-            });
-          });
-      },
-      read() {
-        const data = {
-          action: "get_message_info",
-          id: this.$route.query.id,
-          type: this.$route.query.type,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.view = result.data.data.info;
-          });
-      },
-    },
+        });
+    }
+    read(): void {
+      const data = {
+        action: "get_message_info",
+        id: this.$route.query.id,
+        type: this.$route.query.type,
+      };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: ResultData) => {
+          console.log(result);
+          this.view = result.data.data.info;
+        });
+    }
     created() {
       this.read();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .read {

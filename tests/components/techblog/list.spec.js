@@ -16,16 +16,16 @@ describe.skip("App", () => {
     const router = new VueRouter({
       base: process.env.BASE_URL,
       routes,
-      mode: "history",
+      mode: "history"
     });
     const ListComponent = shallowMount(List, {
-      router,
+      router
     });
     ListComponent.vm.goToPath();
     const wrapper = mount(App, {
       localVue,
       router,
-      store,
+      store
     });
     wrapper.vm.$nextTick();
     expect(router.currentRoute.path).toBe("/techBlog/read");

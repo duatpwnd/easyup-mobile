@@ -1,6 +1,6 @@
 <template>
   <div class="tech_blog">
-    <h2>이지타임</h2>
+    <h2>이지채널</h2>
     <router-view></router-view>
   </div>
 </template>
@@ -15,11 +15,11 @@
 </script>
 <style scoped lang="scss">
   .tech_blog {
-    padding: 0 4.445%;
-    padding-bottom: 10px;
+    padding: 0 16px 10px;
+    margin-top: 13px;
     h2 {
-      font-size: 2rem;
-      padding-top: 4.445%;
+      font-size: 18px;
+      padding-bottom: 13px;
     }
   }
 </style>

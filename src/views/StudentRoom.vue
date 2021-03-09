@@ -1,15 +1,36 @@
 <template>
   <div id="my_lecture" v-if="dashboard_list">
+    <Profile
+      v-if="profile_modal"
+      @profileModalClose="profile_modal = false"
+    ></Profile>
     <UserInfo v-if="top_count">
       <span slot="user_name" class="name"
-        >{{ userStore_userinfo.info.username }}
-      </span>
+        >{{ userStore_userinfo.info.username }}님의 강의실</span
+      >
       <p slot="user_email" class="email">
         {{ userStore_userinfo.info.email }}
       </p>
-      <p class="update_date" slot="update_date">
+      <template
+        slot="convert"
+        v-if="
+          $route.query.view == 'teacher' || userStore_userinfo.info.status == 1
+        "
+      >
+        <span class="report" @click="profile_modal = true">프로필</span>
+        <span
+          class="convert"
+          @click="convert('student')"
+          v-if="$route.query.view == 'teacher'"
+          >학생전환</span
+        >
+        <span slot="convert" @click="convert('teacher')" v-else class="convert"
+          >강사전환</span
+        >
+      </template>
+      <!-- <p class="update_date" slot="update_date">
         최근 접속일: {{ userStore_userinfo.info.last_login }}
-      </p>
+      </p> -->
       <template slot="info">
         <li>
           <h3>진행중인 강의</h3>
@@ -34,8 +55,6 @@
           <span>{{ top_count.session.end_count }}건</span>
         </li>
       </template>
-
-      <!-- <span slot="convert" @click="convert()" class="convert">강사전환</span> -->
     </UserInfo>
 
     <div class="contents">
@@ -171,10 +190,11 @@
   import List from "@/components/my_lecture_room/list.vue";
   import UserInfo from "@/components/my_lecture_room/user_info.vue";
   import ProgressBar from "@/components/common/ProgressBar.vue";
+  import Profile from "@/components/modal/Profile.vue";
   import { mapState, mapMutations } from "vuex";
-
   export default {
     components: {
+      Profile,
       TimeLine,
       ProgressBar,
       List,
@@ -187,13 +207,20 @@
     },
     data() {
       return {
+        profile_modal: false,
         top_count: "",
         dashboard_list: "",
       };
     },
     methods: {
-      convert() {
-        this.$router.push("/teacherClassRoom");
+      convert(type) {
+        this.$router
+          .push({
+            query: {
+              view: type,
+            },
+          })
+          .catch(() => {});
       },
 
       getMyLecture(action) {
@@ -214,7 +241,6 @@
     },
     created() {
       this.getMyLecture("get_top_count");
-
       this.getMyLecture("get_dashboard_list");
     },
   };
@@ -226,7 +252,7 @@
   .contents {
     padding: 4.445%;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
       &:not(:first-child) {
         margin-top: 20px;
       }
@@ -238,12 +264,12 @@
     }
     .subscribed_lec {
       .td_wrap {
-        width: 37%;
+        width: 40%;
         text-align: right;
         vertical-align: middle;
         display: inline-block;
         ::v-deep .progress_bar {
-          width: 55%;
+          width: 45%;
           margin-left: 5px;
           margin-right: 0;
           height: 16px;

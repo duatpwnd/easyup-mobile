@@ -18,57 +18,57 @@
   </div>
 </template>
 <script>
-  import BlueBtn from "@/components/common/BaseButton.vue";
+import BlueBtn from "@/components/common/BaseButton.vue";
 
-  export default {
-    props: ["active"],
-    components: {
-      BlueBtn,
-    },
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+export default {
+  props: ["active"],
+  components: {
+    BlueBtn
+  },
+  data() {
+    return {};
+  },
+  methods: {}
+};
 </script>
 <style scoped lang="scss">
-  .edit_wrap {
-    .edit {
-      border: 1px solid #dbdbdb;
-      font-size: 1.375rem;
-      width: 100%;
-      resize: none;
-      box-sizing: border-box;
-      border-radius: 5px;
-      height: 60px;
-      padding: 10px;
-      font-family: "NotoSansCJKkr-DemiLight";
-      font-size: 11px;
-      &::placeholder {
-        color: #b5b5b5;
-      }
+.edit_wrap {
+  .edit {
+    border: 1px solid #dbdbdb;
+    font-size: 1.375rem;
+    width: 100%;
+    resize: none;
+    box-sizing: border-box;
+    border-radius: 5px;
+    height: 60px;
+    padding: 10px;
+    font-family: "NotoSansCJKkr-DemiLight";
+    font-size: 11px;
+    &::placeholder {
+      color: #b5b5b5;
     }
-    .btn_wrap {
-      margin-top: 10px;
+  }
+  .btn_wrap {
+    margin-top: 10px;
 
-      &:after {
-        display: block;
-        content: "";
-        clear: both;
-      }
-      .blue_btn {
-        width: 48%;
-      }
-      .left {
-        float: left;
-      }
-      .right {
-        float: right;
-        button {
-          background: white;
-          color: #114fff;
-        }
+    &:after {
+      display: block;
+      content: "";
+      clear: both;
+    }
+    .blue_btn {
+      width: 48%;
+    }
+    .left {
+      float: left;
+    }
+    .right {
+      float: right;
+      button {
+        background: white;
+        color: #114fff;
       }
     }
   }
+}
 </style>

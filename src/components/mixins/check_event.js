@@ -18,13 +18,13 @@ let checkEvent = {
       } else {
         this.allCheck = true;
       }
-    },
+    }
   },
   data() {
     return {
       checked_list: [],
-      allCheck: false,
+      allCheck: false
     };
-  },
+  }
 };
 export default checkEvent;

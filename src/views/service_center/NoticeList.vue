@@ -30,7 +30,7 @@
         @click="goToPath(li.id)"
       >
         <span class="left">{{ li.title }}</span>
-        <span class="right">{{ li.created_at }}</span>
+        <span class="right">{{ li.created_at.split(" ")[0] }}</span>
       </li>
     </ul>
     <Pagination>
@@ -145,7 +145,7 @@
         }
         .left {
           float: left;
-          width: 55%;
+          width: 70%;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;

@@ -1,14 +1,14 @@
 <template>
   <div class="mask">
     <div class="notice_modal">
-      <p class="contents">
-        {{ toggleStore_noticeMessage }}
-      </p>
+      <p class="contents" v-html="toggleStore_noticeMessage"></p>
       <div class="btn_wrap" v-if="toggleStore_confirm_modal">
         <BlueBtn>
-          <button class="confirm_ok" slot="blue_btn" @click="confirmOk()">
-            확인
-          </button>
+          <slot name="btn1">
+            <button class="confirm_ok" slot="blue_btn" @click="confirmOk()">
+              확인
+            </button>
+          </slot>
         </BlueBtn>
         <BlueBtn>
           <button class="cancel" slot="blue_btn" @click="cancel()">취소</button>
@@ -17,11 +17,11 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
-
-  export default {
+  import { mapState } from "vuex";
+  import { Component, Vue } from "vue-property-decorator";
+  @Component({
     components: {
       BlueBtn,
     },
@@ -31,45 +31,31 @@
         toggleStore_confirm_modal: "confirm_modal",
       }),
     },
-    data() {
-      return {};
-    },
-    methods: {
-      confirmOk() {
-        this.$emit("ok");
-        this.cancel();
-      },
-      cancel() {
-        this.$store.commit("toggleStore/Toggle", {
-          confirm_modal: false,
-        });
-      },
-    },
-  };
+  })
+  export default class ConfirmModal extends Vue {
+    confirmOk(): void {
+      this.$emit("ok");
+      this.cancel();
+    }
+    cancel(): void {
+      this.$store.commit("toggleStore/Toggle", {
+        confirm_modal: false,
+      });
+    }
+  }
 </script>
 <style scoped lang="scss">
   .mask {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 5;
     .notice_modal {
       background: white;
       max-width: 720px;
       width: 80%;
-      margin: 0 auto;
       padding: 10px;
       box-sizing: border-box;
-      height: 92px;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: auto;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       .contents {
         font-size: 16px;
         text-align: center;

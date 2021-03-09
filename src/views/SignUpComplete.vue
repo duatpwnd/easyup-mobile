@@ -10,7 +10,7 @@
     </div>
     <p class="row3">
       회원님의 무한한 가능성을 한층 업그레이드할 수 있도록 최선을 다하겠습니다.
-      지금 바로 EASYUP 강좌를 시작해보세요!
+      지금 바로 EASYUP 강의를 시작해보세요!
     </p>
     <BlueBtn>
       <button slot="blue_btn" @click="goToPath()">메인으로 이동</button>

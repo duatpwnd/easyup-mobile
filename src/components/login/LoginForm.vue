@@ -28,11 +28,11 @@
       >
     </div>
     <div class="lec_course">
-      <button class="lec" @click="goToLecture()">
+      <button class="lec arrow" @click="goToLecture()">
         강의
       </button>
       <button
-        class="course"
+        class="course arrow"
         @click="
           $router.push({
             path: '/course',
@@ -45,10 +45,31 @@
           });
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask: false,
           });
         "
       >
         코스
+      </button>
+      <button
+        class="blog"
+        @click="
+          $router
+            .push({
+              path: '/techBlog',
+              query: {
+                pageCurrent: 1,
+                keyword: '',
+              },
+            })
+            .catch(() => {});
+          $store.commit('toggleStore/Toggle', {
+            login_modal: false,
+            mask: false,
+          });
+        "
+      >
+        이지채널
       </button>
     </div>
     <div class="support">
@@ -63,12 +84,14 @@
           });
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask: false,
           });
         "
       >
         공지사항
       </button>
       <button
+        class="faq_btn"
         @click="
           $router.push({
             name: 'helpFaq',
@@ -80,6 +103,7 @@
           });
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask: false,
           });
         "
       >
@@ -90,6 +114,7 @@
           $router.push('/help/qna');
           $store.commit('toggleStore/Toggle', {
             login_modal: false,
+            mask: false,
           });
         "
       >
@@ -98,49 +123,50 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Component, Vue } from "vue-property-decorator";
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
-  export default {
+  import { mapState } from "vuex";
+  @Component({
     components: {
       BlueBtn,
     },
-    data() {
-      return {
-        userid: "",
-        userpw: "",
-      };
-    },
     computed: {
-      ...mapState("toggleStore", {
-        toggleStore_loginModal: "login_modal",
-      }),
       ...mapState("userStore", {
-        userStore_referer: "referer",
+        userStore_referer: "refererLink",
       }),
     },
-    methods: {
-      goToLecture() {
-        this.$EventBus.$emit("GoToLecture", true);
-      },
-      goToPath(url) {
-        this.$router.push(url).catch(() => {});
-        this.$store.commit("toggleStore/Toggle", {
-          login_modal: !this.toggleStore_loginModal,
-        });
-      },
-      login() {
-        const data = {
-          action: "login",
-          userid: this.userid,
-          userpw: this.userpw,
-        };
-        if (this.userid.trim().length == 0 || this.userpw.trim().length == 0) {
-          this.$noticeMessage("아이디 또는 비밀번호를 입력해주세요");
-        } else {
-          this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-            .then((result) => {
+  })
+  export default class LoginForm extends Vue {
+    userid = "";
+    userpw = "";
+    userStore_referer!: string;
+    goToLecture() {
+      this.$EventBus.$emit("GoToLecture", true);
+    }
+    goToPath(url: string): void {
+      this.$router.push(url).catch(() => {});
+      this.$store.commit("toggleStore/Toggle", {
+        login_modal: false,
+        mask: false,
+      });
+    }
+    login(): void {
+      const data = {
+        action: "login",
+        userid: this.userid,
+        userpw: this.userpw,
+      };
+      if (this.userid.trim().length == 0 || this.userpw.trim().length == 0) {
+        this.$noticeMessage("아이디 또는 비밀번호를 입력해주세요");
+      } else {
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then(
+            (result: {
+              data: { error: boolean; message: string; data: object[] };
+            }) => {
+              console.log(result);
               if (result.data.error) {
                 this.$noticeMessage(result.data.message);
               } else {
@@ -155,20 +181,22 @@
                   this.$router.push(this.userStore_referer).catch(() => {});
                 }
               }
-            })
-            .catch((err) => {});
-        }
-      },
-    },
-    mounted() {},
+            }
+          );
+      }
+    }
+    mounted() {}
     created() {
-      this.$EventBus.$on("login from signUpComplete", (result) => {
-        this.userid = result.email;
-        this.userpw = result.password;
-        this.login();
-      });
-    },
-  };
+      this.$EventBus.$on(
+        "login from signUpComplete",
+        (result: { email: string; password: string }) => {
+          this.userid = result.email;
+          this.userpw = result.password;
+          this.login();
+        }
+      );
+    }
+  }
 </script>
 <style scoped lang="scss">
   .blue_btn {
@@ -179,11 +207,12 @@
     }
   }
   .menu_modal {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 3;
+    z-index: 5;
     width: 72.222%;
+    height: 100%;
     box-sizing: border-box;
     background: #f8f8f8;
     .login_form {
@@ -199,7 +228,6 @@
         font-size: 1.5rem;
         padding: 5px 10px;
       }
-
       .user_pw {
         margin: 10px 0;
       }
@@ -213,12 +241,17 @@
         width: 100%;
         font-size: 1.5rem;
         font-family: "NotoSansCJKkr-Regular";
-        background: url("~@/assets/images/common/right_arrow.png") no-repeat
-          right center / 3%;
       }
       .course {
         @extend .lec;
         margin-top: 4%;
+      }
+      .arrow {
+        background: url("~@/assets/images/common/right_arrow.png") no-repeat
+          right center / 3%;
+      }
+      .blog {
+        @extend .course;
       }
     }
     .support {
@@ -227,10 +260,13 @@
       margin-top: 2%;
       padding: 4.445%;
       button {
+        width: 100%;
+        text-align: left;
         font-size: 1.5rem;
-        display: inline-block;
-        width: 33.333%;
-        text-align: center;
+        display: block;
+      }
+      .faq_btn {
+        margin: 4% 0;
       }
     }
     .user_find {

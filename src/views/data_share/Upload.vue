@@ -41,79 +41,89 @@
     </BlueBtn>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
-
-  export default {
+  import { Component, Vue } from "vue-property-decorator";
+  import { ResultData } from "@/assets/js/util";
+  interface BodyData {
+    action: string;
+    code: string;
+    recipients?: string[];
+    file?: { [key: string]: any };
+  }
+  @Component({
     components: {
       BlueBtn,
     },
-    data() {
-      return {
-        file_obj: "",
-        select_list: "", // 강의선택 리스트
-        selected: null, // 강의선택 v-model
-        share_list: "", // 공유 받을사람
-        shared_recipients: [], // 공유받을사람 v-model
+  })
+  export default class Upload extends Vue {
+    $refs!: {
+      upload: HTMLFormElement;
+    };
+    file_obj: { [key: string]: any } = {};
+    select_list = {}; // 강의선택 리스트
+    selected = ""; // 강의선택 v-model
+    share_list = {}; // 공유 받을사람
+    shared_recipients: string[] = []; // 공유받을사람 v-model
+    goToPath(): void {
+      this.$router.push("/help/read");
+    }
+    fileSelect(): void {
+      const selected_file = this.$refs.upload.files[0];
+      this.file_obj = selected_file;
+    }
+    upload(): void {
+      const formData = new FormData();
+      const data: BodyData = {
+        action: "upload_dropbox_file",
+        code: this.selected,
+        recipients: this.shared_recipients,
+        file: this.file_obj,
       };
-    },
-    methods: {
-      goToPath() {
-        this.$router.push("/help/read");
-      },
-      fileSelect() {
-        const selected_file = this.$refs.upload.files[0];
-        this.file_obj = selected_file;
-      },
-      upload() {
-        const formData = new FormData();
-        formData.append("action", "upload_dropbox_file");
-        formData.append("code", this.selected);
-        formData.append("recipients", this.shared_recipients);
-        formData.append("file", this.file_obj);
-
-        this.$axios.post(this.$ApiUrl.mobileAPI_v1, formData).then((result) => {
-          console.log(result);
-          if (result.data.data.length == 1) {
-            this.$router.push({
-              path: "/dataShare",
-              query: {
-                keyword: "",
-                pageCurrent: 1,
-                order: "all",
-              },
-            });
-          }
+      for (let key in data) {
+        formData.append(key, data[key]);
+      }
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, formData)
+        .then((result: ResultData) => {
+          this.$router.push({
+            path: "/dataShare",
+            query: {
+              keyword: "",
+              pageCurrent: 1,
+              order: "all",
+              view: this.$route.query.view,
+            },
+          });
         });
-      },
-      targetSelect() {
-        const data = {
-          action: "get_dropbox_target_select",
-          code: this.selected,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("공유받은사람:", result);
-            this.share_list = result.data.data;
-          });
-      },
-      dropBoxList() {
-        const data = {
-          action: "get_dropbox_course_select",
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.select_list = result.data.data;
-          });
-      },
-    },
+    }
+    targetSelect(): void {
+      const data: BodyData = {
+        action: "get_dropbox_target_select",
+        code: this.selected,
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: ResultData) => {
+          console.log("공유받은사람:", result);
+          this.share_list = result.data.data;
+        });
+    }
+    dropBoxList(): void {
+      const data = {
+        action: "get_dropbox_course_select",
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: ResultData) => {
+          console.log(result);
+          this.select_list = result.data.data;
+        });
+    }
     created() {
       this.dropBoxList();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .qna {

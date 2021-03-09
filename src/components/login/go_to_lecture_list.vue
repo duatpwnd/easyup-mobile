@@ -18,6 +18,7 @@
             });
             $store.commit('toggleStore/Toggle', {
               login_modal: false,
+              mask: false,
             });
           "
           >전체보기</span
@@ -39,6 +40,7 @@
             });
             $store.commit('toggleStore/Toggle', {
               login_modal: false,
+              mask: false,
             });
           "
           >{{ list }}</span
@@ -47,49 +49,44 @@
     </ul>
   </div>
 </template>
-<script>
-  export default {
-    components: {},
-    data() {
-      return {
-        category_list: "",
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
+  @Component
+  export default class LectureList extends Vue {
+    category_list = "";
+    async getCategoryList() {
+      const data = {
+        action: "get_category_list",
       };
-    },
-    methods: {
-      async getCategoryList() {
-        const data = {
-          action: "get_category_list",
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.category_list = result.data.data;
-          });
-      },
-      back() {
-        this.$EventBus.$emit("LoginInfo", true);
-        this.$EventBus.$emit("LoginForm", true);
-      },
-    },
-    mounted() {},
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          console.log(result);
+          this.category_list = result.data.data;
+        });
+    }
+    back(): void {
+      this.$EventBus.$emit("LoginInfo", true);
+      this.$EventBus.$emit("LoginForm", true);
+    }
     created() {
       this.getCategoryList();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .menu_modal {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 3;
+    z-index: 5;
     width: 72.222%;
+    height: 100%;
     box-sizing: border-box;
     background: #f8f8f8;
     h3 {
       font-size: 1.5rem;
-
+      padding: 10px 0;
       color: #999999;
       text-align: center;
       font-weight: 500;

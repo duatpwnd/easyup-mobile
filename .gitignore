@@ -3,6 +3,9 @@ node_modules
 /dist
 /coverage
 
+# cypress mp4
+/cypress/videos
+
 # local env files
 .env.local
 .env.*.local

@@ -105,6 +105,7 @@
                   keyword: "",
                   pageCurrent: 1,
                   order: "course_name",
+                  view: this.$route.query.view,
                 },
               });
             }

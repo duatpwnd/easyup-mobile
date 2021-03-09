@@ -6,19 +6,19 @@
   </div>
 </template>
 <script>
-  import RegisterComponent from "@/components/common/multiple_register.vue";
-  export default {
-    components: {
-      RegisterComponent,
-    },
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+import RegisterComponent from "@/components/common/multiple_register.vue";
+export default {
+  components: {
+    RegisterComponent
+  },
+  data() {
+    return {};
+  },
+  methods: {}
+};
 </script>
 <style scoped lang="scss">
-  .register {
-    padding: 4.445%;
-  }
+.register {
+  padding: 4.445%;
+}
 </style>

@@ -28,7 +28,7 @@
       vertical-align: middle;
     }
     .td1 {
-      width: 63%;
+      width: 60%;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;

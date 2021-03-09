@@ -17,56 +17,56 @@
   </div>
 </template>
 <script>
-  export default {
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+export default {
+  data() {
+    return {};
+  },
+  methods: {}
+};
 </script>
 <style scoped lang="scss">
-  .list_wrap {
-    position: relative;
-    .tr {
-      &:after {
-        display: block;
-        content: "";
-        clear: both;
-      }
-      .td {
-        float: left;
-        color: #333333;
-        font-size: 1.25rem;
-        padding: 5px;
-        box-sizing: border-box;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-      }
+.list_wrap {
+  position: relative;
+  .tr {
+    &:after {
+      display: block;
+      content: "";
+      clear: both;
     }
-    .top_tr {
-      .left_td {
-        width: 30%;
-      }
-
-      .right_td {
-        width: 70%;
-      }
-    }
-    .bottom_tr {
-      .td {
-        color: #999999;
-        font-size: 1.125rem;
-      }
-      .left_td {
-        width: 33.33%;
-      }
-      .center_td {
-        width: 33.33%;
-      }
-      .right_td {
-        width: 33.33%;
-      }
+    .td {
+      float: left;
+      color: #333333;
+      font-size: 1.25rem;
+      padding: 5px;
+      box-sizing: border-box;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
   }
+  .top_tr {
+    .left_td {
+      width: 30%;
+    }
+
+    .right_td {
+      width: 70%;
+    }
+  }
+  .bottom_tr {
+    .td {
+      color: #999999;
+      font-size: 1.125rem;
+    }
+    .left_td {
+      width: 33.33%;
+    }
+    .center_td {
+      width: 33.33%;
+    }
+    .right_td {
+      width: 33.33%;
+    }
+  }
+}
 </style>

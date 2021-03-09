@@ -108,11 +108,9 @@
           id: this.$route.query.id,
           type: "received",
         };
-        console.log(data);
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
-            console.log(result);
             this.view = result.data.data.info;
             this.title = "답 : " + result.data.data.info.title;
             this.choice_list = [{ id: result.data.data.info.user_sender_id }];
@@ -179,7 +177,7 @@
             });
             data.users = map;
             // 배열값이 배열이 빠진 문자만 들어가는현상 발생
-            for (var key in data) {
+            for (let key in data) {
               formData.append(key, data[key]);
             }
             this.$axios
@@ -200,6 +198,7 @@
                       query: {
                         pageCurrent: 1,
                         keyword: "",
+                        view: this.$route.query.view,
                       },
                     });
                   }

@@ -23,7 +23,6 @@
         <template slot="contents">
           <img :src="li.thumbnail" :alt="li.title" :title="li.title" />
           <h2 class="title">{{ li.title }}</h2>
-          <p class="brief">{{ li.intro_txt }}</p>
           <span class="date">{{ li.wdate }}</span>
         </template>
       </TechBlogList>
@@ -106,14 +105,29 @@
 </script>
 <style scoped lang="scss">
   .search {
-    margin: 2% 0;
+    margin-top: 0;
     .search_contents {
       width: 100%;
       margin-left: 0;
     }
   }
   .list {
-    border-bottom: 4px solid #f8f8f8;
-    padding: 10px 0;
+    margin-top: 24px;
+    width: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    &:nth-child(even) {
+      margin-right: 8px;
+    }
+    &:nth-child(odd) {
+      width: calc(100% - 50% - 8px);
+    }
+    .blog-li {
+      img {
+        height: 270px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+    }
   }
 </style>

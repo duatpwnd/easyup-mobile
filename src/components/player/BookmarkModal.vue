@@ -1,7 +1,9 @@
 <template>
   <div class="bookmark-add-wrap">
     <div class="clearfix">
-      <span class="pull-right" @click="bookmarkModalClose()"></span>
+      <span class="pull-right" @click="bookmarkModalClose()">
+        <font-awesome-icon :icon="['fa', 'times']" />
+      </span>
     </div>
     <div class="bookmark-add">
       <p class="add-txt">생성하실 책갈피의 이름을 입력해주세요.</p>
@@ -35,8 +37,14 @@
       },
     },
     computed: {
+      ...mapState("toggleStore", {
+        toggleStore_bookmark_modal: "bookmark_modal",
+      }),
       ...mapState("playerStore", {
         playerStore_stopTime: "stop_time",
+        playerStore_video: "video_stop_time",
+        playerStore_custom_type: "custom_type",
+        playerStore_lp_type: "lp_type",
       }),
     },
     components: {
@@ -55,7 +63,11 @@
           course_id: this.$route.query.course_id,
           lp_id: this.$route.query.lp_id,
           current_id: this.current_id,
-          check_time: Math.floor(this.playerStore_stopTime()),
+          check_time:
+            this.playerStore_lp_type == "document" &&
+            this.playerStore_custom_type == "video"
+              ? Math.floor(this.playerStore_video.currentTime())
+              : Math.floor(this.playerStore_stopTime()),
           title: this.title,
         };
         console.log(data);
@@ -76,6 +88,11 @@
         });
       },
     },
+    destroyed() {
+      this.$store.commit("toggleStore/Toggle", {
+        bookmark_modal: false,
+      });
+    },
   };
 </script>
 <style scoped lang="scss">
@@ -92,15 +109,14 @@
     right: 0;
     bottom: 0;
     margin: auto;
-    z-index: 1;
+    z-index: 2;
     .clearfix {
       text-align: right;
       .pull-right {
-        background: url("http://develop.hell0world.net/main/img/x_pop.png")
-          no-repeat center / 16px 16px;
-        width: 16px;
-        height: 16px;
-        display: inline-block;
+        .fa-times {
+          color: #e0e0e0;
+          font-size: 23px;
+        }
       }
     }
     .bookmark-add {
