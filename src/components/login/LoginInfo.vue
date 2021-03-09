@@ -54,7 +54,7 @@
           });
         "
       >
-        이지타임
+        이지채널
       </button>
       <button
         @click="

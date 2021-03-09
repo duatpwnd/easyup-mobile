@@ -43,7 +43,7 @@
     <address>
       <pre>(주)유니윌<br />대표이사:조인형   주소:서울시 강남구 테헤란로124<br />사업자 등록번호:220-86-20171    통신판매업신고:강남 제3339호</pre>
     </address>
-    <h2 class="supply_number">고객지원 Support@easyupclass.com</h2>
+    <h2 class="supply_number">고객지원 support@easyupclass.com</h2>
   </footer>
 </template>
 <script lang="ts"></script>

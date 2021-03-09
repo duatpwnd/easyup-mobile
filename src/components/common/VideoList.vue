@@ -44,7 +44,7 @@
         "
         >{{ list.title }}</span
       >
-      <span class="right">{{ list.limit }}</span>
+      <span class="right">{{ list.limit_short }}</span>
     </div>
     <div
       class="reason"

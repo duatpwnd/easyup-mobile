@@ -166,7 +166,9 @@
           </div>
           <div class="row">
             <span class="dt">취소 요청 금액</span>
-            <span class="dd">{{ list.pay_info.price.format_cancel }}원</span>
+            <span class="dd final-price"
+              >{{ list.cancel.price_info.format_cancel }}원</span
+            >
           </div>
           <div class="row">
             <span class="dt">취소 사유</span>
@@ -202,8 +204,8 @@
         <div
           class="section"
           v-if="
-            list.status_code == 3 ||
-              (list.status_code == 5 && list.pay_info.method == 'bank')
+            (list.status_code == 3 || list.status_code == 5) &&
+              list.pay_info.method == 'bank'
           "
         >
           <h2 class="title">환불 계좌</h2>
@@ -223,34 +225,34 @@
         <!-- 환불 계좌 :: E -->
 
         <!-- 환불 정보 :: S -->
-        <!-- <div class="section">
-          <h2 class="title">환불 정보</h2>
+        <div
+          class="section"
+          v-if="
+            list.cancel != null &&
+              list.cancel.state == 3 &&
+              list.cancel.refund_date != null
+          "
+        >
+          <h2 class="title">환불 처리</h2>
           <div class="row">
-            <span class="dt">
-              {{ list.refund_info.refund_date.split(" ")[0] }}
+            <span class="dt">처리일</span>
+            <span class="dd">
+              {{ list.cancel.refund_date }}
             </span>
           </div>
           <div class="row">
             <span class="dt">공제 금액</span>
             <span class="dd">
-              {{
-                list.refund_info.penalty
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원
+              {{ list.cancel.price_info.format_refund_fee }}원
             </span>
           </div>
           <div class="row">
-            <span class="dt">환불 정보</span>
-            <span class="dd">
-              {{
-                list.refund_info.refund_price
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원
+            <span class="dt">환불 금액</span>
+            <span class="dd final-price">
+              {{ list.cancel.price_info.format_refund }}원
             </span>
           </div>
-        </div> -->
+        </div>
         <!-- 환불 정보 :: E -->
       </template>
     </Row>
@@ -284,7 +286,14 @@
       </BaseButton>
       <BaseButton
         class="right"
-        :style="[{ width: list.status_code == 4 ? '100%' : '49%' }]"
+        :style="[
+          {
+            width:
+              list.status_code == 4 || list.status == '취소완료'
+                ? '100%'
+                : '49%',
+          },
+        ]"
       >
         <button
           slot="blue_btn"

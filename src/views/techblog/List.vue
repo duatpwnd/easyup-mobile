@@ -23,7 +23,6 @@
         <template slot="contents">
           <img :src="li.thumbnail" :alt="li.title" :title="li.title" />
           <h2 class="title">{{ li.title }}</h2>
-          <p class="brief">{{ li.intro_txt }}</p>
           <span class="date">{{ li.wdate }}</span>
         </template>
       </TechBlogList>
@@ -117,7 +116,7 @@
     padding: 10px 0;
     .blog-li {
       img {
-        height: 150px;
+        height: 270px;
         object-fit: cover;
         border-radius: 10px;
       }

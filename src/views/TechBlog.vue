@@ -1,6 +1,6 @@
 <template>
   <div class="tech_blog">
-    <h2>이지타임</h2>
+    <h2>이지채널</h2>
     <router-view></router-view>
   </div>
 </template>

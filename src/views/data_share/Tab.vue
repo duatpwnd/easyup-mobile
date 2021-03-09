@@ -37,7 +37,7 @@
             slot="check"
           />
         </CheckBox>
-        <span>강좌명</span>
+        <span>강의명</span>
         <span>파일명</span>
       </template>
     </BoardTitle>

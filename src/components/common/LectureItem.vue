@@ -80,12 +80,12 @@
           font-weight: bold;
         }
         .original {
-          font-size: 14px;
+          font-size: 13px;
           color: #bdbdbd;
         }
         .final {
           margin-left: 5px;
-          font-size: 18px;
+          font-size: 14px;
           color: #114fff;
         }
       }

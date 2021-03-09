@@ -1,7 +1,7 @@
 <template>
   <div class="mask">
     <div class="cancel_lecture">
-      <h2 class="h2_title">취소 강의</h2>
+      <!-- <h2 class="h2_title">취소 강의</h2>
       <select
         slot="option"
         class="select"
@@ -10,10 +10,10 @@
       >
         <option value="1">전체 취소</option>
         <option value="2">부분 취소</option>
-        <!-- <option value="section_name">섹션명</option>
-        <option value="title">책갈피제목</option> -->
-      </select>
-      <div class="lecture_wrap">
+        <option value="section_name">섹션명</option>
+        <option value="title">책갈피제목</option>
+      </select> -->
+      <!-- <div class="lecture_wrap">
         <div
           class="lecture"
           v-for="(li, index) in lecture_info.lecture_info"
@@ -36,7 +36,7 @@
             /></CheckBox>
           </div>
         </div>
-      </div>
+      </div> -->
       <h2 class="h2_title reason_title">취소 사유</h2>
       <select slot="option" class="select" v-model="reason_option">
         <option value="1">구매 의사 취소</option>
@@ -77,31 +77,32 @@
     select = 1; // 전체취소, 부분취소 유무
     reason_option = 1; // 취소 사유 옵션
     reason = ""; // 취소 내용
-    checked_list = this.lecture_info.lecture_info.map((el) => el.id);
-    cancelChange(): void {
-      if (this.select == 2) {
-        this.checked_list = [];
-      }
-    }
+    // checked_list = this.lecture_info.lecture_info.map((el) => el.id);
+    // cancelChange(): void {
+    //   if (this.select == 2) {
+    //     this.checked_list = [];
+    //   }
+    // }
     send(): void {
       interface BodyData {
         action: string;
         order_id: number;
         method: string;
-        cancel_type: number;
+        // cancel_type: number;
         reason_type: number;
         reason_detail: string;
-        items: number[];
+        // items: number[];
       }
       const data: BodyData = {
         action: "request_cancel",
         order_id: this.lecture_info.order_id,
         method: this.lecture_info.pay_info.method,
-        cancel_type: this.select,
+        // cancel_type: this.select,
         reason_type: this.reason_option,
         reason_detail: this.reason_option == 6 ? this.reason : "",
-        items: this.checked_list,
+        // items: this.lecture_info.lecture_info.map((el) => el.id),
       };
+      console.log(data);
       if (this.lecture_info.pay_info.method == "bank") {
         this.close();
         this.$EventBus.$emit("refundInfo", data);
@@ -135,9 +136,9 @@
         font-size: 16px;
         margin-bottom: 15px;
       }
-      .reason_title {
-        margin-top: 35px;
-      }
+      // .reason_title {
+      //   margin-top: 35px;
+      // }
       .select {
         width: 100%;
         outline: none;

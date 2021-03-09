@@ -25,9 +25,7 @@
       </template>
       <template slot="info">
         <div class="center">
-          <h2>
-            {{ li.title }}
-          </h2>
+          <h2>{{ li.title }}</h2>
           <div class="price">
             <del
               class="final_price"
@@ -41,16 +39,20 @@
               >수강기한 : {{ li.access_limit }}</span
             >
             <span class="limit" v-else>{{ li.first_course }}</span>
+            <span class="is-include" v-if="li.price.purchased_array != null"
+              >(구매강의포함)</span
+            >
           </div>
         </div>
         <div class="chk">
           <CheckBox>
             <input
               type="checkbox"
+              :disabled="activeAll"
               v-model="checked_list"
               slot="check"
               :value="li"
-              @change="partial_check(li)"
+              @change="partial_check()"
           /></CheckBox>
         </div>
       </template>
@@ -89,6 +91,7 @@
           <input
             type="checkbox"
             @click="all_check()"
+            :disabled="activeAll"
             @change="all()"
             v-model="allCheck"
             slot="check"
@@ -117,81 +120,93 @@
     components: { Row, CheckBox, BaseButton, LectureCourseList },
     data() {
       return {
+        activeAll: false,
         list: "",
         checked_list: [],
         allCheck: false,
+        format_sum_final: "", // 총 금액
+        format_sum_discount: "", // 할인 금액
+        format_sum_original: "", // 강의 비용
       };
     },
     computed: {
       // 강의 비용
-      format_sum_original: {
-        get() {
-          return this.list.calculate_price.sum_original
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        },
-        set(value) {
-          console.log(value);
-          if (value.type == "all") {
-            this.list.calculate_price.sum_original = value.price.original;
-          } else {
-            if (this.checked_list.indexOf(value) >= 0) {
-              this.list.calculate_price.sum_original =
-                this.list.calculate_price.sum_original + value.price.original;
-            } else {
-              this.list.calculate_price.sum_original =
-                this.list.calculate_price.sum_original - value.price.original;
-            }
-          }
-        },
-      },
+      // format_sum_original: {
+      //   get() {
+      //     return this.list.calculate_price.sum_original
+      //       .toString()
+      //       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      //   },
+      //   set(value) {
+      //     console.log(value);
+      //     if (value.type == "all") {
+      //       this.list.calculate_price.sum_original = value.price.original;
+      //     } else {
+      //       if (this.checked_list.indexOf(value) >= 0) {
+      //         this.list.calculate_price.sum_original =
+      //           this.list.calculate_price.sum_original + value.price.original;
+      //       } else {
+      //         this.list.calculate_price.sum_original =
+      //           this.list.calculate_price.sum_original - value.price.original;
+      //       }
+      //     }
+      //   },
+      // },
       // 할인 금액
-      format_sum_discount: {
-        get() {
-          return this.list.calculate_price.sum_discount
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        },
-        set(value) {
-          if (value.info.length == 0) {
-            this.list.calculate_price.sum_discount = 0;
-          } else {
-            console.log(this.format_sum_original.replace(/,/g, ""), value);
-            this.list.calculate_price.sum_discount =
-              this.format_sum_original.replace(/,/g, "") - value.sum;
-          }
-        },
-      },
+      // format_sum_discount: {
+      //   get() {
+      //     return this.list.calculate_price.sum_discount
+      //       .toString()
+      //       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      //   },
+      //   set(value) {
+      //     if (value.info.length == 0) {
+      //       this.list.calculate_price.sum_discount = 0;
+      //     } else {
+      //       console.log(this.format_sum_original.replace(/,/g, ""), value);
+      //       this.list.calculate_price.sum_discount =
+      //         this.format_sum_original.replace(/,/g, "") - value.sum;
+      //     }
+      //   },
+      // },
       // 총금액
-      format_sum_final() {
-        console.log(this.list.calculate_price.format_purchased_price);
-        return this.$numberWithCommas(
-          this.format_sum_original.replace(/,/g, "") -
-            this.format_sum_discount.replace(/,/g, "") -
-            this.list.calculate_price.format_purchased_price.replace(/,/g, "")
-        );
-      },
+      // format_sum_final() {
+      //   console.log(this.list.calculate_price.format_purchased_price);
+      //   return this.$numberWithCommas(
+      //     this.format_sum_original.replace(/,/g, "") -
+      //       this.format_sum_discount.replace(/,/g, "") -
+      //       this.list.calculate_price.format_purchased_price.replace(/,/g, "")
+      //   );
+      // },
     },
     methods: {
+      async costCalculate(arr) {
+        const data = {
+          action: "calculate_cart_items",
+          items: arr,
+        };
+        if (arr.length == 0) {
+          this.format_sum_final = 0;
+          this.format_sum_discount = 0;
+          this.format_sum_original = 0;
+        } else {
+          this.activeAll = true;
+          await this.$axios
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+            .then((result) => {
+              console.log(result);
+              this.format_sum_final = result.data.data.format_sum_final;
+              this.format_sum_discount = result.data.data.format_sum_discount;
+              this.format_sum_original = result.data.data.format_sum_original;
+              this.activeAll = false;
+            });
+        }
+      },
       all() {
         let allList = [...this.list.courses, ...this.list.sessions];
         if (this.allCheck == false) {
           allList = [];
         }
-        console.log(allList);
-        const originalSum = allList.reduce((acc, current) => {
-          return (acc += current.price.original);
-        }, 0);
-        const finalSum = allList.reduce((acc, current) => {
-          return (acc += current.price.final);
-        }, 0);
-        this.format_sum_original = {
-          type: "all",
-          price: {
-            original: originalSum,
-          },
-        };
-        this.format_sum_discount = { info: allList, sum: finalSum };
       },
       // 전체체크
       all_check() {
@@ -201,16 +216,11 @@
         } else {
           this.checked_list = [];
         }
+        this.costCalculate(this.checked_list.map((el) => el.cart_id));
       },
       // 부분체크
-      partial_check(info) {
-        console.log(this.checked_list);
-        const sum = this.checked_list.reduce((acc, current) => {
-          return (acc += current.price.final);
-        }, 0);
-        console.log(sum);
-        this.format_sum_original = info;
-        this.format_sum_discount = { info: info, sum: sum };
+      partial_check() {
+        this.costCalculate(this.checked_list.map((el) => el.cart_id));
         if (
           this.list.courses.length + this.list.sessions.length !=
           this.checked_list.length
@@ -268,6 +278,7 @@
               console.log(result);
               this.getList().then((result) => {
                 //삭제할 인덱스 찾기
+
                 if (id.length == 1) {
                   const filter = this.checked_list.findIndex((el) => {
                     return el.cart_id == data.cart_id;
@@ -289,6 +300,7 @@
                 } else {
                   this.allCheck = true;
                 }
+                this.costCalculate(this.checked_list.map((el) => el.cart_id));
               });
             });
         }
@@ -308,7 +320,6 @@
     },
     created() {
       this.getList(this.$route.query.pageCurrent).then((result) => {
-        console.log(result);
         this.all_check();
       });
     },
@@ -382,6 +393,10 @@
     .limit {
       font-size: 12px;
       color: #999999;
+    }
+    .is-include {
+      @extend .limit;
+      color: red;
     }
     .right {
       float: right;

@@ -573,7 +573,11 @@
     }
     mounted() {
       // 새로고침감지
-      window.addEventListener("beforeunload", (event) => {
+      const isOnIOS =
+        navigator.userAgent.match(/iPad/i) ||
+        navigator.userAgent.match(/iPhone/i);
+      const eventName = isOnIOS ? "pagehide" : "beforeunload";
+      window.addEventListener(eventName, (event) => {
         this.$cookies.set("search_title", {
           num: this.$cookies.get("search_title").num + 1,
         });

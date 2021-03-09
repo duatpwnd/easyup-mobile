@@ -32,6 +32,7 @@
       };
     },
     methods: {
+      // contenteditable 커서 위치 맨처음 || 맨끝 설정
       createCaretPlacer(atStart) {
         return function(el) {
           el.focus();
@@ -39,14 +40,14 @@
             typeof window.getSelection != "undefined" &&
             typeof document.createRange != "undefined"
           ) {
-            var range = document.createRange();
+            let range = document.createRange();
             range.selectNodeContents(el);
             range.collapse(atStart);
-            var sel = window.getSelection();
+            let sel = window.getSelection();
             sel.removeAllRanges();
             sel.addRange(range);
           } else if (typeof document.body.createTextRange != "undefined") {
-            var textRange = document.body.createTextRange();
+            let textRange = document.body.createTextRange();
             textRange.moveToElementText(el);
             textRange.collapse(atStart);
             textRange.select();

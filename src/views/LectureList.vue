@@ -40,6 +40,7 @@
         class="li"
         v-for="(list, index) in category_list.list"
         :key="index"
+        :style="[{ 'margin-top': index > 1 ? '24px' : 0 }]"
         @click="
           $router.push({
             path: $route.name == 'course' ? '/courseDetail' : '/lecDetail',
@@ -191,7 +192,7 @@
       }
     }
     .lec_list_wrap {
-      margin-top: 3%;
+      margin-top: 24px;
       &:after {
         display: block;
         clear: both;
@@ -200,7 +201,6 @@
       .li {
         float: left;
         width: 48.782%;
-        margin-top: 24px;
         &:nth-child(odd) {
           margin-right: 2.436%;
         }

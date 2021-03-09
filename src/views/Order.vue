@@ -136,14 +136,14 @@
             무통장 입금
           </button>
         </BaseButton>
-        <BaseButton
+        <!-- <BaseButton
           @click.native="payMethod = '0000010000'"
           :class="{ active: payMethod == '0000010000' }"
         >
           <button slot="blue_btn">
             휴대폰 결제
           </button>
-        </BaseButton>
+        </BaseButton> -->
       </div>
     </div>
     <div class="isAgree">
@@ -383,7 +383,7 @@
     .payMethod {
       .blue_btn {
         display: inline-block;
-        width: 32.666%;
+        width: 49.5%;
         &:not(:last-child) {
           margin-right: 1%;
         }

@@ -69,7 +69,7 @@
           });
         "
       >
-        이지타임
+        이지채널
       </button>
     </div>
     <div class="support">
