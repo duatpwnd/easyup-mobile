@@ -112,8 +112,16 @@
     }
   }
   .list {
-    border-bottom: 4px solid #f8f8f8;
-    padding: 10px 0;
+    margin-top: 24px;
+    width: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    &:nth-child(even) {
+      margin-right: 8px;
+    }
+    &:nth-child(odd) {
+      width: calc(100% - 50% - 8px);
+    }
     .blog-li {
       img {
         height: 270px;
