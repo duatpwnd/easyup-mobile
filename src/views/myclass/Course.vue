@@ -143,7 +143,6 @@
                     >리뷰관리</router-link
                   >
                   <!-- 학생버전 삭제 -->
-
                   <span
                     @click="confirm(list.id)"
                     class="ing_ico lecture_remove"

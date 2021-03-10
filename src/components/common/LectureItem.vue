@@ -55,7 +55,7 @@
     .evaluate {
       .score {
         vertical-align: middle;
-        font-size: 18px;
+        font-size: 14px;
         display: inline-block;
         width: 15%;
         text-align: left;
@@ -67,7 +67,7 @@
       .free {
         vertical-align: middle;
         display: inline-block;
-        font-size: 18px;
+        font-size: 14px;
         color: #114fff;
         font-weight: bold;
         width: calc(100% - 15%);

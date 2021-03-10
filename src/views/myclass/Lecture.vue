@@ -161,10 +161,14 @@
                 v-if="list.show_btn_review"
                 >리뷰관리</router-link
               >
+              <!-- 학생버전 삭제 -->
               <span
                 @click="confirm(list.code)"
                 class="ing_ico lecture_remove lecture-remove-student"
-                v-if="list.status == 'end' || list.price.is_free"
+                v-if="
+                  list.status == 'end' ||
+                    (list.price.is_free && $route.query.view == 'student')
+                "
                 >강의삭제</span
               >
               <!-- 강사버전 삭제 -->
