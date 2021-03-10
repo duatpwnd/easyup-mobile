@@ -88,7 +88,7 @@
         action: string;
         order_id: number;
         method: string;
-        // cancel_type: number;
+        cancel_type: number;
         reason_type: number;
         reason_detail: string;
         // items: number[];
@@ -97,7 +97,7 @@
         action: "request_cancel",
         order_id: this.lecture_info.order_id,
         method: this.lecture_info.pay_info.method,
-        // cancel_type: this.select,
+        cancel_type: 1,
         reason_type: this.reason_option,
         reason_detail: this.reason_option == 6 ? this.reason : "",
         // items: this.lecture_info.lecture_info.map((el) => el.id),
