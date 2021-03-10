@@ -347,7 +347,7 @@
     </div>
     <!-- 인기코스 :: E -->
     <!-- 번역강의 :: S -->
-    <div
+    <!-- <div
       class="section swiper_section"
       v-if="list.translation_lecture.length > 0"
     >
@@ -368,9 +368,9 @@
           >더보기</router-link
         >
       </h2>
-      <!-- <p class="suggest">
+      <p class="suggest">
         한글 자막이 제공되는 외국 우수 강의를 구독하세요
-      </p> -->
+      </p>
       <Slide :swiper_option="slide_option.translation_lecture">
         <template slot="list">
           <swiper-slide
@@ -421,7 +421,7 @@
           ></div>
         </template>
       </Slide>
-    </div>
+    </div> -->
     <!-- 번역강의 :: E -->
 
     <!-- 카테고리별강의 :: S -->
