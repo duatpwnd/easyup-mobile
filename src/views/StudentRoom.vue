@@ -1,31 +1,36 @@
 <template>
   <div id="my_lecture" v-if="dashboard_list">
     <Profile
-      v-show="profile_modal"
+      v-if="profile_modal"
       @profileModalClose="profile_modal = false"
     ></Profile>
     <UserInfo v-if="top_count">
       <span slot="user_name" class="name"
-        >{{ userStore_userinfo.info.username }}
-      </span>
+        >{{ userStore_userinfo.info.username }}님의 강의실</span
+      >
       <p slot="user_email" class="email">
         {{ userStore_userinfo.info.email }}
       </p>
-      <template slot="convert"> </template>
-      <span
+      <template
         slot="convert"
-        v-if="$route.query.view == 'student'"
-        @click="convert('teacher')"
-        class="convert"
-        >강사전환</span
+        v-if="
+          $route.query.view == 'teacher' || userStore_userinfo.info.status == 1
+        "
       >
-      <template v-else slot="convert">
         <span class="report" @click="profile_modal = true">프로필</span>
-        <span class="convert" @click="convert('student')">학생전환</span>
+        <span
+          class="convert"
+          @click="convert('student')"
+          v-if="$route.query.view == 'teacher'"
+          >학생전환</span
+        >
+        <span slot="convert" @click="convert('teacher')" v-else class="convert"
+          >강사전환</span
+        >
       </template>
-      <p class="update_date" slot="update_date">
+      <!-- <p class="update_date" slot="update_date">
         최근 접속일: {{ userStore_userinfo.info.last_login }}
-      </p>
+      </p> -->
       <template slot="info">
         <li>
           <h3>진행중인 강의</h3>
@@ -209,7 +214,6 @@
     },
     methods: {
       convert(type) {
-        console.log(type);
         this.$router
           .push({
             query: {
@@ -217,15 +221,6 @@
             },
           })
           .catch(() => {});
-        // 학생전환 강사전환
-        // this.$EventBus.$emit("typeConversion", true);
-        // let userinfo = this.userStore_userinfo;
-        // if (type == "student") {
-        //   userinfo.info.status = 5;
-        // } else {
-        //   userinfo.info.status = 1;
-        // }
-        // this.$store.commit("userStore/loginToken", this.userStore_userinfo);
       },
 
       getMyLecture(action) {
@@ -257,7 +252,7 @@
   .contents {
     padding: 4.445%;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
       &:not(:first-child) {
         margin-top: 20px;
       }
@@ -269,12 +264,12 @@
     }
     .subscribed_lec {
       .td_wrap {
-        width: 37%;
+        width: 40%;
         text-align: right;
         vertical-align: middle;
         display: inline-block;
         ::v-deep .progress_bar {
-          width: 55%;
+          width: 45%;
           margin-left: 5px;
           margin-right: 0;
           height: 16px;

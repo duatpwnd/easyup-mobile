@@ -48,7 +48,6 @@
 </template>
 <script>
   import DatePicker from "@/components/common/DatePicker.vue";
-
   export default {
     components: { DatePicker },
     data() {
@@ -94,7 +93,7 @@
   .settlement_payment {
     padding-bottom: 65px;
     .tab {
-      font-size: 2rem;
+      font-size: 18px;
       font-weight: 600;
       width: 50%;
       display: inline-block;

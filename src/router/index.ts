@@ -93,7 +93,7 @@ const routes = [
     name: "lecDetail",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/LecDetail.vue"),
-    meta: { isFooter: true, unauthorized: true },
+    meta: { isFooter: true, unauthorized: true, title: "강의" },
   },
 
   {
@@ -101,19 +101,19 @@ const routes = [
     name: "courseDetail",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/CourseDetail.vue"),
-    meta: { isFooter: true, unauthorized: true },
+    meta: { isFooter: true, unauthorized: true, title: "코스" },
   },
   {
     path: "/category",
     name: "category",
     component: () => import("../views/LectureList.vue"),
-    meta: { isFooter: true, unauthorized: true },
+    meta: { isFooter: true, unauthorized: true, title: "강의" },
   },
   {
     path: "/course",
     name: "course",
     component: () => import("../views/LectureList.vue"),
-    meta: { isFooter: true, unauthorized: true },
+    meta: { isFooter: true, unauthorized: true, title: "코스" },
   },
   {
     path: "/teacherClassRoom",
@@ -468,7 +468,7 @@ const router = new VueRouter({
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (to.name == "lecDetail" && from.name == "myClassLecture") {
-      return { x: 0, y: 9999 };
+      return { x: 0, y: 99999 };
     } else {
       return { x: 0, y: 0 };
     }

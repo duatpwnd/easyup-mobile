@@ -69,12 +69,11 @@
         </div>
 
         <div class="row">
-          <span class="dt">금액</span>
-          <span class="dd"
-            >{{
-              li.payment_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }}원</span
-          >
+          <span class="dt special-default">금액</span>
+          <span class="dd  special-default">원</span>
+          <span class="dd special-default price">{{
+            li.payment_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }}</span>
         </div>
         <div class="row">
           <span class="dt status" v-if="li.status == 'success'">결제완료</span>
@@ -247,6 +246,12 @@
     padding-top: 0;
     margin-top: 24px;
     border-bottom: 4px solid #f8f8f8;
+    .special-default {
+      font-weight: bold;
+    }
+    .price {
+      color: #114fff;
+    }
   }
   .payment {
     border: 0;

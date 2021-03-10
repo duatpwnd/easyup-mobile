@@ -1,6 +1,11 @@
 <template>
   <footer>
-    <h1>EASYUP</h1>
+    <img
+      class="logo"
+      src="@/assets/images//main/footer_logo.png"
+      alt="EASYUP"
+      title="EASYUP"
+    />
     <div class="gnb">
       <router-link
         :to="{
@@ -38,7 +43,7 @@
     <address>
       <pre>(주)유니윌<br />대표이사:조인형   주소:서울시 강남구 테헤란로124<br />사업자 등록번호:220-86-20171    통신판매업신고:강남 제3339호</pre>
     </address>
-    <h2 class="supply_number">고객지원 Support@easyupclass.com</h2>
+    <h2 class="supply_number">고객지원 support@easyupclass.com</h2>
   </footer>
 </template>
 <script lang="ts"></script>
@@ -47,39 +52,39 @@
     padding: 14px;
     background: #333333;
     position: absolute;
-    bottom: -128px;
+    bottom: -154px;
     max-width: 720px;
     width: 100%;
     box-sizing: border-box;
-    height: 128px;
 
-    h1 {
-      color: #dadada;
-      font-size: 13px;
-      font-weight: bold;
+    .logo {
+      width: 101px;
+      height: 17px;
     }
+
     .gnb {
-      margin: 2.5px 0;
-      span {
+      margin: 10px 0px 3px 0;
+      font-size: 12px;
+      a {
         color: #7a7a7a;
-        font-size: 10px;
       }
       .bar {
+        color: #7a7a7a;
         margin: 0 15px;
       }
     }
-
     address {
       font-style: normal;
       color: #7a7a7a;
       pre {
         font-family: "NotoSansCJKkr-Regular";
-        font-size: 9px;
+        font-size: 12px;
+        white-space: pre-wrap;
       }
     }
     .supply_number {
       color: #7a7a7a;
-      font-size: 12px;
+      font-size: 14px;
     }
   }
 </style>

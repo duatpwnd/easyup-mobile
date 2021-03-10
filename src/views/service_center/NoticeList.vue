@@ -30,7 +30,7 @@
         @click="goToPath(li.id)"
       >
         <span class="left">{{ li.title }}</span>
-        <span class="right">{{ li.created_at }}</span>
+        <span class="right">{{ li.created_at.split(" ")[0] }}</span>
       </li>
     </ul>
     <Pagination>
@@ -54,106 +54,106 @@
   </div>
 </template>
 <script>
-import Pagination from "@/components/common/Pagination.vue";
+  import Pagination from "@/components/common/Pagination.vue";
 
-import BoardTitle from "@/components/common/BoardTitle.vue";
-import Search from "@/components/common/Search.vue";
-export default {
-  components: { BoardTitle, Search, Pagination },
-  data() {
-    return {
-      list: "",
-      keyword: "",
-      current: ""
-    };
-  },
-  methods: {
-    getList(num, keyword) {
-      const data = {
-        action: "get_cs_list", //필수
-        current: num, //필수
-        type: "notice",
-        keyword: keyword //옵션
+  import BoardTitle from "@/components/common/BoardTitle.vue";
+  import Search from "@/components/common/Search.vue";
+  export default {
+    components: { BoardTitle, Search, Pagination },
+    data() {
+      return {
+        list: "",
+        keyword: "",
+        current: "",
       };
-      this.$axios
-        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then(result => {
-          this.$router
-            .push({
-              query: {
-                pageCurrent: num,
-                keyword: keyword
-              }
-            })
-            .catch(() => {});
-          this.list = result.data.data;
-          this.keyword = keyword;
-          this.current = num;
-        });
     },
-    goToPath(id) {
-      this.$router
-        .push({
-          path: "/help/notice/read",
-          query: {
-            id: id
-          }
-        })
-        .catch(() => {});
-    }
-  },
-  mounted() {
-    this.getList(this.$route.query.pageCurrent, this.$route.query.keyword);
-  }
-};
+    methods: {
+      getList(num, keyword) {
+        const data = {
+          action: "get_cs_list", //필수
+          current: num, //필수
+          type: "notice",
+          keyword: keyword, //옵션
+        };
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            this.$router
+              .push({
+                query: {
+                  pageCurrent: num,
+                  keyword: keyword,
+                },
+              })
+              .catch(() => {});
+            this.list = result.data.data;
+            this.keyword = keyword;
+            this.current = num;
+          });
+      },
+      goToPath(id) {
+        this.$router
+          .push({
+            path: "/help/notice/read",
+            query: {
+              id: id,
+            },
+          })
+          .catch(() => {});
+      },
+    },
+    mounted() {
+      this.getList(this.$route.query.pageCurrent, this.$route.query.keyword);
+    },
+  };
 </script>
 <style scoped lang="scss">
-.notice {
-  padding: 4.445%;
-  .search {
-    .search_contents {
-      width: 100%;
-      margin-left: 0;
-    }
-  }
-  h2 {
-    font-size: 1.375rem;
-    margin-top: 2.5%;
-    .num {
-      color: #114fff;
-    }
-  }
-  .title_wrap {
-    span {
-      text-align: right;
-    }
-  }
-  .item_wrap {
-    li {
-      &:after {
-        display: block;
-        content: "";
-        clear: both;
+  .notice {
+    padding: 4.445%;
+    .search {
+      .search_contents {
+        width: 100%;
+        margin-left: 0;
       }
-      padding: 2%;
-      &:nth-child(even) {
-        background: #f8f8f8;
+    }
+    h2 {
+      font-size: 1.375rem;
+      margin-top: 2.5%;
+      .num {
+        color: #114fff;
       }
+    }
+    .title_wrap {
       span {
-        color: #333333;
-        font-size: 1.25rem;
+        text-align: right;
       }
-      .left {
-        float: left;
-        width: 55%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .right {
-        float: right;
+    }
+    .item_wrap {
+      li {
+        &:after {
+          display: block;
+          content: "";
+          clear: both;
+        }
+        padding: 2%;
+        &:nth-child(even) {
+          background: #f8f8f8;
+        }
+        span {
+          color: #333333;
+          font-size: 1.25rem;
+        }
+        .left {
+          float: left;
+          width: 70%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .right {
+          float: right;
+        }
       }
     }
   }
-}
 </style>

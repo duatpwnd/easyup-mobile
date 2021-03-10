@@ -38,12 +38,13 @@
   </div>
 </template>
 <script lang="ts">
-  import { Vue } from "vue-property-decorator";
-  export default class UniJob extends Vue {}
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({})
+  export default class Unijob extends Vue {}
 </script>
 <style scoped lang="scss">
   .tab {
-    font-size: 2rem;
+    font-size: 18px;
     font-weight: 600;
     width: 50%;
     display: inline-block;

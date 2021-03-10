@@ -1,6 +1,5 @@
 import { Component, Watch, Vue } from "vue-property-decorator";
-import { ResultData } from "@/assets/js/util.ts";
-
+import { ResultData } from "@/assets/js/util";
 interface Data {
   action: string;
   course_id: number;
@@ -15,10 +14,14 @@ type OptionalData = Partial<Data>;
   },
 })
 export default class GroupMixin extends Vue {
+  $refs!: {
+    subs_btn: HTMLButtonElement;
+  };
+  detail = {}; //코스는 지금 타입스크립트 적용안되서 지금 일딴 써놨음 코스도 타입스크립트 적용시키면 제거 시키기
   isPossibleReview = false;
   is_subscribe = false;
   subscribe_btn = false;
-  detail = {};
+  test = "염세중";
   score_info = {}; // 각 별점의 개수
   url = window.document.location.href; // 클립보드 현재 url
   @Watch("detect_token")
@@ -60,6 +63,8 @@ export default class GroupMixin extends Vue {
     } else {
       data.session_id = Number(this.$route.query.id);
     }
+    console.log("dddd", data);
+
     await this.$axios
       .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
       .then((result: ResultData) => {
@@ -75,12 +80,15 @@ export default class GroupMixin extends Vue {
   }
   subscribe_btn_toggle(): void {
     if (this.$refs.subs_btn != undefined) {
-      const el = this.$refs.subs_btn as HTMLElement;
+      const el = this.$refs.subs_btn;
       const btn_offset_top = el.offsetTop;
       const btn_h = el.clientHeight;
       const scroll_top = window.scrollY;
       if (scroll_top > btn_offset_top + btn_h) {
         this.subscribe_btn = true;
+        // footer
+        (this.$root.$el.children[2] as HTMLElement).style.cssText =
+          "padding-bottom : 78px; position: unset;";
       } else {
         this.subscribe_btn = false;
       }
@@ -100,10 +108,23 @@ export default class GroupMixin extends Vue {
     this.$axios
       .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
       .then((result: ResultData) => {
-        this.$noticeMessage("강의바구니에 담았습니다.");
+        if (result.data.error == false) {
+          this.$store.commit("toggleStore/Toggle", {
+            cart_modal: true,
+          });
+          this.$store.commit(
+            "toggleStore/noticeMessage",
+            "강의 바구니에 담았습니다.<br> 강의 바구니로 이동하시겠습니까?"
+          );
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
-
+  destroyed() {
+    (this.$root.$el.children[2] as HTMLElement).removeAttribute("style");
+  }
   created() {
     window.onscroll = () => {
       this.subscribe_btn_toggle();

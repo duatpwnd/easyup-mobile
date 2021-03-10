@@ -11,7 +11,7 @@
       name="sndStoreid"
       size="10"
       maxlength="10"
-      value="2999199999"
+      :value="sndStoreid"
     />
     <!-- 화폐단위 -->
     <input
@@ -154,10 +154,15 @@
     },
   })
   export default class OrderForm extends Vue {
+    sndStoreid =
+      process.env.NODE_ENV == "production" ? "2001106668" : "2999199999";
     // 결제수단
     @Prop(String) private value!: String;
     // 결제정보
     @Prop(Object) private info!: Object;
+    created() {
+      console.log("mode:", this.sndStoreid);
+    }
   }
 </script>
 <style scoped lang="scss"></style>

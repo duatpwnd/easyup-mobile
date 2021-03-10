@@ -93,8 +93,8 @@
         </div>
 
         <div class="row">
-          <span class="dt">결제 금액</span>
-          <span class="dd"
+          <span class="dt special-default">결제 금액</span>
+          <span class="dd special-default"
             >{{
               li.price.final.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }}원</span
@@ -117,9 +117,9 @@
           >
         </div>
         <div class="row">
-          <span class="dt">정산 금액</span>
-          <span class="dd">원</span>
-          <span class="dd status">{{
+          <span class="dt special-default">정산 금액</span>
+          <span class="dd special-default">원</span>
+          <span class="dd status special-default">{{
             li.price.settlement.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }}</span>
         </div>
@@ -173,15 +173,14 @@
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
-            console.log(result);
-            console.log(this.$route.query.view);
+            console.log(result, data);
             this.list = result.data.data;
             this.$router
               .push({
                 query: {
                   pageCurrent: num,
-                  start_date: this.$route.query.start_date,
-                  end_date: this.$route.query.end_date,
+                  start_date: data.search_start_date,
+                  end_date: data.search_end_date,
                   view: this.$route.query.view,
                 },
               })
@@ -237,6 +236,7 @@
         font-size: 12px;
         color: #999999;
       }
+
       .dd {
         font-size: 16px;
       }
@@ -252,6 +252,9 @@
     padding-top: 0;
     margin-top: 24px;
     border-bottom: 4px solid #f8f8f8;
+    .special-default {
+      font-weight: bold;
+    }
   }
   .amount_wrap {
     border: 0;

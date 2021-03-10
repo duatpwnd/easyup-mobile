@@ -6,14 +6,71 @@
         slot="list"
         v-for="(list, index) in list.banner"
         :key="index"
-        ><img :src="list.image_url" @click="noticeRead(list.id)"
+        ><img
+          :src="list.image_url"
+          @click="
+            $router
+              .push({
+                path: list.id == null ? '' : '/help/notice/read',
+                query: {
+                  id: list.id,
+                },
+              })
+              .catch(() => {})
+          "
       /></swiper-slide>
     </Slide>
     <!-- 배너 :: E -->
 
+    <!-- 인기강의 :: S -->
+    <!-- <div class="section" v-if="list.popular_lecture.length > 0">
+      <h2 class="title">인기 강의</h2>
+      <p class="suggest">이지업의 가장 인기가 많은 강의를 확인해보세요</p>
+      <div class="lec_list_wrap">
+        <div
+          class="li"
+          v-for="(list, index) in list.popular_lecture"
+          :key="index"
+          @click="
+            $router.push({
+              path: '/lecDetail',
+              query: {
+                id: list.id,
+              },
+            })
+          "
+        >
+          <LecItem>
+            <span
+              class="lec_list"
+              slot="router"
+              :style="{ 'background-image': `url(${list.image_url})` }"
+            >
+            </span>
+            <h4 slot="teacher">{{ list.teachers }}</h4>
+            <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
+            <span slot="grade" class="score">{{ list.ranking }}</span>
+            <h1 class="free" slot="free" v-if="list.price.is_free">
+              FREE
+            </h1>
+            <span class="price" v-else slot="free">
+              <del
+                class="original"
+                v-if="list.price.format_original != list.price.format_final"
+                >{{ list.price.format_original }}</del
+              >
+              <span class="final">{{ list.price.format_final }}</span>
+            </span>
+          </LecItem>
+        </div>
+      </div>
+    </div> -->
+    <!-- 인기강의 :: E-->
     <!-- 강의 검색 :: S-->
     <div class="section search-section">
-      <h2 class="title">이지업에서 쉽고 빠르게 성장하세요!</h2>
+      <h2 class="main-title">
+        {{ search_title[$cookies.get("search_title").num] }}
+      </h2>
       <Search>
         <input
           slot="slot_input"
@@ -34,11 +91,17 @@
     <!-- 카테고리별 강의 :: S -->
     <CategoryLec></CategoryLec>
     <!-- 카테고리별 강의 :: E -->
-
     <!-- 추천강의 :: S -->
     <div class="section swiper_section" v-if="list.popular_lecture.length > 0">
-      <h2 class="title">추천 강의</h2>
-      <!-- <p class="suggest">이지업의 가장 인기가 많은 강의를 확인해보세요</p> -->
+      <div class="title-header">
+        <h2 class="title">추천 강의</h2>
+        <span class="more-view-btn" @click="moreView('type_rating')"
+          >전체보기 ></span
+        >
+      </div>
+      <!-- <p class="suggest">
+        이지업이 추천하는 검증된 강의!
+      </p> -->
       <Slide :swiper_option="slide_option.recommand_lecture">
         <template slot="list">
           <swiper-slide
@@ -55,18 +118,25 @@
                     id: list.id,
                   },
                 }"
-                :style="{ 'background-image': `url(${list.image_url})` }"
               >
+                <img
+                  :src="list.image_url"
+                  :alt="list.title"
+                  :title="list.title"
+                />
               </router-link>
               <h4 slot="teacher">{{ list.teachers }}</h4>
-
-              <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+              <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
               <span slot="grade" class="score">{{ list.ranking }}</span>
               <h1 class="free" slot="free" v-if="list.price.is_free">
                 FREE
               </h1>
               <span class="price" v-else slot="free">
-                <del class="original">{{ list.price.format_original }}</del>
+                <del
+                  class="original"
+                  v-if="list.price.format_original != list.price.format_final"
+                  >{{ list.price.format_original }}</del
+                >
                 <span class="final">{{ list.price.format_final }}</span>
               </span>
             </LecItem>
@@ -86,11 +156,84 @@
         </template>
       </Slide>
     </div>
-    <!-- 추천강의 :: E-->
+    <!-- 추천강의 :: E -->
 
+    <!-- 이지채널 :: S -->
+    <div class="section swiper_section blog-section">
+      <div class="title-header">
+        <h2 class="title">이지채널</h2>
+        <span
+          class="more-view-btn"
+          @click="
+            $router
+              .push({
+                path: '/techBlog',
+                query: {
+                  pageCurrent: 1,
+                  keyword: '',
+                },
+              })
+              .catch(() => {})
+          "
+          >전체보기 ></span
+        >
+      </div>
+      <!-- <p class="suggest">
+        간단하고 쉽게 개발 정보를 얻을 수 있는 블로그!
+      </p> -->
+      <Slide :swiper_option="slide_option.easy_channel">
+        <template slot="list">
+          <swiper-slide
+            v-for="(list, index) in list.techblog_post"
+            :key="index"
+          >
+            <LecItem>
+              <router-link
+                class="lec_list"
+                slot="router"
+                :to="{
+                  path: '/techBlog/read',
+                  query: {
+                    id: list.id,
+                  },
+                }"
+              >
+                <img
+                  :src="list.thumbnail"
+                  :alt="list.title"
+                  :title="list.title"
+                />
+              </router-link>
+              <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
+              <span slot="grade" class="date"
+                >{{ list.wdate_format }} {{ list.writer }}</span
+              >
+            </LecItem>
+          </swiper-slide>
+        </template>
+        <template slot="nav_btn">
+          <div
+            class="swiper-button-prev swiper-button-prev-4"
+            slot="button-prev"
+            @click.stop=""
+          ></div>
+          <div
+            class="swiper-button-next swiper-button-next-4"
+            slot="button-next"
+            @click.stop=""
+          ></div>
+        </template>
+      </Slide>
+    </div>
+    <!-- 이지채널 :: E -->
     <!-- 최신강의 ::  S -->
     <div class="section swiper_section" v-if="list.latest_lecture.length > 0">
-      <h2 class="title">최신 강의</h2>
+      <div class="title-header">
+        <h2 class="title">최신 강의</h2>
+        <span class="more-view-btn" @click="moreView('type_date')"
+          >전체보기 ></span
+        >
+      </div>
       <!-- <p class="suggest">
         최근 트렌드를 반영한 강의 정보를 확인하세요
       </p> -->
@@ -110,18 +253,25 @@
                     id: list.id,
                   },
                 }"
-                :style="{ 'background-image': `url(${list.image_url})` }"
               >
+                <img
+                  :src="list.image_url"
+                  :alt="list.title"
+                  :title="list.title"
+                />
               </router-link>
               <h4 slot="teacher">{{ list.teachers }}</h4>
-
-              <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+              <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
               <span slot="grade" class="score">{{ list.ranking }}</span>
               <h1 class="free" slot="free" v-if="list.price.is_free">
                 FREE
               </h1>
               <span class="price" v-else slot="free">
-                <del class="original">{{ list.price.format_original }}</del>
+                <del
+                  class="original"
+                  v-if="list.price.format_original != list.price.format_final"
+                  >{{ list.price.format_original }}</del
+                >
                 <span class="final">{{ list.price.format_final }}</span>
               </span>
             </LecItem>
@@ -144,7 +294,24 @@
     <!-- 최신강의 ::  E -->
     <!-- 인기 코스 :: S -->
     <div class="section swiper_section" v-if="list.popular_course.length > 0">
-      <h2 class="title">인기 코스</h2>
+      <div class="title-header">
+        <h2 class="title">인기 코스</h2>
+        <span
+          class="more-view-btn"
+          @click="
+            $router.push({
+              path: '/course',
+              query: {
+                action: 'get_session_list',
+                pageCurrent: 1,
+                order: 'type_rating',
+                keyword: '',
+              },
+            })
+          "
+          >전체보기 ></span
+        >
+      </div>
       <!-- <p class="suggest">
         초심자 과정부터 전문가 과정까지, 전 과정을 합리적인 가격에 마스터하세요
       </p> -->
@@ -225,13 +392,17 @@
               </router-link>
               <h4 slot="teacher">{{ list.teachers }}</h4>
 
-              <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+              <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
               <span slot="grade" class="score">{{ list.ranking }}</span>
               <h1 class="free" slot="free" v-if="list.price.is_free">
                 FREE
               </h1>
               <span class="price" v-else slot="free">
-                <del class="original">{{ list.price.format_original }}</del>
+                <del
+                  class="original"
+                  v-if="list.price.format_original != list.price.format_final"
+                  >{{ list.price.format_original }}</del
+                >
                 <span class="final">{{ list.price.format_final }}</span>
               </span>
             </LecItem></swiper-slide
@@ -276,9 +447,9 @@
 <script lang="ts">
   import { Component, Vue } from "vue-property-decorator";
   import LecItem from "@/components/common/LectureItem.vue";
-  import Search from "@/components/common/Search.vue";
   import CategoryLec from "@/components/main/MainCategory.vue";
   import Slide from "@/components/common/Slide.vue";
+  import Search from "@/components/common/Search.vue";
   interface ResultedData {
     data: {
       data: {};
@@ -286,13 +457,22 @@
   }
   @Component({
     components: {
+      Search,
       Slide,
       LecItem,
-      Search,
       CategoryLec,
     },
   })
   export default class Main extends Vue {
+    search_title = [
+      "이지업에서 쉽고 빠르게 성장하세요!",
+      "소스도 먼저 코딩하는 놈이 낫다",
+      "발 없는 소스가 천리간다",
+      "고와도 내 코드 미워도 내 코드",
+      "내가 짠 코드가 세상을 바꾼다",
+      "짰슈?",
+      "응 짰슈.",
+    ];
     keyword = "";
     slide_option = {
       banner: {
@@ -340,6 +520,15 @@
           prevEl: ".swiper-button-prev-3",
         },
       },
+      easy_channel: {
+        spaceBetween: 8,
+        slidesPerView: 2,
+        direction: "horizontal",
+        navigation: {
+          nextEl: ".swiper-button-next-4",
+          prevEl: ".swiper-button-prev-4",
+        },
+      },
     };
     list = {};
     lectureSearch(): void {
@@ -367,9 +556,47 @@
           this.list = result.data.data;
         });
     }
-
+    moreView(order: string): void {
+      this.$router
+        .push({
+          path: "/category",
+          query: {
+            title: "전체",
+            category_code: "ALL",
+            action: "get_course_list",
+            keyword: "",
+            pageCurrent: 1,
+            order: order,
+          },
+        })
+        .catch(() => {});
+    }
+    mounted() {
+      // 새로고침감지
+      const isOnIOS =
+        navigator.userAgent.match(/iPad/i) ||
+        navigator.userAgent.match(/iPhone/i);
+      const eventName = isOnIOS ? "pagehide" : "beforeunload";
+      window.addEventListener(eventName, (event) => {
+        this.$cookies.set("search_title", {
+          num: this.$cookies.get("search_title").num + 1,
+        });
+        if (
+          this.$cookies.get("search_title").num + 1 >
+          this.search_title.length
+        ) {
+          this.$cookies.set("search_title", {
+            num: 0,
+          });
+        }
+      });
+    }
     created() {
-      console.log(this.$cookies);
+      if (this.$cookies.get("search_title") == null) {
+        this.$cookies.set("search_title", {
+          num: 0,
+        });
+      }
       this.getLectureList();
     }
   }
@@ -377,34 +604,58 @@
 <style scoped lang="scss">
   #main {
     position: relative;
+    > .slide {
+      .swiper-container {
+        height: 200px;
+        .swiper-wrapper {
+          height: 200px;
+          .swiper-slide {
+            height: 200px;
+            img {
+              height: 200px;
+              object-fit: cover;
+            }
+          }
+        }
+      }
+    }
     .section {
       padding: 4.445%;
-      .lec_list {
-        padding-bottom: 55%;
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
-      .title {
+      .title-header {
         position: relative;
-        font-size: 2rem;
-        margin-top: 24px;
-        &:first-child {
-          margin-top: 0;
-        }
-        .more_view {
-          font-family: "NotoSansCJKkr-Medium";
-          position: absolute;
+        .more-view-btn {
+          color: #bdbdbd;
           font-size: 12px;
-          color: #114fff;
-          border: 1px solid #114fff;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          height: 22px;
-          padding: 1px 10px;
-          border-radius: 4px;
-          margin: auto;
-          line-height: 20px;
+          display: inline-block;
+          vertical-align: middle;
+          text-align: right;
+          width: 20%;
+        }
+        .title {
+          vertical-align: middle;
+          position: relative;
+          font-size: 2rem;
+          display: inline-block;
+          width: 80%;
+          margin-top: 24px;
+          &:first-child {
+            margin-top: 0;
+          }
+          .more_view {
+            font-family: "NotoSansCJKkr-Medium";
+            position: absolute;
+            font-size: 12px;
+            color: #114fff;
+            border: 1px solid #114fff;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            height: 22px;
+            padding: 1px 10px;
+            border-radius: 4px;
+            margin: auto;
+            line-height: 20px;
+          }
         }
       }
       .suggest {
@@ -461,7 +712,7 @@
     }
     .search-section {
       padding-bottom: 0;
-      .title {
+      .main-title {
         text-align: center;
         font-size: 16px;
       }
@@ -525,6 +776,16 @@
           background: url("~@/assets/images/main/next_btn.png") no-repeat center
             center / 100% 100%;
           right: 0;
+        }
+      }
+    }
+    .blog-section {
+      .swiper-slide {
+        .item {
+          img {
+            height: 270px;
+            object-fit: cover;
+          }
         }
       }
     }

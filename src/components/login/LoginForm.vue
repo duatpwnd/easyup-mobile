@@ -28,11 +28,11 @@
       >
     </div>
     <div class="lec_course">
-      <button class="lec" @click="goToLecture()">
+      <button class="lec arrow" @click="goToLecture()">
         강의
       </button>
       <button
-        class="course"
+        class="course arrow"
         @click="
           $router.push({
             path: '/course',
@@ -50,6 +50,26 @@
         "
       >
         코스
+      </button>
+      <button
+        class="blog"
+        @click="
+          $router
+            .push({
+              path: '/techBlog',
+              query: {
+                pageCurrent: 1,
+                keyword: '',
+              },
+            })
+            .catch(() => {});
+          $store.commit('toggleStore/Toggle', {
+            login_modal: false,
+            mask: false,
+          });
+        "
+      >
+        이지채널
       </button>
     </div>
     <div class="support">
@@ -208,7 +228,6 @@
         font-size: 1.5rem;
         padding: 5px 10px;
       }
-
       .user_pw {
         margin: 10px 0;
       }
@@ -222,12 +241,17 @@
         width: 100%;
         font-size: 1.5rem;
         font-family: "NotoSansCJKkr-Regular";
-        background: url("~@/assets/images/common/right_arrow.png") no-repeat
-          right center / 3%;
       }
       .course {
         @extend .lec;
         margin-top: 4%;
+      }
+      .arrow {
+        background: url("~@/assets/images/common/right_arrow.png") no-repeat
+          right center / 3%;
+      }
+      .blog {
+        @extend .course;
       }
     }
     .support {
@@ -240,8 +264,6 @@
         text-align: left;
         font-size: 1.5rem;
         display: block;
-        background: url("~@/assets/images/common/right_arrow.png") no-repeat
-          right center / 3%;
       }
       .faq_btn {
         margin: 4% 0;

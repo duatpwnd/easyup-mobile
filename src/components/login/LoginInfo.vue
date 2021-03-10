@@ -37,7 +37,6 @@
         코스
       </button>
       <button
-        v-if="env == 'development'"
         class="lnb"
         @click="
           $router
@@ -55,7 +54,7 @@
           });
         "
       >
-        이지타임
+        이지채널
       </button>
       <button
         @click="
@@ -64,7 +63,11 @@
               path: '/studentClassRoom',
               query: {
                 view:
-                  userStore_userinfo.info.status === 1 ? 'student' : 'teacher',
+                  $route.query.view === undefined
+                    ? userStore_userinfo.info.status == 1
+                      ? 'teacher'
+                      : 'student'
+                    : $route.query.view,
               },
             })
             .catch(() => {});
@@ -107,7 +110,11 @@
               path: '/profileModify',
               query: {
                 view:
-                  userStore_userinfo.info.status === 1 ? 'student' : 'teacher',
+                  $route.query.view === undefined
+                    ? userStore_userinfo.info.status == 1
+                      ? 'teacher'
+                      : 'student'
+                    : $route.query.view,
               },
             })
             .catch(() => {});
@@ -199,7 +206,7 @@
   export default class LoginInfo extends Vue {
     userid = "";
     userpw = "";
-    env = "";
+
     logout(): void {
       this.$logOut();
     }
@@ -209,9 +216,6 @@
     }
     goToLecture(): void {
       this.$EventBus.$emit("GoToLecture", true);
-    }
-    mounted() {
-      this.env = String(process.env.NODE_ENV);
     }
   }
 </script>
@@ -253,6 +257,8 @@
       }
     }
     .lnb_menu {
+      border-top: 4px solid #f8f8f8;
+      border-bottom: 4px solid #f8f8f8;
       padding: 4.445%;
       border-top: 4px solid #f8f8f8;
       border-bottom: 4px solid #f8f8f8;
@@ -284,7 +290,6 @@
     .logout {
       background: white;
       padding: 4.445%;
-      padding-top: 0;
       position: absolute;
       bottom: 0;
       width: 100%;

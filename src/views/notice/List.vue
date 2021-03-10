@@ -142,7 +142,10 @@
 </script>
 <style scoped lang="scss">
   .search_area {
-    margin: 3.5% 0;
+    margin-bottom: 10px;
+    .search {
+      margin-top: 0;
+    }
   }
   .list {
     &:nth-child(even) {

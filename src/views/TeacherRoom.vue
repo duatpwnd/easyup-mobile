@@ -30,67 +30,67 @@
   </div>
 </template>
 <script>
-import UserInfo from "@/components/my_lecture_room/user_info.vue";
-import List from "@/components/my_lecture_room/list.vue";
-export default {
-  components: {
-    List,
-    UserInfo
-  },
-  data() {
-    return {};
-  },
-  methods: {}
-};
+  import UserInfo from "@/components/my_lecture_room/user_info.vue";
+  import List from "@/components/my_lecture_room/list.vue";
+  export default {
+    components: {
+      List,
+      UserInfo,
+    },
+    data() {
+      return {};
+    },
+    methods: {},
+  };
 </script>
 <style scoped lang="scss">
-.contents {
-  padding: 4.445%;
-  h2 {
-    font-size: 2rem;
-    &:not(:first-child) {
-      margin-top: 20px;
+  .contents {
+    padding: 4.445%;
+    h2 {
+      font-size: 2rem;
+      &:not(:first-child) {
+        margin-top: 20px;
+      }
     }
-  }
-  .subscribed_lec {
-    .td_wrap {
-      width: 37%;
-      text-align: right;
-      vertical-align: middle;
-      display: inline-block;
-      .progress {
-        width: 57%;
-        margin-left: 5%;
-        background: white;
-        border-radius: 4px;
-        text-align: left;
-        border: 1px solid #cacaca;
-        .progress_bar {
-          display: inline-block;
+    .subscribed_lec {
+      .td_wrap {
+        width: 37%;
+        text-align: right;
+        vertical-align: middle;
+        display: inline-block;
+        .progress {
+          width: 57%;
+          margin-left: 5%;
+          background: white;
           border-radius: 4px;
-          background: #ecedee;
-          width: 65%;
-          .percent {
-            width: 100%;
-            display: block;
+          text-align: left;
+          border: 1px solid #cacaca;
+          .progress_bar {
+            display: inline-block;
+            border-radius: 4px;
+            background: #ecedee;
+            width: 65%;
+            .percent {
+              width: 100%;
+              display: block;
+            }
           }
         }
       }
     }
+    .board_list {
+      ::v-deep .td1 {
+        width: 62%;
+      }
+      .td2 {
+        width: 23%;
+      }
+      .td3 {
+        font-weight: bold;
+        width: 15%;
+        text-align: right;
+        color: #333333;
+      }
+    }
   }
-  .board_list {
-    ::v-deep .td1 {
-      width: 62%;
-    }
-    .td2 {
-      width: 23%;
-    }
-    .td3 {
-      font-weight: bold;
-      width: 15%;
-      text-align: right;
-      color: #333333;
-    }
-  }
-}
 </style>

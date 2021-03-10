@@ -41,8 +41,6 @@
       line-height: 2.3;
       font-size: 1.25rem;
       color: #333333;
-      outline: none;
-
       background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 92%
         center / 7px 5px;
     }

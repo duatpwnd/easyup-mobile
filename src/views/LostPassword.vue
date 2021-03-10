@@ -52,14 +52,15 @@
 </script>
 <style scoped lang="scss">
   #findByEmail {
-    padding: 4.445%;
+    padding: 16px;
+    padding-top: 0;
+    margin-top: 13px;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
+      margin-bottom: 13px;
       color: #333333;
     }
     .form {
-      margin-top: 4%;
-
       .blue_btn {
         margin-top: 5%;
         width: calc(100% - 35%);
@@ -73,7 +74,7 @@
         clear: both;
 
         input {
-          font-size: 1.5rem;
+          font-size: 16px;
           font-family: "NotoSansCJKkr-Regular";
           width: calc(100% - 35%);
           box-sizing: border-box;
@@ -86,7 +87,7 @@
         .dt {
           width: 35%;
           display: inline-block;
-          font-size: 1.5rem;
+          font-size: 16px;
           font-family: "NotoSansCJKkr-Regular";
           .required {
             color: #114fff;

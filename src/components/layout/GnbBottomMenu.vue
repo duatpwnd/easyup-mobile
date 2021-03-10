@@ -3,7 +3,20 @@
     <div class="gnb_mask" v-if="gnb_mask" @click="removeMask()"></div>
     <ul class="more_view" v-if="toggleStore_more_view">
       <li v-for="(list, index) in top_menu" :key="index" @click="removeMask()">
+        <!-- 추후 업데이트 :: S -->
+        <span
+          @click="
+            removeMask();
+            $noticeMessage('준비중입니다.');
+          "
+          v-if="list.isPreparing != null"
+        >
+          <img :src="list.name" :alt="list.title" :title="list.title" />
+          <h3>{{ list.title }}</h3></span
+        >
+        <!-- 추후 업데이트 :: E -->
         <router-link
+          v-else
           :to="{ path: list.path, query: list.query }"
           :class="[
             {
@@ -48,10 +61,25 @@
           </h3>
           <h3 class="inactive_title" v-else>{{ list.title }}</h3>
         </span>
+        <!-- 추후 업데이트 :: S -->
+        <span
+          @click="
+            removeMask();
+            $noticeMessage('준비중입니다.');
+          "
+          v-else-if="list.title != '학습관리' && list.isPreparing != null"
+        >
+          <img :src="list.name" :alt="list.title" :title="list.title" />
+          <h3>{{ list.title }}</h3></span
+        >
+        <!-- 추후 업데이트 :: E -->
         <router-link
           @click.native="removeMask()"
-          v-else
-          :to="{ path: list.path, query: list.query }"
+          v-else-if="list.title != '학습관리' && list.isPreparing == null"
+          :to="{
+            path: list.path,
+            query: list.query,
+          }"
           :class="[
             {
               'router-link-active':
@@ -95,6 +123,7 @@
     name: string;
     active: string;
     status?: number;
+    isPreparing?: boolean;
     query?: {
       type?: string;
       keyword?: string;
@@ -154,27 +183,28 @@
         path: "/dataShare/sent",
         name: require("@/assets/images/common/share_ico.png"),
         active: require("@/assets/images/common/share_active_ico.png"),
+        isPreparing: true,
         query: {
           keyword: "",
           pageCurrent: 1,
           order: "all",
         },
       },
-      {
-        title: "과제게시판",
-        path: "/dataShare/sent",
-        name: require("@/assets/images/common/learning_ico.png"),
-        active: require("@/assets/images/common/learning_active_ico.png"),
-        query: {
-          // keyword: "",
-          // pageCurrent: 1,
-          // order: "all",
-        },
-      },
+      // {
+      //   title: "과제게시판",
+      //   path: "/dataShare/sent",
+      //   name: require("@/assets/images/common/learning_ico.png"),
+      //   active: require("@/assets/images/common/learning_active_ico.png"),
+      //   query: {
+      // keyword: "",
+      // pageCurrent: 1,
+      // order: "all",
+      //   },
+      // },
     ];
     bottom_menu: MenuType[] = [
       {
-        title: "내 강좌/코스",
+        title: "내 강의/코스",
         path: "/myClass/lecture",
         name: require("@/assets/images/common/lec_course_ico.png"),
         active: require("@/assets/images/common/lec_course_active_ico.png"),
@@ -232,6 +262,7 @@
               pageCurrent: 1,
               view: this.$route.query.view as string,
             },
+            isPreparing: true,
             name: require("@/assets/images/common/coupon_ico.png"),
             active: require("@/assets/images/common/coupon_active_ico.png"),
           },
@@ -268,6 +299,7 @@
           {
             title: "쿠폰관리",
             path: "/couponManageTeacher/list",
+            isPreparing: true,
             query: {
               order: "",
               pageCurrent: 1,
@@ -283,6 +315,7 @@
             name: require("@/assets/images/common/payment_ico.png"),
             active: require("@/assets/images/common/payment_active_ico.png"),
             status: 1,
+            isPreparing: true,
             query: {
               pageCurrent: 1,
               start_date: this.$dateFormat(),
@@ -388,7 +421,8 @@
       position: relative;
       li {
         padding: 10px 0;
-        a {
+        a,
+        span {
           padding: 0;
         }
         &:not(:last-child) {

@@ -98,8 +98,8 @@
             >
           </div>
           <div class="row">
-            <span class="dt">결제 금액</span>
-            <span class="dd"
+            <span class="dt special-default">결제 금액</span>
+            <span class="dd special-default"
               >{{
                 list.pay_info.price.final
                   .toString()
@@ -118,14 +118,13 @@
             >
           </div>
           <div class="row">
-            <span class="dt">정산 금액</span>
-            <span class="dd"
-              >{{
-                list.pay_info.price.settlement
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원</span
-            >
+            <span class="dt special-default">정산 금액</span>
+            <span class="dd special-default">원</span>
+            <span class="dd special-default price">{{
+              list.pay_info.price.settlement
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }}</span>
           </div>
         </template>
       </Row>
@@ -223,6 +222,14 @@
         .ori_price {
           font-weight: bold;
           margin-left: 5px;
+          color: #114fff;
+        }
+      }
+      .li {
+        .special-default {
+          font-weight: bold;
+        }
+        .price {
           color: #114fff;
         }
       }

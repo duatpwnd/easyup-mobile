@@ -23,7 +23,6 @@
         <template slot="contents">
           <img :src="li.thumbnail" :alt="li.title" :title="li.title" />
           <h2 class="title">{{ li.title }}</h2>
-          <p class="brief">{{ li.intro_txt }}</p>
           <span class="date">{{ li.wdate }}</span>
         </template>
       </TechBlogList>
@@ -49,71 +48,86 @@
   </div>
 </template>
 <script>
-import Pagination from "@/components/common/Pagination.vue";
-import Search from "@/components/common/Search.vue";
-import TechBlogList from "@/components/techblog/List.vue";
-export default {
-  components: {
-    Pagination,
-    TechBlogList,
-    Search
-  },
-  data() {
-    return {
-      list: "",
-      keyword: "",
-      current: ""
-    };
-  },
-  methods: {
-    goToPath(id) {
-      this.$router.push({
-        path: "/techBlog/read",
-        query: {
-          id: id
-        }
-      });
+  import Pagination from "@/components/common/Pagination.vue";
+  import Search from "@/components/common/Search.vue";
+  import TechBlogList from "@/components/techblog/List.vue";
+  export default {
+    components: {
+      Pagination,
+      TechBlogList,
+      Search,
     },
-    getList(num, keyword) {
-      const data = {
-        action: "get_blog_list", //필수
-        current: num, //필수
-        keyword: keyword //옵션
+    data() {
+      return {
+        list: "",
+        keyword: "",
+        current: "",
       };
-      console.log(data);
-      this.$axios
-        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then(result => {
-          console.log("기술블로그", result);
-          this.$router
-            .push({
-              query: {
-                pageCurrent: num,
-                keyword: keyword
-              }
-            })
-            .catch(() => {});
-          this.list = result.data.data;
-          this.keyword = keyword;
-          this.current = num;
+    },
+    methods: {
+      goToPath(id) {
+        this.$router.push({
+          path: "/techBlog/read",
+          query: {
+            id: id,
+          },
         });
-    }
-  },
-  created() {
-    this.getList(this.$route.query.pageCurrent, this.$route.query.keyword);
-  }
-};
+      },
+      getList(num, keyword) {
+        const data = {
+          action: "get_blog_list", //필수
+          current: num, //필수
+          keyword: keyword, //옵션
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log("기술블로그", result);
+            this.$router
+              .push({
+                query: {
+                  pageCurrent: num,
+                  keyword: keyword,
+                },
+              })
+              .catch(() => {});
+            this.list = result.data.data;
+            this.keyword = keyword;
+            this.current = num;
+          });
+      },
+    },
+    created() {
+      this.getList(this.$route.query.pageCurrent, this.$route.query.keyword);
+    },
+  };
 </script>
 <style scoped lang="scss">
-.search {
-  margin: 2% 0;
-  .search_contents {
-    width: 100%;
-    margin-left: 0;
+  .search {
+    margin-top: 0;
+    .search_contents {
+      width: 100%;
+      margin-left: 0;
+    }
   }
-}
-.list {
-  border-bottom: 4px solid #f8f8f8;
-  padding: 10px 0;
-}
+  .list {
+    margin-top: 24px;
+    width: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    &:nth-child(even) {
+      margin-right: 8px;
+    }
+    &:nth-child(odd) {
+      width: calc(100% - 50% - 8px);
+    }
+    .blog-li {
+      img {
+        height: 270px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+    }
+  }
 </style>

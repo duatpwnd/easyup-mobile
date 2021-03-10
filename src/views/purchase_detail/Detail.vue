@@ -47,7 +47,11 @@
             >
             <div class="clear_both">
               <span class="dt">{{ li.teacher_name }}</span>
-              <del class="dt final_price">{{ li.price.format_original }}</del>
+              <del
+                class="dt final_price"
+                v-if="li.price.format_original != li.price.format_final"
+                >{{ li.price.format_original }}</del
+              >
               <span class="dt ori_price">{{
                 li.price.format_sum_purchased
               }}</span>
@@ -137,7 +141,7 @@
           </div> -->
           <div class="row">
             <span class="dt">결제금액</span>
-            <span class="dd"
+            <span class="dd final-price"
               >{{ list.pay_info.price.format_sum_purchased }}원</span
             >
           </div>
@@ -152,17 +156,19 @@
           <h2 class="title">취소 요청</h2>
           <div class="row">
             <span class="dt">강의 비용</span>
-            <span class="dd">{{
-              list.pay_info.price.format_sum_purchased
-            }}</span>
+            <span class="dd"
+              >{{ list.pay_info.price.format_sum_purchased }}원</span
+            >
           </div>
           <div class="row">
             <span class="dt">할인 금액</span>
-            <span class="dd">{{ list.pay_info.price.format_purchased }}</span>
+            <span class="dd">-원</span>
           </div>
           <div class="row">
             <span class="dt">취소 요청 금액</span>
-            <span class="dd">{{ list.pay_info.price.format_cancel }}</span>
+            <span class="dd final-price"
+              >{{ list.cancel.price_info.format_cancel }}원</span
+            >
           </div>
           <div class="row">
             <span class="dt">취소 사유</span>
@@ -181,7 +187,11 @@
             >
             <div class="clear_both">
               <span class="dt">{{ li.teacher_name }}</span>
-              <del class="dt final_price">{{ li.price.format_original }}</del>
+              <del
+                class="dt final_price"
+                v-if="li.price.format_original != li.price.format_final"
+                >{{ li.price.format_original }}</del
+              >
               <span class="dt ori_price">{{
                 li.price.format_sum_purchased
               }}</span>
@@ -194,8 +204,8 @@
         <div
           class="section"
           v-if="
-            list.status_code == 3 ||
-              (list.status_code == 5 && list.pay_info.method == 'bank')
+            (list.status_code == 3 || list.status_code == 5) &&
+              list.pay_info.method == 'bank'
           "
         >
           <h2 class="title">환불 계좌</h2>
@@ -215,41 +225,41 @@
         <!-- 환불 계좌 :: E -->
 
         <!-- 환불 정보 :: S -->
-        <!-- <div class="section">
-          <h2 class="title">환불 정보</h2>
+        <div
+          class="section"
+          v-if="
+            list.cancel != null &&
+              list.cancel.state == 3 &&
+              list.cancel.refund_date != null
+          "
+        >
+          <h2 class="title">환불 처리</h2>
           <div class="row">
-            <span class="dt">
-              {{ list.refund_info.refund_date.split(" ")[0] }}
+            <span class="dt">처리일</span>
+            <span class="dd">
+              {{ list.cancel.refund_date }}
             </span>
           </div>
           <div class="row">
             <span class="dt">공제 금액</span>
             <span class="dd">
-              {{
-                list.refund_info.penalty
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원
+              {{ list.cancel.price_info.format_refund_fee }}원
             </span>
           </div>
           <div class="row">
-            <span class="dt">환불 정보</span>
-            <span class="dd">
-              {{
-                list.refund_info.refund_price
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원
+            <span class="dt">환불 금액</span>
+            <span class="dd final-price">
+              {{ list.cancel.price_info.format_refund }}원
             </span>
           </div>
-        </div> -->
+        </div>
         <!-- 환불 정보 :: E -->
       </template>
     </Row>
     <div class="btn_wrap">
       <BaseButton
         class="left"
-        v-if="list.is_possible_cancel && list.status_code == 1"
+        v-if="list.is_possible_cancel.result && list.status_code == 1"
         @click.native="isCancel()"
       >
         <button slot="blue_btn">
@@ -257,11 +267,9 @@
         </button>
       </BaseButton>
       <BaseButton
-        @click.native="
-          $noticeMessage('취소 신청 가능 일이 지난<br>구매 내역입니다.')
-        "
+        @click.native="$noticeMessage(list.is_possible_cancel.false_reason)"
         class="left"
-        v-else-if="list.is_possible_cancel == false"
+        v-else-if="list.is_possible_cancel.result == false"
       >
         <button slot="blue_btn" class="cancel_req_btn">
           취소 요청
@@ -270,16 +278,22 @@
       <BaseButton
         @click.native="$noticeMessage('취소 신청 내역을 확인 중입니다.')"
         class="left"
-        v-else-if="list.is_possible_cancel && list.status_code == 5"
+        v-else-if="list.is_possible_cancel.result && list.status_code == 5"
       >
         <button slot="blue_btn">
           취소 진행
         </button>
       </BaseButton>
-
       <BaseButton
         class="right"
-        :style="[{ width: list.status_code == 4 ? '100%' : '49%' }]"
+        :style="[
+          {
+            width:
+              list.status_code == 4 || list.status == '취소완료'
+                ? '100%'
+                : '49%',
+          },
+        ]"
       >
         <button
           slot="blue_btn"
@@ -355,6 +369,11 @@
     .section {
       padding: 4.445%;
       border-bottom: 4px solid #f8f8f8;
+      .row {
+        .final-price {
+          font-weight: bold;
+        }
+      }
     }
     .user_info,
     .payment_info,

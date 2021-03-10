@@ -16,6 +16,12 @@
           class="thumb"
           :alt="li.title"
           :title="li.title"
+          @click="
+            $router.push({
+              path: li.type == 'course' ? '/lecDetail' : '/courseDetail',
+              query: { id: li.id },
+            })
+          "
         />
       </template>
       <template slot="info">
@@ -24,7 +30,11 @@
             {{ li.title }}
           </h2>
           <div class="price">
-            <del class="final_price">{{ li.price.format_original }}</del>
+            <del
+              class="final_price"
+              v-if="li.price.format_original != li.price.format_final"
+              >{{ li.price.format_original }}</del
+            >
             <span class="ori_price">{{ li.price.format_final }}</span>
           </div>
           <div>
@@ -57,7 +67,7 @@
         <div class="row ">
           <span class="dt">강의 할인</span>
           <span class="dd"
-            >-{{
+            >{{
               list.info.calculate_price_info.format_sum_discount_course
             }}원</span
           >
@@ -65,9 +75,18 @@
         <div class="row ">
           <span class="dt">코스 할인</span>
           <span class="dd"
-            >-{{
+            >{{
               list.info.calculate_price_info.format_sum_discount_session
             }}원</span
+          >
+        </div>
+        <div
+          class="row "
+          v-if="list.info.calculate_price_info.format_purchased_price != 0"
+        >
+          <span class="dt">이미 구매한 강의</span>
+          <span class="dd"
+            >{{ list.info.calculate_price_info.format_purchased_price }}원</span
           >
         </div>
         <!-- <div class="row line contain_btn">
@@ -117,14 +136,14 @@
             무통장 입금
           </button>
         </BaseButton>
-        <BaseButton
+        <!-- <BaseButton
           @click.native="payMethod = '0000010000'"
           :class="{ active: payMethod == '0000010000' }"
         >
           <button slot="blue_btn">
             휴대폰 결제
           </button>
-        </BaseButton>
+        </BaseButton> -->
       </div>
     </div>
     <div class="isAgree">
@@ -364,7 +383,7 @@
     .payMethod {
       .blue_btn {
         display: inline-block;
-        width: 32.666%;
+        width: 49.5%;
         &:not(:last-child) {
           margin-right: 1%;
         }

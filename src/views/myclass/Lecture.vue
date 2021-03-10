@@ -1,5 +1,9 @@
 <template>
   <div>
+    <ConfirmModal
+      @ok="lectureDelete()"
+      v-if="toggleStore_confirmModal"
+    ></ConfirmModal>
     <div class="search_area">
       <Search>
         <select slot="option" class="select" v-model="order">
@@ -45,9 +49,11 @@
       >
         <template slot="thumbnail">
           <img
+            v-if="list.status != 'end'"
             :src="list.thumbnail"
             class="thumb"
-            alt=""
+            :alt="list.title"
+            :title="list.title"
             @click="
               $router.push({
                 path: '/play',
@@ -58,7 +64,9 @@
               })
             "
           />
+          <img v-else :src="list.thumbnail" class="thumb" alt="" />
           <img
+            v-if="list.status != 'end'"
             src="@/assets/images/common/playing_ico.png"
             class="playing_ico"
             @click="
@@ -74,9 +82,17 @@
         </template>
         <template slot="info">
           <span class="name">{{ list.teacher }}</span>
-          <h2>
-            {{ list.title }}
-          </h2>
+          <h2
+            v-html="list.title"
+            @click="
+              $router.push({
+                path: '/lecDetail',
+                query: {
+                  id: list.id,
+                },
+              })
+            "
+          ></h2>
           <div class="list_right_bottom">
             <span class="star_cell"> </span>
             <span class="num">{{ list.ranking }}</span>
@@ -86,22 +102,43 @@
           <div class="statistics" v-if="$route.query.view == 'teacher'">
             <span class="date">{{ list.approve_date }}</span>
             <span class="count">{{ list.count_users }}명</span>
-            <!-- <span class="price">
-              <del class="final_price">{{
-                list.price.final
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}</del>
-              <span class="ori_price">{{
-                list.price.original
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}</span>
-            </span> -->
+            <span class="price" v-if="list.price.is_free == false">
+              <del
+                class="ori_price"
+                v-if="list.price.format_original != list.price.format_final"
+                >{{ list.price.format_original }}</del
+              >
+              <span class="final_price">{{ list.price.format_final }}</span>
+            </span>
+            <span class="price" v-else>
+              <span class="final_price">FREE</span>
+            </span>
           </div>
           <div class="progress">
             <div class="compile_wrap">
               <span class="ing_ico" v-if="list.status == 'ing'">진행중</span>
+              <span class="ing_ico" v-else-if="list.approve_status == 'active'"
+                >활성</span
+              >
+              <span
+                class="ing_ico not_active_ico"
+                v-else-if="
+                  list.approve_status == 'not active' || list.status == 'end'
+                "
+                >비활성</span
+              >
+              <span
+                class="ing_ico not_approved_ico"
+                v-else-if="list.approve_status == 'not approved'"
+                >심사중</span
+              >
+              <span
+                @click="rejectToggle(index)"
+                class="ing_ico reject_ico"
+                v-else-if="list.approve_status == 'reject'"
+                >반려</span
+              >
+
               <ProgressBar
                 v-if="$route.query.view == 'student'"
                 :max="100"
@@ -111,24 +148,6 @@
                   list.progress + "%"
                 }}</span>
               </ProgressBar>
-              <span class="ing_ico" v-else-if="list.approve_status == 'active'"
-                >활성</span
-              >
-              <span
-                class="ing_ico not_active_ico"
-                v-else-if="list.approve_status == 'not active'"
-                >비활성</span
-              >
-              <span
-                class="ing_ico not_approved_ico"
-                v-else-if="list.approve_status == 'not approved'"
-                >심사중</span
-              >
-              <span
-                class="ing_ico reject_ico"
-                v-else-if="list.approve_status == 'reject'"
-                >반려</span
-              >
               <span>{{ list.expired_on }}</span>
               <router-link
                 tag="span"
@@ -143,11 +162,26 @@
                 >리뷰관리</router-link
               >
               <span
-                @click="lectureDelete(list.id)"
+                @click="confirm(list.code)"
+                class="ing_ico lecture_remove lecture-remove-student"
+                v-if="list.status == 'end' || list.price.is_free"
+                >강의삭제</span
+              >
+              <!-- 강사버전 삭제 -->
+              <span
+                @click="confirm(list.id)"
                 class="ing_ico lecture_remove"
                 v-if="list.show_btn_delete"
                 >강의삭제</span
               >
+              <div
+                class="reason"
+                v-if="
+                  list.approve_status == 'reject' &&
+                    reason_tab.indexOf(index) >= 0
+                "
+                v-html="list.reject_reason"
+              ></div>
             </div>
           </div>
         </template>
@@ -199,32 +233,64 @@
   import LectureCourseList from "@/components/common/LectureCourseList.vue";
   import Search from "@/components/common/Search.vue";
   import Pagination from "@/components/common/Pagination.vue";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import mixin from "./mixin.js";
-  import { mapState, mapMutations } from "vuex";
+  import { mapState } from "vuex";
   export default {
     mixins: [mixin],
     components: {
+      ConfirmModal,
       Pagination,
       ProgressBar,
       Search,
       LectureCourseList,
     },
     computed: {
+      ...mapState("toggleStore", {
+        toggleStore_confirmModal: "confirm_modal",
+      }),
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
       }),
     },
     data() {
-      return {};
+      return {
+        reason_tab: [], // 거절 사유 탭
+        delete_id: "", // 강의 삭제 아이디
+      };
     },
     methods: {
-      lectureDelete(id) {
-        const obj = {
-          action: "change_visibility",
-          id: id,
-          type: "course",
-        };
-        console.log(obj);
+      rejectToggle(index) {
+        const currentNum = this.reason_tab.indexOf(index);
+        if (currentNum >= 0) {
+          // 현재 배열안에있음
+          this.reason_tab.splice(currentNum, 1);
+        } else {
+          this.reason_tab.push(index);
+        }
+      },
+      confirm(id) {
+        this.delete_id = id;
+        this.$confirmMessage("삭제하시겠습니까?");
+      },
+      // 강사 버전
+      lectureDelete() {
+        let obj;
+        if (this.$route.query.view == "teacher") {
+          // 강사
+          obj = {
+            action: "change_visibility",
+            id: this.delete_id,
+            type: "course",
+          };
+        } else {
+          // 학생
+          obj = {
+            action: "delete_myclass_item",
+            code: this.delete_id,
+            type: "course",
+          };
+        }
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
           .then((result) => {
@@ -300,16 +366,15 @@
       .price {
         width: 50%;
         text-align: right;
+        font-weight: bold;
         .final_price {
-          font-size: 14px;
-          color: #bdbdbd;
-          margin-left: 4px;
-        }
-        .ori_price {
-          font-weight: bold;
           margin-left: 5px;
           font-size: 18px;
           color: #114fff;
+        }
+        .ori_price {
+          font-size: 14px;
+          color: #bdbdbd;
         }
       }
     }

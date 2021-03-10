@@ -35,10 +35,11 @@
 </script>
 <style scoped lang="scss">
   #notice {
-    padding: 4.445%;
-    padding-bottom: 65px;
+    padding: 0 16px 65px;
+    margin-top: 13px;
     .title {
-      font-size: 2rem;
+      font-size: 18px;
+      padding-bottom: 13px;
     }
   }
 </style>
