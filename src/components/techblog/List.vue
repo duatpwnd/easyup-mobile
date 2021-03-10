@@ -22,7 +22,7 @@
     font-size: 18px;
     color: #333333;
     margin-top: 10px;
-    height: 46px;
+    height: 55px;
     text-overflow: ellipsis;
     overflow: hidden;
     display: -webkit-box;

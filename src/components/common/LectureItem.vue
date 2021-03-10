@@ -38,7 +38,7 @@
     }
     .subtitle {
       font-size: 14px;
-      height: 38px;
+      height: 42px;
       text-overflow: ellipsis;
       overflow: hidden;
       display: -webkit-box;
