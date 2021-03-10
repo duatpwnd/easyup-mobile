@@ -779,16 +779,6 @@
         }
       }
     }
-    .blog-section {
-      .swiper-slide {
-        .item {
-          img {
-            height: 270px;
-            object-fit: cover;
-          }
-        }
-      }
-    }
     .category_section {
       padding-top: 0;
     }

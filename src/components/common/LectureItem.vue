@@ -29,7 +29,7 @@
 </script>
 <style scoped lang="scss">
   .item {
-    border-radius: 10px;
+    // border-radius: 10px;
     overflow: hidden;
     h4 {
       font-size: 0.9375rem;
@@ -38,7 +38,8 @@
     }
     .subtitle {
       font-size: 14px;
-      height: 42px;
+      line-height: 19px;
+      height: 38px;
       text-overflow: ellipsis;
       overflow: hidden;
       display: -webkit-box;

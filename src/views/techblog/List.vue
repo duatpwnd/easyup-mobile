@@ -13,19 +13,21 @@
         @click="getList(1, keyword)"
       ></button>
     </Search>
-    <div
-      class="list"
-      @click="goToPath(li.id)"
-      v-for="(li, index) in list.list"
-      :key="index"
-    >
-      <TechBlogList>
-        <template slot="contents">
-          <img :src="li.thumbnail" :alt="li.title" :title="li.title" />
-          <h2 class="title">{{ li.title }}</h2>
-          <span class="date">{{ li.wdate }}</span>
-        </template>
-      </TechBlogList>
+    <div class="list-wrap">
+      <div
+        class="list"
+        @click="goToPath(li.id)"
+        v-for="(li, index) in list.list"
+        :key="index"
+      >
+        <TechBlogList>
+          <template slot="contents">
+            <img :src="li.thumbnail" :alt="li.title" :title="li.title" />
+            <h2 class="title">{{ li.title }}</h2>
+            <div class="date">{{ li.wdate }}</div>
+          </template>
+        </TechBlogList>
+      </div>
     </div>
     <Pagination>
       <template slot="paging">
@@ -111,22 +113,18 @@
       margin-left: 0;
     }
   }
-  .list {
-    margin-top: 24px;
-    width: 50%;
-    display: inline-block;
-    vertical-align: middle;
-    &:nth-child(even) {
-      margin-right: 8px;
-    }
-    &:nth-child(odd) {
-      width: calc(100% - 50% - 8px);
-    }
-    .blog-li {
-      img {
-        height: 270px;
-        object-fit: cover;
-        border-radius: 10px;
+  .list-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .list {
+      margin-top: 24px;
+      vertical-align: middle;
+      width: 49%;
+      .blog-li {
+        img {
+          border-radius: 10px;
+        }
       }
     }
   }

@@ -19,10 +19,11 @@
 </script>
 <style scoped lang="scss">
   .title {
-    font-size: 18px;
+    font-size: 14px;
     color: #333333;
     margin-top: 10px;
-    height: 55px;
+    line-height: 19px;
+    height: 38px;
     text-overflow: ellipsis;
     overflow: hidden;
     display: -webkit-box;
@@ -37,6 +38,7 @@
   }
   .date {
     color: #999999;
-    font-size: 1.125rem;
+    font-size: 14px;
+    text-align: right;
   }
 </style>
