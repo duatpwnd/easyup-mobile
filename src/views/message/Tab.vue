@@ -18,7 +18,7 @@
       ></button>
     </Search>
     <div class="btn_wrap">
-      <BlueBtn class="left">
+      <BlueBtn class="left" v-if="userStore_userinfo.info.is_admin">
         <button
           slot="blue_btn"
           @click="
@@ -33,7 +33,14 @@
           새메시지
         </button>
       </BlueBtn>
-      <BlueBtn class="right">
+      <BlueBtn
+        class="right"
+        :style="[
+          userStore_userinfo.info.is_admin == false
+            ? { width: '100%' }
+            : { width: '48%' },
+        ]"
+      >
         <button slot="blue_btn" @click="confirm()">
           삭제
         </button>
@@ -122,6 +129,9 @@
       Search,
     },
     computed: {
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
       ...mapState("toggleStore", {
         toggleStore_confirmModal: "confirm_modal",
       }),
