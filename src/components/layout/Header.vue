@@ -29,10 +29,10 @@
             pageCurrent: 1,
             keyword: '',
             view:
-              typeof $route.query.view == 'undefined'
-                ? userStore_userinfo.info.status === 1
-                  ? 'student'
-                  : 'teacher'
+              $route.query.view === undefined
+                ? userStore_userinfo.info.status == 1
+                  ? 'teacher'
+                  : 'student'
                 : $route.query.view,
           },
         }"

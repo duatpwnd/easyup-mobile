@@ -127,6 +127,7 @@
       .convert {
         @extend .report;
         padding: 0 4.5px;
+        margin-right: 0;
         background: url("~@/assets/images/mylecture_room/convert_ico.png")
           no-repeat 100%-4.5 center / 11.5px 9px;
         background-color: white;
@@ -157,6 +158,16 @@
         font-size: 10px;
         font-weight: 500;
         color: #dbdbdb;
+      }
+    }
+  }
+  @media all and (max-width: 340px) {
+    .user_info {
+      .info {
+        .report,
+        .convert {
+          width: 45%;
+        }
       }
     }
   }

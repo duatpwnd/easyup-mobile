@@ -447,7 +447,7 @@
 <script lang="ts">
   import { Component, Vue } from "vue-property-decorator";
   import LecItem from "@/components/common/LectureItem.vue";
-  // import CategoryLec from "@/components/main/MainCategory.vue";
+  import CategoryLec from "@/components/main/MainCategory.vue";
   import Slide from "@/components/common/Slide.vue";
   import Search from "@/components/common/Search.vue";
   interface ResultedData {
@@ -460,7 +460,7 @@
       Search,
       Slide,
       LecItem,
-      // CategoryLec,
+      CategoryLec,
     },
   })
   export default class Main extends Vue {

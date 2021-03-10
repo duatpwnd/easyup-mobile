@@ -288,7 +288,6 @@
     .logout {
       background: white;
       padding: 4.445%;
-      padding-top: 0;
       position: absolute;
       bottom: 0;
       width: 100%;

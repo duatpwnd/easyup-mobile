@@ -79,6 +79,7 @@
       pre {
         font-family: "NotoSansCJKkr-Regular";
         font-size: 12px;
+        white-space: pre-wrap;
       }
     }
     .supply_number {
