@@ -97,7 +97,7 @@
     choice_active = -1; //선택된사람 active 걸어주기
     title = "";
     choice_list: { [key: string]: any }[] = []; // 선택된사람
-    received_list = []; // 받는사람 찾기
+    received_list: { [key: string]: any }[] = []; // 받는사람 찾기
     keyword = ""; // 검색부분 v-model
     file_obj = ""; // 파일객체
     search_result = false;
