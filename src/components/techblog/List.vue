@@ -29,6 +29,7 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     word-wrap: break-word;
+    word-break: break-all;
     -webkit-line-clamp: 2;
   }
   .brief {

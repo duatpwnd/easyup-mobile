@@ -510,6 +510,7 @@
         font-size: 18px;
         color: #333333;
         word-wrap: break-word;
+        word-break: break-all;
       }
     }
     .star_rating {

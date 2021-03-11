@@ -126,6 +126,7 @@
       font-family: "NotoSansCJKkr-Regular";
       font-size: 14px;
       word-wrap: break-word;
+      word-break: break-all;
     }
     .list {
       margin-top: 6px;

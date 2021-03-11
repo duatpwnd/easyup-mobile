@@ -81,6 +81,7 @@
         -webkit-box-orient: vertical;
         margin-bottom: 4px;
         word-wrap: break-word;
+        word-break: break-all;
       }
       .name {
         color: #999999;
