@@ -110,4 +110,15 @@
       }
     }
   }
+  @media all and (max-width: 360px) {
+    #findByEmail {
+      .form {
+        .row {
+          .dt {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
 </style>

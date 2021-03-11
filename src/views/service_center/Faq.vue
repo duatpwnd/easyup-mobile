@@ -62,118 +62,125 @@
     </h2>
     <List v-for="(li, index) in list.list" :key="index">
       <template slot="category">
-        <span @click="slide(index)">[{{ li.category }}]{{ li.title }}</span>
+        <span class="faq-list" @click="slide(index)"
+          >[{{ li.category }}]{{ li.title }}</span
+        >
       </template>
       <dd slot="dd" ref="dd" v-show="active" v-html="li.contents"></dd>
     </List>
   </div>
 </template>
 <script>
-import List from "@/components/faq/List.vue";
-import Search from "@/components/common/Search.vue";
-export default {
-  components: {
-    List,
-    Search
-  },
-  data() {
-    return {
-      list: "",
-      keyword: "",
-      active: false
-    };
-  },
-  methods: {
-    slide(index) {
-      if (this.$refs.dd[index].style.display == "none") {
-        this.$refs.dd[index].style.display = "block";
-      } else {
-        this.$refs.dd[index].style.display = "none";
-      }
+  import List from "@/components/faq/List.vue";
+  import Search from "@/components/common/Search.vue";
+  export default {
+    components: {
+      List,
+      Search,
     },
-    getList(category, keyword, current) {
-      console.log(category, keyword, current);
-      const data = {
-        action: "get_cs_list", //필수
-        current: current, //필수
-        type: "faq",
-        category: category,
-        keyword: keyword //옵션
+    data() {
+      return {
+        list: "",
+        keyword: "",
+        active: false,
       };
-      this.$axios
-        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {})
-        .then(result => {
-          if (this.$refs.dd != undefined) {
-            this.$refs.dd.forEach((el, index) => {
-              el.style.display = "none";
-            });
-          }
-          this.list = result.data.data;
-          this.keyword = keyword;
-          this.$router
-            .push({
-              query: {
-                category: category,
-                keyword: keyword,
-                current: current
-              }
-            })
-            .catch(() => {});
-        });
-    }
-  },
-  created() {
-    this.getList(
-      this.$route.query.category,
-      this.$route.query.keyword,
-      this.$route.query.current
-    );
-  }
-};
+    },
+    methods: {
+      slide(index) {
+        if (this.$refs.dd[index].style.display == "none") {
+          this.$refs.dd[index].style.display = "block";
+        } else {
+          this.$refs.dd[index].style.display = "none";
+        }
+      },
+      getList(category, keyword, current) {
+        console.log(category, keyword, current);
+        const data = {
+          action: "get_cs_list", //필수
+          current: current, //필수
+          type: "faq",
+          category: category,
+          keyword: keyword, //옵션
+        };
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {})
+          .then((result) => {
+            if (this.$refs.dd != undefined) {
+              this.$refs.dd.forEach((el, index) => {
+                el.style.display = "none";
+              });
+            }
+            this.list = result.data.data;
+            this.keyword = keyword;
+            this.$router
+              .push({
+                query: {
+                  category: category,
+                  keyword: keyword,
+                  current: current,
+                },
+              })
+              .catch(() => {});
+          });
+      },
+    },
+    created() {
+      this.getList(
+        this.$route.query.category,
+        this.$route.query.keyword,
+        this.$route.query.current
+      );
+    },
+  };
 </script>
 <style scoped lang="scss">
-.faq {
-  padding: 4.445%;
-  .search {
-    .search_contents {
-      width: 100%;
-      margin-left: 0;
-    }
-  }
-  h2 {
-    font-size: 1.375rem;
-    margin-top: 2.5%;
-    padding-bottom: 2%;
-    border-bottom: 2px solid #333333;
-    .num {
-      color: #114fff;
-    }
-  }
-  .search {
-    margin-top: 4%;
-  }
-  .faq_gnb {
-    background: #f4f4f4;
-    padding: 2%;
-    border-radius: 30px;
-    display: flex;
-    justify-content: space-around;
-    line-height: 1;
-    li {
-      span {
-        font-size: 10px;
-        color: #999999;
-        vertical-align: middle;
-      }
-      .bar {
-        font-size: 1rem;
+  .faq {
+    padding: 4.445%;
+    .search {
+      .search_contents {
+        width: 100%;
+        margin-left: 0;
       }
     }
-    .active {
-      span {
-        color: black;
+    h2 {
+      font-size: 1.375rem;
+      margin-top: 2.5%;
+      padding-bottom: 2%;
+      border-bottom: 2px solid #333333;
+      .num {
+        color: #114fff;
       }
     }
+    .search {
+      margin-top: 4%;
+    }
+    .faq_gnb {
+      background: #f4f4f4;
+      padding: 2%;
+      border-radius: 30px;
+      display: flex;
+      justify-content: space-around;
+      line-height: 1;
+      li {
+        span {
+          font-size: 10px;
+          color: #999999;
+          vertical-align: middle;
+        }
+        .bar {
+          font-size: 1rem;
+        }
+      }
+      .active {
+        span {
+          color: black;
+        }
+      }
+    }
+    .faq-list {
+      display: inline-block;
+      vertical-align: middle;
+      width: 94.8%;
+    }
   }
-}
 </style>
