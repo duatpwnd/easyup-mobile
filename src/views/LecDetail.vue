@@ -235,6 +235,11 @@
             }"
           ></span>
           <span class="teacher-name" v-html="detail.teachers.name"></span>
+          <h2 class="teacher-intro-title">강사소개</h2>
+          <div
+            class="teacher-intro"
+            v-html="detail.teachers.profile_info"
+          ></div>
         </div>
         <div>
           <span class="access_limit">{{ detail.access_limit.basic }}</span>
@@ -717,6 +722,14 @@
           font-size: 14px;
           margin-left: 15px;
           vertical-align: middle;
+        }
+        .teacher-intro-title {
+          margin-top: 10px;
+          font-size: 18px;
+        }
+        .teacher-intro {
+          margin-top: 5px;
+          font-size: 14px;
         }
       }
     }
