@@ -55,13 +55,15 @@
             :alt="list.title"
             :title="list.title"
             @click="
-              $router.push({
-                path: '/play',
-                query: {
-                  lp_id: list.lp_id,
-                  course_id: list.id,
-                },
-              })
+              if (list.approve_status != 'not approved') {
+                $router.push({
+                  path: '/play',
+                  query: {
+                    lp_id: list.lp_id,
+                    course_id: list.id,
+                  },
+                });
+              }
             "
           />
           <img v-else :src="list.thumbnail" class="thumb" alt="" />

@@ -884,7 +884,8 @@
           color: #999999;
           font-size: 1.25rem;
           vertical-align: middle;
-          margin-left: 5px;
+          margin-left: 1%;
+          width: 22%;
           display: inline-block;
         }
         .ing-ico {
@@ -912,13 +913,16 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            max-width: 74%;
+            max-width: calc(100% - 23%);
             vertical-align: middle;
           }
         }
         .else_lec_title {
           width: 100%;
           border-radius: 100px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         .lec_num {
           width: 24%;
@@ -940,12 +944,16 @@
 
             color: #333333;
             .child-title-section {
-              max-width: 74%;
+              max-width: calc(100% - 17%);
               display: inline-block;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
               vertical-align: middle;
+            }
+            .ing-ico,
+            .complete-ico {
+              width: 16%;
             }
           }
         }
