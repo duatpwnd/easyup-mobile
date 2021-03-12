@@ -108,23 +108,23 @@
             v-for="(list, index) in list.popular_lecture"
             :key="index"
           >
-            <LecItem>
-              <router-link
-                class="lec_list"
-                slot="router"
-                :to="{
+            <LecItem
+              @click.native="
+                $router.push({
                   path: '/lecDetail',
                   query: {
                     id: list.id,
                   },
-                }"
-              >
+                })
+              "
+            >
+              <span class="lec_list" slot="router">
                 <img
                   :src="list.image_url"
                   :alt="list.title"
                   :title="list.title"
                 />
-              </router-link>
+              </span>
               <h4 slot="teacher">{{ list.teachers }}</h4>
               <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
               <span slot="grade" class="score">{{ list.ranking }}</span>
@@ -187,23 +187,23 @@
             v-for="(list, index) in list.techblog_post"
             :key="index"
           >
-            <LecItem>
-              <router-link
-                class="lec_list"
-                slot="router"
-                :to="{
+            <LecItem
+              @click.native="
+                $router.push({
                   path: '/techBlog/read',
                   query: {
                     id: list.id,
                   },
-                }"
-              >
+                })
+              "
+            >
+              <span class="lec_list" slot="router">
                 <img
                   :src="list.thumbnail"
                   :alt="list.title"
                   :title="list.title"
                 />
-              </router-link>
+              </span>
               <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
               <span slot="grade" class="date"
                 >{{ list.wdate_format }} {{ list.writer }}</span
@@ -226,6 +226,7 @@
       </Slide>
     </div>
     <!-- 이지채널 :: E -->
+
     <!-- 최신강의 ::  S -->
     <div class="section swiper_section" v-if="list.latest_lecture.length > 0">
       <div class="title-header">
@@ -243,23 +244,23 @@
             v-for="(list, index) in list.latest_lecture"
             :key="index"
           >
-            <LecItem>
-              <router-link
-                class="lec_list"
-                slot="router"
-                :to="{
+            <LecItem
+              @click.native="
+                $router.push({
                   path: '/lecDetail',
                   query: {
                     id: list.id,
                   },
-                }"
-              >
+                })
+              "
+            >
+              <span class="lec_list" slot="router">
                 <img
                   :src="list.image_url"
                   :alt="list.title"
                   :title="list.title"
                 />
-              </router-link>
+              </span>
               <h4 slot="teacher">{{ list.teachers }}</h4>
               <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
               <span slot="grade" class="score">{{ list.ranking }}</span>

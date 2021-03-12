@@ -20,7 +20,7 @@
 <style scoped lang="scss">
   .tr {
     width: 100%;
-    margin-top: 1%;
+    margin-top: 3px;
     .td {
       display: inline-block;
       font-size: 14px;
@@ -35,7 +35,7 @@
     }
     .td2 {
       font-weight: bold;
-      width: 37%;
+      width: 40%;
       text-align: right;
       color: #333333;
     }

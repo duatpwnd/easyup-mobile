@@ -251,6 +251,8 @@
   }
   .contents {
     padding: 4.445%;
+    padding-top: 0;
+    margin-top: 20px;
     h2 {
       font-size: 18px;
       &:not(:first-child) {
@@ -270,8 +272,8 @@
         display: inline-block;
         ::v-deep .progress_bar {
           width: 45%;
+          margin: 0;
           margin-left: 5px;
-          margin-right: 0;
           height: 16px;
           position: relative;
           border: 1px solid #cacaca;
