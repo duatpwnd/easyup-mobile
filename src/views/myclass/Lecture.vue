@@ -66,7 +66,7 @@
           />
           <img v-else :src="list.thumbnail" class="thumb" alt="" />
           <img
-            v-if="list.status != 'end'"
+            v-if="list.status != 'end' && list.approve_status != 'not approved'"
             src="@/assets/images/common/playing_ico.png"
             class="playing_ico"
             @click="
@@ -169,14 +169,14 @@
                   list.status == 'end' ||
                     (list.price.is_free && $route.query.view == 'student')
                 "
-                >강의삭제</span
+                >삭제</span
               >
               <!-- 강사버전 삭제 -->
               <span
                 @click="confirm(list.id)"
                 class="ing_ico lecture_remove"
                 v-if="list.show_btn_delete"
-                >강의삭제</span
+                >삭제</span
               >
               <div
                 class="reason"

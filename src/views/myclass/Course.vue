@@ -147,7 +147,7 @@
                     @click="confirm(list.id)"
                     class="ing_ico lecture_remove"
                     v-if="list.price.is_free && $route.query.view == 'student'"
-                    >코스삭제</span
+                    >삭제</span
                   >
                   <!-- 강사버전 삭제 -->
                   <span
@@ -157,7 +157,7 @@
                       list.approve_status == 'reject' ||
                         list.approve_status == 'not active'
                     "
-                    >코스삭제</span
+                    >삭제</span
                   >
                 </template>
               </VideoList>

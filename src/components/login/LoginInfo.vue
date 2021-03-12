@@ -265,7 +265,7 @@
       .lnb {
         text-align: left;
         width: 100%;
-        margin-top: 5px;
+        margin-top: 4%;
         font-size: 1.5rem;
         font-family: "NotoSansCJKkr-Regular";
       }

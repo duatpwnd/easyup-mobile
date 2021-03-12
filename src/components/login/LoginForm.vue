@@ -244,7 +244,7 @@
       }
       .course {
         @extend .lec;
-        margin-top: 5px;
+        margin-top: 4%;
       }
       .arrow {
         background: url("~@/assets/images/common/right_arrow.png") no-repeat
@@ -278,7 +278,7 @@
         display: block;
       }
       .forget {
-        margin-top: 5px;
+        margin-top: 4%;
       }
     }
   }

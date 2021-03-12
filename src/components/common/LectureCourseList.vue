@@ -135,6 +135,9 @@
           color: #114fff;
           line-height: 24px;
         }
+        .lecture_remove {
+          width: 15%;
+        }
         .lecture-remove-student {
           margin-left: 10px;
         }
