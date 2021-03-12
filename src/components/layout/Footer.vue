@@ -46,7 +46,11 @@
     <h2 class="supply_number">고객지원 support@easyupclass.com</h2>
   </footer>
 </template>
-<script lang="ts"></script>
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
+  @Component
+  export default class Footer extends Vue {}
+</script>
 <style scoped lang="scss">
   footer {
     padding: 14px;

@@ -279,19 +279,37 @@
           >{{ detail.curriculum_list.count_detail }}개 레슨</span
         >
       </div>
-      <ul
-        class="curriculum_list"
-        v-for="(list, index) in detail.curriculum_list.items"
-        :key="index"
-      >
-        <li v-if="list.children_count != null">
-          <span class="lec_title" v-html="list.title"> </span>
+      <div class="curriculum_list">
+        <!-- 개수 있을때 -->
+        <div v-for="(list, index) in isCountTrue" :key="'true' + index">
+          <span class="lec_title" @click="curriculumToggle(index)">
+            <span v-html="list.title" class="lec-title-section"></span>
+            <span v-if="list.up_status == 1" class="ing-ico">변환중</span>
+            <span v-else-if="list.up_status == 2" class="complete-ico"
+              >완료</span
+            >
+          </span>
           <span class="lec_num"> {{ list.children_count }}개</span>
-        </li>
-        <li v-else>
+          <!-- 커리큘럼 하위 리스트 -->
+          <div class="child-list" v-if="curriculumTab.indexOf(index) >= 0">
+            <div
+              v-for="(li, index) in list.children_list"
+              :key="'child' + index"
+              class="child-list-title"
+            >
+              <span class="child-title-section" v-html="li.title"></span
+              ><span v-if="li.up_status == 1" class="ing-ico">변환중</span>
+              <span v-else-if="li.up_status == 2" class="complete-ico"
+                >완료</span
+              >
+            </div>
+          </div>
+        </div>
+        <!-- 개수 없을때 -->
+        <div v-for="(list, index) in isCountFalse" :key="'false' + index">
           <span class="lec_title else_lec_title" v-html="list.title"> </span>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
     <!-- description :: E  -->
     <div id="lec_eval">
@@ -409,9 +427,22 @@
     },
   })
   export default class LecDetail extends Vue {
+    curriculumTab: number[] = [];
     url: string = window.document.location.href;
     detail: { [key: string]: any } = {};
     isSubscribe!: Function;
+    // 커리큘럼 강의 개수가 있을때
+    get isCountTrue() {
+      return this.detail.curriculum_list.items.filter(
+        (item) => item.children_count != null
+      );
+    }
+    // 커리큘럼 강의 개수가 없을때
+    get isCountFalse() {
+      return this.detail.curriculum_list.items.filter(
+        (item) => item.children_count == null
+      );
+    }
     get discount_price() {
       return this.$numberWithCommas(this.detail.coupon.discount_price);
     }
@@ -474,6 +505,16 @@
           console.log(result);
           this.detail = result.data.data;
         });
+    }
+    // 커리큘럼 토글
+    curriculumToggle(index) {
+      const currentNum = this.curriculumTab.indexOf(index);
+      if (currentNum >= 0) {
+        // 현재 배열안에있음
+        this.curriculumTab.splice(currentNum, 1);
+      } else {
+        this.curriculumTab.push(index);
+      }
     }
     mounted() {
       this.$EventBus.$on("commentReload", () => {
@@ -837,8 +878,19 @@
       }
     }
     .curriculum_list {
-      li {
-        margin-top: 2%;
+      div {
+        margin-top: 10px;
+        .complete-ico {
+          color: #999999;
+          font-size: 1.25rem;
+          vertical-align: middle;
+          margin-left: 5px;
+          display: inline-block;
+        }
+        .ing-ico {
+          @extend .complete-ico;
+          color: #114fff;
+        }
         .lec_title,
         .lec_num {
           font-size: 1.25rem;
@@ -853,10 +905,16 @@
           width: 74%;
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
           vertical-align: middle;
+          font-family: unset;
+          .lec-title-section {
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 74%;
+            vertical-align: middle;
+          }
         }
         .else_lec_title {
           width: 100%;
@@ -870,6 +928,26 @@
           display: inline-block;
           text-align: center;
           vertical-align: middle;
+        }
+        .child-list {
+          margin-top: 0;
+          padding: 0 15px;
+          .child-list-title {
+            width: 100%;
+            box-sizing: border-box;
+            display: inline-block;
+            font-size: 1.25rem;
+
+            color: #333333;
+            .child-title-section {
+              max-width: 74%;
+              display: inline-block;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              vertical-align: middle;
+            }
+          }
         }
       }
     }
