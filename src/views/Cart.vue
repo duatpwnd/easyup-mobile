@@ -1,5 +1,5 @@
 <template>
-  <div v-if="list" id="cart">
+  <div v-if="Object.keys(list).length > 0" id="cart">
     <h2 class="h2_title">강의바구니</h2>
     <LectureCourseList
       v-for="(li, index) in [...list.courses, ...list.sessions]"
@@ -110,220 +110,216 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Row from "@/components/common/Row.vue";
   import CheckBox from "@/components/common/BaseCheckBox.vue";
   import BaseButton from "@/components/common/BaseButton.vue";
   import LectureCourseList from "@/components/common/LectureCourseList.vue";
-
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: { Row, CheckBox, BaseButton, LectureCourseList },
-    data() {
-      return {
-        activeAll: false,
-        list: "",
-        checked_list: [],
-        allCheck: false,
-        format_sum_final: "", // 총 금액
-        format_sum_discount: "", // 할인 금액
-        format_sum_original: "", // 강의 비용
+  })
+  export default class Cart extends Vue {
+    activeAll = false;
+    list: { [key: string]: any } = {};
+    checked_list: { [key: string]: any }[] = [];
+    allCheck = false;
+    format_sum_final = ""; // 총 금액
+    format_sum_discount = ""; // 할인 금액
+    format_sum_original = ""; // 강의 비용
+    // computed: {
+    // 강의 비용
+    // format_sum_original: {
+    //   get() {
+    //     return this.list.calculate_price.sum_original
+    //       .toString()
+    //       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //   },
+    //   set(value) {
+    //     console.log(value);
+    //     if (value.type == "all") {
+    //       this.list.calculate_price.sum_original = value.price.original;
+    //     } else {
+    //       if (this.checked_list.indexOf(value) >= 0) {
+    //         this.list.calculate_price.sum_original =
+    //           this.list.calculate_price.sum_original + value.price.original;
+    //       } else {
+    //         this.list.calculate_price.sum_original =
+    //           this.list.calculate_price.sum_original - value.price.original;
+    //       }
+    //     }
+    //   },
+    // },
+    // 할인 금액
+    // format_sum_discount: {
+    //   get() {
+    //     return this.list.calculate_price.sum_discount
+    //       .toString()
+    //       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //   },
+    //   set(value) {
+    //     if (value.info.length == 0) {
+    //       this.list.calculate_price.sum_discount = 0;
+    //     } else {
+    //       console.log(this.format_sum_original.replace(/,/g, ""), value);
+    //       this.list.calculate_price.sum_discount =
+    //         this.format_sum_original.replace(/,/g, "") - value.sum;
+    //     }
+    //   },
+    // },
+    // 총금액
+    // format_sum_final() {
+    //   console.log(this.list.calculate_price.format_purchased_price);
+    //   return this.$numberWithCommas(
+    //     this.format_sum_original.replace(/,/g, "") -
+    //       this.format_sum_discount.replace(/,/g, "") -
+    //       this.list.calculate_price.format_purchased_price.replace(/,/g, "")
+    //   );
+    // },
+    // },
+    costCalculate(arr: number[]): void {
+      const data = {
+        action: "calculate_cart_items",
+        items: arr,
       };
-    },
-    computed: {
-      // 강의 비용
-      // format_sum_original: {
-      //   get() {
-      //     return this.list.calculate_price.sum_original
-      //       .toString()
-      //       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      //   },
-      //   set(value) {
-      //     console.log(value);
-      //     if (value.type == "all") {
-      //       this.list.calculate_price.sum_original = value.price.original;
-      //     } else {
-      //       if (this.checked_list.indexOf(value) >= 0) {
-      //         this.list.calculate_price.sum_original =
-      //           this.list.calculate_price.sum_original + value.price.original;
-      //       } else {
-      //         this.list.calculate_price.sum_original =
-      //           this.list.calculate_price.sum_original - value.price.original;
-      //       }
-      //     }
-      //   },
-      // },
-      // 할인 금액
-      // format_sum_discount: {
-      //   get() {
-      //     return this.list.calculate_price.sum_discount
-      //       .toString()
-      //       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      //   },
-      //   set(value) {
-      //     if (value.info.length == 0) {
-      //       this.list.calculate_price.sum_discount = 0;
-      //     } else {
-      //       console.log(this.format_sum_original.replace(/,/g, ""), value);
-      //       this.list.calculate_price.sum_discount =
-      //         this.format_sum_original.replace(/,/g, "") - value.sum;
-      //     }
-      //   },
-      // },
-      // 총금액
-      // format_sum_final() {
-      //   console.log(this.list.calculate_price.format_purchased_price);
-      //   return this.$numberWithCommas(
-      //     this.format_sum_original.replace(/,/g, "") -
-      //       this.format_sum_discount.replace(/,/g, "") -
-      //       this.list.calculate_price.format_purchased_price.replace(/,/g, "")
-      //   );
-      // },
-    },
-    methods: {
-      async costCalculate(arr) {
-        const data = {
-          action: "calculate_cart_items",
-          items: arr,
-        };
-        if (arr.length == 0) {
-          this.format_sum_final = 0;
-          this.format_sum_discount = 0;
-          this.format_sum_original = 0;
-        } else {
-          this.activeAll = true;
-          await this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-            .then((result) => {
-              console.log(result);
-              this.format_sum_final = result.data.data.format_sum_final;
-              this.format_sum_discount = result.data.data.format_sum_discount;
-              this.format_sum_original = result.data.data.format_sum_original;
-              this.activeAll = false;
-            });
-        }
-      },
-      all() {
-        let allList = [...this.list.courses, ...this.list.sessions];
-        if (this.allCheck == false) {
-          allList = [];
-        }
-      },
-      // 전체체크
-      all_check() {
-        this.allCheck = !this.allCheck;
-        if (this.allCheck) {
-          this.checked_list = [...this.list.courses, ...this.list.sessions];
-        } else {
-          this.checked_list = [];
-        }
-        this.costCalculate(this.checked_list.map((el) => el.cart_id));
-      },
-      // 부분체크
-      partial_check() {
-        this.costCalculate(this.checked_list.map((el) => el.cart_id));
-        if (
-          this.list.courses.length + this.list.sessions.length !=
-          this.checked_list.length
-        ) {
-          this.allCheck = false;
-        } else {
-          this.allCheck = true;
-        }
-      },
-      goToOrder() {
-        const map = this.checked_list.map((el) => {
-          return el.type + "_" + el.item_id;
-        });
-        const data = {
-          action: "check_cart_items",
-          cart_items: map,
-        };
-        if (map.length == 0) {
-          this.$noticeMessage("구매할 강의를 선택해주세요.");
-        } else {
-          this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-            .then((result) => {
-              console.log(result);
-              if (result.data.data.result) {
-                this.$router.push({
-                  path: "/order",
-                  query: {
-                    cart_id: this.checked_list.map((el) => el.cart_id),
-                  },
-                });
-              }
-            })
-            .catch((err) => {
-              this.$noticeMessage(
-                "선택된 코스 및 강의가 중복돼 구매 진행이 불가하니 확인해 주세요."
-              );
-            });
-        }
-      },
-      cartRemove(id) {
-        if (id.length == 0) {
-          this.$noticeMessage("삭제할 강의를 선택해주세요.");
-        } else {
-          const data = {
-            action: "delete_cart",
-            cart_id: id.map((el) => {
-              return el.cart_id;
-            }),
-          };
-          console.log(data);
-          this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-            .then((result) => {
-              console.log(result);
-              this.getList().then((result) => {
-                //삭제할 인덱스 찾기
-
-                if (id.length == 1) {
-                  const filter = this.checked_list.findIndex((el) => {
-                    return el.cart_id == data.cart_id;
-                  });
-                  if (filter != -1) {
-                    const removeChecked = this.checked_list.splice(filter, 1);
-                  }
-                } else {
-                  this.checked_list = [];
-                }
-                if (this.checked_list.length == 0) {
-                  this.all();
-                }
-                if (
-                  this.list.courses.length + this.list.sessions.length !=
-                  this.checked_list.length
-                ) {
-                  this.allCheck = false;
-                } else {
-                  this.allCheck = true;
-                }
-                this.costCalculate(this.checked_list.map((el) => el.cart_id));
-              });
-            });
-        }
-      },
-      getList() {
-        const data = {
-          action: "cart_list",
-        };
-        return this.$axios
+      if (arr.length == 0) {
+        this.format_sum_final = "0";
+        this.format_sum_discount = "0";
+        this.format_sum_original = "0";
+      } else {
+        this.activeAll = true;
+        this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result) => {
             console.log(result);
-            this.list = result.data.data;
-            return true;
+            this.format_sum_final = result.data.data.format_sum_final;
+            this.format_sum_discount = result.data.data.format_sum_discount;
+            this.format_sum_original = result.data.data.format_sum_original;
+            this.activeAll = false;
           });
-      },
-    },
+      }
+    }
+    all(): void {
+      let allList = [...this.list.courses, ...this.list.sessions];
+      if (this.allCheck == false) {
+        allList = [];
+      }
+    }
+    // 전체체크
+    all_check(): void {
+      this.allCheck = !this.allCheck;
+      if (this.allCheck) {
+        this.checked_list = [...this.list.courses, ...this.list.sessions];
+      } else {
+        this.checked_list = [];
+      }
+      this.costCalculate(this.checked_list.map((el) => el.cart_id));
+    }
+    // 부분체크
+    partial_check(): void {
+      this.costCalculate(this.checked_list.map((el) => el.cart_id));
+      if (
+        this.list.courses.length + this.list.sessions.length !=
+        this.checked_list.length
+      ) {
+        this.allCheck = false;
+      } else {
+        this.allCheck = true;
+      }
+    }
+    goToOrder(): void {
+      const map: string[] = this.checked_list.map((el) => {
+        return el.type + "_" + el.item_id;
+      });
+      const data = {
+        action: "check_cart_items",
+        cart_items: map,
+      };
+      if (map.length == 0) {
+        this.$noticeMessage("구매할 강의를 선택해주세요.");
+      } else {
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log(result);
+            if (result.data.data.result) {
+              this.$router.push({
+                path: "/order",
+                query: {
+                  cart_id: this.checked_list.map((el) => el.cart_id),
+                },
+              });
+            }
+          })
+          .catch((err) => {
+            this.$noticeMessage(
+              "선택된 코스 및 강의가 중복돼 구매 진행이 불가하니 확인해 주세요."
+            );
+          });
+      }
+    }
+    cartRemove(id: { [key: string]: any }[]): void {
+      if (id.length == 0) {
+        this.$noticeMessage("삭제할 강의를 선택해주세요.");
+      } else {
+        const data = {
+          action: "delete_cart",
+          cart_id: id.map((el) => {
+            return el.cart_id;
+          }),
+        };
+        console.log(data);
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result) => {
+            console.log(result);
+            this.getList().then((result) => {
+              //삭제할 인덱스 찾기
+
+              if (id.length == 1) {
+                const filter = this.checked_list.findIndex((el) => {
+                  return el.cart_id == data.cart_id;
+                });
+                if (filter != -1) {
+                  const removeChecked = this.checked_list.splice(filter, 1);
+                }
+              } else {
+                this.checked_list = [];
+              }
+              if (this.checked_list.length == 0) {
+                this.all();
+              }
+              if (
+                this.list.courses.length + this.list.sessions.length !=
+                this.checked_list.length
+              ) {
+                this.allCheck = false;
+              } else {
+                this.allCheck = true;
+              }
+              this.costCalculate(this.checked_list.map((el) => el.cart_id));
+            });
+          });
+      }
+    }
+    getList(): Promise<boolean> {
+      const data = {
+        action: "cart_list",
+      };
+      return this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          console.log(result);
+          this.list = result.data.data;
+          return true;
+        });
+    }
     created() {
-      this.getList(this.$route.query.pageCurrent).then((result) => {
+      this.getList().then((result: boolean) => {
         this.all_check();
       });
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .h2_title {
