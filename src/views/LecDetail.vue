@@ -283,8 +283,14 @@
         >
           <span class="lec_title">
             <span v-html="list.title" class="lec-title-section"></span>
-            <span v-if="list.up_status == 1" class="ing-ico">변환중</span>
-            <span v-else-if="list.up_status == 2" class="complete-ico"
+            <span
+              v-if="list.up_status == 1 && detail.isApprove == 0"
+              class="ing-ico"
+              >변환중</span
+            >
+            <span
+              v-else-if="list.up_status == 2 && detail.isApprove == 0"
+              class="complete-ico"
               >완료</span
             >
           </span>
@@ -297,8 +303,14 @@
               class="child-list-title"
             >
               <span class="child-title-section" v-html="li.title"></span
-              ><span v-if="li.up_status == 1" class="ing-ico">변환중</span>
-              <span v-else-if="li.up_status == 2" class="complete-ico"
+              ><span
+                v-if="li.up_status == 1 && detail.isApprove == 0"
+                class="ing-ico"
+                >변환중</span
+              >
+              <span
+                v-else-if="li.up_status == 2 && detail.isApprove == 0"
+                class="complete-ico"
                 >완료</span
               >
             </div>

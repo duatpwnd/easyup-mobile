@@ -62,7 +62,9 @@
             @change="fileSelect()"
           />
           <label for="upload" class="file">파일 선택</label>
-          <div class="file_name">{{ file_obj.name }}</div>
+          <div class="file_name">
+            {{ file_obj.name }}
+          </div>
         </div>
         <BlueBtn>
           <button type="button" slot="blue_btn" @click="register()">
@@ -73,81 +75,82 @@
     </form>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
   import Notice from "@/components/common/notice.vue";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       BlueBtn,
       Notice,
     },
-    data() {
-      return {
-        file_obj: "",
-        name: "",
-        category: "",
-        email: "",
-        phone: "",
-        contents: "",
-      };
-    },
-    methods: {
-      fileSelect() {
-        const selected_file = this.$refs.upload.files[0];
-        this.file_obj = selected_file;
-      },
-      goToPath() {
-        this.$router.push("/help/read");
-      },
-      validationCheck() {
-        return new Promise((resolve, reject) => {
-          if (this.name.trim().length == 0) {
-            this.$noticeMessage("이름을 입력하세요");
-          } else if (this.email.trim().length == 0) {
-            this.$noticeMessage("이메일을 입력하세요");
-          } else {
-            resolve("success");
-          }
-        });
-      },
-      register() {
-        this.validationCheck().then((result) => {
-          console.log(result);
-          if (result == "success") {
-            // const formData = new FormData();
-            // formData.append("action", "send_qna");
-            // formData.append("add_file", this.file_obj);
-            // formData.append("name", this.name);
-            // formData.append("email", this.email);
-            // formData.append("phone", this.phone);
-            // formData.append("contents", this.contents);
-            // formData.append("category", "all");
-            // console.log(formData);
-            const data = {
-              action: "send_qna",
-              category: "all",
-              name: this.name,
-              email: this.email,
-              phone: this.phone,
-              contents: this.contents,
-              add_file: this.file_obj,
-            };
-            console.log(data);
-            this.$axios
-              .post(this.$ApiUrl.mobileAPI_v1, data, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              })
-              .then((result) => {
-                console.log(result);
-                this.$noticeMessage(result.data.data[0]);
-              });
-          }
-        });
-      },
-    },
-  };
+  })
+  export default class Qna extends Vue {
+    $refs!: {
+      upload: HTMLFormElement;
+    };
+    file_obj: { [key: string]: any } = {};
+    name = "";
+    category = "";
+    email = "";
+    phone = "";
+    contents = "";
+    fileSelect(): void {
+      const selected_file = this.$refs.upload.files[0];
+      this.file_obj = selected_file;
+      console.log(selected_file.name, selected_file.size);
+    }
+    goToPath(): void {
+      this.$router.push("/help/read");
+    }
+    validationCheck(): Promise<string> {
+      return new Promise((resolve, reject) => {
+        if (this.name.trim().length == 0) {
+          this.$noticeMessage("이름을 입력하세요");
+        } else if (this.email.trim().length == 0) {
+          this.$noticeMessage("이메일을 입력하세요");
+        } else {
+          resolve("success");
+        }
+      });
+    }
+    register(): void {
+      interface BodyData {
+        action: string;
+        category: string;
+        name: string;
+        email: string;
+        phone: string;
+        contents: string;
+        add_file: { [key: string]: any };
+      }
+      this.validationCheck().then((result) => {
+        console.log(result);
+        if (result == "success") {
+          const data: BodyData = {
+            action: "send_qna",
+            category: "all",
+            name: this.name,
+            email: this.email,
+            phone: this.phone,
+            contents: this.contents,
+            add_file: this.file_obj,
+          };
+          console.log(data);
+          this.$axios
+            .post(this.$ApiUrl.mobileAPI_v1, data, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then((result) => {
+              console.log(result);
+              this.$noticeMessage(result.data.data[0]);
+            });
+        }
+      });
+    }
+  }
 </script>
 <style scoped lang="scss">
   .qna {
