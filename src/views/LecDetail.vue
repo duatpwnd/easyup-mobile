@@ -235,11 +235,6 @@
             }"
           ></span>
           <span class="teacher-name" v-html="detail.teachers.name"></span>
-          <h2 class="teacher-intro-title">강사소개</h2>
-          <div
-            class="teacher-intro"
-            v-html="detail.teachers.profile_info"
-          ></div>
         </div>
         <div>
           <span class="access_limit">{{ detail.access_limit.basic }}</span>
@@ -281,8 +276,12 @@
       </div>
       <div class="curriculum_list">
         <!-- 개수 있을때 -->
-        <div v-for="(list, index) in isCountTrue" :key="'true' + index">
-          <span class="lec_title" @click="curriculumToggle(index)">
+        <div
+          v-for="(list, index) in isCountTrue"
+          :key="'true' + index"
+          @click="curriculumToggle(index)"
+        >
+          <span class="lec_title">
             <span v-html="list.title" class="lec-title-section"></span>
             <span v-if="list.up_status == 1" class="ing-ico">변환중</span>
             <span v-else-if="list.up_status == 2" class="complete-ico"
@@ -310,6 +309,14 @@
           <span class="lec_title else_lec_title" v-html="list.title"> </span>
         </div>
       </div>
+    </div>
+    <!-- 강사소개 -->
+    <div class="teacher-intro">
+      <h2 class="teacher-intro-title">강사소개</h2>
+      <div
+        class="teacher-intro-contents"
+        v-html="detail.teachers.profile_info"
+      ></div>
     </div>
     <!-- description :: E  -->
     <div id="lec_eval">
@@ -765,14 +772,6 @@
           margin-left: 15px;
           vertical-align: middle;
         }
-        .teacher-intro-title {
-          margin-top: 10px;
-          font-size: 18px;
-        }
-        .teacher-intro {
-          margin-top: 5px;
-          font-size: 14px;
-        }
       }
     }
     .name {
@@ -808,6 +807,17 @@
         background: url("~@/assets/images/lec_detail/share_ico.png") no-repeat
           no-repeat 14px center / 28px 27px;
       }
+    }
+  }
+  .teacher-intro {
+    padding: 0 4.445%;
+    margin-top: 30px;
+    .teacher-intro-title {
+      font-size: 18px;
+    }
+    .teacher-intro-contents {
+      margin-top: 5px;
+      font-size: 14px;
     }
   }
   #intro {
