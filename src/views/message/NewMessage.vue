@@ -110,7 +110,7 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
           this.view = result.data.data.info;
           this.title = "답 : " + result.data.data.info.title;
           this.choice_list = [{ id: result.data.data.info.user_sender_id }];
@@ -152,7 +152,7 @@
                 : null,
             },
           })
-          .then((result) => {
+          .then((result: { [key: string]: any }) => {
             console.log(result);
             this.loading = false;
             if (result.data.data.items.length == 0) {
@@ -180,7 +180,7 @@
           data.users = map;
           // 배열값이 배열이 빠진 문자만 들어가는현상 발생
           for (let key in data) {
-            formData.append(key, data[key]);
+            formData.append(key, data[key as never]);
           }
           this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, formData, {
@@ -191,7 +191,7 @@
                   : null,
               },
             })
-            .then((result) => {
+            .then((result: { [key: string]: any }) => {
               console.log(result);
               if (result.data.error != true) {
                 if (result.data.data.fail == 0) {

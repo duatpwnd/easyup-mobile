@@ -143,7 +143,7 @@
                 "Content-Type": "multipart/form-data",
               },
             })
-            .then((result) => {
+            .then((result: { [key: string]: any }) => {
               console.log(result);
               this.$noticeMessage(result.data.data[0]);
             });

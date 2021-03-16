@@ -264,12 +264,12 @@
       console.log("결제하기 리스트 데이터:", data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
           console.log("결제하기 리스트 결과:", result);
           this.list = result.data.data;
         });
     }
-    _pay(_frm): void {
+    _pay(_frm: HTMLFormElement): void {
       if (this.isAgree == false) {
         this.$noticeMessage(
           "구매조건 확인 및 결제대행 서비스 약관에 동의해주세요"

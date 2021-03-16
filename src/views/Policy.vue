@@ -34,7 +34,7 @@
       { name: "개인정보 취급방침", target: "Privacy" },
     ];
 
-    toggle(type, index) {
+    toggle(type: string, index: any): void {
       this.$router
         .push({
           name: "policy",
@@ -43,9 +43,9 @@
             active: index,
           },
         })
-        .catch(() => {});
+        .catch((err: Error) => {});
     }
-    compSet() {
+    compSet(): void {
       this.type = String(this.$route.query.action);
       this.isActive = Number(this.$route.query.active);
     }

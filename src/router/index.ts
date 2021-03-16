@@ -16,13 +16,6 @@ const routes = [
     name: "signup",
     component: () => import("../views/SignUp.vue"),
     meta: { isFooter: false, unauthorized: true },
-    beforeEnter(to, from, next) {
-      if (VueCookies.get("access_token")) {
-        next("/");
-      } else {
-        next();
-      }
-    },
   },
   {
     path: "/signupComplete",
@@ -480,7 +473,9 @@ router.beforeEach(async (to, from, next) => {
     store.commit("userStore/loginToken", VueCookies.get("user_info"));
   }
   const arr = ["GnbBottomMenu", "isFooter", "ProfileMsgTab"];
-  const result = arr.reduce((acc, el) => {
+  const result = arr.reduce((acc: { [key: string]: any }, el: string): {
+    [key: string]: any;
+  } => {
     if (el == Object.keys(to.meta)[0]) {
       acc[el] = Object.values(to.meta)[0];
     } else {

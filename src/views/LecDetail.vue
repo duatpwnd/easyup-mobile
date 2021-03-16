@@ -453,13 +453,13 @@
     // 커리큘럼 강의 개수가 있을때
     get isCountTrue() {
       return this.detail.curriculum_list.items.filter(
-        (item) => item.children_count != null
+        (item: { [key: string]: any }) => item.children_count != null
       );
     }
     // 커리큘럼 강의 개수가 없을때
     get isCountFalse() {
       return this.detail.curriculum_list.items.filter(
-        (item) => item.children_count == null
+        (item: { [key: string]: any }) => item.children_count == null
       );
     }
     get discount_price() {
@@ -526,7 +526,7 @@
         });
     }
     // 커리큘럼 토글
-    curriculumToggle(index) {
+    curriculumToggle(index: number): void {
       const currentNum = this.curriculumTab.indexOf(index);
       if (currentNum >= 0) {
         // 현재 배열안에있음

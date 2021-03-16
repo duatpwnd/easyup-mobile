@@ -19,86 +19,80 @@
     </div>
   </div>
 </template>
-<script>
-import BlueBtn from "@/components/common/BaseButton.vue";
-export default {
-  components: {
-    BlueBtn
-  },
-  data() {
-    return {
-      info: ""
-    };
-  },
-  methods: {
-    noticeView(id) {
-      console.log(id);
+<script lang="ts">
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
+    components: {
+      BlueBtn,
+    },
+  })
+  export default class NoticeRead extends Vue {
+    info = "";
+    noticeView(id: number): void {
       const data = {
         action: "get_cs_view",
-        id: id //게시물ID
+        id: id, //게시물ID
       };
-      console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {})
-        .then(result => {
-          console.log(result.data.data);
+        .then((result: { [key: string]: any }) => {
           this.info = result.data.data;
           this.$router
             .push({
               query: {
-                id: id
-              }
+                id: id,
+              },
             })
             .catch(() => {});
         });
     }
-  },
-  created() {
-    this.noticeView(this.$route.query.id);
+    created() {
+      this.noticeView(this.$route.query.id);
+    }
   }
-};
 </script>
 <style scoped lang="scss">
-.read {
-  padding: 4.445%;
-  .head {
-    margin-top: 5%;
-    span {
-      font-size: 1.375rem;
-    }
-  }
-  .contents {
-    border-top: 2px solid #333333;
-    border-bottom: 2px solid #333333;
-    padding: 2% 0;
-    margin: 2% 0;
-    white-space: pre-wrap;
-    font-size: 1.25rem;
-    color: #666666;
-    font-family: "NotoSansCJKkr-Regular";
-    word-break: break-all;
-  }
-  .button_wrap {
-    &:after {
-      display: block;
-      content: "";
-      clear: both;
-    }
-    .btn {
-      float: left;
-      width: 23.172%;
-      button {
-        border: 1px solid #114fff;
-        background: white;
-        color: #114fff;
-        height: 24px;
-        line-height: 16px;
-        font-size: 12px;
+  .read {
+    padding: 4.445%;
+    .head {
+      margin-top: 5%;
+      span {
+        font-size: 1.375rem;
       }
     }
-    .last_btn {
-      float: right;
+    .contents {
+      border-top: 2px solid #333333;
+      border-bottom: 2px solid #333333;
+      padding: 2% 0;
+      margin: 2% 0;
+      white-space: pre-wrap;
+      font-size: 1.25rem;
+      color: #666666;
+      font-family: "NotoSansCJKkr-Regular";
+      word-break: break-all;
+    }
+    .button_wrap {
+      &:after {
+        display: block;
+        content: "";
+        clear: both;
+      }
+      .btn {
+        float: left;
+        width: 23.172%;
+        button {
+          border: 1px solid #114fff;
+          background: white;
+          color: #114fff;
+          height: 24px;
+          line-height: 16px;
+          font-size: 12px;
+        }
+      }
+      .last_btn {
+        float: right;
+      }
     }
   }
-}
 </style>

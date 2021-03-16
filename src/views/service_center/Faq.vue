@@ -84,11 +84,18 @@
     list = "";
     keyword = "";
     active = false;
+
     slide(index: number): void {
-      if (this.$refs.dd[index].style.display == "none") {
-        this.$refs.dd[index].style.display = "block";
+      interface Person {
+        name: string;
+        age: number;
+        location: string;
+      }
+      const dd = (this.$refs.dd as unknown) as HTMLCollectionOf<HTMLElement>;
+      if (dd[index].style.display == "none") {
+        dd[index].style.display = "block";
       } else {
-        this.$refs.dd[index].style.display = "none";
+        dd[index].style.display = "none";
       }
     }
     getList(category: string, keyword: string, current: number): void {
@@ -102,7 +109,7 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {})
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
           if (this.$refs.dd != undefined) {
             Array.from(
               this.$refs.dd as Iterable<HTMLDListElement>,

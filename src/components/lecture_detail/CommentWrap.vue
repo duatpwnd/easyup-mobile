@@ -170,30 +170,33 @@
     comment = "";
     view = 4;
     toggle(modify: string): void {
+      const eventObj = event as { [key: string]: any };
       if (
-        event!["path"][2].nextElementSibling.nextElementSibling.style.display ==
-        "none"
+        eventObj["path"][2].nextElementSibling.nextElementSibling.style
+          .display == "none"
       ) {
-        event!["path"][2].nextElementSibling.nextElementSibling.style.display =
-          "block";
+        eventObj[
+          "path"
+        ][2].nextElementSibling.nextElementSibling.style.display = "block";
         if (modify != undefined) {
-          event![
+          eventObj[
             "path"
-          ][2].nextElementSibling.nextElementSibling.children[0].value = event![
-            "path"
-          ][2].nextElementSibling.innerText;
+          ][2].nextElementSibling.nextElementSibling.children[0].value =
+            eventObj["path"][2].nextElementSibling.innerText;
         }
       } else {
-        event!["path"][2].nextElementSibling.nextElementSibling.style.display =
-          "none";
+        eventObj[
+          "path"
+        ][2].nextElementSibling.nextElementSibling.style.display = "none";
       }
     }
     // 토글 일부취소
     private toggle_cancel(): void {
-      if (event!["path"][3].style.display == "none") {
-        event!["path"][3].style.display = "block";
+      const eventObj = event as { [key: string]: any };
+      if (eventObj["path"][3].style.display == "none") {
+        eventObj["path"][3].style.display = "block";
       } else {
-        event!["path"][3].style.display = "none";
+        eventObj["path"][3].style.display = "none";
       }
     }
     private toggleOff(): void {
@@ -252,10 +255,11 @@
     }
     // 답글 수정
     reply_comment_modify(index: number, num: number) {
+      const eventObj = event as { [key: string]: any };
       const obj: Data = {
         action: "modify_comment",
         review_comment_id: index,
-        contents: event!["path"][3].children[0].value.trim(),
+        contents: eventObj["path"][3].children[0].value.trim(),
       };
       console.log("수정:", obj);
       this.$axios

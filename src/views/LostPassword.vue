@@ -41,7 +41,7 @@
       } else {
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
+          .then((result: { [key: string]: any }) => {
             console.log("이메일", result);
             this.$noticeMessage(result.data.data.msg);
             this.$router.push("/");

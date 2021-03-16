@@ -7,7 +7,7 @@ import "swiper/swiper-bundle.css";
 import VueMq from "vue-mq";
 import CKEditor from "ckeditor4-vue";
 const VueCookies = require("vue-cookies");
-import ApiUrl from "@/assets/js/api_url.js";
+import ApiUrl from "@/assets/js/api_url";
 import GlobalPlugin from "@/plugin/global_plugin";
 import axios from "axios";
 import VueRouterBackButton from "vue-router-back-button";
@@ -63,8 +63,8 @@ axios.interceptors.response.use((response) => {
   if (response.data.type == "token") {
     // 토큰이없을경우 마지막 url 기억
     store.commit("userStore/referer", router.currentRoute.fullPath);
-    Vue["noticeMessage"]("로그인을 해주세요.");
-    Vue["logOut"]();
+    Vue.noticeMessage("로그인을 해주세요.");
+    Vue.logOut();
   }
   return response;
 });

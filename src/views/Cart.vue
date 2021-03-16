@@ -190,7 +190,7 @@
         this.activeAll = true;
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
+          .then((result: { [key: string]: any }) => {
             console.log(result);
             this.format_sum_final = result.data.data.format_sum_final;
             this.format_sum_discount = result.data.data.format_sum_discount;
@@ -240,7 +240,7 @@
       } else {
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
+          .then((result: { [key: string]: any }) => {
             console.log(result);
             if (result.data.data.result) {
               this.$router.push({
@@ -251,7 +251,7 @@
               });
             }
           })
-          .catch((err) => {
+          .catch((err: Error) => {
             this.$noticeMessage(
               "선택된 코스 및 강의가 중복돼 구매 진행이 불가하니 확인해 주세요."
             );
@@ -264,14 +264,14 @@
       } else {
         const data = {
           action: "delete_cart",
-          cart_id: id.map((el) => {
+          cart_id: id.map((el: { [key: string]: any }) => {
             return el.cart_id;
           }),
         };
         console.log(data);
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
+          .then((result: { [key: string]: any }) => {
             console.log(result);
             this.getList().then((result) => {
               //삭제할 인덱스 찾기
@@ -308,7 +308,7 @@
       };
       return this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
           console.log(result);
           this.list = result.data.data;
           return true;

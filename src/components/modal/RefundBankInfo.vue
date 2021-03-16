@@ -60,7 +60,7 @@
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
           console.log(result);
           this.close();
           this.$noticeMessage(
@@ -69,7 +69,7 @@
         });
     }
     created() {
-      this.$EventBus.$on("refundInfo", (result) => {
+      this.$EventBus.$on("refundInfo", (result: { [key: string]: any }) => {
         this.refundBankInfo = true;
         this.lecture_info = result;
       });

@@ -81,7 +81,7 @@
         file: this.file_obj,
       };
       for (let key in data) {
-        formData.append(key, data[key]);
+        formData.append(key, data[key as never]);
       }
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, formData)

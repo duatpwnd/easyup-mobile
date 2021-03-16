@@ -53,66 +53,64 @@
   </div>
 </template>
 <script>
-import Item from "@/components/player/Item.vue";
-import { mapState, mapMutations } from "vuex";
+  import Item from "@/components/player/Item.vue";
+  import { mapState, mapMutations } from "vuex";
 
-export default {
-  data() {
-    return {
-      isActive: true, // 강의 전체 토글
-      current_index: ""
-    };
-  },
-  props: {
-    list: {
-      type: Object,
-      required: true
-    }
-  },
-  computed: {
-    ...mapState("playerStore", {
-      playerStore_current_item_id: "current_item_id"
-    })
-  },
-  components: {
-    Item
-  },
+  export default {
+    data() {
+      return {
+        isActive: true, // 강의 전체 토글
+        current_index: "",
+      };
+    },
+    props: {
+      list: {
+        type: Object,
+        required: true,
+      },
+    },
+    computed: {
+      ...mapState("playerStore", {
+        playerStore_current_item_id: "current_item_id",
+      }),
+    },
+    components: {
+      Item,
+    },
 
-  methods: {
-    all() {
-      this.isActive = !this.isActive;
-    }
-  },
-  mounted() {
-    if (this.list.are_parents.length != 0) {
-      this.all();
-    }
-  }
-};
+    methods: {
+      all() {
+        this.isActive = !this.isActive;
+      },
+    },
+    mounted() {
+      if (this.list.are_parents.length != 0) {
+        this.all();
+      }
+    },
+  };
 </script>
 <style scoped lang="scss">
-.list {
-  .toggle_btn {
-    text-align: center;
-    padding: 2% 0;
-    position: relative;
-    border-bottom: 2px solid #f8f8f8;
-    img {
-      // width: 3.333%; /* 24px/720px */
-      width: 4.583%;
-      position: absolute;
-      top: 0;
-      left: 4.445%;
-      bottom: 0;
-      margin: auto;
-    }
-    h2 {
-      font-size: 1.5rem;
-      color: #999999;
-      font-weight: 400;
+  .list {
+    .toggle_btn {
+      text-align: center;
+      padding: 2% 0;
+      position: relative;
+      border-bottom: 2px solid #f8f8f8;
+      img {
+        // width: 3.333%; /* 24px/720px */
+        width: 4.583%;
+        position: absolute;
+        top: 0;
+        left: 4.445%;
+        bottom: 0;
+        margin: auto;
+      }
+      h2 {
+        font-size: 1.5rem;
+        color: #999999;
+        font-weight: 400;
+      }
     }
   }
-  .list_wrapper {
-  }
-}
 </style>

@@ -133,11 +133,11 @@
             picture: this.file_obj,
           };
           for (let key in data) {
-            formData.append(key, data[key]);
+            formData.append(key, data[key as never]);
           }
           this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, formData)
-            .then((result) => {
+            .then((result: { [key: string]: any }) => {
               console.log(result);
               if (result.data.error) {
                 this.$noticeMessage(result.data.message);
