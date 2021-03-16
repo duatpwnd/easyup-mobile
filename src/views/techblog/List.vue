@@ -49,61 +49,58 @@
     </Pagination>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Pagination from "@/components/common/Pagination.vue";
   import Search from "@/components/common/Search.vue";
   import TechBlogList from "@/components/techblog/List.vue";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       Pagination,
       TechBlogList,
       Search,
     },
-    data() {
-      return {
-        list: "",
-        keyword: "",
-        current: "",
+  })
+  export default class List extends Vue {
+    list = "";
+    keyword = "";
+    current = 1;
+    goToPath(id: number): void {
+      this.$router.push({
+        path: "/techBlog/read",
+        query: {
+          id: id,
+        },
+      });
+    }
+    getList(num: number, keyword: string): void {
+      const data = {
+        action: "get_blog_list", //필수
+        current: num, //필수
+        keyword: keyword, //옵션
       };
-    },
-    methods: {
-      goToPath(id) {
-        this.$router.push({
-          path: "/techBlog/read",
-          query: {
-            id: id,
-          },
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result) => {
+          console.log("기술블로그", result);
+          this.$router
+            .push({
+              query: {
+                pageCurrent: num,
+                keyword: keyword,
+              },
+            })
+            .catch(() => {});
+          this.list = result.data.data;
+          this.keyword = keyword;
+          this.current = num;
         });
-      },
-      getList(num, keyword) {
-        const data = {
-          action: "get_blog_list", //필수
-          current: num, //필수
-          keyword: keyword, //옵션
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("기술블로그", result);
-            this.$router
-              .push({
-                query: {
-                  pageCurrent: num,
-                  keyword: keyword,
-                },
-              })
-              .catch(() => {});
-            this.list = result.data.data;
-            this.keyword = keyword;
-            this.current = num;
-          });
-      },
-    },
+    }
     created() {
       this.getList(this.$route.query.pageCurrent, this.$route.query.keyword);
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .search {
