@@ -108,7 +108,7 @@
     video_set = false;
     playerStore_check_time!: number | undefined | string;
     playerStore_current_item_id!: number;
-    info: any = {};
+    info: { [key: string]: any } = {};
     isActive = 0;
     type = "Tab1";
     types = [

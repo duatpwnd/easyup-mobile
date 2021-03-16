@@ -451,29 +451,23 @@
     detail: { [key: string]: any } = {};
     isSubscribe!: Function;
     // 커리큘럼 강의 개수가 있을때
-    get isCountTrue() {
+    get isCountTrue(): object[] {
       return this.detail.curriculum_list.items.filter(
         (item: { [key: string]: any }) => item.children_count != null
       );
     }
     // 커리큘럼 강의 개수가 없을때
-    get isCountFalse() {
+    get isCountFalse(): object[] {
       return this.detail.curriculum_list.items.filter(
         (item: { [key: string]: any }) => item.children_count == null
       );
     }
-    get discount_price() {
-      return this.$numberWithCommas(this.detail.coupon.discount_price);
-    }
-    get quantity() {
-      return this.$numberWithCommas(this.detail.coupon.quantity);
-    }
-    isPurchase() {
+    isPurchase(): void {
       this.$store.commit("toggleStore/Toggle", {
         purchase_apply: true,
       });
     }
-    isWatch() {
+    isWatch(): void {
       this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
     }
     // 쿠폰다운
@@ -489,7 +483,7 @@
           this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
         });
     }
-    video(course_id: any, lp_id: any): void {
+    video(course_id: number, lp_id: number): void {
       this.$router.push({
         path: "/play",
         query: {

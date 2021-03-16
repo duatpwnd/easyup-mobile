@@ -34,7 +34,7 @@
       { name: "개인정보 취급방침", target: "Privacy" },
     ];
 
-    toggle(type: string, index: any): void {
+    toggle(type: string, index: number): void {
       this.$router
         .push({
           name: "policy",
