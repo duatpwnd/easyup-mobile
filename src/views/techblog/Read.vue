@@ -89,7 +89,7 @@
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
           console.log("댓글등록", result);
           if (result.data.error != true) {
             this.view(this.$route.query.id);
@@ -104,7 +104,7 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
           console.log("기술블로그읽기", result.data.data);
           this.list = result.data.data;
           this.$router

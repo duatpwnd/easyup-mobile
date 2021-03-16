@@ -82,7 +82,7 @@
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
           console.log("기술블로그", result);
           this.$router
             .push({
