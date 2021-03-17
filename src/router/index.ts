@@ -270,7 +270,7 @@ const routes = [
   {
     path: "/play",
     name: "play",
-    component: () => import("../views/Player.vue"),
+    component: () => import(/* webpackPrefetch: true */ "../views/Player.vue"),
     meta: { isFooter: false },
   },
   {
