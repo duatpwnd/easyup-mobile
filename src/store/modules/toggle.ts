@@ -1,4 +1,7 @@
 import { Module, VuexModule, Mutation } from "vuex-module-decorators";
+interface KeysType {
+  more_view: string;
+}
 // 스코어 인터페이스
 interface ScoreInfo {
   review_id: string;
@@ -50,7 +53,7 @@ export default class Toggle extends VuexModule {
   @Mutation
   Toggle(obj: { [key: string]: any }): void {
     Object.keys(obj).forEach((el: string, index: number) => {
-      this[el] = Object.values(obj)[index];
+      this[el as keyof KeysType] = Object.values(obj)[index];
     });
   }
 }
