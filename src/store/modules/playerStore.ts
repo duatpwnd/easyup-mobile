@@ -2,7 +2,6 @@ import { Module, VuexModule, Mutation } from "vuex-module-decorators";
 interface KeysType {
   check_time: string;
 }
-
 @Module({ namespaced: true, name: "PlayStore" })
 export default class PlayStore extends VuexModule {
   check_time = ""; // 즐겨찾기 추가 시간

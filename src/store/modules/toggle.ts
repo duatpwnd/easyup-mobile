@@ -1,4 +1,16 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { Module, VuexModule, Mutation } from "vuex-module-decorators";
+// 스코어 인터페이스
+interface ScoreInfo {
+  review_id: string;
+  score_modal: boolean;
+  score: number;
+  score_contents: string;
+}
+// 책갈피 인터페이스
+interface Bookmark {
+  current_id: string;
+  bookmark_list_modal: boolean;
+}
 @Module({ namespaced: true, name: "Toggle" })
 export default class Toggle extends VuexModule {
   more_view = false; // 내강의실 상위 메뉴
@@ -24,20 +36,20 @@ export default class Toggle extends VuexModule {
     bookmark_list_modal: false, // 책갈피 리스트 모달
   };
   @Mutation
-  noticeMessage(msg: string) {
+  noticeMessage(msg: string): void {
     this.notice_message = msg;
   }
   @Mutation
-  bookmarkListToggle(obj) {
+  bookmarkListToggle(obj: Bookmark): void {
     this.bookmark_list_info = obj;
   }
   @Mutation
-  scoreToggle(obj) {
+  scoreToggle(obj: ScoreInfo): void {
     this.score_info = obj;
   }
   @Mutation
-  Toggle(obj) {
-    Object.keys(obj).forEach((el, index) => {
+  Toggle(obj: { [key: string]: any }): void {
+    Object.keys(obj).forEach((el: string, index: number) => {
       this[el] = Object.values(obj)[index];
     });
   }

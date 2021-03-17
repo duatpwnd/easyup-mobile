@@ -473,9 +473,9 @@ router.beforeEach(async (to, from, next) => {
     store.commit("userStore/loginToken", VueCookies.get("user_info"));
   }
   const arr = ["GnbBottomMenu", "isFooter", "ProfileMsgTab"];
-  const result = arr.reduce((acc: { [key: string]: any }, el: string): {
+  const result: {
     [key: string]: any;
-  } => {
+  } = arr.reduce((acc: { [key: string]: any }, el: string) => {
     if (el == Object.keys(to.meta)[0]) {
       acc[el] = Object.values(to.meta)[0];
     } else {

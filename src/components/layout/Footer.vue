@@ -56,7 +56,7 @@
     padding: 14px;
     background: #333333;
     position: absolute;
-    bottom: -154px;
+    bottom: -150px;
     max-width: 720px;
     width: 100%;
     box-sizing: border-box;
