@@ -54,9 +54,9 @@
   </div>
 </template>
 <script lang="ts">
-  import Pagination from "@/components/common/Pagination.vue";
-  import BoardTitle from "@/components/common/BoardTitle.vue";
   import Search from "@/components/common/Search.vue";
+  import BoardTitle from "@/components/common/BoardTitle.vue";
+  import Pagination from "@/components/common/Pagination.vue";
   import { Vue, Component } from "vue-property-decorator";
   @Component({
     components: { BoardTitle, Search, Pagination },

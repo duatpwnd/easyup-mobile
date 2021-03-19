@@ -33,9 +33,8 @@
   </section>
 </template>
 <script>
-  import Pagination from "@/components/common/Pagination.vue";
-
   import Slide from "@/components/common/Slide.vue";
+  import Pagination from "@/components/common/Pagination.vue";
   export default {
     components: {
       Pagination,

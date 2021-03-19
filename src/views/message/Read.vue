@@ -72,12 +72,11 @@
   </div>
 </template>
 <script lang="ts">
-  import { Component, Vue } from "vue-property-decorator";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
-  import { mapState } from "vuex";
   import BlueBtn from "@/components/common/BaseButton.vue";
+  import { Component, Vue } from "vue-property-decorator";
+  import { mapState } from "vuex";
   import { ResultData } from "@/assets/js/util";
-
   @Component({
     components: {
       BlueBtn,

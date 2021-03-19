@@ -94,13 +94,12 @@
   </div>
 </template>
 <script>
-  import Pagination from "@/components/common/Pagination.vue";
   import Search from "@/components/common/Search.vue";
   import LecItem from "@/components/common/LectureItem.vue";
+  import Pagination from "@/components/common/Pagination.vue";
   export default {
     components: {
       Pagination,
-
       LecItem,
       Search,
     },

@@ -323,14 +323,14 @@
   </div>
 </template>
 <script>
-  import StarRating from "vue-star-rating";
-  import GoToCart from "@/components/modal/GotoCart.vue";
-  import CommentWrap from "@/components/lecture_detail/CommentWrap";
-  import ProgressBar from "@/components/common/ProgressBar.vue";
-  import CourseItem from "@/components/common/LectureItem.vue";
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  import mixin from "@/views/mixins/lec_course_detail.js";
   import PurchaseApply from "@/components/modal/PurchaseApply.vue";
+  import GoToCart from "@/components/modal/GotoCart.vue";
+  import StarRating from "vue-star-rating";
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import CourseItem from "@/components/common/LectureItem.vue";
+  import ProgressBar from "@/components/common/ProgressBar.vue";
+  import CommentWrap from "@/components/lecture_detail/CommentWrap";
+  import mixin from "@/views/mixins/lec_course_detail.js";
   import { mapState, mapMutations } from "vuex";
   export default {
     mixins: [mixin],

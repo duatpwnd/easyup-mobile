@@ -217,11 +217,11 @@
 </template>
 <script>
   import Search from "@/components/common/Search.vue";
-  import Pagination from "@/components/common/Pagination.vue";
   import LectureCourseList from "@/components/common/LectureCourseList.vue";
   import VideoList from "@/components/common/VideoList.vue";
-  import mixin from "./mixin.js";
+  import Pagination from "@/components/common/Pagination.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import mixin from "./mixin.js";
   import { mapState } from "vuex";
   export default {
     mixins: [mixin],

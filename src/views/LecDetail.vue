@@ -410,17 +410,17 @@
 </template>
 <script lang="ts">
   import { Component, Vue } from "vue-property-decorator";
-  import GoToCart from "@/components/modal/GotoCart.vue";
+  import PurchaseApply from "@/components/modal/PurchaseApply.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import GoToCart from "@/components/modal/GotoCart.vue";
   import StarScoreModal from "@/components/lecture_detail/StarScoreModal.vue";
-  import CommentWrap from "@/components/lecture_detail/CommentWrap.vue";
-  import BlueBtn from "@/components/common/BaseButton.vue";
   import StarRating from "vue-star-rating";
+  import BlueBtn from "@/components/common/BaseButton.vue";
   import ProgressBar from "@/components/common/ProgressBar.vue";
+  import CommentWrap from "@/components/lecture_detail/CommentWrap.vue";
   import mixin from "@/views/mixins/lec_course_detail";
   import { mapState, mapMutations } from "vuex";
   import { ResultData } from "@/assets/js/util";
-  import PurchaseApply from "@/components/modal/PurchaseApply.vue";
   @Component({
     mixins: [mixin],
     components: {

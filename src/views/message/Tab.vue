@@ -109,15 +109,14 @@
   </div>
 </template>
 <script>
-  import Pagination from "@/components/common/Pagination.vue";
-  import CheckBox from "@/components/common/BaseCheckBox.vue";
-  import BoardTitle from "@/components/common/BoardTitle.vue";
-  import BoardList from "@/components/common/BoardList.vue";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import Search from "@/components/common/Search.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import BoardTitle from "@/components/common/BoardTitle.vue";
+  import CheckBox from "@/components/common/BaseCheckBox.vue";
+  import BoardList from "@/components/common/BoardList.vue";
+  import Pagination from "@/components/common/Pagination.vue";
   import { mapState, mapMutations } from "vuex";
-
   export default {
     components: {
       Pagination,

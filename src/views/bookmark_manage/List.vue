@@ -77,11 +77,10 @@
   </div>
 </template>
 <script>
-  import Pagination from "@/components/common/Pagination.vue";
-
   import Search from "@/components/common/Search.vue";
   import BoardTitle from "@/components/common/BoardTitle.vue";
   import BoardList from "@/components/common/BoardList.vue";
+  import Pagination from "@/components/common/Pagination.vue";
   export default {
     components: {
       Pagination,

@@ -186,11 +186,11 @@
   </div>
 </template>
 <script>
-  import TimeLine from "@/components/my_lecture_room/TimeLine.vue";
-  import List from "@/components/my_lecture_room/list.vue";
-  import UserInfo from "@/components/my_lecture_room/user_info.vue";
-  import ProgressBar from "@/components/common/ProgressBar.vue";
   import Profile from "@/components/modal/Profile.vue";
+  import UserInfo from "@/components/my_lecture_room/user_info.vue";
+  import List from "@/components/my_lecture_room/list.vue";
+  import ProgressBar from "@/components/common/ProgressBar.vue";
+  import TimeLine from "@/components/my_lecture_room/TimeLine.vue";
   import { mapState, mapMutations } from "vuex";
   export default {
     components: {

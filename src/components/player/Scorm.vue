@@ -98,10 +98,10 @@
   </div>
 </template>
 <script>
-  import ProgressBar from "@/components/common/ProgressBar.vue";
-  import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
   import StarRating from "vue-star-rating";
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import ProgressBar from "@/components/common/ProgressBar.vue";
+  import { mapState, mapMutations } from "vuex";
   import mixin from "@/components/player/player_mixin.js";
 
   export default {

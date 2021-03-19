@@ -112,10 +112,10 @@
   </div>
 </template>
 <script lang="ts">
-  import Pagination from "@/components/common/Pagination.vue";
+  import Search from "@/components/common/Search.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import BoardTitle from "@/components/common/BoardTitle.vue";
-  import Search from "@/components/common/Search.vue";
+  import Pagination from "@/components/common/Pagination.vue";
   import { Vue, Component, Watch } from "vue-property-decorator";
   @Component({
     components: { BoardTitle, Search, Pagination, BlueBtn },

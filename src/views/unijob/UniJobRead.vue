@@ -84,9 +84,9 @@
   </div>
 </template>
 <script>
+  import BlueBtn from "@/components/common/BaseButton.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import { mapState, mapMutations } from "vuex";
-  import BlueBtn from "@/components/common/BaseButton.vue";
   import mixin from "./unijob_mixin.js";
   export default {
     mixins: [mixin],

@@ -50,9 +50,9 @@
   </div>
 </template>
 <script lang="ts">
-  import Pagination from "@/components/common/Pagination.vue";
   import Search from "@/components/common/Search.vue";
   import TechBlogList from "@/components/techblog/List.vue";
+  import Pagination from "@/components/common/Pagination.vue";
   import { Vue, Component } from "vue-property-decorator";
   @Component({
     components: {

@@ -447,10 +447,10 @@
 
 <script lang="ts">
   import { Component, Vue } from "vue-property-decorator";
-  import LecItem from "@/components/common/LectureItem.vue";
-  import CategoryLec from "@/components/main/MainCategory.vue";
   import Slide from "@/components/common/Slide.vue";
   import Search from "@/components/common/Search.vue";
+  import CategoryLec from "@/components/main/MainCategory.vue";
+  import LecItem from "@/components/common/LectureItem.vue";
   interface ResultedData {
     data: {
       data: {};

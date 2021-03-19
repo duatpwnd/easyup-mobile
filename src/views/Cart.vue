@@ -111,10 +111,10 @@
   </div>
 </template>
 <script lang="ts">
-  import Row from "@/components/common/Row.vue";
+  import LectureCourseList from "@/components/common/LectureCourseList.vue";
   import CheckBox from "@/components/common/BaseCheckBox.vue";
   import BaseButton from "@/components/common/BaseButton.vue";
-  import LectureCourseList from "@/components/common/LectureCourseList.vue";
+  import Row from "@/components/common/Row.vue";
   import { Vue, Component } from "vue-property-decorator";
   @Component({
     components: { Row, CheckBox, BaseButton, LectureCourseList },

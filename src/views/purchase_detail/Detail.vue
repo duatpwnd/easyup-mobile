@@ -316,12 +316,12 @@
   </div>
 </template>
 <script lang="ts">
-  import Row from "@/components/common/Row.vue";
-  import BaseButton from "@/components/common/BaseButton.vue";
-  import { mapState } from "vuex";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import CancelLecture from "@/components/modal/CancelLecture.vue";
   import RefundBankInfo from "@/components/modal/RefundBankInfo.vue";
+  import Row from "@/components/common/Row.vue";
+  import BaseButton from "@/components/common/BaseButton.vue";
+  import { mapState } from "vuex";
   import { Vue, Component } from "vue-property-decorator";
   @Component({
     components: {

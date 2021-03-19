@@ -146,9 +146,10 @@
   </div>
 </template>
 <script>
-  import Pagination from "@/components/common/Pagination.vue";
   import Row from "@/components/common/Row.vue";
   import BaseButton from "@/components/common/BaseButton.vue";
+  import Pagination from "@/components/common/Pagination.vue";
+
   export default {
     components: {
       Row,

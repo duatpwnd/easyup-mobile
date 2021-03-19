@@ -96,11 +96,11 @@
   </div>
 </template>
 <script lang="ts">
-  import BaseButton from "@/components/common/BaseButton.vue";
   import Search from "@/components/common/Search.vue";
   import DatePicker from "@/components/common/DatePicker.vue";
-  import Pagination from "@/components/common/Pagination.vue";
   import Row from "@/components/common/Row.vue";
+  import BaseButton from "@/components/common/BaseButton.vue";
+  import Pagination from "@/components/common/Pagination.vue";
   import { Vue, Component } from "vue-property-decorator";
   interface BodyData {
     action: string;

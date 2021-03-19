@@ -196,24 +196,24 @@
   </div>
 </template>
 <script lang="ts">
+  import LectureCourseList from "@/components/common/LectureCourseList.vue";
   import Row from "@/components/common/Row.vue";
   import BaseButton from "@/components/common/BaseButton.vue";
-  import LectureCourseList from "@/components/common/LectureCourseList.vue";
-  import MyCoupon from "@/components/modal/MyCoupon.vue";
   import CheckBox from "@/components/common/BaseCheckBox.vue";
   import Policy from "@/views/Policy.vue";
   import Terms from "@/components/policy/Terms.vue";
   import Privacy from "@/components/policy/Privacy.vue";
   import OrderForm from "@/components/order/OrderForm.vue";
+  import MyCoupon from "@/components/modal/MyCoupon.vue";
   import { Vue, Component } from "vue-property-decorator";
   @Component({
     components: {
       Policy,
       CheckBox,
       MyCoupon,
+      LectureCourseList,
       Row,
       BaseButton,
-      LectureCourseList,
       Terms,
       Privacy,
       OrderForm,

@@ -235,9 +235,9 @@
   </div>
 </template>
 <script>
-  import ProgressBar from "@/components/common/ProgressBar.vue";
-  import LectureCourseList from "@/components/common/LectureCourseList.vue";
   import Search from "@/components/common/Search.vue";
+  import LectureCourseList from "@/components/common/LectureCourseList.vue";
+  import ProgressBar from "@/components/common/ProgressBar.vue";
   import Pagination from "@/components/common/Pagination.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import mixin from "./mixin.js";
@@ -245,11 +245,11 @@
   export default {
     mixins: [mixin],
     components: {
-      ConfirmModal,
-      Pagination,
-      ProgressBar,
       Search,
       LectureCourseList,
+      ProgressBar,
+      Pagination,
+      ConfirmModal,
     },
     computed: {
       ...mapState("toggleStore", {
