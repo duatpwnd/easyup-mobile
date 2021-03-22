@@ -418,11 +418,10 @@
   import BlueBtn from "@/components/common/BaseButton.vue";
   import ProgressBar from "@/components/common/ProgressBar.vue";
   import CommentWrap from "@/components/lecture_detail/CommentWrap.vue";
-  import mixin from "@/views/mixins/lec_course_detail";
-  import { mapState, mapMutations } from "vuex";
+  import Mixin from "@/views/mixins/lec_course_detail";
+  import { mapState } from "vuex";
   import { ResultData } from "@/assets/js/util";
   @Component({
-    mixins: [mixin],
     components: {
       GoToCart,
       ConfirmModal,
@@ -445,11 +444,10 @@
       }),
     },
   })
-  export default class LecDetail extends Vue {
+  export default class LecDetail extends Mixin {
     curriculumTab: number[] = [];
     url: string = window.document.location.href;
     detail: { [key: string]: any } = {};
-    isSubscribe!: Function;
     // 커리큘럼 강의 개수가 있을때
     get isCountTrue(): object[] {
       return this.detail.curriculum_list.items.filter(

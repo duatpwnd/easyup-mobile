@@ -215,16 +215,16 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Search from "@/components/common/Search.vue";
   import LectureCourseList from "@/components/common/LectureCourseList.vue";
   import VideoList from "@/components/common/VideoList.vue";
   import Pagination from "@/components/common/Pagination.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
-  import mixin from "./mixin.js";
+  import Mixin from "./mixin";
   import { mapState } from "vuex";
-  export default {
-    mixins: [mixin],
+  import { Component, Vue } from "vue-property-decorator";
+  @Component({
     components: {
       Pagination,
       VideoList,
@@ -240,58 +240,54 @@
         userStore_userinfo: "userinfo",
       }),
     },
-    data() {
-      return {
-        reason_tab: [], // 거절 사유 탭
-        delete_id: "", // 코스 삭제 아이디
-      };
-    },
-    methods: {
-      rejectToggle(index) {
-        const currentNum = this.reason_tab.indexOf(index);
-        if (currentNum >= 0) {
-          // 현재 배열안에있음
-          this.reason_tab.splice(currentNum, 1);
-        } else {
-          this.reason_tab.push(index);
-        }
-      },
-      confirm(id) {
-        this.delete_id = id;
-        this.$confirmMessage("삭제하시겠습니까?");
-      },
-      courseDelete() {
-        let obj;
-        if (this.$route.query.view == "teacher") {
-          // 강사
-          obj = {
-            action: "change_visibility",
-            id: this.delete_id,
-            type: "session",
-          };
-        } else {
-          // 학생
-          obj = {
-            action: "delete_myclass_item",
-            code: this.delete_id,
-            type: "session",
-          };
-        }
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-          .then((result) => {
-            console.log(result);
-            this.getMyCourse(
-              this.$route.query.view == "teacher"
-                ? "get_my_session_teacher"
-                : "get_my_session",
-              this.$route.query.pageCurrent,
-              this.$route.query.order,
-              this.$route.query.keyword
-            );
-          });
-      },
-    },
+  })
+  export default class Course extends Mixin {
+    reason_tab: number[] = []; // 거절 사유 탭
+    delete_id!: number; // 코스 삭제 아이디
+    rejectToggle(index: number): void {
+      const currentNum = this.reason_tab.indexOf(index);
+      if (currentNum >= 0) {
+        // 현재 배열안에있음
+        this.reason_tab.splice(currentNum, 1);
+      } else {
+        this.reason_tab.push(index);
+      }
+    }
+    confirm(id: number): void {
+      this.delete_id = id;
+      this.$confirmMessage("삭제하시겠습니까?");
+    }
+    courseDelete(): void {
+      let obj;
+      if (this.$route.query.view == "teacher") {
+        // 강사
+        obj = {
+          action: "change_visibility",
+          id: this.delete_id,
+          type: "session",
+        };
+      } else {
+        // 학생
+        obj = {
+          action: "delete_myclass_item",
+          code: this.delete_id,
+          type: "session",
+        };
+      }
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          this.getMyCourse(
+            this.$route.query.view == "teacher"
+              ? "get_my_session_teacher"
+              : "get_my_session",
+            this.$route.query.pageCurrent,
+            this.$route.query.order,
+            this.$route.query.keyword
+          );
+        });
+    }
     created() {
       // 강사버전, 학생버전 분기처리
       this.getMyCourse(
@@ -302,8 +298,8 @@
         this.$route.query.order,
         this.$route.query.keyword
       );
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .search_area,

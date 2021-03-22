@@ -21,7 +21,6 @@ export default class GroupMixin extends Vue {
   isPossibleReview = false;
   is_subscribe = false;
   subscribe_btn = false;
-  test = "염세중";
   score_info = {}; // 각 별점의 개수
   url = window.document.location.href; // 클립보드 현재 url
   @Watch("detect_token")
