@@ -116,7 +116,6 @@
         </div>
       </template>
     </Row>
-
     <div class="btn_wrap">
       <h2>결제 수단</h2>
       <div class="payMethod">
