@@ -34,15 +34,12 @@
     <router-view></router-view>
   </div>
 </template>
-<script>
-  export default {
-    data() {
-      return {
-        active: 0,
-      };
-    },
-    methods: {},
-  };
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
+  @Component
+  export default class ServiceCenter extends Vue {
+    active = 0;
+  }
 </script>
 <style scoped lang="scss">
   .tab {
