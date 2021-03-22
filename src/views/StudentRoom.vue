@@ -185,14 +185,15 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Profile from "@/components/modal/Profile.vue";
   import UserInfo from "@/components/my_lecture_room/user_info.vue";
   import List from "@/components/my_lecture_room/list.vue";
   import ProgressBar from "@/components/common/ProgressBar.vue";
   import TimeLine from "@/components/my_lecture_room/TimeLine.vue";
   import { mapState, mapMutations } from "vuex";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       Profile,
       TimeLine,
@@ -205,45 +206,40 @@
         userStore_userinfo: "userinfo",
       }),
     },
-    data() {
-      return {
-        profile_modal: false,
-        top_count: "",
-        dashboard_list: "",
+  })
+  export default class MyLectureRoom extends Vue {
+    profile_modal = false;
+    top_count = "";
+    dashboard_list = "";
+    convert(type: string): void {
+      this.$router
+        .push({
+          query: {
+            view: type,
+          },
+        })
+        .catch(() => {});
+    }
+    getMyLecture(action: string): void {
+      const obj = {
+        action: action,
       };
-    },
-    methods: {
-      convert(type) {
-        this.$router
-          .push({
-            query: {
-              view: type,
-            },
-          })
-          .catch(() => {});
-      },
-
-      getMyLecture(action) {
-        const obj = {
-          action: action,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-          .then((result) => {
-            console.log(result);
-            if (action == "get_top_count") {
-              this.top_count = result.data.data;
-            } else {
-              this.dashboard_list = result.data.data;
-            }
-          });
-      },
-    },
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          if (action == "get_top_count") {
+            this.top_count = result.data.data;
+          } else {
+            this.dashboard_list = result.data.data;
+          }
+        });
+    }
     created() {
       this.getMyLecture("get_top_count");
       this.getMyLecture("get_dashboard_list");
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   #my_lecture {
