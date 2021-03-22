@@ -93,80 +93,77 @@
     </Pagination>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Search from "@/components/common/Search.vue";
   import LecItem from "@/components/common/LectureItem.vue";
   import Pagination from "@/components/common/Pagination.vue";
-  export default {
+  import { Vue, Watch, Component } from "vue-property-decorator";
+  @Component({
     components: {
       Pagination,
       LecItem,
       Search,
     },
-    data() {
-      return {
-        current: "", //현재번호
-        order: "",
-        keyword: "",
-        category_list: "",
+  })
+  export default class LectureList extends Vue {
+    current = 1; //현재번호
+    order = "";
+    keyword = "";
+    category_list = "";
+    @Watch("$route")
+    onPropertyChanged(
+      to: { [key: string]: any },
+      from: { [key: string]: any }
+    ): void {
+      if (to.query.category_code != from.query.category_code) {
+        this.getList(
+          this.$route.query.pageCurrent,
+          this.$route.query.order,
+          this.$route.query.keyword
+        );
+      }
+    }
+    getList(num: number, order: string, keyword: string): void {
+      const data = {
+        action: this.$route.query.action,
+        current: num,
+        order: order,
+        keyword: keyword,
+        category_code: this.$route.query.category_code
+          ? this.$route.query.category_code
+          : null,
+        tag: this.$route.query.tag,
       };
-    },
-    methods: {
-      async getList(num, order, keyword) {
-        const data = {
-          action: this.$route.query.action,
-          current: num,
-          order: order,
-          keyword: keyword,
-          category_code: this.$route.query.category_code
-            ? this.$route.query.category_code
-            : null,
-          tag: this.$route.query.tag,
-        };
-        this.order = order;
-        this.keyword = keyword;
-        this.current = num;
-
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.category_list = result.data.data;
-            this.$router
-              .push({
-                query: {
-                  action: this.$route.query.action,
-                  pageCurrent: num,
-                  order: order,
-                  keyword: keyword,
-                  category_code: this.$route.query.category_code,
-                  tag: this.$route.query.tag,
-                },
-              })
-              .catch(() => {});
-          });
-      },
-    },
-    watch: {
-      $route(to, from) {
-        console.log(to, from);
-        if (to.query.category_code != from.query.category_code) {
-          this.getList(
-            this.$route.query.pageCurrent,
-            this.$route.query.order,
-            this.$route.query.keyword
-          );
-        }
-      },
-    },
+      this.order = order;
+      this.keyword = keyword;
+      this.current = num;
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          this.category_list = result.data.data;
+          this.$router
+            .push({
+              query: {
+                action: this.$route.query.action,
+                pageCurrent: num,
+                order: order,
+                keyword: keyword,
+                category_code: this.$route.query.category_code,
+                tag: this.$route.query.tag,
+              },
+            })
+            .catch(() => {});
+        });
+    }
     created() {
       this.getList(
         this.$route.query.pageCurrent,
         this.$route.query.order,
         this.$route.query.keyword
       );
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   #lec_list {
