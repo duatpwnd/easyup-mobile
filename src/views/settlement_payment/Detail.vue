@@ -100,60 +100,56 @@
     </Pagination>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Row from "@/components/common/Row.vue";
   import BaseButton from "@/components/common/BaseButton.vue";
   import Pagination from "@/components/common/Pagination.vue";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       Row,
       BaseButton,
       Pagination,
     },
-    data() {
-      return {
-        list: "",
-        current: "",
+  })
+  export default class Detail extends Vue {
+    list = "";
+    current = 1;
+    getList(num: number): void {
+      const data = {
+        action: "get_settlement_detail",
+        current: num,
+        search_start_date: this.$route.query.start_date,
+        search_end_date: this.$route.query.end_date,
       };
-    },
-    methods: {
-      getList(num) {
-        const data = {
-          action: "get_settlement_detail",
-          current: num,
-          search_start_date: this.$route.query.start_date,
-          search_end_date: this.$route.query.end_date,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.list = result.data.data;
-            this.$router
-              .push({
-                query: {
-                  pageCurrent: num,
-                  start_date: this.$route.query.start_date,
-                  end_date: this.$route.query.end_date,
-                  view: this.$route.query.view,
-                },
-              })
-              .catch(() => {});
-            this.current = num;
-          });
-      },
-    },
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          this.list = result.data.data;
+          this.$router
+            .push({
+              query: {
+                pageCurrent: num,
+                start_date: this.$route.query.start_date,
+                end_date: this.$route.query.end_date,
+                view: this.$route.query.view,
+              },
+            })
+            .catch(() => {});
+          this.current = num;
+        });
+    }
     beforeDestroy() {
       this.$EventBus.$off(`detail_datePick`);
-    },
+    }
     created() {
       this.$EventBus.$on(`detail_datePick`, () => {
         this.getList(1);
       });
       this.getList(this.$route.query.pageCurrent);
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .detail_contents {
