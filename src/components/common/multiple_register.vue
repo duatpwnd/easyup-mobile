@@ -27,10 +27,6 @@
     components: {
       CkEditor,
     },
-    data() {
-      return {};
-    },
-    methods: {},
   };
 </script>
 <style scoped lang="scss">

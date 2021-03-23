@@ -48,7 +48,6 @@
         ref="textarea"
       ></div>
     </div>
-
     <div class="row">
       <span class="left"></span>
       <button class="save_btn" @click="bookmarkAdd()">등록</button>

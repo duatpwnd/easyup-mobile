@@ -180,10 +180,10 @@
     </div>
   </div>
 </template>
-<script>
-  export default {
-    components: {},
-  };
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
+  @Component
+  export default class MainCategory extends Vue {}
 </script>
 <style scoped lang="scss">
   #category_lec {

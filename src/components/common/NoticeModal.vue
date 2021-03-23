@@ -58,7 +58,6 @@
         text-align: center;
         margin-bottom: 20px;
       }
-
       .blue_btn {
         text-align: center;
         .ok {
