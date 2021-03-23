@@ -32,47 +32,42 @@
     </Pagination>
   </section>
 </template>
-<script>
+<script lang="ts">
   import Slide from "@/components/common/Slide.vue";
   import Pagination from "@/components/common/Pagination.vue";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       Pagination,
-
       Slide,
     },
-    data() {
-      return {
-        slide_option: {
-          timeline: {
-            pagination: {
-              el: ".swiper-pagination",
-            },
-          },
+  })
+  export default class CurrentLecture extends Vue {
+    slide_option = {
+      timeline: {
+        pagination: {
+          el: ".swiper-pagination",
         },
-        timeline_list: "",
-        current: "", //현재번호
-      };
-    },
-
-    methods: {
-      getDashboardTimeline(num) {
-        const obj = {
-          action: "get_dashboard_timeline",
-          current: num,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-          .then((result) => {
-            this.timeline_list = result.data.data;
-            this.current = num;
-          });
       },
-    },
+    };
+    timeline_list = "";
+    current = 1; //현재번호
+    getDashboardTimeline(num: number): void {
+      const obj = {
+        action: "get_dashboard_timeline",
+        current: num,
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
+        .then((result: { [key: string]: any }) => {
+          this.timeline_list = result.data.data;
+          this.current = num;
+        });
+    }
     created() {
       this.getDashboardTimeline(1);
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .timeLine {
