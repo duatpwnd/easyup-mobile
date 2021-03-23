@@ -24,102 +24,98 @@
     </form>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
-
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: { BlueBtn },
-    data() {
-      return {
-        pw1: "",
-        pw2: "",
-        time: "",
-        reload: true,
+  })
+  export default class ReissuePw extends Vue {
+    pw1 = "";
+    pw2 = "";
+    time = "";
+    reload = true;
+    countdown(): void {
+      let timeArray = this.time.split(":");
+      let seconds = this.timeToSeconds(timeArray);
+      if (typeof seconds === "string") {
+        this.time = "00:00";
+        this.tokenCheck();
+        return;
+      } else {
+        seconds--;
+        this.time = this.secondsToTime(seconds);
+        let timeoutMyOswego = setTimeout(this.countdown, 1000);
+      }
+    }
+    timeToSeconds(timeArray: string[]): number | string {
+      const minutes = ((timeArray[0] as unknown) as number) * 1;
+      let seconds = (((minutes * 60 + timeArray[1]) as unknown) as number) * 1;
+      return seconds;
+    }
+    secondsToTime(secs: number): string {
+      let hours: string | number = Math.floor(secs / (60 * 60));
+      hours = hours < 10 ? "0" + hours : hours;
+      const divisor_for_minutes = secs % (60 * 60);
+      let minutes: string | number = Math.floor(divisor_for_minutes / 60);
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      const divisor_for_seconds = divisor_for_minutes % 60;
+      let seconds: string | number = Math.ceil(divisor_for_seconds);
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+      return minutes + ":" + seconds;
+    }
+    pwChange(): void {
+      const data = {
+        action: "reset_password",
+        token: this.$route.query.token,
+        new_password: this.pw1,
+        new_password_confirm: this.pw2,
       };
-    },
-    methods: {
-      countdown() {
-        let timeArray = this.time.split(":");
-        let seconds = this.timeToSeconds(timeArray);
-        if (seconds == "") {
-          this.time = "00:00";
-          this.tokenCheck();
-          return;
-        } else {
-          seconds--;
-          this.time = this.secondsToTime(seconds);
-          let timeoutMyOswego = setTimeout(this.countdown, 1000);
-        }
-      },
-      timeToSeconds(timeArray) {
-        const minutes = timeArray[0] * 1;
-        let seconds = minutes * 60 + timeArray[1] * 1;
-        return seconds;
-      },
-      secondsToTime(secs) {
-        let hours = Math.floor(secs / (60 * 60));
-        hours = hours < 10 ? "0" + hours : hours;
-        const divisor_for_minutes = secs % (60 * 60);
-        let minutes = Math.floor(divisor_for_minutes / 60);
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        const divisor_for_seconds = divisor_for_minutes % 60;
-        let seconds = Math.ceil(divisor_for_seconds);
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-        return minutes + ":" + seconds;
-      },
-      pwChange() {
-        const data = {
-          action: "reset_password",
-          token: this.$route.query.token,
-          new_password: this.pw1,
-          new_password_confirm: this.pw2,
-        };
-        console.log(data);
-        if (this.pw1.trim().length == 0) {
-          this.$noticeMessage("비밀번호를 입력해주세요.");
-        } else if (this.pw2.trim().length == 0) {
-          this.$noticeMessage("비밀번호 확인을 입력해주세요.");
-        } else if (this.pw1 != this.pw2) {
-          this.$noticeMessage("비밀번호가 일치하지 않습니다.");
-        } else {
-          this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
-              headers: {
-                Authorization: this.$cookies.get("user_info")
-                  ? "Bearer " + this.$cookies.get("user_info").access_token
-                  : null,
-              },
-            })
-            .then((result) => {
-              console.log("비밀번호 변경", result);
-              this.$noticeMessage("비밀번호 변경이 완료 되었습니다.");
-              this.$router.push("/");
-            });
-        }
-      },
-      tokenCheck() {
-        const data = {
-          action: "reset_password_token_chk",
-          token: this.$route.query.token,
-        };
+      console.log(data);
+      if (this.pw1.trim().length == 0) {
+        this.$noticeMessage("비밀번호를 입력해주세요.");
+      } else if (this.pw2.trim().length == 0) {
+        this.$noticeMessage("비밀번호 확인을 입력해주세요.");
+      } else if (this.pw1 != this.pw2) {
+        this.$noticeMessage("비밀번호가 일치하지 않습니다.");
+      } else {
         this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("토큰", result);
-            if (result.data.error) {
-              this.$noticeMessage(result.data.message);
-              this.$router.push("/lostPassword");
-            } else {
-              this.time = result.data.data.remain_time;
-              this.countdown();
-            }
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result: { [key: string]: any }) => {
+            console.log("비밀번호 변경", result);
+            this.$noticeMessage("비밀번호 변경이 완료 되었습니다.");
+            this.$router.push("/");
           });
-      },
-    },
+      }
+    }
+    tokenCheck(): void {
+      const data = {
+        action: "reset_password_token_chk",
+        token: this.$route.query.token,
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log("토큰", result);
+          if (result.data.error) {
+            this.$noticeMessage(result.data.message);
+            this.$router.push("/lostPassword");
+          } else {
+            this.time = result.data.data.remain_time;
+            this.countdown();
+          }
+        });
+    }
     mounted() {
       this.tokenCheck();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   #findByEmail {

@@ -568,6 +568,10 @@
         .catch(() => {});
     }
     mounted() {
+      const a = "00:00:00";
+      const b = a.split(":");
+      const c = (b[0] as unknown) as number;
+      console.log(c * 60 + b[1]);
       // 새로고침감지
       const isOnIOS =
         navigator.userAgent.match(/iPad/i) ||
