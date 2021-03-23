@@ -15,14 +15,6 @@ const routes = [
         name: "signup",
         component: () => import("../views/SignUp.vue"),
         meta: { isFooter: false, unauthorized: true },
-        beforeEnter(to, from, next) {
-            if (VueCookies.get("access_token")) {
-                next("/");
-            }
-            else {
-                next();
-            }
-        },
     },
     {
         path: "/signupComplete",
@@ -263,7 +255,7 @@ const routes = [
     {
         path: "/play",
         name: "play",
-        component: () => import("../views/Player.vue"),
+        component: () => import(/* webpackPrefetch: true */ "../views/Player.vue"),
         meta: { isFooter: false },
     },
     {

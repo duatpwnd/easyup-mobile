@@ -4,8 +4,8 @@ let UserStore = class UserStore extends VuexModule {
     constructor() {
         super(...arguments);
         this.userinfo = {
-            access_token: null,
-            info: "",
+            access_token: null || "",
+            info: {},
         };
         this.refererLink = "";
     }
@@ -13,7 +13,8 @@ let UserStore = class UserStore extends VuexModule {
         return this.userinfo.access_token;
     }
     get status() {
-        return this.userinfo.info["status"];
+        console.log(this.userinfo.info);
+        return this.userinfo.info;
     }
     loginToken(param) {
         this.userinfo = param;

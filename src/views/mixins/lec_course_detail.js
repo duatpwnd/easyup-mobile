@@ -7,7 +7,6 @@ let GroupMixin = class GroupMixin extends Vue {
         this.isPossibleReview = false;
         this.is_subscribe = false;
         this.subscribe_btn = false;
-        this.test = "염세중";
         this.score_info = {}; // 각 별점의 개수
         this.url = window.document.location.href; // 클립보드 현재 url
     }
@@ -105,7 +104,10 @@ let GroupMixin = class GroupMixin extends Vue {
         });
     }
     destroyed() {
-        this.$root.$el.children[2].removeAttribute("style");
+        // this.$root.$el.children[2] == footer
+        if (this.$root.$el.children[2] != undefined) {
+            this.$root.$el.children[2].removeAttribute("style");
+        }
     }
     created() {
         window.onscroll = () => {

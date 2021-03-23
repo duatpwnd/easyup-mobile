@@ -1,5 +1,5 @@
 <template>
-  <div class="read" v-if="view">
+  <div class="read" v-if="Object.keys(view).length > 0">
     <ConfirmModal
       @ok="deleteMessage($route.name)"
       v-if="toggleStore_confirmModal"
@@ -83,13 +83,13 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
-  import { mapState, mapMutations } from "vuex";
-  import mixin from "./unijob_mixin.js";
-  export default {
-    mixins: [mixin],
+  import { mapState } from "vuex";
+  import Mixin from "./unijob_mixin";
+  import { Component } from "vue-property-decorator";
+  @Component({
     components: {
       BlueBtn,
       ConfirmModal,
@@ -99,72 +99,68 @@
         toggleStore_confirmModal: "confirm_modal",
       }),
     },
-    data() {
-      return {
-        view: "",
+  })
+  export default class UnijobRead extends Mixin {
+    // view: { [key: string]: any } = {};
+    download(filename: string): void {
+      const data = {
+        action: "download_attach_file",
+        type: this.$route.query.type,
+        id: this.$route.query.id,
+        filename: filename,
       };
-    },
-    methods: {
-      download(filename) {
-        const data = {
-          action: "download_attach_file",
-          type: this.$route.query.type,
-          id: this.$route.query.id,
-          filename: filename,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, data, {
-            responseType: "blob",
-            headers: {
-              Authorization: this.$cookies.get("user_info")
-                ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null,
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, data, {
+          responseType: "blob",
+          headers: {
+            Authorization: this.$cookies.get("user_info")
+              ? "Bearer " + this.$cookies.get("user_info").access_token
+              : null,
+          },
+        })
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          // 로컬서버에서는 작동하지 않음
+          if (window.navigator.msSaveOrOpenBlob) {
+            // IE 10+
+            window.navigator.msSaveOrOpenBlob(result.data, filename);
+          } else {
+            // not IE
+            let link = document.createElement("a");
+            link.href = window.URL.createObjectURL(result.data);
+            link.target = "_self";
+            if (filename) link.download = filename;
+            link.click();
+            window.URL.revokeObjectURL(result.data);
+          }
+        });
+    }
+    confirm(): void {
+      this.$confirmMessage("삭제하시겠습니까?");
+    }
+    deleteUnijob(): void {
+      const data = {
+        action: "delete_unijob",
+        type: this.$route.query.type,
+        id: this.$route.query.id,
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          this.$router.push({
+            path: `/uniJob/${this.$route.query.type}`,
+            query: {
+              pageCurrent: 1,
+              keyword: "",
             },
-          })
-          .then((result) => {
-            console.log(result);
-            // 로컬서버에서는 작동하지 않음
-            if (window.navigator.msSaveOrOpenBlob) {
-              // IE 10+
-              window.navigator.msSaveOrOpenBlob(result.data, filename);
-            } else {
-              // not IE
-              let link = document.createElement("a");
-              link.href = window.URL.createObjectURL(result.data);
-              link.target = "_self";
-              if (filename) link.download = filename;
-              link.click();
-              window.URL.revokeObjectURL(result.data);
-            }
           });
-      },
-      confirm() {
-        this.$confirmMessage("삭제하시겠습니까?");
-      },
-      deleteUnijob() {
-        const data = {
-          action: "delete_unijob",
-          type: this.$route.query.type,
-          id: this.$route.query.id,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.$router.push({
-              path: `/uniJob/${this.$route.query.type}`,
-              query: {
-                pageCurrent: 1,
-                keyword: "",
-              },
-            });
-          });
-      },
-    },
+        });
+    }
     created() {
       this.read(this.$route.query.id);
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .read {

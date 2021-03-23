@@ -1,6 +1,5 @@
 import Vue from "vue";
 import App from "./App.vue";
-import { router } from "./router";
 import store from "./store";
 import VueAwesomeSwiper from "vue-awesome-swiper";
 import "swiper/swiper-bundle.css";
@@ -15,6 +14,7 @@ import Clipboard from "v-clipboard";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { router } from "./router";
 library.add(faTimes);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.use(Clipboard);
@@ -61,8 +61,8 @@ axios.interceptors.response.use((response) => {
     if (response.data.type == "token") {
         // 토큰이없을경우 마지막 url 기억
         store.commit("userStore/referer", router.currentRoute.fullPath);
-        Vue["noticeMessage"]("로그인을 해주세요.");
-        Vue["logOut"]();
+        Vue.noticeMessage("로그인을 해주세요.");
+        Vue.logOut();
     }
     return response;
 });
