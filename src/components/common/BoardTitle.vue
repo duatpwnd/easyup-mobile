@@ -6,14 +6,10 @@
     </slot>
   </div>
 </template>
-<script>
-  export default {
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
+  @Component
+  export default class BoardTitle extends Vue {}
 </script>
 <style scoped lang="scss">
   .title_wrap {

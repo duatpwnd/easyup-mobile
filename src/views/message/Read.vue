@@ -6,7 +6,7 @@
     ></ConfirmModal>
     <h2>메시지</h2>
     <div class="head">
-      <span>{{ view.title }}</span>
+      <span v-html="view.title"></span>
     </div>
     <div class="contents">
       <span v-html="view.send_name" class="send"></span>

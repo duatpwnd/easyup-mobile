@@ -9,7 +9,7 @@ module.exports = {
   },
   configureWebpack: {
     // 배포를 할때 여러개의 chunk css와js를 하나로 압축함, 빌드된 js의 용량크기를 줄여줌
-    // 한개로 축소하는대신 각 컴포넌트의 scss 파일을 minify하는데 충돌이 얼어남(import 순서에따라서)
+    // 한개로 축소하는대신 각 컴포넌트의 scss 파일을 minify하는데 충돌이 얼어남(import 순서에따라서... warning 나오는순서대로 맞춰주기)
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1,

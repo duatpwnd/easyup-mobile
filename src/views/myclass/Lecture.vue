@@ -235,11 +235,11 @@
   </div>
 </template>
 <script lang="ts">
-  import Search from "@/components/common/Search.vue";
   import LectureCourseList from "@/components/common/LectureCourseList.vue";
+  import Search from "@/components/common/Search.vue";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import ProgressBar from "@/components/common/ProgressBar.vue";
   import Pagination from "@/components/common/Pagination.vue";
-  import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import Mixin from "./mixin";
   import { mapState } from "vuex";
   import { Component, Vue } from "vue-property-decorator";

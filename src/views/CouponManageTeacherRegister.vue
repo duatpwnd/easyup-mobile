@@ -189,12 +189,11 @@
   </div>
 </template>
 <script>
-  import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import BaseRadioBox from "@/components/common/BaseRadioBox.vue";
   import DatePicker from "@/components/common/DatePicker.vue";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import { mapState, mapMutations } from "vuex";
-
   export default {
     components: { BlueBtn, DatePicker, BaseRadioBox, ConfirmModal },
     computed: {
