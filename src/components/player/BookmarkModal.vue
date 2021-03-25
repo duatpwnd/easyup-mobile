@@ -28,7 +28,6 @@
 <script>
   import BlueBtn from "@/components/common/BaseButton.vue";
   import { mapState, mapMutations } from "vuex";
-
   export default {
     props: {
       current_id: {

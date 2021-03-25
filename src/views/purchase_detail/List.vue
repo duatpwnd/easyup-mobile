@@ -74,7 +74,6 @@
         </div>
       </template>
     </Row>
-
     <Pagination>
       <template slot="paging">
         <li
@@ -182,7 +181,6 @@
 <style scoped lang="scss">
   .list_wrap {
     padding: 0 16px;
-
     .filter {
       .box {
         margin-top: 15px;

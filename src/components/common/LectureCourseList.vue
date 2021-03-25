@@ -33,18 +33,14 @@
     <slot name="list_info"> </slot>
   </div>
 </template>
-<script>
-  export default {
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {
-      playing() {
-        this.$router.push("/play").catch(() => {});
-      },
-    },
-  };
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
+  @Component
+  export default class LectureCourseList extends Vue {
+    playing(): void {
+      this.$router.push("/play").catch(() => {});
+    }
+  }
 </script>
 <style scoped lang="scss">
   .list_wrap {

@@ -8,11 +8,11 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
-
-  export default {
+  import { mapState } from "vuex";
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       BlueBtn,
     },
@@ -21,17 +21,14 @@
         toggleStore_noticeMessage: "notice_message",
       }),
     },
-    data() {
-      return {};
-    },
-    methods: {
-      ok() {
-        this.$store.commit("toggleStore/Toggle", {
-          notice_modal: false,
-        });
-      },
-    },
-  };
+  })
+  export default class NoticeModal extends Vue {
+    ok(): void {
+      this.$store.commit("toggleStore/Toggle", {
+        notice_modal: false,
+      });
+    }
+  }
 </script>
 <style scoped lang="scss">
   .mask1 {

@@ -14,24 +14,23 @@
     <button slot="search_btn" class="search_btn" @click="search()"></button
   ></Search>
 </template>
-<script>
+<script lang="ts">
   import Search from "@/components/common/Search.vue";
-
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       Search,
     },
-    data() {
-      return { order: "", keyword: "" };
-    },
-    methods: {
-      search() {
-        this.$EventBus.$emit(`search`, {
-          order: this.order,
-          keyword: this.keyword,
-        });
-      },
-    },
-  };
+  })
+  export default class SearchClass extends Vue {
+    order = "";
+    keyword = "";
+    search(): void {
+      this.$EventBus.$emit(`search`, {
+        order: this.order,
+        keyword: this.keyword,
+      });
+    }
+  }
 </script>
 <style scoped lang="scss"></style>

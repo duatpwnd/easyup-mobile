@@ -322,18 +322,18 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Component } from "vue-property-decorator";
   import PurchaseApply from "@/components/modal/PurchaseApply.vue";
   import GoToCart from "@/components/modal/GotoCart.vue";
   import StarRating from "vue-star-rating";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import CourseItem from "@/components/common/LectureItem.vue";
   import ProgressBar from "@/components/common/ProgressBar.vue";
-  import CommentWrap from "@/components/lecture_detail/CommentWrap";
-  import mixin from "@/views/mixins/lec_course_detail.js";
-  import { mapState, mapMutations } from "vuex";
-  export default {
-    mixins: [mixin],
+  import CommentWrap from "@/components/lecture_detail/CommentWrap.vue";
+  import Mixin from "@/views/mixins/lec_course_detail";
+  import { mapState } from "vuex";
+  @Component({
     components: {
       GoToCart,
       ProgressBar,
@@ -353,52 +353,37 @@
         userStore_userinfo: "userinfo",
       }),
     },
-    data() {
-      return {};
-    },
-    methods: {
-      isPurchase() {
-        this.$store.commit("toggleStore/Toggle", {
-          purchase_apply: true,
-        });
-      },
-      goToPath() {
-        this.$router.push({
-          path: "/myClass/course",
-          query: {
-            keyword: "",
-            pageCurrent: 1,
-            order: "",
-            view:
-              this.$route.query.view === undefined
-                ? this.userStore_userinfo.info.status == 1
-                  ? "teacher"
-                  : "student"
-                : this.$route.query.view,
-          },
-        });
-      },
-      // 코스 상세 조회
-      async getCourseDetail() {
-        const data = {
-          action: "get_session_info",
-          session_id: this.$route.query.id,
-        };
-        await this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("코스상세:", result.data.data);
-            this.detail = result.data.data;
-          });
-      },
-    },
+  })
+  export default class CourseDetail extends Mixin {
+    userStore_userinfo!: { [key: string]: any };
+    isPurchase(): void {
+      this.$store.commit("toggleStore/Toggle", {
+        purchase_apply: true,
+      });
+    }
+    goToPath(): void {
+      this.$router.push({
+        path: "/myClass/course",
+        query: {
+          keyword: "",
+          pageCurrent: 1,
+          order: "",
+          view:
+            this.$route.query.view === undefined
+              ? this.userStore_userinfo.info.status == 1
+                ? "teacher"
+                : "student"
+              : this.$route.query.view,
+        },
+      });
+    }
     created() {
       if (this.$cookies.get("user_info") != null) {
         this.isSubscribe();
       }
-      this.getCourseDetail();
-    },
-  };
+      this.getDetail("get_session_info");
+    }
+  }
 </script>
 <style scoped lang="scss">
   .update_noti {

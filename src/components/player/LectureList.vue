@@ -55,7 +55,6 @@
 <script>
   import Item from "@/components/player/Item.vue";
   import { mapState, mapMutations } from "vuex";
-
   export default {
     data() {
       return {

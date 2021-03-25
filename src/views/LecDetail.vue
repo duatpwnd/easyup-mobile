@@ -409,7 +409,7 @@
   </div>
 </template>
 <script lang="ts">
-  import { Component, Vue } from "vue-property-decorator";
+  import { Component } from "vue-property-decorator";
   import PurchaseApply from "@/components/modal/PurchaseApply.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import GoToCart from "@/components/modal/GotoCart.vue";
@@ -447,7 +447,6 @@
   export default class LecDetail extends Mixin {
     curriculumTab: number[] = [];
     url: string = window.document.location.href;
-    detail: { [key: string]: any } = {};
     // 커리큘럼 강의 개수가 있을때
     get isCountTrue(): object[] {
       return this.detail.curriculum_list.items.filter(
@@ -503,20 +502,6 @@
       };
       this.$store.commit("toggleStore/scoreToggle", obj);
     }
-
-    // 강의 상세 조회
-    async getLectureDetail(): Promise<void> {
-      const data: { action: string; course_id: number } = {
-        action: "get_course_info",
-        course_id: (this.$route.query.id as unknown) as number,
-      };
-      await this.$axios
-        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result: ResultData) => {
-          console.log(result);
-          this.detail = result.data.data;
-        });
-    }
     // 커리큘럼 토글
     curriculumToggle(index: number): void {
       const currentNum = this.curriculumTab.indexOf(index);
@@ -529,14 +514,14 @@
     }
     mounted() {
       this.$EventBus.$on("commentReload", () => {
-        this.getLectureDetail();
+        this.getDetail("get_course_info");
       });
     }
     created() {
       if (this.$cookies.get("user_info") != null) {
         this.isSubscribe();
       }
-      this.getLectureDetail();
+      this.getDetail("get_course_info");
     }
   }
 </script>
