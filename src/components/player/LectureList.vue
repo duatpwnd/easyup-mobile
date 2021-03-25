@@ -52,42 +52,33 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Item from "@/components/player/Item.vue";
-  import { mapState, mapMutations } from "vuex";
-  export default {
-    data() {
-      return {
-        isActive: true, // 강의 전체 토글
-        current_index: "",
-      };
-    },
-    props: {
-      list: {
-        type: Object,
-        required: true,
-      },
+  import { Vue, Prop, Component } from "vue-property-decorator";
+  import { mapState } from "vuex";
+  @Component({
+    components: {
+      Item,
     },
     computed: {
       ...mapState("playerStore", {
         playerStore_current_item_id: "current_item_id",
       }),
     },
-    components: {
-      Item,
-    },
-
-    methods: {
-      all() {
-        this.isActive = !this.isActive;
-      },
-    },
+  })
+  export default class LectureList extends Vue {
+    @Prop(Object) private list!: { [key: string]: any };
+    isActive = true; // 강의 전체 토글
+    current_index = "";
+    all(): void {
+      this.isActive = !this.isActive;
+    }
     mounted() {
       if (this.list.are_parents.length != 0) {
         this.all();
       }
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .list {

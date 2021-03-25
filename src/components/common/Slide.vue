@@ -6,23 +6,16 @@
     <slot name="nav_btn"></slot>
   </div>
 </template>
-<script>
-  export default {
-    props: {
-      swiper_option: {
-        type: Object,
-        required: true,
-      },
-    },
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-    updated() {
-      this.$refs.mySwiper.swiper.slideTo(0);
-    },
-  };
+<script lang="ts">
+  import { Vue, Component, Prop } from "vue-property-decorator";
+  @Component
+  export default class Slide extends Vue {
+    @Prop(Object) private swiper_option!: object;
+    updated(): void {
+      const mySwiper = this.$refs.mySwiper as { [key: string]: any };
+      mySwiper.swiper.slideTo(0);
+    }
+  }
 </script>
 <style scoped lang="scss">
   .slide {
