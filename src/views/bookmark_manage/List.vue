@@ -76,75 +76,72 @@
     </Pagination>
   </div>
 </template>
-<script>
+<script lang="ts">
   import Search from "@/components/common/Search.vue";
   import BoardTitle from "@/components/common/BoardTitle.vue";
   import BoardList from "@/components/common/BoardList.vue";
   import Pagination from "@/components/common/Pagination.vue";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       Pagination,
       BoardTitle,
       BoardList,
       Search,
     },
-    data() {
-      return {
-        current: "", //현재번호
-        order: "",
-        keyword: "",
-        bookmark_list: "",
+  })
+  export default class List extends Vue {
+    current = 1; //현재번호
+    order = "";
+    keyword = "";
+    bookmark_list = "";
+    go_to_path(url: string, id: number): void {
+      this.$router
+        .push({
+          path: url,
+          query: {
+            id: id,
+            view: this.$route.query.view,
+          },
+        })
+        .catch(() => {});
+    }
+    getList(num: number, order: string, keyword: string): void {
+      const data = {
+        action: "get_bookmark_list",
+        current: num,
+        search_status: order,
+        keyword: keyword,
       };
-    },
-    methods: {
-      go_to_path(url, id) {
-        this.$router
-          .push({
-            path: url,
-            query: {
-              id: id,
-              view: this.$route.query.view,
-            },
-          })
-          .catch(() => {});
-      },
-      async getList(num, order, keyword) {
-        const data = {
-          action: "get_bookmark_list",
-          current: num,
-          search_status: order,
-          keyword: keyword,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            if (result.data.error != true) {
-              this.bookmark_list = result.data.data;
-              this.$router
-                .push({
-                  query: {
-                    pageCurrent: num,
-                    order: order,
-                    keyword: keyword,
-                    view: this.$route.query.view,
-                  },
-                })
-                .catch(() => {});
-              this.order = order;
-              this.keyword = keyword;
-              this.current = num;
-            }
-          });
-      },
-    },
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          if (result.data.error != true) {
+            this.bookmark_list = result.data.data;
+            this.$router
+              .push({
+                query: {
+                  pageCurrent: num,
+                  order: order,
+                  keyword: keyword,
+                  view: this.$route.query.view,
+                },
+              })
+              .catch(() => {});
+            this.order = order;
+            this.keyword = keyword;
+            this.current = num;
+          }
+        });
+    }
     created() {
       this.getList(
         this.$route.query.pageCurrent,
         this.$route.query.order,
         this.$route.query.keyword
       );
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .no_result {

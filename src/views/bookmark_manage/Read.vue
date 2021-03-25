@@ -51,77 +51,71 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
-
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       BlueBtn,
     },
-    data() {
-      return {
-        info: "",
+  })
+  export default class Read extends Vue {
+    info: { [key: string]: any } = {};
+    go_to_path(url: string, id: number): void {
+      this.$router
+        .push({
+          path: url,
+          query: {
+            id: id,
+            mode: "modify",
+            view: this.$route.query.view,
+          },
+        })
+        .catch(() => {});
+    }
+    deleteBookmark(): void {
+      const data = {
+        action: "delete_bookmark",
+        id: this.$route.query.id, //게시물ID
       };
-    },
-
-    methods: {
-      go_to_path(url, id) {
-        this.$router
-          .push({
-            path: url,
-            query: {
-              id: id,
-              mode: "modify",
-              view: this.$route.query.view,
-            },
-          })
-          .catch(() => {});
-      },
-
-      deleteBookmark() {
-        const data = {
-          action: "delete_bookmark",
-          id: this.$route.query.id, //게시물ID
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            if (result.data.data.result == 1) {
-              this.$router.push({
-                path: "/bookmarkManage",
-                query: {
-                  keyword: "",
-                  pageCurrent: 1,
-                  order: "course_name",
-                  view: this.$route.query.view,
-                },
-              });
-            }
-          });
-      },
-      bookmarkRead() {
-        const data = {
-          action: "get_bookmark_info",
-          id: this.$route.query.id, //게시물ID
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result.data);
-            this.info = result.data.data.info;
-            this.info.check_point = this.$getTimeStringSeconds(
-              this.info.check_point
-            );
-          });
-      },
-    },
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          if (result.data.data.result == 1) {
+            this.$router.push({
+              path: "/bookmarkManage",
+              query: {
+                keyword: "",
+                pageCurrent: 1,
+                order: "course_name",
+                view: this.$route.query.view,
+              },
+            });
+          }
+        });
+    }
+    bookmarkRead(): void {
+      const data = {
+        action: "get_bookmark_info",
+        id: this.$route.query.id, //게시물ID
+      };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log(result.data);
+          this.info = result.data.data.info;
+          this.info.check_point = this.$getTimeStringSeconds(
+            this.info.check_point
+          );
+        });
+    }
     created() {
       this.bookmarkRead();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .head {
