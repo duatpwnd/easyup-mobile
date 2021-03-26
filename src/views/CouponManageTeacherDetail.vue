@@ -110,6 +110,7 @@
     },
     methods: {
       datePick(result) {
+        console.log(result);
         this.$router
           .push({
             query: {

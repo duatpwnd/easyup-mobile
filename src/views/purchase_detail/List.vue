@@ -119,6 +119,7 @@
     current = 1;
     list = "";
     datePick(result: [object, object]): void {
+      console.log(result);
       this.$router
         .push({
           query: {
