@@ -161,7 +161,7 @@
     $dateFormat!: Function;
     sndStoreid =
       process.env.NODE_ENV == "production" ? "2001106668" : "2999199999";
-    sndVirExpDt!: String;
+    sndVirExpDt!: String; //yyyymmdd
     // 결제수단
     @Prop(String) private value!: String;
     // 결제정보
@@ -171,7 +171,6 @@
       const later3Day = new Date(date.setDate(date.getDate() + 3));
       const result = this.$dateFormat(later3Day).split("-");
       this.sndVirExpDt = result[0] + result[1] + result[2];
-      console.log("mode:", this.sndStoreid);
     }
   }
 </script>

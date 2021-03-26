@@ -15,7 +15,7 @@ module.exports = {
         maxChunks: 1,
       }),
       // 번들된 파일들의 용량을 보여주는 ui 플러그인
-      new BundleAnalyzerPlugin(),
+      // new BundleAnalyzerPlugin(),
     ],
     // 웹펙이 추천해주는 힌트 제거
     performance: {
