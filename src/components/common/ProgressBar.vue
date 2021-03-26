@@ -4,24 +4,13 @@
     <progress :max="max" :value="value"> </progress>
   </div>
 </template>
-<script>
-  export default {
-    props: {
-      max: {
-        type: Number,
-        required: true,
-      },
-      value: {
-        type: Number,
-        required: true,
-      },
-    },
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {},
-  };
+<script lang="ts">
+  import { Vue, Component, Prop } from "vue-property-decorator";
+  @Component
+  export default class ProgressBar extends Vue {
+    @Prop(Number) private max!: Number;
+    @Prop(Number) private value!: Number;
+  }
 </script>
 <style scoped lang="scss">
   .progress_bar {
@@ -31,7 +20,6 @@
     margin: 5px 10px;
     vertical-align: middle;
     display: inline-block;
-
     .percent {
       color: #757575;
       height: 12px;

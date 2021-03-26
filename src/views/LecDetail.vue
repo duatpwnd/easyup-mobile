@@ -409,7 +409,6 @@
   </div>
 </template>
 <script lang="ts">
-  import { Component } from "vue-property-decorator";
   import PurchaseApply from "@/components/modal/PurchaseApply.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import GoToCart from "@/components/modal/GotoCart.vue";
@@ -421,6 +420,7 @@
   import Mixin from "@/views/mixins/lec_course_detail";
   import { mapState } from "vuex";
   import { ResultData } from "@/assets/js/util";
+  import { Component } from "vue-property-decorator";
   @Component({
     components: {
       GoToCart,

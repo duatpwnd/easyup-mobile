@@ -4,6 +4,27 @@
       @ok="cancelLecture = true"
       v-if="toggleStore_confirmModal"
     ></ConfirmModal>
+    <ConfirmModal class="receipt-modal" v-if="recepit_issue">
+      <input
+        type="phone"
+        class="phone"
+        slot="contents"
+        v-model="phone"
+        placeholder="휴대폰번호"
+      />
+      <template slot="button_type">
+        <BaseButton @click.native="receiptApplication()" class="confirm">
+          <button slot="blue_btn">
+            확인
+          </button>
+        </BaseButton>
+        <BaseButton @click.native="recepit_issue = false" class="cancel">
+          <button slot="blue_btn">
+            취소
+          </button>
+        </BaseButton>
+      </template>
+    </ConfirmModal>
     <CancelLecture
       v-if="cancelLecture"
       @emitClose="cancelLecture = false"
@@ -256,7 +277,7 @@
         <!-- 환불 정보 :: E -->
       </template>
     </Row>
-    <div class="btn_wrap">
+    <div class="btn_wrap_list">
       <BaseButton
         class="left"
         v-if="list.is_possible_cancel.result && list.status_code == 1"
@@ -288,10 +309,7 @@
         class="right"
         :style="[
           {
-            width:
-              list.status_code == 4 || list.status == '취소완료'
-                ? '100%'
-                : '49%',
+            width: list.status == '결제실패' ? '100%' : '49%',
           },
         ]"
       >
@@ -310,6 +328,36 @@
           "
         >
           목록
+        </button>
+      </BaseButton>
+      <BaseButton
+        class="purchase_receipt"
+        v-if="
+          list.pay_info.show_cash_receipt || list.pay_info.show_card_receipt
+        "
+      >
+        <button
+          slot="blue_btn"
+          @click="
+            list.pay_info.show_cash_receipt
+              ? receiptList(
+                  `http://pgims.ksnet.co.kr/pg_infoc/src/bill/ps2.jsp?s_pg_deal_numb=${list.pay_info.tid}`
+                )
+              : receiptList(
+                  `http://pgims.ksnet.co.kr/pg_infoc/src/bill/credit_view.jsp?tr_no=${list.pay_info.tid}`
+                )
+          "
+        >
+          구매영수증
+        </button>
+      </BaseButton>
+      <BaseButton
+        class="purchase_receipt"
+        v-if="list.pay_info.is_possible_receipt"
+        @click.native="recepit_issue = true"
+      >
+        <button slot="blue_btn">
+          현금영수증 발급
         </button>
       </BaseButton>
     </div>
@@ -341,12 +389,36 @@
     list: { [key: string]: any } = {};
     cancelLecture = false;
     refundBankInfo = false;
+    phone: string = "";
+    recepit_issue = false;
+    // 영수증 조회
+    receiptList(url: string): void {
+      window.location.href = url;
+    }
+    // 현금영수증 발급 신청
     isCancel(): void {
       this.$confirmMessage(
         "구매하신 강의를 취소 하시겠습니까?<br>취소 신청 시 강의 시청이 불가 합니다."
       );
     }
-
+    receiptApplication(): void {
+      const data = {
+        action: "request_cash_receipt",
+        order_id: this.$route.query.order_id,
+        receipt_number: this.phone,
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          if (result.data.data.result == false) {
+            this.recepit_issue = false;
+            this.$noticeMessage(result.data.data.msg);
+          } else {
+            this.$noticeMessage("현금영수증 발급이 신청되었습니다.");
+          }
+        });
+    }
     getList(): void {
       const data = {
         action: "order_info",
@@ -365,6 +437,41 @@
   }
 </script>
 <style scoped lang="scss">
+  ::v-deep .receipt-modal {
+    .notice_modal {
+      .phone {
+        border: 1px solid #ccc;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 14px;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      .btn_wrap {
+        &:after {
+          display: block;
+          content: "";
+          clear: both;
+        }
+        .blue_btn {
+          width: 48%;
+        }
+        .confirm {
+          float: left;
+        }
+        .cancel {
+          float: right;
+          button {
+            border: 1px solid #dbdbdb;
+            background: #dbdbdb;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
   .detail_wrap {
     .section {
       padding: 4.445%;
@@ -421,7 +528,7 @@
         color: #114fff;
       }
     }
-    .btn_wrap {
+    .btn_wrap_list {
       padding: 4.445%;
       &:after {
         display: block;
@@ -450,6 +557,11 @@
         border: 1px solid #dbdbdb;
         background: #dbdbdb;
         color: white;
+      }
+      .purchase_receipt {
+        width: 100%;
+        clear: both;
+        padding-top: 4.445%;
       }
     }
   }

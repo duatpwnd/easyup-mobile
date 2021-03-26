@@ -1,18 +1,24 @@
 <template>
   <div class="mask">
     <div class="notice_modal">
-      <p class="contents" v-html="toggleStore_noticeMessage"></p>
-      <div class="btn_wrap" v-if="toggleStore_confirm_modal">
-        <BlueBtn>
-          <slot name="btn1">
-            <button class="confirm_ok" slot="blue_btn" @click="confirmOk()">
-              확인
+      <slot name="contents">
+        <p class="contents" v-html="toggleStore_noticeMessage"></p>
+      </slot>
+      <div class="btn_wrap">
+        <slot name="button_type">
+          <BlueBtn>
+            <slot name="btn1">
+              <button class="confirm_ok" slot="blue_btn" @click="confirmOk()">
+                확인
+              </button>
+            </slot>
+          </BlueBtn>
+          <BlueBtn>
+            <button class="cancel" slot="blue_btn" @click="cancel()">
+              취소
             </button>
-          </slot>
-        </BlueBtn>
-        <BlueBtn>
-          <button class="cancel" slot="blue_btn" @click="cancel()">취소</button>
-        </BlueBtn>
+          </BlueBtn>
+        </slot>
       </div>
     </div>
   </div>

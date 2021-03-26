@@ -248,7 +248,6 @@
           });
       },
     },
-    mounted() {},
     watch: {
       $route(to, from) {
         this.getDropBoxList(
