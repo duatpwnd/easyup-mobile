@@ -5,7 +5,6 @@ import VueAwesomeSwiper from "vue-awesome-swiper";
 import "swiper/swiper-bundle.css";
 import VueMq from "vue-mq";
 import CKEditor from "ckeditor4-vue";
-const VueCookies = require("vue-cookies");
 import ApiUrl from "@/assets/js/api_url";
 import GlobalPlugin from "@/plugin/global_plugin";
 import axios from "axios";
@@ -16,12 +15,10 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { router } from "./router";
 library.add(faTimes);
+const VueCookies = require("vue-cookies");
 Vue.component("font-awesome-icon", FontAwesomeIcon);
-Vue.use(Clipboard);
-Vue.prototype.$EventBus = new Vue();
-Vue.prototype.$ApiUrl = ApiUrl;
-Vue.prototype.$axios = axios;
 Vue.use(VueRouterBackButton, { router });
+Vue.use(Clipboard);
 Vue.use(VueCookies);
 Vue.use(GlobalPlugin);
 Vue.use(CKEditor);
@@ -34,6 +31,9 @@ Vue.use(VueMq, {
   },
 });
 Vue.use(VueAwesomeSwiper);
+Vue.prototype.$EventBus = new Vue();
+Vue.prototype.$ApiUrl = ApiUrl;
+Vue.prototype.$axios = axios;
 Vue.config.productionTip = true;
 // NODE_ENV = '앱실행모드'
 if (process.env.NODE_ENV == "development") {
