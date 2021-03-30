@@ -36,7 +36,38 @@
       <template slot="row">
         <div class="section">
           <div class="row">
-            <h2 class="title">결제번호 {{ list.order_id }}</h2>
+            <h2 class="title paynum">결제번호 {{ list.order_id }}</h2>
+            <BaseButton
+              class="purchase_receipt"
+              v-if="
+                list.pay_info.show_cash_receipt ||
+                  list.pay_info.show_card_receipt
+              "
+            >
+              <button
+                slot="blue_btn"
+                @click="
+                  list.pay_info.show_cash_receipt
+                    ? receiptList(
+                        `http://pgims.ksnet.co.kr/pg_infoc/src/bill/ps2.jsp?s_pg_deal_numb=${list.pay_info.tid}`
+                      )
+                    : receiptList(
+                        `http://pgims.ksnet.co.kr/pg_infoc/src/bill/credit_view.jsp?tr_no=${list.pay_info.tid}`
+                      )
+                "
+              >
+                구매영수증
+              </button>
+            </BaseButton>
+            <BaseButton
+              class="purchase_receipt"
+              v-if="list.pay_info.is_possible_receipt"
+              @click.native="recepit_issue = true"
+            >
+              <button slot="blue_btn">
+                현금영수증 발급
+              </button>
+            </BaseButton>
           </div>
         </div>
         <!-- 구매자 정보 :: S -->
@@ -330,36 +361,6 @@
           목록
         </button>
       </BaseButton>
-      <BaseButton
-        class="purchase_receipt"
-        v-if="
-          list.pay_info.show_cash_receipt || list.pay_info.show_card_receipt
-        "
-      >
-        <button
-          slot="blue_btn"
-          @click="
-            list.pay_info.show_cash_receipt
-              ? receiptList(
-                  `http://pgims.ksnet.co.kr/pg_infoc/src/bill/ps2.jsp?s_pg_deal_numb=${list.pay_info.tid}`
-                )
-              : receiptList(
-                  `http://pgims.ksnet.co.kr/pg_infoc/src/bill/credit_view.jsp?tr_no=${list.pay_info.tid}`
-                )
-          "
-        >
-          구매영수증
-        </button>
-      </BaseButton>
-      <BaseButton
-        class="purchase_receipt"
-        v-if="list.pay_info.is_possible_receipt"
-        @click.native="recepit_issue = true"
-      >
-        <button slot="blue_btn">
-          현금영수증 발급
-        </button>
-      </BaseButton>
     </div>
   </div>
 </template>
@@ -471,7 +472,15 @@
       }
     }
   }
-
+  .section {
+    .row {
+      .paynum {
+        float: left;
+        height: 30px;
+        line-height: 30px;
+      }
+    }
+  }
   .detail_wrap {
     .section {
       padding: 4.445%;

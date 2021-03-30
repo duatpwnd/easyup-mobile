@@ -78,7 +78,7 @@
   import Scorm from "@/components/player/Scorm.vue";
   import BookmarkModal from "@/components/player/BookmarkModal.vue";
   import BookmarkListModal from "@/components/player/BookMarkListModal.vue";
-  import { mapState, mapMutations } from "vuex";
+  import { mapState } from "vuex";
   import mixin from "@/components/player/player_mixin";
   import videojs from "video.js";
   import { ResultData } from "@/assets/js/util";
