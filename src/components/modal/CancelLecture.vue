@@ -111,6 +111,7 @@
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result: { [key: string]: any }) => {
             console.log(result);
+            this.$emit("emitSuccess");
             this.close();
           });
       }

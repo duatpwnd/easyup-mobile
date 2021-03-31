@@ -27,6 +27,7 @@
     </ConfirmModal>
     <CancelLecture
       v-if="cancelLecture"
+      @emitSuccess="getList()"
       @emitClose="cancelLecture = false"
       :lecture_info="list"
     ></CancelLecture>
@@ -340,7 +341,10 @@
         class="right"
         :style="[
           {
-            width: list.status == '결제실패' ? '100%' : '49%',
+            width:
+              list.status == '결제실패' || list.status == '결제대기'
+                ? '100%'
+                : '49%',
           },
         ]"
       >
@@ -396,12 +400,12 @@
     receiptList(url: string): void {
       window.location.href = url;
     }
-    // 현금영수증 발급 신청
     isCancel(): void {
       this.$confirmMessage(
         "구매하신 강의를 취소 하시겠습니까?<br>취소 신청 시 강의 시청이 불가 합니다."
       );
     }
+    // 현금영수증 발급 신청
     receiptApplication(): void {
       const data = {
         action: "request_cash_receipt",
