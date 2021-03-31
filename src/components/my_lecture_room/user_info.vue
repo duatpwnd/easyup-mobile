@@ -51,25 +51,21 @@
     </ul>
   </div>
 </template>
-<script>
-  import { mapState, mapMutations } from "vuex";
-
-  export default {
+<script lang="ts">
+  import { mapState } from "vuex";
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     computed: {
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
       }),
     },
-    components: {},
-    data() {
-      return {};
-    },
-    methods: {
-      convert() {
-        this.$router.push("/studentClaasRoom").catch(() => {});
-      },
-    },
-  };
+  })
+  export default class UserInfro extends Vue {
+    convert(): void {
+      this.$router.push("/studentClaasRoom").catch(() => {});
+    }
+  }
 </script>
 <style scoped lang="scss">
   .user_info {

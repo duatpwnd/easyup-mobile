@@ -130,7 +130,7 @@
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import CheckBox from "@/components/common/BaseCheckBox.vue";
   import Pagination from "@/components/common/Pagination.vue";
-  import { mapState, mapMutations } from "vuex";
+  import { mapState } from "vuex";
   export default {
     components: { BlueBtn, Search, CheckBox, ConfirmModal, Pagination },
     computed: {

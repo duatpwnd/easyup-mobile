@@ -17,13 +17,9 @@ describe("LostPassword.vue", () => {
     const router = new VueRouter({
       mode: "history",
       base: process.env.BASE_URL,
-      duplicateNavigationPolicy: "ignore"
+      duplicateNavigationPolicy: "ignore",
     });
     wrapper = shallowMount(LostPassword, { router });
-  });
-  test("이메일 주소를 입력하지 않을 경우", () => {
-    expect(wrapper.vm.email.length).toBe(0);
-    expect(wrapper.vm.email).toMatch(regExp);
   });
   test("이메일 주소를 입력할 경우", () => {
     wrapper.vm.email = "duatpwnd1@naver.com";
