@@ -62,6 +62,7 @@
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: { [key: string]: any }) => {
           console.log(result);
+          this.$emit("emitSuccess");
           this.close();
           this.$noticeMessage(
             "취소 신청이 완료 되었습니다.<br>강의 시청 내역을 확인 후 환불 처리 됩니다."

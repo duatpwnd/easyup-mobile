@@ -548,7 +548,7 @@
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: { [key: string]: any }) => {
-          console.log(result);
+          console.log(result.data.data,result.data.data.length);
           this.list = result.data.data;
         });
     }

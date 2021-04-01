@@ -32,7 +32,7 @@
       :lecture_info="list"
     ></CancelLecture>
     <!-- 무통장 환불 은행 정보 -->
-    <RefundBankInfo></RefundBankInfo>
+    <RefundBankInfo @emitSuccess="getList()"></RefundBankInfo>
     <Row>
       <template slot="row">
         <div class="section">
@@ -96,8 +96,9 @@
           >
             <span class="dt"
               ><span class="lec" v-if="li.type == 'course'">강의</span>
-              <span class="course" v-else>코스</span>{{ li.title }}</span
-            >
+              <span class="course" v-else>코스</span
+              ><span v-html="li.title"></span
+            ></span>
             <div class="clear_both">
               <span class="dt">{{ li.teacher_name }}</span>
               <del
@@ -126,7 +127,7 @@
             :key="key"
           >
             <div>{{ li.order_id }}</div>
-            <div>{{ li.item_title }}</div>
+            <div v-html="li.item_title"></div>
             <div>{{ list.pay_info.price.format_purchased }}</div>
           </div>
           <!-- <table>
@@ -208,47 +209,11 @@
         >
           <h2 class="title">취소 요청</h2>
           <div class="row">
-            <span class="dt">강의 비용</span>
-            <span class="dd"
-              >{{ list.pay_info.price.format_sum_purchased }}원</span
-            >
-          </div>
-          <div class="row">
-            <span class="dt">할인 금액</span>
-            <span class="dd">-원</span>
-          </div>
-          <div class="row">
-            <span class="dt">취소 요청 금액</span>
-            <span class="dd final-price"
-              >{{ list.cancel.price_info.format_cancel }}원</span
-            >
-          </div>
-          <div class="row">
-            <span class="dt">취소 사유</span>
-            <span class="dd">{{ list.cancel.cancel_reason }}</span>
-          </div>
-          <div
-            class="row cancel_req_list"
-            v-for="(li, index) in list.lecture_info.filter((el) => {
-              return el.state == 3 || el.state == 5;
-            })"
-            :key="index"
-          >
-            <span class="dt"
-              ><span class="lec" v-if="li.type == 'course'">강의</span>
-              <span class="course" v-else>코스</span>{{ li.title }}</span
-            >
-            <div class="clear_both">
-              <span class="dt">{{ li.teacher_name }}</span>
-              <del
-                class="dt final_price"
-                v-if="li.price.format_original != li.price.format_final"
-                >{{ li.price.format_original }}</del
-              >
-              <span class="dt ori_price">{{
-                li.price.format_sum_purchased
-              }}</span>
-            </div>
+            <span class="cancel-lecture-title">취소 사유</span>
+            <span
+              class="cancel-lecture-contents"
+              v-html="list.cancel.cancel_reason"
+            ></span>
           </div>
         </div>
         <!-- 취소 요청 :: E -->
@@ -342,7 +307,9 @@
         :style="[
           {
             width:
-              list.status == '결제실패' || list.status == '결제대기'
+              list.status == '결제실패' ||
+              list.status == '결제대기' ||
+              list.status == '취소완료'
                 ? '100%'
                 : '49%',
           },
@@ -482,6 +449,18 @@
         float: left;
         height: 30px;
         line-height: 30px;
+      }
+      .cancel-lecture-title {
+        width: 18%;
+      }
+      .cancel-lecture-contents {
+        width: 82%;
+      }
+      .cancel-lecture-title,
+      .cancel-lecture-contents {
+        font-size: 14px;
+        display: inline-block;
+        vertical-align: top;
       }
     }
   }

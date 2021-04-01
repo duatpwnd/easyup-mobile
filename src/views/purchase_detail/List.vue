@@ -9,14 +9,14 @@
           @change="getList(1, order, keyword)"
         >
           <option value="">전체</option>
-          <option value="success">결제완료</option>
+          <option value="pay">결제완료</option>
           <option value="refund">환불완료</option>
           <option value="cancel">취소신청</option>
         </select>
         <input
           slot="slot_input"
           class="search_contents"
-          placeholder="강의명을 검색하세요."
+          placeholder="검색어 입력"
           :value="keyword"
           v-on:input="keyword = $event.target.value"
         />
@@ -49,7 +49,7 @@
           </BaseButton>
         </div>
         <div class="row">
-          <span class="dt product-name">{{ li.product_name }}</span>
+          <span class="dt product-name" v-html="li.product_name"></span>
         </div>
         <div class="row">
           <span class="dt">강의 비용</span>
@@ -68,7 +68,7 @@
           <span class="dd">{{ li.status }}</span>
         </div>
         <div class="row">
-          <span class="status" v-if="li.status == 'success'">결제완료</span>
+          <span class="status" v-if="li.status == 'pay'">결제완료</span>
           <span class="status" v-else-if="li.status == 'refund'">환불완료</span>
           <span class="status" v-else-if="li.status == 'cancel'">취소신청</span>
         </div>
@@ -144,8 +144,14 @@
         current: num,
         keyword: keyword,
         search_status: order,
-        search_start_date: this.$route.query.start_date as string,
-        search_end_date: this.$route.query.end_date as string,
+        search_start_date:
+          this.$route.query.start_date == undefined
+            ? this.$dateFormat()
+            : (this.$route.query.start_date as string),
+        search_end_date:
+          this.$route.query.end_date == undefined
+            ? this.$dateFormat()
+            : (this.$route.query.end_date as string),
       };
       console.log(data);
       this.$axios
@@ -202,6 +208,9 @@
         margin-bottom: 10px;
       }
       .row {
+        .blue_btn {
+          width: 55%;
+        }
         .final-price {
           font-weight: bold;
         }
