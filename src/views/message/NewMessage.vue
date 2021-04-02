@@ -15,6 +15,7 @@
           <input
             v-on:input="keyword = $event.target.value"
             class="search_input"
+            placeholder="이메일 주소"
             @keyup="search()"
           />
           <div class="icon-container" v-show="loading">
@@ -254,6 +255,8 @@
       li {
         font-size: 1.5rem;
         padding: 2%;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .active {
         background: #114fff;
@@ -330,6 +333,10 @@
             width: 80%;
             padding: 0;
             outline: none;
+            &::placeholder {
+              padding-left: 3px;
+              font-size: 14px;
+            }
           }
         }
         .selected_list {
