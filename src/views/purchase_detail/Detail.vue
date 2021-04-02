@@ -287,7 +287,9 @@
       <BaseButton
         @click.native="$noticeMessage(list.is_possible_cancel.false_reason)"
         class="left"
-        v-else-if="list.is_possible_cancel.result == false"
+        v-else-if="
+          list.is_possible_cancel.result == false && list.status_code != 3
+        "
       >
         <button slot="blue_btn" class="cancel_req_btn">
           취소 요청
@@ -307,11 +309,7 @@
         :style="[
           {
             width:
-              list.status == '결제실패' ||
-              list.status == '결제대기' ||
-              list.status == '취소완료'
-                ? '100%'
-                : '49%',
+              list.status_code == 3 || list.status_code == 4 ? '100%' : '49%',
           },
         ]"
       >

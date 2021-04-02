@@ -108,13 +108,6 @@ describe("Main.vue", () => {
     Vue.prototype.$axios = axios;
     Vue.prototype.$ApiUrl = ApiUrl;
     Vue.prototype.$cookies = VueCookies;
-    // jest.fn() 모의함수 반환. 기본적으로 호출이 감시됨
-    const response = {
-      data: {
-        title: "delectus aut autem",
-      },
-    };
-    await jest.fn().mockResolvedValue(response);
 
     wrapper = shallowMount(Main);
   });

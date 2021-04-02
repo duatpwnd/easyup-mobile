@@ -146,11 +146,11 @@
         search_status: order,
         search_start_date:
           this.$route.query.start_date == undefined
-            ? this.$dateFormat()
+            ? ""
             : (this.$route.query.start_date as string),
         search_end_date:
           this.$route.query.end_date == undefined
-            ? this.$dateFormat()
+            ? ""
             : (this.$route.query.end_date as string),
       };
       console.log(data);

@@ -18,7 +18,7 @@
         alt="펼치기"
         title="펼치기"
       />
-      <span class="title">{{ li.title }}</span>
+      <span class="title" v-html="li.title"></span>
     </div>
     <!-- 자식요소가 없는 경우 작은제목 -->
     <div
@@ -86,7 +86,7 @@
             ]"
             @click="switchItem(childrenli.id, childrenli.current_id)"
           >
-            <span class="child_title">{{ childrenli.title }}</span>
+            <span class="child_title" v-html="childrenli.title"></span>
             <img
               v-if="childrenli.bookmark == 'active'"
               src="@/assets/images/player/active_bookmark_ico.png"
