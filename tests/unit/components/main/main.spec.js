@@ -11,7 +11,7 @@ localVue.use(VueRouter);
 localVue.use(VueAwesomeSwiper);
 describe("Main.vue", () => {
   let wrapper;
-  beforeAll(async () => {
+  beforeEach(async () => {
     const data = {
       data: {
         recent_notice: [
@@ -103,15 +103,22 @@ describe("Main.vue", () => {
         ],
       },
     };
-  });
-  beforeEach(async () => {
     Vue.prototype.$axios = axios;
     Vue.prototype.$ApiUrl = ApiUrl;
     Vue.prototype.$cookies = VueCookies;
+    axios.post = jest.fn().mockResolvedValue({ data: data });
+    axios
+      .post({
+        action: "main_page_list",
+      })
+      .then((result) => {});
 
-    wrapper = shallowMount(Main);
+    wrapper = shallowMount(Main, { localVue });
   });
   // call 직접호출, inovke 간접호출
+  test("가져오기 호출 확인", () => {
+    expect(axios.post).toHaveBeenCalled();
+  });
   test("메인페이지 인기강의, 추천강의, 이지채널, 최신강의, 인기코스 리스트 가져오기", () => {
     jest.spyOn(wrapper.vm, "getLectureList");
     wrapper.vm.getLectureList();
