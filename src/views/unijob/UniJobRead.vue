@@ -157,6 +157,7 @@
           });
         });
     }
+
     created() {
       this.read(this.$route.query.id);
     }

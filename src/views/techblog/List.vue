@@ -24,7 +24,7 @@
           <template slot="contents">
             <img :src="li.thumbnail" :alt="li.title" :title="li.title" />
             <h2 class="title">{{ li.title }}</h2>
-            <div class="date">{{ li.wdate.split(" ")[0] }}</div>
+            <div class="date">{{ li.wdate.split(" ")[0] }} {{ li.writer }}</div>
           </template>
         </TechBlogList>
       </div>
