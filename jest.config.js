@@ -13,7 +13,7 @@ module.exports = {
   },
 
   collectCoverage: false,
-
+  coverageReporters: ["html"],
   collectCoverageFrom: [
     "<rootDir>/src/components/**/*.vue",
     "<rootDir>/src/views/**/*.vue",

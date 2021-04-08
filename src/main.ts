@@ -37,7 +37,7 @@ Vue.prototype.$axios = axios;
 Vue.config.productionTip = true;
 // NODE_ENV = '앱실행모드'
 if (process.env.NODE_ENV == "development") {
-  axios.defaults.baseURL = "http://develop.hell0world.net:5580";
+  axios.defaults.baseURL = "http://develop.hell0world.net";
 } else if (process.env.NODE_ENV == "production") {
   axios.defaults.baseURL = "https://www.easyupclass.com";
 }

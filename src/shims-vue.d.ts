@@ -8,3 +8,4 @@ declare module "ckeditor4-vue";
 declare module "video.js";
 declare module "@/assets/js/youtube/youtube_external_subtitle.js";
 declare module "@/assets/js/youtube/subtitles.parser.js";
+declare module "ramda";

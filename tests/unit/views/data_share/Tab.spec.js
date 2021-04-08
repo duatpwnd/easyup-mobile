@@ -1,9 +1,31 @@
-import { shallowMount, mount, createLocalVue } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import mixin from "@/components/mixins/check_event.js";
 import Tab from "@/views/data_share/Tab.vue";
-describe.skip("mixin", () => {
-  const wrapper = shallowMount(Tab, {
-    mixins: [mixin]
+import VueRouter from "vue-router";
+
+describe.skip("자료공유 페이지", () => {
+  let wrapper;
+  beforeEach(() => {
+    Vue.use(VueRouter);
+    const router = new VueRouter({
+      mode: "history",
+      base: process.env.BASE_URL,
+      duplicateNavigationPolicy: "ignore",
+    });
+    router.push({
+      name: "resume",
+      meta: {
+        type: "sent",
+      },
+      query: {
+        pageCurrent: 1,
+        keyword: "",
+      },
+    });
+    wrapper = shallowMount(Tab, {
+      mixins: [mixin],
+      router,
+    });
   });
   test("all check event", () => {
     jest.spyOn(wrapper.vm, "all_check");

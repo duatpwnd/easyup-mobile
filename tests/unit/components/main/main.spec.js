@@ -1,4 +1,4 @@
-import { shallowMount, mount, createLocalVue } from "@vue/test-utils";
+import { shallowMount, createLocalVue } from "@vue/test-utils";
 import Main from "@/views/Main.vue";
 import axios from "axios";
 import Vue from "vue";
@@ -9,7 +9,7 @@ const VueCookies = require("vue-cookies");
 const localVue = createLocalVue();
 localVue.use(VueRouter);
 localVue.use(VueAwesomeSwiper);
-describe("Main.vue", () => {
+describe("메인 페이지", () => {
   let wrapper;
   beforeEach(async () => {
     const data = {
@@ -18,21 +18,21 @@ describe("Main.vue", () => {
           {
             id: "28",
             link:
-              "http://develop.hell0world.net:5580/main/help/?type=notice&action=read&id=28",
+              "http://develop.hell0world.net/main/help/?type=notice&action=read&id=28",
             title: "로드맵 상세 페이지",
           },
         ],
         popular_course: [
           {
             id: 9,
-            image_url: "http://develop.hell0world.net:5580/main/img/bann01.png",
+            image_url: "http://develop.hell0world.net/main/img/bann01.png",
           },
         ],
         banner: [
           {
             id: "28",
             image_url:
-              "http://develop.hell0world.net:5580/app/upload/users/5/59/my_files/banner3.png",
+              "http://develop.hell0world.net/app/upload/users/5/59/my_files/banner3.png",
             parse_info: {
               action: "read",
               id: "28",
@@ -47,7 +47,7 @@ describe("Main.vue", () => {
           {
             id: "174",
             image_url:
-              "http://develop.hell0world.net:5580/courses/LANG21/course-pic.png",
+              "http://develop.hell0world.net/courses/LANG21/course-pic.png",
             price: {
               discount: 50,
               discount_price: 1000,
@@ -70,10 +70,10 @@ describe("Main.vue", () => {
           {
             id: "40",
             thumbnail:
-              "http://develop.hell0world.net:5580/app/upload/techblog/,thumb7efc6f049aec97f95e43b62a47899c38.jpg",
+              "http://develop.hell0world.net/app/upload/techblog/,thumb7efc6f049aec97f95e43b62a47899c38.jpg",
             title: "에디터1",
             viewLink:
-              "http://develop.hell0world.net:5580/main/techBlog/view.php?id=40",
+              "http://develop.hell0world.net/main/techBlog/view.php?id=40",
             wdate_format: "2021.02.17",
             writer: "송 기범",
           },
@@ -95,7 +95,7 @@ describe("Main.vue", () => {
               original: 0,
             },
             image_url:
-              "http://develop.hell0world.net:5580/main/img/session_default.png",
+              "http://develop.hell0world.net/main/img/session_default.png",
             ranking: 3,
             teachers: "이지업",
             title: "234",
@@ -112,7 +112,6 @@ describe("Main.vue", () => {
         action: "main_page_list",
       })
       .then((result) => {});
-
     wrapper = shallowMount(Main, { localVue });
   });
   // call 직접호출, inovke 간접호출

@@ -13,9 +13,9 @@ describe("SubsCribe.vue", () => {
     const btn_offset_top = 200;
     const btn_h = 50;
     if (scroll_top > btn_offset_top + btn_h) {
-      wrapper.vm.subscribe_btn = true;
+      wrapper.setData({ subscribe_btn: true });
     } else {
-      wrapper.vm.subscribe_btn = false;
+      wrapper.setData({ subscribe_btn: false });
     }
     expect(wrapper.vm.subscribe_btn).toBe(true);
   });

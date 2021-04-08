@@ -41,7 +41,6 @@ export default class GroupMixin extends Vue {
       data.session_id = Number(this.$route.query.id);
     }
     console.log("data", data);
-
     this.$axios
       .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
       .then((result: ResultData) => {
@@ -107,6 +106,7 @@ export default class GroupMixin extends Vue {
     this.$axios
       .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
       .then((result: ResultData) => {
+        console.log(result);
         if (result.data.error == false) {
           this.$store.commit("toggleStore/Toggle", {
             cart_modal: true,
