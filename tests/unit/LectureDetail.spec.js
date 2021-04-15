@@ -10,26 +10,21 @@ const VueCookies = require("vue-cookies");
 describe("강의 상세페이지", () => {
   let wrapper;
   beforeEach(() => {
-    Vue.use(VueRouter);
-    Vue.prototype.$cookies = VueCookies;
-    Vue.prototype.$EventBus = new Vue();
-    Vue.prototype.$axios = axios;
-    Vue.prototype.$ApiUrl = ApiUrl;
-    const router = new VueRouter({
-      mode: "history",
-      base: process.env.BASE_URL,
-      duplicateNavigationPolicy: "ignore",
-    });
-    router.push({
-      query: {
-        name: "lecDetail",
-        id: 1,
-      },
-    });
     wrapper = shallowMount(LecDetail, {
       mixins: [MyMixin],
       store,
-      router,
+      mocks: {
+        $route: {
+          query: {
+            name: "lecDetail",
+            id: 1,
+          },
+        },
+        $EventBus: new Vue(),
+        $axios: axios,
+        $ApiUrl: ApiUrl,
+        $cookies: VueCookies,
+      },
     });
   });
   test("강의 || 코스 상세 조회", () => {

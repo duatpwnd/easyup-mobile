@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import Main from "@/views/Main.vue";
 import axios from "axios";
 import Vue from "vue";
@@ -6,9 +6,8 @@ import ApiUrl from "@/assets/js/api_url.js";
 import VueAwesomeSwiper from "vue-awesome-swiper";
 import VueRouter from "vue-router";
 const VueCookies = require("vue-cookies");
-const localVue = createLocalVue();
-localVue.use(VueRouter);
-localVue.use(VueAwesomeSwiper);
+Vue.use(VueRouter);
+Vue.use(VueAwesomeSwiper);
 describe("메인 페이지", () => {
   let wrapper;
   beforeEach(async () => {
@@ -103,16 +102,14 @@ describe("메인 페이지", () => {
         ],
       },
     };
-    Vue.prototype.$axios = axios;
-    Vue.prototype.$ApiUrl = ApiUrl;
-    Vue.prototype.$cookies = VueCookies;
     axios.post = jest.fn().mockResolvedValue({ data: data });
-    axios
-      .post({
-        action: "main_page_list",
-      })
-      .then((result) => {});
-    wrapper = shallowMount(Main, { localVue });
+    wrapper = shallowMount(Main, {
+      mocks: {
+        $axios: axios,
+        $ApiUrl: ApiUrl,
+        $cookies: VueCookies,
+      },
+    });
   });
   // call 직접호출, inovke 간접호출
   test("가져오기 호출 확인", () => {

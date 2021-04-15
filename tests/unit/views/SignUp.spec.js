@@ -15,17 +15,17 @@ describe("SignUp.vue", () => {
     const router = new VueRouter({
       mode: "history",
       base: process.env.BASE_URL,
-      duplicateNavigationPolicy: "ignore"
+      duplicateNavigationPolicy: "ignore",
     });
     wrapper = shallowMount(SignUp, { router });
   });
   test("성을 입력 안했을경우", () => {
-    const lastname = wrapper.vm.lastname;
-    expect(lastname.trim().length).toBe(0);
+    const lastName = wrapper.vm.lastname;
+    expect(lastName.trim().length).toBe(0);
   });
   test("이름을 입력 안했을경우", () => {
-    const firstname = wrapper.vm.firstname;
-    expect(firstname.trim().length).toBe(0);
+    const firstName = wrapper.vm.firstname;
+    expect(firstName.trim().length).toBe(0);
   });
   test("이메일을 입력 안했을경우", () => {
     const email = wrapper.vm.email;
@@ -55,15 +55,15 @@ describe("SignUp.vue", () => {
       email: "duatpwnd1@naver.com",
       pw1: "123",
       pw2: "123",
-      agree: true
+      agree: true,
     });
-    const lastname = wrapper.vm.lastname;
-    const firstname = wrapper.vm.firstname;
+    const lastName = wrapper.vm.lastname;
+    const firstName = wrapper.vm.firstname;
     const email = wrapper.vm.email;
     const pw1 = wrapper.vm.pw1;
     const pw2 = wrapper.vm.pw2;
-    expect(lastname.trim().length).toBeGreaterThan(0);
-    expect(firstname.trim().length).toBeGreaterThan(0);
+    expect(lastName.trim().length).toBeGreaterThan(0);
+    expect(firstName.trim().length).toBeGreaterThan(0);
     expect(email.trim().length).toBeGreaterThan(0);
     expect(pw1.trim().length).toBeGreaterThan(0);
     expect(pw2.trim().length).toBeGreaterThan(0);
