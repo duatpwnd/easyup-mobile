@@ -8,9 +8,6 @@ describe("책갈피 리스트", () => {
   let wrapper;
   beforeEach(() => {
     Vue.use(VueRouter);
-    Vue.prototype.$EventBus = new Vue();
-    Vue.prototype.$axios = axios;
-    Vue.prototype.$ApiUrl = ApiUrl;
     const router = new VueRouter({
       mode: "history",
       base: process.env.BASE_URL,
@@ -22,6 +19,11 @@ describe("책갈피 리스트", () => {
     axios.post = jest.fn().mockResolvedValue({ data: data });
     wrapper = shallowMount(List, {
       router,
+      mocks: {
+        $EventBus: new Vue(),
+        $axios: axios,
+        $ApiUrl: ApiUrl,
+      },
     });
   });
   test("책갈피 리스트 api 호출 확인", async () => {

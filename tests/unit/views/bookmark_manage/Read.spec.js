@@ -8,9 +8,6 @@ describe("책갈피 읽기", () => {
   let wrapper;
   beforeEach(() => {
     Vue.use(VueRouter);
-    Vue.prototype.$EventBus = new Vue();
-    Vue.prototype.$axios = axios;
-    Vue.prototype.$ApiUrl = ApiUrl;
     const router = new VueRouter({
       mode: "history",
       base: process.env.BASE_URL,
@@ -23,6 +20,11 @@ describe("책갈피 읽기", () => {
     });
     wrapper = shallowMount(Read, {
       router,
+      mocks: {
+        $EventBus: new Vue(),
+        $axios: axios,
+        $ApiUrl: ApiUrl,
+      },
     });
   });
   test("책갈피 읽기 함수 호출", () => {
