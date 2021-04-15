@@ -157,6 +157,7 @@
         userid: this.userid,
         userpw: this.userpw,
       };
+
       if (this.userid.trim().length == 0 || this.userpw.trim().length == 0) {
         this.$noticeMessage("아이디 또는 비밀번호를 입력해주세요");
       } else {
@@ -166,17 +167,13 @@
             (result: {
               data: { error: boolean; message: string; data: object[] };
             }) => {
-              console.log(result);
               if (result.data.error) {
                 this.$noticeMessage(result.data.message);
               } else {
                 this.$cookies.set("user_info", result.data.data[0]);
                 this.$store.commit("userStore/loginToken", result.data.data[0]);
+
                 // 마지막 로그아웃 시점url이 있을경우
-                console.log(
-                  "★★★★★★★★★★마지막 URL:★★★★★★★★★★★★★",
-                  this.userStore_referer
-                );
                 if (this.userStore_referer != "") {
                   this.$router.push(this.userStore_referer).catch(() => {});
                 }
@@ -185,7 +182,6 @@
           );
       }
     }
-    mounted() {}
     created() {
       this.$EventBus.$on(
         "login from signUpComplete",
