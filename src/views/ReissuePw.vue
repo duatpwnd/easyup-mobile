@@ -102,7 +102,6 @@
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: { [key: string]: any }) => {
-          console.log("토큰", result);
           if (result.data.error) {
             this.$noticeMessage(result.data.message);
             this.$router.push("/lostPassword");
