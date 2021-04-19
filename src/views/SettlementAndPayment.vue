@@ -11,8 +11,8 @@
       :to="{
         path: '/settlementAndPayment/settleList',
         query: {
-          start_date: this.$dateFormat(),
-          end_date: this.$dateFormat(),
+          start_date: undefined,
+          end_date: undefined,
           pageCurrent: 1,
           view: this.$route.query.view,
         },
@@ -25,8 +25,8 @@
       :to="{
         path: '/settlementAndPayment/payList',
         query: {
-          start_date: this.$dateFormat(),
-          end_date: this.$dateFormat(),
+          start_date: undefined,
+          end_date: undefined,
           keyword: '',
           pageCurrent: 1,
           order: '',
@@ -77,6 +77,8 @@
                 start_date: this.$dateFormat(result[0]),
                 end_date: this.$dateFormat(result[1]),
                 view: this.$route.query.view,
+                type: this.$route.query.type,
+                settle_date: this.$route.query.settle_date,
               },
             })
             .catch(() => {});
