@@ -1,10 +1,10 @@
 <template>
-  <div class="detail_contents">
-    <h2 class="h2_title">상세내역</h2>
+  <div class="detail_contents" v-if="list">
+    <!-- <h2 class="h2_title">상세내역</h2> -->
     <Row v-for="(li, index) in list.list" :key="index">
       <template slot="row">
         <div class="row contain_btn">
-          <h2 class="date">{{ li.pay_date }}</h2>
+          <h2 class="date">{{ li.pay_date.split(" ")[0] }}</h2>
           <BaseButton
             @click.native="
               $router.push({
@@ -20,16 +20,16 @@
           </BaseButton>
         </div>
         <div class="row">
-          <span class="dt lec" v-if="li.type == 'course'">강의</span>
-          <span class="dt course" v-else>코스</span>
-          <span class="dt">{{ li.title }}</span>
+          <span class="dt type" v-if="li.type == 'course'">강의</span>
+          <span class="dt type" v-else>코스</span>
+          <span class="dt subtitle" v-html="li.title"></span>
         </div>
-        <div class="row">
+        <!-- <div class="row">
           <span class="dt">구매자</span>
           <span class="dd">{{ li.pay_user_name }}</span>
-        </div>
+        </div> -->
 
-        <div class="row">
+        <!-- <div class="row">
           <span class="dt">강의 비용</span>
           <span class="dd"
             >{{
@@ -48,34 +48,28 @@
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }}원</span
           >
-        </div>
+        </div> -->
         <div class="row">
-          <span class="dt special-default">결제 금액</span>
-          <span class="dd special-default"
-            >{{
-              li.price.final.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }}원</span
-          >
+          <span class="dt t">결제 금액</span>
+          <span class="dd special-default">{{ li.price.final }}원</span>
         </div>
-        <div class="row">
+        <!-- <div class="row">
           <span class="dt">환불 금액</span>
           <span class="dd">원</span>
           <span class="dd">{{
             li.price.refund.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }}</span>
-        </div>
+        </div> -->
         <div class="row">
           <span class="dt">정산 수수료</span>
           <span class="dd">원</span>
-          <span class="dd">{{
-            li.price.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}</span>
+          <span class="dd">{{ li.price.commission }}</span>
         </div>
         <div class="row">
-          <span class="dt special-default">정산 금액</span>
+          <span class="dt ">정산 금액</span>
           <span class="dd special-default">원</span>
           <span class="dd status special-default">{{
-            li.price.settlement.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            li.price.settlement
           }}</span>
         </div>
       </template>
@@ -116,12 +110,22 @@
     list = "";
     current = 1;
     getList(num: number): void {
+      console.log("type", this.$route.query.type);
       const data = {
         action: "get_settlement_detail",
+        type: this.$route.query.type,
+        settle_date: this.$route.query.settle_date,
         current: num,
-        search_start_date: this.$route.query.start_date,
-        search_end_date: this.$route.query.end_date,
+        search_start_date:
+          this.$route.query.start_date == undefined
+            ? ""
+            : this.$route.query.start_date,
+        search_end_date:
+          this.$route.query.end_date == undefined
+            ? ""
+            : this.$route.query.end_date,
       };
+      console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: { [key: string]: any }) => {
@@ -134,6 +138,8 @@
                 start_date: this.$route.query.start_date,
                 end_date: this.$route.query.end_date,
                 view: this.$route.query.view,
+                type: this.$route.query.type,
+                settle_date: this.$route.query.settle_date,
               },
             })
             .catch(() => {});
@@ -145,6 +151,7 @@
     }
     created() {
       this.$EventBus.$on(`detail_datePick`, () => {
+        console.log("데이트픽왔다");
         this.getList(1);
       });
       this.getList(this.$route.query.pageCurrent);
@@ -163,8 +170,27 @@
       padding-top: 0;
       margin-top: 24px;
       border-bottom: 4px solid #f8f8f8;
+      .contain_btn {
+        margin-bottom: 10px;
+      }
       .special-default {
         font-weight: bold;
+      }
+      .blue_btn {
+        width: 55%;
+        button {
+          font-size: 16px;
+          height: 30px;
+          line-height: 21px;
+        }
+      }
+      .row {
+        .type {
+          width: 8%;
+        }
+        .subtitle {
+          width: 92%;
+        }
       }
     }
   }
