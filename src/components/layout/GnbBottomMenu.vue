@@ -315,11 +315,11 @@
             name: require("@/assets/images/common/payment_ico.png"),
             active: require("@/assets/images/common/payment_active_ico.png"),
             status: 1,
-            isPreparing: true,
+            // isPreparing: true,
             query: {
               pageCurrent: 1,
-              start_date: this.$dateFormat(),
-              end_date: this.$dateFormat(),
+              start_date: undefined,
+              end_date: undefined,
               view: this.$route.query.view as string,
             },
           }
