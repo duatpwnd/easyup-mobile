@@ -12,6 +12,8 @@
                 query: {
                   order_id: li.order_id,
                   view: $route.query.view,
+                  type: li.type,
+                  item_id: li.item_id,
                 },
               })
             "
@@ -114,7 +116,10 @@
       const data = {
         action: "get_settlement_detail",
         type: this.$route.query.type,
-        settle_date: this.$route.query.settle_date,
+        settle_date:
+          this.$route.query.settle_date == "hold"
+            ? ""
+            : this.$route.query.settle_date,
         current: num,
         search_start_date:
           this.$route.query.start_date == undefined
