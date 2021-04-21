@@ -40,6 +40,7 @@
                 query: {
                   order_id: li.order_id,
                   view: $route.query.view,
+                  row_id: li.row_id,
                 },
               })
             "
@@ -47,7 +48,6 @@
             <button slot="blue_btn">{{ li.order_id }}</button>
           </BaseButton>
         </div>
-
         <div class="row">
           <span class="dt type" v-if="li.type == 'course'">강의</span>
           <span class="dt type" v-else>코스</span>
@@ -167,13 +167,13 @@
     }
     created() {
       this.$EventBus.$on(
-        `search`,
+        "search",
         (result: { order: string; keyword: string }) => {
           console.log(result);
           this.getList(1, result.order, result.keyword);
         }
       );
-      this.$EventBus.$on(`payList_datePick`, () => {
+      this.$EventBus.$on("payList_datePick", () => {
         this.getList(1, this.$route.query.order, this.$route.query.keyword);
       });
       this.getList(
