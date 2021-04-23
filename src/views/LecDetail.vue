@@ -445,30 +445,29 @@
     },
   })
   export default class LecDetail extends Mixin {
-    curriculumTab: number[] = [];
-    url: string = window.document.location.href;
+    private curriculumTab: number[] = [];
     // 커리큘럼 강의 개수가 있을때
-    get isCountTrue(): object[] {
+    private get isCountTrue(): object[] {
       return this.detail.curriculum_list.items.filter(
         (item: { [key: string]: any }) => item.children_count != null
       );
     }
     // 커리큘럼 강의 개수가 없을때
-    get isCountFalse(): object[] {
+    private get isCountFalse(): object[] {
       return this.detail.curriculum_list.items.filter(
         (item: { [key: string]: any }) => item.children_count == null
       );
     }
-    isPurchase(): void {
+    private isPurchase(): void {
       this.$store.commit("toggleStore/Toggle", {
         purchase_apply: true,
       });
     }
-    isWatch(): void {
+    private isWatch(): void {
       this.$confirmMessage("강의시청<br>강의를 시청 하시겠습니까?");
     }
     // 쿠폰다운
-    couponDownload(): void {
+    private couponDownload(): void {
       const data: { action: string; course_id: number; c_id: number } = {
         action: "download_coupon",
         course_id: Number(this.$route.query.id),
@@ -480,7 +479,7 @@
           this.$noticeMessage("쿠폰 발급이 완료되었습니다.");
         });
     }
-    video(course_id: number, lp_id: number): void {
+    private video(course_id: number, lp_id: number): void {
       this.$router.push({
         path: "/play",
         query: {
@@ -490,7 +489,7 @@
       });
     }
     // 강의평가 모달
-    scoreModal(): void {
+    private scoreModal(): void {
       const obj: {
         score_modal: boolean;
         score: number;
@@ -503,7 +502,7 @@
       this.$store.commit("toggleStore/scoreToggle", obj);
     }
     // 커리큘럼 토글
-    curriculumToggle(index: number): void {
+    private curriculumToggle(index: number): void {
       const currentNum = this.curriculumTab.indexOf(index);
       if (currentNum >= 0) {
         // 현재 배열안에있음

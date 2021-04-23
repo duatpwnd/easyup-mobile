@@ -106,7 +106,7 @@ describe("메인 페이지", () => {
     wrapper = shallowMount(Main, {
       mocks: {
         $axios: axios,
-        $ApiUrl: ApiUrl,
+        $ApiUrl: jest.fn(),
         $cookies: VueCookies,
       },
     });

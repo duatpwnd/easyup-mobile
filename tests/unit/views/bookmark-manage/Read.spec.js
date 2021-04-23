@@ -1,29 +1,23 @@
 import { shallowMount } from "@vue/test-utils";
 import Read from "@/views/bookmark_manage/Read.vue";
 import axios from "axios";
-import Vue from "vue";
-import ApiUrl from "@/assets/js/api_url.ts";
-import VueRouter from "vue-router";
 describe("책갈피 읽기", () => {
   let wrapper;
   beforeEach(() => {
-    Vue.use(VueRouter);
-    const router = new VueRouter({
-      mode: "history",
-      base: process.env.BASE_URL,
-      duplicateNavigationPolicy: "ignore",
-    });
-    router.push({
-      query: {
-        id: 1,
-      },
-    });
     wrapper = shallowMount(Read, {
-      router,
       mocks: {
-        $EventBus: new Vue(),
+        $route: {
+          query: {
+            id: 1,
+          },
+        },
+        $EventBus: {
+          $on: jest.fn(),
+          $off: jest.fn(),
+          $emit: jest.fn(),
+        },
         $axios: axios,
-        $ApiUrl: ApiUrl,
+        $ApiUrl: jest.fn(),
       },
     });
   });

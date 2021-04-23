@@ -146,12 +146,12 @@
         this.$route.query.keyword
       );
     }
-    list: { [key: string]: any } = {};
-    keyword = "";
-    current = 1;
-    checked_list: number[] = [];
-    allCheck = false;
-    all_check(): void {
+    private list: { [key: string]: any } = {};
+    private keyword = "";
+    private current = 1;
+    private checked_list: number[] = [];
+    private allCheck = false;
+    private all_check(): void {
       this.allCheck = !this.allCheck;
       if (this.allCheck) {
         console.log(this.list.list);
@@ -163,14 +163,14 @@
       }
     }
     // 부분체크
-    partial_check(): void {
+    private partial_check(): void {
       if (this.list.list.length != this.checked_list.length) {
         this.allCheck = false;
       } else {
         this.allCheck = true;
       }
     }
-    goToPath(id: number): void {
+    private goToPath(id: number): void {
       this.$router
         .push({
           path: "/msg/read",
@@ -182,14 +182,14 @@
         })
         .catch(() => {});
     }
-    confirm(): void {
+    private confirm(): void {
       if (this.checked_list.length == 0) {
         this.$noticeMessage("삭제할 메시지를 선택해주세요.");
       } else {
         this.$confirmMessage("삭제하시겠습니까?");
       }
     }
-    deleteMessage(type: string): void {
+    private deleteMessage(type: string): void {
       const data = {
         action: "delete_message",
         type: type,
@@ -204,7 +204,7 @@
           this.allCheck = false;
         });
     }
-    getList(type: string, num: number, keyword: string): void {
+    private getList(type: string, num: number, keyword: string): void {
       const data = {
         action: "get_message_list",
         type: type,

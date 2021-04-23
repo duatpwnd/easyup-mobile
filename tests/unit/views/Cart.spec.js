@@ -20,9 +20,8 @@ describe("강의 바구니 페이지", () => {
   beforeEach(() => {
     wrapper = shallowMount(Cart, {
       mocks: {
-        $EventBus: new Vue(),
         $axios: axios,
-        $ApiUrl: ApiUrl,
+        $ApiUrl: jest.fn(),
         $cookies: VueCookies,
       },
     });

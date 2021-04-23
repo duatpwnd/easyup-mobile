@@ -20,7 +20,11 @@ describe("강의 상세페이지", () => {
             id: 1,
           },
         },
-        $EventBus: new Vue(),
+        $EventBus: {
+          $on: jest.fn(),
+          $off: jest.fn(),
+          $emit: jest.fn(),
+        },
         $axios: axios,
         $ApiUrl: ApiUrl,
         $cookies: VueCookies,

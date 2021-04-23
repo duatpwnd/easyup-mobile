@@ -34,7 +34,11 @@
           </div>
           <div class="row price_line">
             <span class="dt" v-html="li.teacher_name"></span>
-            <del class="dt final_price">{{ li.price.format_original }}</del>
+            <del
+              class="dt final_price"
+              v-if="li.price.format_original != li.price.format_final"
+              >{{ li.price.format_original }}</del
+            >
             <span class="dt ori_price">{{ li.price.format_final }}</span>
           </div>
         </template>
@@ -60,6 +64,9 @@
             >
             <span class="dd" v-else-if="list.pay_info.method == 'phone'"
               >휴대폰</span
+            >
+            <span class="dd" v-else-if="list.pay_info.method == 'bank'"
+              >무통장</span
             >
           </div>
           <div class="row">
@@ -96,27 +103,43 @@
         </template>
       </Row>
     </section>
-    <!-- <section>
+    <section v-if="list.status_code == 3 || list.status_code == 5">
+      <h3 class="h3_title info">취소 요청</h3>
+      <Row>
+        <template slot="row">
+          <div class="row">
+            <span class="cancel-lecture-title">취소 사유</span>
+            <span
+              class="cancel-lecture-contents"
+              v-html="list.cancel.cancel_reason"
+            ></span>
+          </div>
+        </template>
+      </Row>
+    </section>
+    <section v-if="list.status_code == 3">
       <h3 class="h3_title info">환불 정보</h3>
       <Row>
         <template slot="row">
           <div class="row">
-            <span class="dt">{{
-              list.refund_info.refund_date.split(" ")[0]
-            }}</span>
+            <span class="dt">{{ list.cancel.refund_date.split(" ")[0] }}</span>
           </div>
           <div class="row">
-            <span class="dt">공제 금액</span>
-            <span class="dd">{{ list.refund_info.penalty }}원</span>
+            <span class="dt">공제금액</span>
+            <span class="dd "
+              >{{ list.cancel.price_info.format_refund_fee }}원</span
+            >
           </div>
 
           <div class="row">
-            <span class="dt">환불 정보</span>
-            <span class="dd">{{ list.refund_info.refund_price }}원</span>
+            <span class="dt">환불금액</span>
+            <span class="dd special-default"
+              >{{ list.cancel.price_info.format_refund }}원</span
+            >
           </div>
         </template>
       </Row>
-    </section> -->
+    </section>
   </div>
 </template>
 <script lang="ts">
@@ -126,7 +149,6 @@
     action: string;
     order_id: string;
     row_id: number;
-    type: string;
     item_type: string;
     item_id: number;
   }
@@ -136,15 +158,14 @@
     },
   })
   export default class PaymentDetail extends Vue {
-    list = "";
-    getList(): void {
+    private list = "";
+    private getList(): void {
       let data = {
         action: "get_order_info_by_teacher",
         order_id: this.$route.query.order_id,
       };
       if (this.$route.query.row_id == undefined) {
         let pay: Omit<BodyData, "row_id" | "action" | "order_id"> = {
-          type: "settlement",
           item_type: this.$route.query.type,
           item_id: this.$route.query.item_id,
         };
@@ -154,12 +175,10 @@
           BodyData,
           "item_type" | "item_id" | "action" | "order_id"
         > = {
-          type: "order",
           row_id: this.$route.query.row_id,
         };
         data = { ...data, ...settle };
       }
-      console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: { [key: string]: any }) => {
@@ -218,6 +237,16 @@
         }
         .price {
           color: #114fff;
+        }
+        .cancel-lecture-title {
+          font-size: 14px;
+          display: inline-block;
+          vertical-align: top;
+          width: 18%;
+        }
+        .cancel-lecture-contents {
+          @extend .cancel-lecture-title;
+          width: 82%;
         }
       }
     }

@@ -1,9 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 import LostPassword from "@/views/LostPassword.vue";
-import Vue from "vue";
 import axios from "axios";
-import ApiUrl from "@/assets/js/api_url.js";
-import GlobalUrl from "@/plugin/global_plugin.js";
 describe("LostPassword.vue", () => {
   let wrapper;
   // 이메일 정규식
@@ -11,10 +8,14 @@ describe("LostPassword.vue", () => {
   beforeEach(() => {
     wrapper = shallowMount(LostPassword, {
       mocks: {
-        $EventBus: new Vue(),
+        $EventBus: {
+          $on: jest.fn(),
+          $off: jest.fn(),
+          $emit: jest.fn(),
+        },
         $axios: axios,
-        $ApiUrl: ApiUrl,
-        $GlobalUrl: GlobalUrl,
+        $ApiUrl: jest.fn(),
+        $GlobalUrl: jest.fn(),
       },
     });
   });

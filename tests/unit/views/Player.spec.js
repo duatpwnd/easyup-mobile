@@ -1,15 +1,18 @@
-import { shallowMount, mount, createLocalVue } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import Player from "@/views/Player.vue";
-import Vue from "vue";
-import VueRouter from "vue-router";
-import ApiUrl from "@/assets/js/api_url.js";
-import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import store from "@/store";
-
-describe.skip("Player.vue", () => {
+function mockFn(action, data) {
+  switch (action) {
+    case "get_player_info":
+      return jest.fn().mockResolvedValue(data);
+    default:
+      return jest.fn().mockResolvedValue();
+  }
+}
+describe("플레이어 컴포넌트", () => {
   let wrapper;
-  const data = {
+  let data = {
     data: {
       player_info: {
         course_id: 54,
@@ -43,45 +46,74 @@ describe.skip("Player.vue", () => {
             "https://www.youtube.com/embed/A7d1mMdhePY?rel=0&amp;autoplay=1",
           iframe_src:
             "http://develop.hell0world.net/courses/PY05/document/7-1..html?&session_id=0",
-          custom_type: "",
+          custom_type: "video",
           note_contents: "'강의노트에 해당하는 파라미터",
         },
       ],
     },
   };
-  beforeEach(async () => {
-    Vue.use(VueRouter);
-    const router = new VueRouter({
-      mode: "history",
-      base: process.env.BASE_URL,
-      duplicateNavigationPolicy: "ignore",
-    });
-    router.push({
-      query: {
-        course_id: 1,
-        lp_id: 1,
-        linkType: undefined,
-      },
-    });
+  beforeEach(() => {
     wrapper = shallowMount(Player, {
       store,
-      router,
       mocks: {
-        $EventBus: new Vue(),
+        $route: {
+          query: {
+            course_id: 1,
+            lp_id: 1,
+            linkType: undefined,
+          },
+        },
+        $EventBus: {
+          $on: jest.fn(),
+          $off: jest.fn(),
+          $emit: jest.fn(),
+        },
         $axios: axios,
-        $ApiUrl: ApiUrl,
+        $ApiUrl: jest.fn(),
       },
     });
-    const mock = new MockAdapter(axios);
-    await mock.onPost(ApiUrl.mobileAPI_v1).reply(200, data);
-    jest.spyOn(wrapper.vm, "getPlayInfo");
-    await wrapper.vm.getPlayInfo();
   });
-  it("getPlayInfo call", async () => {
-    expect(wrapper.vm.info).toBeDefined();
-    expect(wrapper.vm.info.player_info.course_id).toBe(
-      data.data.player_info.course_id
+  it("플레이어 정보 호출", () => {
+    const getPlayerInfo = mockFn("get_player_info", data);
+    getPlayerInfo({ action: "get_player_info", course_id: 1, lp_id: 1 }).then(
+      (result) => {
+        expect(getPlayerInfo).toHaveBeenCalledWith({
+          action: "get_player_info",
+          course_id: 1,
+          lp_id: 1,
+        });
+      }
     );
-    expect(wrapper.vm.getPlayInfo).toHaveBeenCalled();
+    expect(getPlayerInfo).toHaveBeenCalled();
+  });
+  it("즐겨찾기 페이지에서 플레이어 페이지로 왔을때 플레이어 정보 호출", () => {
+    const getPlayerInfo = mockFn("get_player_info", data);
+    getPlayerInfo({
+      action: "get_player_info",
+      course_id: 1,
+      lp_id: 1,
+      linkType: "bookmark",
+      iid: 13,
+    }).then((result) => {
+      expect(getPlayerInfo).toHaveBeenCalledWith({
+        action: "get_player_info",
+        course_id: 1,
+        lp_id: 1,
+        linkType: "bookmark",
+        iid: 13,
+      });
+    });
+    expect(getPlayerInfo).toHaveBeenCalled();
+  });
+  it("비디오 파일인 경우", () => {
+    wrapper.setData({ info: data.data });
+    expect(wrapper.vm.info.current_item[0].lp_type).toBe("document");
+    expect(wrapper.vm.info.current_item[0].custom_type).toBe("video");
+  });
+  it("아이 프레임 인경우", () => {
+    data.data.current_item[0].custom_type = "youtube";
+    wrapper.setData({ info: data.data });
+    expect(wrapper.vm.info.current_item[0].lp_type).toBe("document");
+    expect(wrapper.vm.info.current_item[0].custom_type).toBe("youtube");
   });
 });

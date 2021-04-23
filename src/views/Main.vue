@@ -460,7 +460,7 @@
     },
   })
   export default class Main extends Vue {
-    search_title = [
+    private search_title = [
       "이지업에서 쉽고 빠르게 성장하세요!",
       "소스도 먼저 코딩하는 놈이 낫다",
       "발 없는 소스가 천리간다",
@@ -469,8 +469,8 @@
       "짰슈?",
       "응 짰슈.",
     ];
-    keyword = "";
-    slide_option = {
+    private keyword = "";
+    private slide_option = {
       banner: {
         autoplay: {
           delay: 2500,
@@ -526,8 +526,8 @@
         },
       },
     };
-    list = {};
-    lectureSearch(): void {
+    private list = {};
+    private lectureSearch(): void {
       this.$router
         .push({
           path: "/category",
@@ -541,7 +541,7 @@
         })
         .catch(() => {});
     }
-    getLectureList(): void {
+    private getLectureList(): void {
       const data = {
         action: "main_page_list",
       };
@@ -551,7 +551,7 @@
           this.list = result.data.data;
         });
     }
-    moreView(order: string): void {
+    private moreView(order: string): void {
       this.$router
         .push({
           path: "/category",

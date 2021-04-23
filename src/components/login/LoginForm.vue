@@ -138,20 +138,20 @@
     },
   })
   export default class LoginForm extends Vue {
-    userid = "";
-    userpw = "";
-    userStore_referer!: string;
-    goToLecture() {
+    private userid = "";
+    private userpw = "";
+    private userStore_referer!: string;
+    private goToLecture(): void {
       this.$EventBus.$emit("GoToLecture", true);
     }
-    goToPath(url: string): void {
+    private goToPath(url: string): void {
       this.$router.push(url).catch(() => {});
       this.$store.commit("toggleStore/Toggle", {
         login_modal: false,
         mask: false,
       });
     }
-    login(): void {
+    private login(): void {
       const data = {
         action: "login",
         userid: this.userid,

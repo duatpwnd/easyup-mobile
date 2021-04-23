@@ -11,11 +11,11 @@
   })
   // extends 시에는 template 사용 안해도됨
   export default class GoToCart extends ConfirmModal {
-    confirmOk(): void {
+    public confirmOk(): void {
       this.$emit("goToCart");
       this.cancel();
     }
-    cancel(): void {
+    public cancel(): void {
       this.$store.commit("toggleStore/Toggle", {
         cart_modal: false,
       });

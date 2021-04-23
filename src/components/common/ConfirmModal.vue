@@ -39,11 +39,11 @@
     },
   })
   export default class ConfirmModal extends Vue {
-    confirmOk(): void {
+    public confirmOk(): void {
       this.$emit("ok");
       this.cancel();
     }
-    cancel(): void {
+    public cancel(): void {
       this.$store.commit("toggleStore/Toggle", {
         confirm_modal: false,
       });

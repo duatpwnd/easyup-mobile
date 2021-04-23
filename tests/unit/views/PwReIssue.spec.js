@@ -12,7 +12,11 @@ describe("비밀번호 재발급", () => {
         $route: {
           query: { token: "abcdefg" },
         },
-        $EventBus: new Vue(),
+        $EventBus: {
+          $on: jest.fn(),
+          $off: jest.fn(),
+          $emit: jest.fn(),
+        },
         $axios: axios,
         $cookies: VueCookies,
         $ApiUrl: ApiUrl,

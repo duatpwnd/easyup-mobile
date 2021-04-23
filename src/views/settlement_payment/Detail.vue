@@ -109,9 +109,9 @@
     },
   })
   export default class Detail extends Vue {
-    list = "";
-    current = 1;
-    getList(num: number): void {
+    private list = "";
+    private current = 1;
+    private getList(num: number): void {
       console.log("type", this.$route.query.type);
       const data = {
         action: "get_settlement_detail",
@@ -156,7 +156,6 @@
     }
     created() {
       this.$EventBus.$on(`detail_datePick`, () => {
-        console.log("데이트픽왔다");
         this.getList(1);
       });
       this.getList(this.$route.query.pageCurrent);

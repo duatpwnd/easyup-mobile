@@ -89,8 +89,8 @@
     },
   })
   export default class MsgRead extends Vue {
-    view = "";
-    download(filename: string, file_id: number): void {
+    private view = "";
+    private download(filename: string, file_id: number): void {
       const data = {
         action: "download_message_attach",
         type: this.$route.query.type,
@@ -121,10 +121,10 @@
           }
         });
     }
-    confirm(): void {
+    private confirm(): void {
       this.$confirmMessage("삭제하시겠습니까?");
     }
-    deleteMessage(type: string): void {
+    private deleteMessage(type: string): void {
       const data = {
         action: "delete_message",
         type: this.$route.query.type,
@@ -146,7 +146,7 @@
           });
         });
     }
-    read(): void {
+    private read(): void {
       const data = {
         action: "get_message_info",
         id: this.$route.query.id,

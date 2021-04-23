@@ -93,17 +93,17 @@
       textarea: HTMLTextAreaElement;
       upload: HTMLFormElement;
     };
-    view = ""; // 답장정보
-    loading = false; //검색찾는동안 로딩
-    choice_active = -1; //선택된사람 active 걸어주기
-    title = "";
-    choice_list: { [key: string]: any }[] = []; // 선택된사람
-    received_list: { [key: string]: any }[] = []; // 받는사람 찾기
-    keyword = ""; // 검색부분 v-model
-    file_obj = ""; // 파일객체
-    search_result = false;
-    editorData = ""; // 에디터 v-model
-    read(): void {
+    private view = ""; // 답장정보
+    private loading = false; //검색찾는동안 로딩
+    private choice_active = -1; //선택된사람 active 걸어주기
+    private title = "";
+    private choice_list: { [key: string]: any }[] = []; // 선택된사람
+    private received_list: { [key: string]: any }[] = []; // 받는사람 찾기
+    private keyword = ""; // 검색부분 v-model
+    private file_obj = ""; // 파일객체
+    private search_result = false;
+    private editorData = ""; // 에디터 v-model
+    private read(): void {
       const data = {
         action: "get_message_info",
         id: this.$route.query.id,
@@ -122,7 +122,7 @@
         });
     }
     // 선택된사람 다시 빼기
-    close(id: number): void {
+    private close(id: number): void {
       const find_item: { [key: string]: any } = this.choice_list.find(
         (item) => {
           return item.id === id;
@@ -132,11 +132,11 @@
       const result = this.choice_list.splice(idx, 1);
     }
     // 선택된사람
-    choice(list: { [key: string]: any }): void {
+    private choice(list: { [key: string]: any }): void {
       this.choice_list.push(list);
       this.choice_list = Array.from(new Set(this.choice_list));
     }
-    search(): void {
+    private search(): void {
       this.search_result = false;
       this.received_list = [];
       const data = {
@@ -164,7 +164,7 @@
           });
       }
     }
-    send(): void {
+    private send(): void {
       this.validationCheck().then((result) => {
         if (result == "success") {
           const formData = new FormData();
@@ -212,11 +212,11 @@
         }
       });
     }
-    fileSelect(): void {
+    private fileSelect(): void {
       const selected_file = this.$refs.upload.files[0];
       this.file_obj = selected_file;
     }
-    validationCheck(): Promise<string> {
+    private validationCheck(): Promise<string> {
       return new Promise((resolve, reject) => {
         if (this.choice_list.length == 0) {
           this.$noticeMessage("받는분을 입력하세요");

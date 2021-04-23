@@ -1,28 +1,27 @@
-import { shallowMount, createLocalVue } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import List from "@/views/bookmark_manage/List.vue";
 import axios from "axios";
-import Vue from "vue";
-import ApiUrl from "@/assets/js/api_url.ts";
-import VueRouter from "vue-router";
 describe("책갈피 리스트", () => {
   let wrapper;
   beforeEach(() => {
-    Vue.use(VueRouter);
-    const router = new VueRouter({
-      mode: "history",
-      base: process.env.BASE_URL,
-      duplicateNavigationPolicy: "ignore",
-    });
     const data = {
       error: false,
     };
     axios.post = jest.fn().mockResolvedValue({ data: data });
     wrapper = shallowMount(List, {
-      router,
       mocks: {
-        $EventBus: new Vue(),
+        $route: {
+          query: {
+            id: 1,
+          },
+        },
+        $EventBus: {
+          $on: jest.fn(),
+          $off: jest.fn(),
+          $emit: jest.fn(),
+        },
         $axios: axios,
-        $ApiUrl: ApiUrl,
+        $ApiUrl: jest.fn(),
       },
     });
   });

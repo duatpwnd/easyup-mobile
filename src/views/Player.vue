@@ -217,7 +217,7 @@
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: ResultData) => {
-          console.log("플레이어 정보", result);
+          console.log(result);
           this.info = result.data.data;
           this.videoOptions.sources[0].src = this.info.current_item[0].link;
           let current_link;

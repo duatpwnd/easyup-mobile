@@ -21,7 +21,11 @@ describe("자료공유 업로드", () => {
     wrapper = shallowMount(Upload, {
       router,
       mocks: {
-        $EventBus: new Vue(),
+        $EventBus: {
+          $on: jest.fn(),
+          $off: jest.fn(),
+          $emit: jest.fn(),
+        },
         $axios: axios,
         $ApiUrl: ApiUrl,
       },

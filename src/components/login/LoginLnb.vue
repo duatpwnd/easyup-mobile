@@ -16,7 +16,7 @@
     },
   })
   export default class LoginLnb extends Vue {
-    type = "LoginInfo";
+    private type = "LoginInfo";
     mounted() {
       this.$EventBus.$on("GoToLecture", () => {
         this.type = "GoToLecture";

@@ -204,17 +204,16 @@
     },
   })
   export default class LoginInfo extends Vue {
-    userid = "";
-    userpw = "";
-
-    logout(): void {
+    private userid = "";
+    private userpw = "";
+    private logout(): void {
       this.$logOut();
     }
-    goToPath(url: string, obj: object): void {
+    private goToPath(url: string, obj: object): void {
       this.$router.push(url).catch(() => {});
       this.$store.commit("toggleStore/Toggle", obj);
     }
-    goToLecture(): void {
+    private goToLecture(): void {
       this.$EventBus.$emit("GoToLecture", true);
     }
   }

@@ -11,22 +11,29 @@
       </template>
     </Row>
     <div class="payment_info" v-if="list.list.length != 0">
-      <div class="left">
-        <h2 class="dt">결제 건수</h2>
-        <span class="dd">{{ payInfo.cnt_payment }}</span>
-        <span class="unit"> 건</span>
+      <div class="abox">
+        <h2 class="dt">결제 금액</h2>
+        <span class="dd">
+          {{ payInfo.payment }}
+        </span>
+        <span class="unit"> 원</span>
       </div>
-      <div class="center">
-        <h2 class="dt">취소 건수</h2>
-        <span class="dd">{{ payInfo.cnt_cancel }}</span>
-        <span class="unit"> 건</span>
-      </div>
-      <div class="right">
-        <h2 class="dt">취소 금액</h2>
+      <div class="bbox">
+        <h2 class="dt">환불 금액</h2>
         <span class="dd">
           {{ payInfo.cancel }}
         </span>
         <span class="unit"> 원</span>
+      </div>
+      <div class="cbox">
+        <h2 class="dt">결제 건수</h2>
+        <span class="dd">{{ payInfo.cnt_payment }}</span>
+        <span class="unit"> 건</span>
+      </div>
+      <div class="dbox">
+        <h2 class="dt">취소 건수</h2>
+        <span class="dd">{{ payInfo.cnt_cancel }}</span>
+        <span class="unit"> 건</span>
       </div>
     </div>
     <Row v-for="(li, index) in list.list" :key="index">
@@ -102,12 +109,12 @@
     components: { Row, BaseButton, Pagination },
   })
   export default class PayList extends Vue {
-    payInfo = "";
-    list = "";
-    current = 1;
-    order = "";
-    keyword = "";
-    payAmount(): void {
+    private payInfo = "";
+    private list = "";
+    private current = 1;
+    private order = "";
+    private keyword = "";
+    private payAmount(): void {
       const data = {
         action: "get_pay_summary",
         search_start_date:
@@ -128,7 +135,7 @@
           this.payInfo = result.data.data;
         });
     }
-    getList(num: number, order: string, keyword: string): void {
+    private getList(num: number, order: string, keyword: string): void {
       const data = {
         action: "get_pay_list",
         current: num,
@@ -217,12 +224,13 @@
     margin-top: 10px;
     border-radius: 4px;
     background: #f8f8f8;
-    .left,
-    .right,
-    .center {
+    .abox,
+    .bbox,
+    .cbox,
+    .dbox {
       text-align: center;
       display: inline-block;
-      width: 33.3333%;
+      width: 25%;
       box-sizing: border-box;
       .dt {
         font-size: 12px;
@@ -235,8 +243,9 @@
         font-size: 12px;
       }
     }
-    .left,
-    .center {
+    .abox,
+    .bbox,
+    .cbox {
       border-right: 1px solid #333333;
     }
   }
@@ -252,9 +261,6 @@
     border-bottom: 4px solid #f8f8f8;
     .special-default {
       font-weight: bold;
-    }
-    .price {
-      color: #114fff;
     }
     .row {
       .blue_btn {

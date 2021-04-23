@@ -1,8 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 import LoginForm from "@/components/login/LoginForm.vue";
 import axios from "axios";
-import Vue from "vue";
-import ApiUrl from "@/assets/js/api_url.ts";
 import VueRouter from "vue-router";
 const VueCookies = require("vue-cookies");
 describe("로그인 FORM", () => {
@@ -13,10 +11,14 @@ describe("로그인 FORM", () => {
   beforeEach(() => {
     wrapper = shallowMount(LoginForm, {
       mocks: {
-        $EventBus: new Vue(),
+        $EventBus: {
+          $on: jest.fn(),
+          $off: jest.fn(),
+          $emit: jest.fn(),
+        },
         $axios: axios,
         $cookies: VueCookies,
-        $ApiUrl: ApiUrl,
+        $ApiUrl: jest.fn(),
         $store: mockStore,
         $router: VueRouter,
       },

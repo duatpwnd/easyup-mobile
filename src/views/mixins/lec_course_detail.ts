@@ -17,18 +17,18 @@ export default class GroupMixin extends Vue {
   $refs!: {
     subs_btn: HTMLButtonElement;
   };
-  detail: { [key: string]: any } = {};
-  isPossibleReview = false;
-  is_subscribe = false;
-  subscribe_btn = false;
-  score_info = {}; // 각 별점의 개수
-  url = window.document.location.href; // 클립보드 현재 url
+  public detail: { [key: string]: any } = {};
+  public isPossibleReview = false;
+  public is_subscribe = false;
+  public subscribe_btn = false;
+  public score_info = {}; // 각 별점의 개수
+  public url = window.document.location.href; // 클립보드 현재 url
   @Watch("detect_token")
   onPropertyChanged(value: string, oldValue: string) {
     this.isSubscribe();
   }
   // 구독하기
-  subscribe(): void {
+  public subscribe(): void {
     let data: OptionalData = {
       action:
         this.$route.name == "lecDetail"
@@ -49,7 +49,7 @@ export default class GroupMixin extends Vue {
       });
   }
   // 구독 여부 조회
-  async isSubscribe(): Promise<void> {
+  public async isSubscribe(): Promise<void> {
     let data: OptionalData = {
       action:
         this.$route.name == "lecDetail"
@@ -73,10 +73,10 @@ export default class GroupMixin extends Vue {
         }
       });
   }
-  scoreCount(result: object): void {
+  public scoreCount(result: object): void {
     this.score_info = result;
   }
-  subscribe_btn_toggle(): void {
+  public subscribe_btn_toggle(): void {
     if (this.$refs.subs_btn != undefined) {
       const el = this.$refs.subs_btn;
       const btn_offset_top = el.offsetTop;
@@ -93,11 +93,11 @@ export default class GroupMixin extends Vue {
     }
   }
   // url 복사
-  share(): void {
+  public share(): void {
     this.$noticeMessage("현재 페이지 주소가 복사되었습니다.");
   }
   // 강의바구니
-  cartAdd(): void {
+  public cartAdd(): void {
     const data = {
       action: "add_cart",
       type: this.$route.name == "lecDetail" ? "course" : "session",
@@ -122,7 +122,7 @@ export default class GroupMixin extends Vue {
       });
   }
   // 강의 || 코스 상세 조회
-  getDetail(type: string): void {
+  public getDetail(type: string): void {
     let data: { action: string; course_id?: number; session_id?: number } = {
       action: type,
     };

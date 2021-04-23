@@ -3,7 +3,7 @@
     <component v-bind:is="type"></component>
   </keep-alive>
 </template>
-<script>
+<script lang="ts">
   import LoginForm from "./LoginForm.vue";
   import GoToLecture from "./go_to_lecture_list.vue";
   import { Vue, Component } from "vue-property-decorator";
@@ -14,7 +14,7 @@
     },
   })
   export default class LoginModal extends Vue {
-    type = "LoginForm";
+    private type = "LoginForm";
     mounted() {
       this.$EventBus.$on("GoToLecture", () => {
         console.log("Go");
