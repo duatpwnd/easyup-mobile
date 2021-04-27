@@ -10,7 +10,7 @@
         >
           <option value="">전체</option>
           <option value="pay">결제완료</option>
-          <option value="refund">환불완료</option>
+          <option value="refund">취소완료</option>
           <option value="cancel">취소신청</option>
         </select>
         <input
@@ -113,12 +113,12 @@
     components: { BaseButton, Search, DatePicker, Pagination, Row },
   })
   export default class List extends Vue {
-    $dateFormat!: Function;
-    keyword = "";
-    order = "";
-    current = 1;
-    list = "";
-    datePick(result: [object, object]): void {
+    private $dateFormat!: Function;
+    private keyword = "";
+    private order = "";
+    private current = 1;
+    private list = "";
+    private datePick(result: [object, object]): void {
       console.log(result);
       this.$router
         .push({
@@ -138,7 +138,7 @@
         this.$route.query.keyword as string
       );
     }
-    getList(num: number, order: string, keyword: string): void {
+    private getList(num: number, order: string, keyword: string): void {
       const data: BodyData = {
         action: "order_list",
         current: num,
