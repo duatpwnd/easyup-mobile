@@ -155,6 +155,8 @@
                 tag="span"
                 :to="{
                   path: '/lecDetail',
+                  name: 'lecDetail',
+                  params: { type: 'review' },
                   query: {
                     id: list.id,
                   },
