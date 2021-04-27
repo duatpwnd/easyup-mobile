@@ -17,7 +17,12 @@
         </div>
         <div class="row">
           <span class="dt">총 비용</span
-          ><span class="dd total">{{ lecture_info.price.format_final }}원</span>
+          ><span class="dd total" v-if="lecture_info.price.format_final == '-'"
+            >무료</span
+          >
+          <span class="dd total" v-else
+            >{{ lecture_info.price.format_final }}원</span
+          >
         </div>
       </div>
       <div class="btn-wrap">
