@@ -72,13 +72,15 @@
           class="td td1"
           slot="td1"
           @click="
-            $router.push({
-              path: '/play',
-              query: {
-                course_id: list.id,
-                lp_id: list.lp_id,
-              },
-            })
+            list.status == 'ing'
+              ? $router.push({
+                  path: '/play',
+                  query: {
+                    course_id: list.id,
+                    lp_id: list.lp_id,
+                  },
+                })
+              : ''
           "
         >
           {{ list.title }}
