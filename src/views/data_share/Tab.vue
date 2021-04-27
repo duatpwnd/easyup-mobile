@@ -37,7 +37,7 @@
             slot="check"
           />
         </CheckBox>
-        <span>강좌명</span>
+        <span>강의명</span>
         <span>파일명</span>
       </template>
     </BoardTitle>
@@ -111,11 +111,11 @@
   </div>
 </template>
 <script>
-  import CheckBox from "@/components/common/BaseCheckBox.vue";
-  import BoardTitle from "@/components/common/BoardTitle.vue";
-  import BoardList from "@/components/common/BoardList.vue";
   import Search from "@/components/common/Search.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
+  import BoardTitle from "@/components/common/BoardTitle.vue";
+  import CheckBox from "@/components/common/BaseCheckBox.vue";
+  import BoardList from "@/components/common/BoardList.vue";
   import Pagination from "@/components/common/Pagination.vue";
   export default {
     components: {
@@ -248,7 +248,6 @@
           });
       },
     },
-    mounted() {},
     watch: {
       $route(to, from) {
         this.getDropBoxList(
@@ -271,14 +270,17 @@
 </script>
 <style scoped lang="scss">
   .tab1 {
-    padding: 4.445%;
-    padding-top: 0;
+    padding: 16px;
     .no_result {
       text-align: center;
       padding: 15px;
       font-size: 16px;
     }
+    .search {
+      margin-top: 0;
+    }
     .btn_wrap {
+      margin-top: 10px;
       &:after {
         display: block;
         content: "";
@@ -298,9 +300,7 @@
         }
       }
     }
-    .search {
-      margin: 2% 0;
-    }
+
     .file_list {
       &:nth-child(odd) {
         background: #f8f8f8;

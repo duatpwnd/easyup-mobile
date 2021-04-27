@@ -1,5 +1,5 @@
 <template>
-  <div class="bookmark_add" v-if="info">
+  <div class="bookmark_add" v-if="Object.keys(info).length > 0">
     <div class="row">
       <span class="left ">
         책갈피
@@ -48,74 +48,73 @@
         ref="textarea"
       ></div>
     </div>
-
     <div class="row">
       <span class="left"></span>
       <button class="save_btn" @click="bookmarkAdd()">등록</button>
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       BlueBtn,
     },
-    data() {
-      return {
-        editorData: "",
-        info: "",
+  })
+  export default class Add extends Vue {
+    $refs!: {
+      textarea: HTMLTextAreaElement;
+    };
+    private editorData = "";
+    private info: { [key: string]: any } = {};
+    private bookmarkRead(): void {
+      const data = {
+        action: "get_bookmark_info",
+        id: this.$route.query.id, //게시물ID
       };
-    },
-    methods: {
-      bookmarkRead() {
-        const data = {
-          action: "get_bookmark_info",
-          id: this.$route.query.id, //게시물ID
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result.data);
-            this.info = result.data.data.info;
-            this.info.check_point = this.$getTimeStringSeconds(
-              this.info.check_point
-            );
-            if (this.$route.query.mode == "modify") {
-              this.editorData = this.info.contents;
-            }
-          });
-      },
-      bookmarkAdd() {
-        const data = {
-          action: "edit_bookmark",
-          id: this.$route.query.id,
-          contents: this.$refs.textarea.innerText.trim(),
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            if (result.data.data.result == 1) {
-              this.$router.push({
-                path: "/bookmarkManage",
-                query: {
-                  keyword: "",
-                  pageCurrent: 1,
-                  order: "course_name",
-                  view: this.$route.query.view,
-                },
-              });
-            }
-          });
-      },
-    },
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log(result.data);
+          this.info = result.data.data.info;
+          this.info.check_point = this.$getTimeStringSeconds(
+            this.info.check_point
+          );
+          if (this.$route.query.mode == "modify") {
+            this.editorData = this.info.contents;
+          }
+        });
+    }
+    private bookmarkAdd(): void {
+      const data = {
+        action: "edit_bookmark",
+        id: this.$route.query.id,
+        contents: this.$refs.textarea.innerText.trim(),
+      };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          if (result.data.data.result == 1) {
+            this.$router.push({
+              path: "/bookmarkManage",
+              query: {
+                keyword: "",
+                pageCurrent: 1,
+                order: "course_name",
+                view: this.$route.query.view,
+              },
+            });
+          }
+        });
+    }
     created() {
       this.bookmarkRead();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .bookmark_add {

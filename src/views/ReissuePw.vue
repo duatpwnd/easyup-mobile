@@ -24,24 +24,21 @@
     </form>
   </div>
 </template>
-<script>
-import BlueBtn from "@/components/common/BaseButton.vue";
-
-export default {
-  components: { BlueBtn },
-  data() {
-    return {
-      pw1: "",
-      pw2: "",
-      time: "",
-      reload: true
-    };
-  },
-  methods: {
-    countdown() {
+<script lang="ts">
+  import BlueBtn from "@/components/common/BaseButton.vue";
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
+    components: { BlueBtn },
+  })
+  export default class ReissuePw extends Vue {
+    pw1 = "";
+    pw2 = "";
+    time = "";
+    reload = true;
+    countdown(): void {
       let timeArray = this.time.split(":");
       let seconds = this.timeToSeconds(timeArray);
-      if (seconds == "") {
+      if (typeof seconds === "string") {
         this.time = "00:00";
         this.tokenCheck();
         return;
@@ -50,29 +47,29 @@ export default {
         this.time = this.secondsToTime(seconds);
         let timeoutMyOswego = setTimeout(this.countdown, 1000);
       }
-    },
-    timeToSeconds(timeArray) {
-      const minutes = timeArray[0] * 1;
-      let seconds = minutes * 60 + timeArray[1] * 1;
+    }
+    timeToSeconds(timeArray: string[]): number | string {
+      const minutes = ((timeArray[0] as unknown) as number) * 1;
+      let seconds = (((minutes * 60 + timeArray[1]) as unknown) as number) * 1;
       return seconds;
-    },
-    secondsToTime(secs) {
-      let hours = Math.floor(secs / (60 * 60));
+    }
+    secondsToTime(secs: number): string {
+      let hours: string | number = Math.floor(secs / (60 * 60));
       hours = hours < 10 ? "0" + hours : hours;
       const divisor_for_minutes = secs % (60 * 60);
-      let minutes = Math.floor(divisor_for_minutes / 60);
+      let minutes: string | number = Math.floor(divisor_for_minutes / 60);
       minutes = minutes < 10 ? "0" + minutes : minutes;
       const divisor_for_seconds = divisor_for_minutes % 60;
-      let seconds = Math.ceil(divisor_for_seconds);
+      let seconds: string | number = Math.ceil(divisor_for_seconds);
       seconds = seconds < 10 ? "0" + seconds : seconds;
       return minutes + ":" + seconds;
-    },
-    pwChange() {
+    }
+    pwChange(): void {
       const data = {
         action: "reset_password",
         token: this.$route.query.token,
         new_password: this.pw1,
-        new_password_confirm: this.pw2
+        new_password_confirm: this.pw2,
       };
       console.log(data);
       if (this.pw1.trim().length == 0) {
@@ -87,25 +84,24 @@ export default {
             headers: {
               Authorization: this.$cookies.get("user_info")
                 ? "Bearer " + this.$cookies.get("user_info").access_token
-                : null
-            }
+                : null,
+            },
           })
-          .then(result => {
+          .then((result: { [key: string]: any }) => {
             console.log("비밀번호 변경", result);
             this.$noticeMessage("비밀번호 변경이 완료 되었습니다.");
             this.$router.push("/");
           });
       }
-    },
-    tokenCheck() {
+    }
+    tokenCheck(): void {
       const data = {
         action: "reset_password_token_chk",
-        token: this.$route.query.token
+        token: this.$route.query.token,
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then(result => {
-          console.log("토큰", result);
+        .then((result: { [key: string]: any }) => {
           if (result.data.error) {
             this.$noticeMessage(result.data.message);
             this.$router.push("/lostPassword");
@@ -115,71 +111,70 @@ export default {
           }
         });
     }
-  },
-  mounted() {
-    this.tokenCheck();
+    mounted() {
+      this.tokenCheck();
+    }
   }
-};
 </script>
 <style scoped lang="scss">
-#findByEmail {
-  padding: 4.445%;
-  h2 {
-    font-size: 2rem;
-    color: #333333;
-  }
-  .form {
-    margin-top: 4%;
-
-    .blue_btn {
-      margin-top: 5%;
-      width: calc(100% - 35%);
-      float: right;
-      ::v-deep button {
-        width: 70%;
-      }
+  #findByEmail {
+    padding: 16px;
+    padding-top: 0;
+    margin-top: 13px;
+    h2 {
+      font-size: 18px;
+      margin-bottom: 13px;
+      color: #333333;
     }
-    .row {
-      margin-top: 2%;
-      clear: both;
-
-      input {
-        font-size: 1.5rem;
-        font-family: "NotoSansCJKkr-Regular";
+    .form {
+      .blue_btn {
+        margin-top: 5%;
         width: calc(100% - 35%);
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        outline: none;
-        padding: 1%;
+        float: right;
+        ::v-deep button {
+          width: 70%;
+        }
       }
+      .row {
+        margin-top: 2%;
+        clear: both;
+        input {
+          font-size: 16px;
+          font-family: "NotoSansCJKkr-Regular";
+          width: calc(100% - 35%);
+          box-sizing: border-box;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          outline: none;
+          padding: 1%;
+        }
 
-      .dt {
-        width: 35%;
-        display: inline-block;
-        font-size: 1.5rem;
+        .dt {
+          width: 35%;
+          display: inline-block;
+          font-size: 1.5rem;
+          font-family: "NotoSansCJKkr-Regular";
+          .required {
+            color: #114fff;
+          }
+        }
+      }
+      .last_row {
+        width: calc(100% - 35%);
+        position: relative;
+        float: right;
+        color: #333333;
+        margin: 2% 0;
+        font-size: 1.125rem;
         font-family: "NotoSansCJKkr-Regular";
-        .required {
+        span {
+          vertical-align: middle;
+        }
+        .timer {
           color: #114fff;
+          margin-left: 5px;
         }
       }
     }
-    .last_row {
-      width: calc(100% - 35%);
-      position: relative;
-      float: right;
-      color: #333333;
-      margin: 2% 0;
-      font-size: 1.125rem;
-      font-family: "NotoSansCJKkr-Regular";
-      span {
-        vertical-align: middle;
-      }
-      .timer {
-        color: #114fff;
-        margin-left: 5px;
-      }
-    }
   }
-}
 </style>

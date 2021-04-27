@@ -25,17 +25,11 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
-
-  export default {
-    props: {
-      current_id: {
-        type: String,
-        required: true,
-      },
-    },
+  import { Vue, Component, Prop } from "vue-property-decorator";
+  import { mapState } from "vuex";
+  @Component({
     computed: {
       ...mapState("toggleStore", {
         toggleStore_bookmark_modal: "bookmark_modal",
@@ -50,50 +44,53 @@
     components: {
       BlueBtn,
     },
-    data() {
-      return {
-        title: "",
+  })
+  export default class BookmarkModal extends Vue {
+    @Prop(String) private current_id!: string;
+    playerStore_lp_type!: string;
+    playerStore_custom_type!: string;
+    playerStore_video!: {
+      currentTime: Function;
+    };
+    playerStore_stopTime!: Function;
+    title = "";
+    // 즐겨찾기 추가
+    bookmarkAdd(): void {
+      const data = {
+        action: "add_bookmark",
+        course_id: this.$route.query.course_id,
+        lp_id: this.$route.query.lp_id,
+        current_id: this.current_id,
+        check_time:
+          this.playerStore_lp_type == "document" &&
+          this.playerStore_custom_type == "video"
+            ? Math.floor(this.playerStore_video.currentTime())
+            : Math.floor(this.playerStore_stopTime()),
+        title: this.title,
       };
-    },
-    methods: {
-      // 즐겨찾기 추가
-      bookmarkAdd() {
-        const data = {
-          action: "add_bookmark",
-          course_id: this.$route.query.course_id,
-          lp_id: this.$route.query.lp_id,
-          current_id: this.current_id,
-          check_time:
-            this.playerStore_lp_type == "document" &&
-            this.playerStore_custom_type == "video"
-              ? Math.floor(this.playerStore_video.currentTime())
-              : Math.floor(this.playerStore_stopTime()),
-          title: this.title,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("책갈피 정보", result);
-            this.$noticeMessage(result.data.data.msg);
-            this.bookmarkModalClose();
-            this.$emit("bookmark_add");
-          });
-      },
-
-      bookmarkModalClose() {
-        // 즐겨찾기 추가 모달
-        this.$store.commit("toggleStore/Toggle", {
-          bookmark_modal: false,
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log("책갈피 정보", result);
+          this.$noticeMessage(result.data.data.msg);
+          this.bookmarkModalClose();
+          this.$emit("bookmark_add");
         });
-      },
-    },
+    }
+
+    bookmarkModalClose(): void {
+      // 즐겨찾기 추가 모달
+      this.$store.commit("toggleStore/Toggle", {
+        bookmark_modal: false,
+      });
+    }
     destroyed() {
       this.$store.commit("toggleStore/Toggle", {
         bookmark_modal: false,
       });
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .bookmark-add-wrap {

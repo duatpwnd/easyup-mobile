@@ -126,11 +126,11 @@
 </template>
 <script>
   import Search from "@/components/common/Search.vue";
-  import CheckBox from "@/components/common/BaseCheckBox.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import CheckBox from "@/components/common/BaseCheckBox.vue";
   import Pagination from "@/components/common/Pagination.vue";
-  import { mapState, mapMutations } from "vuex";
+  import { mapState } from "vuex";
   export default {
     components: { BlueBtn, Search, CheckBox, ConfirmModal, Pagination },
     computed: {
@@ -210,10 +210,11 @@
 </script>
 <style scoped lang="scss">
   .counpon_list {
-    padding: 4.445%;
-    padding-bottom: 65px;
+    padding: 0 16px 65px;
+    margin-top: 13px;
     .h2_title {
       font-size: 18px;
+      padding-bottom: 13px;
     }
     .btn_wrap {
       margin-top: 10px;

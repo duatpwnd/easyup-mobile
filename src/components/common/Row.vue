@@ -19,6 +19,10 @@
   .li {
     .title {
       font-size: 16px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 67%;
     }
     .row {
       white-space: pre-wrap;

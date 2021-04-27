@@ -35,14 +35,15 @@
   </div>
 </template>
 <script lang="ts">
-  import { Vue } from "vue-property-decorator";
+  import { Component, Vue } from "vue-property-decorator";
+  @Component({})
   export default class Msg extends Vue {}
 </script>
 <style scoped lang="scss">
   .message_view {
     padding-bottom: 65px;
     .tab {
-      font-size: 2rem;
+      font-size: 18px;
       font-weight: 600;
       width: 50%;
       display: inline-block;

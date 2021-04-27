@@ -5,7 +5,8 @@
   </div>
 </template>
 <script lang="ts">
-  import { Vue } from "vue-property-decorator";
+  import { Component, Vue } from "vue-property-decorator";
+  @Component({})
   export default class Purcahse extends Vue {
     keyword = "";
     order = "";
@@ -13,10 +14,11 @@
 </script>
 <style scoped lang="scss">
   .purchase_warp {
+    margin-top: 13px;
     padding-bottom: 65px;
     .title {
       font-size: 18px;
-      padding: 0 4.445%;
+      padding: 0 16px 13px 16px;
     }
   }
 </style>

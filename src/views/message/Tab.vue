@@ -1,5 +1,5 @@
 <template>
-  <div class="tab1" v-if="list">
+  <div class="tab1" v-if="Object.keys(list).length > 0">
     <ConfirmModal
       @ok="deleteMessage($route.name)"
       v-if="toggleStore_confirmModal"
@@ -18,7 +18,7 @@
       ></button>
     </Search>
     <div class="btn_wrap">
-      <BlueBtn class="left">
+      <BlueBtn class="left" v-if="userStore_userinfo.info.is_admin">
         <button
           slot="blue_btn"
           @click="
@@ -33,7 +33,14 @@
           새메시지
         </button>
       </BlueBtn>
-      <BlueBtn class="right">
+      <BlueBtn
+        class="right"
+        :style="[
+          userStore_userinfo.info.is_admin == false
+            ? { width: '100%' }
+            : { width: '48%' },
+        ]"
+      >
         <button slot="blue_btn" @click="confirm()">
           삭제
         </button>
@@ -101,17 +108,17 @@
     </Pagination>
   </div>
 </template>
-<script>
-  import Pagination from "@/components/common/Pagination.vue";
-  import CheckBox from "@/components/common/BaseCheckBox.vue";
-  import BoardTitle from "@/components/common/BoardTitle.vue";
-  import BoardList from "@/components/common/BoardList.vue";
+<script lang="ts">
   import Search from "@/components/common/Search.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
+  import BoardTitle from "@/components/common/BoardTitle.vue";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
-  import { mapState, mapMutations } from "vuex";
-
-  export default {
+  import CheckBox from "@/components/common/BaseCheckBox.vue";
+  import BoardList from "@/components/common/BoardList.vue";
+  import Pagination from "@/components/common/Pagination.vue";
+  import { mapState } from "vuex";
+  import { Vue, Component, Watch } from "vue-property-decorator";
+  @Component({
     components: {
       Pagination,
       ConfirmModal,
@@ -122,109 +129,108 @@
       Search,
     },
     computed: {
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
       ...mapState("toggleStore", {
         toggleStore_confirmModal: "confirm_modal",
       }),
     },
-    data() {
-      return {
-        list: "",
-        keyword: "",
-        current: "",
-        checked_list: [],
-        allCheck: false,
+  })
+  export default class Tab extends Vue {
+    @Watch("$route")
+    onPropertyChanged(to: { [key: string]: any }) {
+      this.getList(
+        to.name,
+        this.$route.query.pageCurrent,
+        this.$route.query.keyword
+      );
+    }
+    private list: { [key: string]: any } = {};
+    private keyword = "";
+    private current = 1;
+    private checked_list: number[] = [];
+    private allCheck = false;
+    private all_check(): void {
+      this.allCheck = !this.allCheck;
+      if (this.allCheck) {
+        console.log(this.list.list);
+        this.list.list.forEach((el: { [key: string]: any }) => {
+          this.checked_list.push(el.id);
+        });
+      } else {
+        this.checked_list = [];
+      }
+    }
+    // 부분체크
+    private partial_check(): void {
+      if (this.list.list.length != this.checked_list.length) {
+        this.allCheck = false;
+      } else {
+        this.allCheck = true;
+      }
+    }
+    private goToPath(id: number): void {
+      this.$router
+        .push({
+          path: "/msg/read",
+          query: {
+            type: this.$route.name,
+            id: id,
+            view: this.$route.query.view,
+          },
+        })
+        .catch(() => {});
+    }
+    private confirm(): void {
+      if (this.checked_list.length == 0) {
+        this.$noticeMessage("삭제할 메시지를 선택해주세요.");
+      } else {
+        this.$confirmMessage("삭제하시겠습니까?");
+      }
+    }
+    private deleteMessage(type: string): void {
+      const data = {
+        action: "delete_message",
+        type: type,
+        id: this.checked_list,
       };
-    },
-    methods: {
-      all_check() {
-        this.allCheck = !this.allCheck;
-        if (this.allCheck) {
-          console.log(this.list.list);
-          this.list.list.forEach((el, index) => {
-            this.checked_list.push(el.id);
-          });
-        } else {
-          this.checked_list = [];
-        }
-      },
-      // 부분체크
-      partial_check() {
-        if (this.list.list.length != this.checked_list.length) {
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log("메시지", result);
+          this.getList(type, 1, "");
           this.allCheck = false;
-        } else {
-          this.allCheck = true;
-        }
-      },
-      goToPath(id) {
-        this.$router
-          .push({
-            path: "/msg/read",
-            query: {
-              type: this.$route.name,
-              id: id,
-              view: this.$route.query.view,
-            },
-          })
-          .catch(() => {});
-      },
-      confirm() {
-        if (this.checked_list.length == 0) {
-          this.$noticeMessage("삭제할 메시지를 선택해주세요.");
-        } else {
-          this.$confirmMessage("삭제하시겠습니까?");
-        }
-      },
-      deleteMessage(type) {
-        const data = {
-          action: "delete_message",
-          type: type,
-          id: this.checked_list,
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("메시지", result);
-            this.getList(type, 1, "");
-            this.allCheck = false;
-          });
-      },
-      getList(type, num, keyword) {
-        const data = {
-          action: "get_message_list",
-          type: type,
-          current: num, //필수
-          keyword: keyword, //옵션
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("메시지", result);
-            this.list = result.data.data;
-            this.$router
-              .push({
-                query: {
-                  pageCurrent: num,
-                  keyword: keyword,
-                  view: this.$route.query.view,
-                },
-              })
-              .catch(() => {});
-            this.keyword = keyword;
-            this.current = num;
-          });
-      },
-    },
-    watch: {
-      $route(to, from) {
-        this.getList(
-          to.name,
-          this.$route.query.pageCurrent,
-          this.$route.query.keyword
-        );
-      },
-    },
+        });
+    }
+    private getList(type: string, num: number, keyword: string): void {
+      const data = {
+        action: "get_message_list",
+        type: type,
+        current: num, //필수
+        keyword: keyword, //옵션
+      };
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log("메시지", result);
+          this.list = result.data.data;
+          this.$router
+            .push({
+              query: {
+                pageCurrent: num,
+                keyword: keyword,
+                view: this.$route.query.view,
+              },
+            })
+            .catch(() => {});
+          this.keyword = keyword;
+          this.current = num;
+        });
+    }
+
     created() {
       console.log(this.$route.name);
       this.getList(
@@ -232,8 +238,8 @@
         this.$route.query.pageCurrent,
         this.$route.query.keyword
       );
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .tab1 {
@@ -275,7 +281,6 @@
         }
       }
     }
-
     .search {
       margin: 2% 0;
     }

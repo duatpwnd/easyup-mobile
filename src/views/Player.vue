@@ -78,10 +78,10 @@
   import Scorm from "@/components/player/Scorm.vue";
   import BookmarkModal from "@/components/player/BookmarkModal.vue";
   import BookmarkListModal from "@/components/player/BookMarkListModal.vue";
-  import { mapState, mapMutations } from "vuex";
-  import mixin from "@/components/player/player_mixin.ts";
+  import { mapState } from "vuex";
+  import mixin from "@/components/player/player_mixin";
   import videojs from "video.js";
-  import { ResultData } from "@/assets/js/util.ts";
+  import { ResultData } from "@/assets/js/util";
   interface BodyData {
     action: string;
     course_id: number;
@@ -92,6 +92,7 @@
     iid: number;
   }
   @Component({
+    mixins: [mixin],
     components: { BookmarkListModal, Tab1, Tab2, Video, Scorm, BookmarkModal },
     computed: {
       ...mapState("playerStore", {
@@ -100,11 +101,14 @@
       }),
     },
   })
-  export default class Player extends mixin {
+  export default class Player extends Vue {
+    $refs!: {
+      videoPlayer: HTMLVideoElement;
+    };
     video_set = false;
     playerStore_check_time!: number | undefined | string;
     playerStore_current_item_id!: number;
-    info: any = {};
+    info: { [key: string]: any } = {};
     isActive = 0;
     type = "Tab1";
     types = [
@@ -213,7 +217,7 @@
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: ResultData) => {
-          console.log("플레이어 정보", result);
+          console.log(result);
           this.info = result.data.data;
           this.videoOptions.sources[0].src = this.info.current_item[0].link;
           let current_link;
@@ -273,7 +277,7 @@
     height: 100%;
     overflow: hidden;
     .tab {
-      font-size: 2rem;
+      font-size: 18px;
       font-weight: 600;
       width: 50%;
       display: inline-block;

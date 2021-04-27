@@ -1,15 +1,24 @@
 <template>
   <div class="mask">
     <div class="cancel_lecture">
-      <h2 class="h2_title">취소 강의</h2>
-      <select slot="option" class="select" v-model="select">
-        <option value="">전체 취소</option>
-        <option value="course_name">강의명</option>
+      <!-- <h2 class="h2_title">취소 강의</h2>
+      <select
+        slot="option"
+        class="select"
+        v-model="select"
+        @change="cancelChange()"
+      >
+        <option value="1">전체 취소</option>
+        <option value="2">부분 취소</option>
         <option value="section_name">섹션명</option>
         <option value="title">책갈피제목</option>
-      </select>
-      <div class="lecture_wrap">
-        <div class="lecture" v-for="(li, index) in lecture_info" :key="index">
+      </select> -->
+      <!-- <div class="lecture_wrap">
+        <div
+          class="lecture"
+          v-for="(li, index) in lecture_info.lecture_info"
+          :key="index"
+        >
           <div class="left">
             <div class="row1">
               <span class="lec" v-if="li.type == 'course'">강의</span>
@@ -27,17 +36,20 @@
             /></CheckBox>
           </div>
         </div>
-      </div>
+      </div> -->
       <h2 class="h2_title reason_title">취소 사유</h2>
-      <select slot="option" class="select" v-model="reason">
-        <option value="">기타</option>
-        <option value="course_name">강의명</option>
-        <option value="section_name">섹션명</option>
-        <option value="title">책갈피제목</option>
+      <select slot="option" class="select" v-model="reason_option">
+        <option value="1">구매 의사 취소</option>
+        <option value="2">강의 정보 상이</option>
+        <option value="3">주문 오류</option>
+        <option value="4">결제 수단 변경</option>
+        <option value="5">서비스 불반족</option>
+        <option value="6">기타</option>
       </select>
       <textarea
-        :disabled="reason == ''"
+        :disabled="reason_option != 6"
         class="textarea"
+        v-model="reason"
         placeholder="취소 사유를 입력해 주세요."
       ></textarea>
       <div class="btn_wrap">
@@ -53,45 +65,61 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BaseButton from "@/components/common/BaseButton.vue";
   import CheckBox from "@/components/common/BaseCheckBox.vue";
-  export default {
-    props: {
-      lecture_info: {
-        type: Array,
-        required: true,
-      },
-    },
+  import { Vue, Prop, Component } from "vue-property-decorator";
+  @Component({
     components: { BaseButton, CheckBox },
-    data() {
-      return {
-        select: "", // 취소 강의
-        reason: "", // 취소 사유
-        checked_list: [],
+  })
+  export default class CancelModal extends Vue {
+    @Prop(Object) private lecture_info!: { [key: string]: any };
+    select = 1; // 전체취소, 부분취소 유무
+    reason_option = 1; // 취소 사유 옵션
+    reason = ""; // 취소 내용
+    // checked_list = this.lecture_info.lecture_info.map((el) => el.id);
+    // cancelChange(): void {
+    //   if (this.select == 2) {
+    //     this.checked_list = [];
+    //   }
+    // }
+    send(): void {
+      interface BodyData {
+        action: string;
+        order_id: number;
+        method: string;
+        cancel_type: number;
+        reason_type: number;
+        reason_detail: string;
+        // items: number[];
+      }
+      const data: BodyData = {
+        action: "request_cancel",
+        order_id: this.lecture_info.order_id,
+        method: this.lecture_info.pay_info.method,
+        cancel_type: 1,
+        reason_type: this.reason_option,
+        reason_detail: this.reason_option == 6 ? this.reason : "",
+        // items: this.lecture_info.lecture_info.map((el) => el.id),
       };
-    },
-    methods: {
-      send() {
-        const data = {
-          action: "request_cancel",
-          order_id: "",
-          reason: "",
-          reason_etc: "",
-        };
-        console.log(data);
+      console.log(data);
+      if (this.lecture_info.pay_info.method == "bank") {
+        this.close();
+        this.$EventBus.$emit("refundInfo", data);
+      } else {
         this.$axios
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
+          .then((result: { [key: string]: any }) => {
             console.log(result);
-            this.list = result.data.data;
+            this.$emit("emitSuccess");
+            this.close();
           });
-      },
-      close() {
-        this.$emit("emitClose");
-      },
-    },
-  };
+      }
+    }
+    close() {
+      this.$emit("emitClose");
+    }
+  }
 </script>
 <style scoped lang="scss">
   .mask {
@@ -109,9 +137,9 @@
         font-size: 16px;
         margin-bottom: 15px;
       }
-      .reason_title {
-        margin-top: 35px;
-      }
+      // .reason_title {
+      //   margin-top: 35px;
+      // }
       .select {
         width: 100%;
         outline: none;

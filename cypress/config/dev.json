@@ -1,0 +1,6 @@
+{
+  "env": {
+    "VUE_APP_BASE_URL": "http://localhost:8080",
+    "VUE_APP_API_URL": "http://develop.hell0world.net/main/mobileAPI/v1.php"
+  }
+}

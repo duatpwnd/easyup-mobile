@@ -28,19 +28,18 @@
       <Row v-for="(li, index) in list.lecture_info" :key="index">
         <template slot="row">
           <div class="row">
-            <span class="dt">
-              <span class=" lec" v-if="li.type == 'course'">강의</span>
-              <span class=" course" v-else>코스</span>{{ li.title }}</span
-            >
+            <span class="type" v-if="li.type == 'course'">강의</span>
+            <span class="type" v-else>코스</span
+            ><span class="subtitle" v-html="li.title"></span>
           </div>
           <div class="row price_line">
-            <span class="dt">{{ li.teacher_name }}</span>
-            <del class="dt final_price">{{
-              li.price.original.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }}</del>
-            <span class="dt ori_price">{{
-              li.price.final.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }}</span>
+            <span class="dt" v-html="li.teacher_name"></span>
+            <del
+              class="dt final_price"
+              v-if="li.price.format_original != li.price.format_final"
+              >{{ li.price.format_original }}</del
+            >
+            <span class="dt ori_price">{{ li.price.format_final }}</span>
           </div>
         </template>
       </Row>
@@ -50,7 +49,7 @@
       <Row>
         <template slot="row">
           <div class="row">
-            <span class="dt">{{ list.pay_info.pay_date.split(" ")[0] }}</span>
+            <span class="dt">{{ list.pay_info.pay_date }}</span>
           </div>
           <div class="row">
             <span class="dt">결제 수단</span>
@@ -66,98 +65,76 @@
             <span class="dd" v-else-if="list.pay_info.method == 'phone'"
               >휴대폰</span
             >
+            <span class="dd" v-else-if="list.pay_info.method == 'bank'"
+              >무통장</span
+            >
           </div>
           <div class="row">
             <span class="dt">강의 비용</span>
-            <span class="dd"
-              >{{
-                list.pay_info.price.original
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원</span
-            >
+            <span class="dd">{{ list.pay_info.price.format_original }}원</span>
           </div>
           <div class="row">
             <span class="dt">패키지 할인</span>
-            <span class="dd"
-              >{{
-                list.pay_info.price.discount_pkg
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원</span
-            >
+            <span class="dd">{{ list.pay_info.price.format_pkg }}원</span>
           </div>
           <div class="row">
             <span class="dt">쿠폰</span>
-            <span class="dd"
-              >{{
-                list.pay_info.price.discount_coupon
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원</span
-            >
+            <span class="dd">{{ list.pay_info.price.format_coupon }}원</span>
           </div>
           <div class="row">
             <span class="dt">결제 금액</span>
-            <span class="dd"
-              >{{
-                list.pay_info.price.final
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원</span
+            <span class="dd special-default"
+              >{{ list.pay_info.price.format_sum_purchased }}원</span
             >
           </div>
           <div class="row">
             <span class="dt">정산 수수료</span>
             <span class="dd"
-              >{{
-                list.pay_info.price.fee
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원</span
+              >{{ list.settlement.format_total_commission }}원</span
             >
           </div>
           <div class="row">
-            <span class="dt">정산 금액</span>
-            <span class="dd"
-              >{{
-                list.pay_info.price.settlement
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원</span
-            >
+            <span class="dt ">정산 금액</span>
+            <span class="dd special-default">원</span>
+            <span class="dd special-default price">{{
+              list.settlement.format_settle_amount
+            }}</span>
           </div>
         </template>
       </Row>
     </section>
-    <section>
+    <section v-if="list.status_code == 3 || list.status_code == 5">
+      <h3 class="h3_title info">취소 요청</h3>
+      <Row>
+        <template slot="row">
+          <div class="row">
+            <span class="cancel-lecture-title">취소 사유</span>
+            <span
+              class="cancel-lecture-contents"
+              v-html="list.cancel.cancel_reason"
+            ></span>
+          </div>
+        </template>
+      </Row>
+    </section>
+    <section v-if="list.status_code == 3">
       <h3 class="h3_title info">환불 정보</h3>
       <Row>
         <template slot="row">
           <div class="row">
-            <span class="dt">{{
-              list.refund_info.refund_date.split(" ")[0]
-            }}</span>
+            <span class="dt">{{ list.cancel.refund_date.split(" ")[0] }}</span>
           </div>
           <div class="row">
-            <span class="dt">공제 금액</span>
-            <span class="dd"
-              >{{
-                list.refund_info.penalty
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원</span
+            <span class="dt">공제금액</span>
+            <span class="dd "
+              >{{ list.cancel.price_info.format_refund_fee }}원</span
             >
           </div>
 
           <div class="row">
-            <span class="dt">환불 정보</span>
-            <span class="dd"
-              >{{
-                list.refund_info.refund_price
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원</span
+            <span class="dt">환불금액</span>
+            <span class="dd special-default"
+              >{{ list.cancel.price_info.format_refund }}원</span
             >
           </div>
         </template>
@@ -165,36 +142,54 @@
     </section>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
   import Row from "@/components/common/Row.vue";
-  export default {
+  interface BodyData {
+    action: string;
+    order_id: string;
+    row_id: number;
+    item_type: string;
+    item_id: number;
+  }
+  @Component({
     components: {
       Row,
     },
-    data() {
-      return {
-        list: "",
+  })
+  export default class PaymentDetail extends Vue {
+    private list = "";
+    private getList(): void {
+      let data = {
+        action: "get_order_info_by_teacher",
+        order_id: this.$route.query.order_id,
       };
-    },
-    methods: {
-      getList() {
-        const data = {
-          action: "get_pay_info",
-          order_id: this.$route.query.order_id,
+      if (this.$route.query.row_id == undefined) {
+        let pay: Omit<BodyData, "row_id" | "action" | "order_id"> = {
+          item_type: this.$route.query.type,
+          item_id: this.$route.query.item_id,
         };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.list = result.data.data;
-          });
-      },
-    },
+        data = { ...data, ...pay };
+      } else {
+        let settle: Omit<
+          BodyData,
+          "item_type" | "item_id" | "action" | "order_id"
+        > = {
+          row_id: this.$route.query.row_id,
+        };
+        data = { ...data, ...settle };
+      }
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          this.list = result.data.data;
+        });
+    }
     created() {
       this.getList();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .payment_detail {
@@ -224,6 +219,32 @@
           font-weight: bold;
           margin-left: 5px;
           color: #114fff;
+        }
+      }
+      .li {
+        .special-default {
+          font-weight: bold;
+        }
+        .type {
+          color: #999999;
+          margin-right: 10px;
+          font-size: 14px;
+        }
+        .subtitle {
+          font-size: 14px;
+        }
+        .price {
+          color: #114fff;
+        }
+        .cancel-lecture-title {
+          font-size: 14px;
+          display: inline-block;
+          vertical-align: top;
+          width: 18%;
+        }
+        .cancel-lecture-contents {
+          @extend .cancel-lecture-title;
+          width: 82%;
         }
       }
     }

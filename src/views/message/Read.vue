@@ -6,7 +6,7 @@
     ></ConfirmModal>
     <h2>메시지</h2>
     <div class="head">
-      <span>{{ view.title }}</span>
+      <span v-html="view.title"></span>
     </div>
     <div class="contents">
       <span v-html="view.send_name" class="send"></span>
@@ -72,12 +72,11 @@
   </div>
 </template>
 <script lang="ts">
-  import { Component, Vue } from "vue-property-decorator";
   import ConfirmModal from "@/components/common/ConfirmModal.vue";
-  import { mapState } from "vuex";
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import { ResultData } from "@/assets/js/util.ts";
-
+  import { Component, Vue } from "vue-property-decorator";
+  import { mapState } from "vuex";
+  import { ResultData } from "@/assets/js/util";
   @Component({
     components: {
       BlueBtn,
@@ -90,9 +89,8 @@
     },
   })
   export default class MsgRead extends Vue {
-    view = "";
-
-    download(filename: string, file_id: number): void {
+    private view = "";
+    private download(filename: string, file_id: number): void {
       const data = {
         action: "download_message_attach",
         type: this.$route.query.type,
@@ -123,10 +121,10 @@
           }
         });
     }
-    confirm(): void {
+    private confirm(): void {
       this.$confirmMessage("삭제하시겠습니까?");
     }
-    deleteMessage(type: string): void {
+    private deleteMessage(type: string): void {
       const data = {
         action: "delete_message",
         type: this.$route.query.type,
@@ -148,7 +146,7 @@
           });
         });
     }
-    read(): void {
+    private read(): void {
       const data = {
         action: "get_message_info",
         id: this.$route.query.id,

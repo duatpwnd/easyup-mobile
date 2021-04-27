@@ -1,20 +1,18 @@
 <template>
   <div class="mask1">
     <div class="notice_modal">
-      <p class="contents">
-        {{ toggleStore_noticeMessage }}
-      </p>
+      <p class="contents" v-html="toggleStore_noticeMessage"></p>
       <BlueBtn>
         <button class="ok" slot="blue_btn" @click="ok()">확인</button>
       </BlueBtn>
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import { mapState, mapMutations } from "vuex";
-
-  export default {
+  import { mapState } from "vuex";
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       BlueBtn,
     },
@@ -23,17 +21,14 @@
         toggleStore_noticeMessage: "notice_message",
       }),
     },
-    data() {
-      return {};
-    },
-    methods: {
-      ok() {
-        this.$store.commit("toggleStore/Toggle", {
-          notice_modal: false,
-        });
-      },
-    },
-  };
+  })
+  export default class NoticeModal extends Vue {
+    ok(): void {
+      this.$store.commit("toggleStore/Toggle", {
+        notice_modal: false,
+      });
+    }
+  }
 </script>
 <style scoped lang="scss">
   .mask1 {
@@ -60,7 +55,6 @@
         text-align: center;
         margin-bottom: 20px;
       }
-
       .blue_btn {
         text-align: center;
         .ok {

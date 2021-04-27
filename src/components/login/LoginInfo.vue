@@ -13,9 +13,9 @@
     </div>
 
     <div class="lnb_menu">
-      <button class="lnb" @click="goToLecture()">강의</button>
+      <button class="lnb arrow" @click="goToLecture()">강의</button>
       <button
-        class="lnb"
+        class="lnb arrow"
         @click="
           $router
             .push({
@@ -54,7 +54,7 @@
           });
         "
       >
-        이지타임
+        이지채널
       </button>
       <button
         @click="
@@ -63,7 +63,11 @@
               path: '/studentClassRoom',
               query: {
                 view:
-                  userStore_userinfo.info.status === 1 ? 'student' : 'teacher',
+                  $route.query.view === undefined
+                    ? userStore_userinfo.info.status == 1
+                      ? 'teacher'
+                      : 'student'
+                    : $route.query.view,
               },
             })
             .catch(() => {});
@@ -72,7 +76,7 @@
             mask: false,
           });
         "
-        class="lnb"
+        class="lnb arrow"
         tag="button"
       >
         내강의실
@@ -106,7 +110,11 @@
               path: '/profileModify',
               query: {
                 view:
-                  userStore_userinfo.info.status === 1 ? 'student' : 'teacher',
+                  $route.query.view === undefined
+                    ? userStore_userinfo.info.status == 1
+                      ? 'teacher'
+                      : 'student'
+                    : $route.query.view,
               },
             })
             .catch(() => {});
@@ -196,21 +204,17 @@
     },
   })
   export default class LoginInfo extends Vue {
-    userid = "";
-    userpw = "";
-    env = "";
-    logout(): void {
+    private userid = "";
+    private userpw = "";
+    private logout(): void {
       this.$logOut();
     }
-    goToPath(url: string, obj: object): void {
+    private goToPath(url: string, obj: object): void {
       this.$router.push(url).catch(() => {});
       this.$store.commit("toggleStore/Toggle", obj);
     }
-    goToLecture(): void {
+    private goToLecture(): void {
       this.$EventBus.$emit("GoToLecture", true);
-    }
-    mounted() {
-      this.env = String(process.env.NODE_ENV);
     }
   }
 </script>
@@ -230,11 +234,11 @@
     width: 72.222%;
     max-width: 720px;
     box-sizing: border-box;
-    background: #f8f8f8;
+    background: white;
     height: 100%;
+
     .profile {
       padding: 4.445%;
-      background: white;
       text-align: center;
       .profile_ico {
         width: 33.773%;
@@ -252,35 +256,31 @@
       }
     }
     .lnb_menu {
-      background: white;
-      margin-top: 2%;
+      border-top: 4px solid #f8f8f8;
+      border-bottom: 4px solid #f8f8f8;
       padding: 4.445%;
+      border-top: 4px solid #f8f8f8;
+      border-bottom: 4px solid #f8f8f8;
       .lnb {
         text-align: left;
         width: 100%;
-        margin-top: 5px;
+        margin-top: 4%;
         font-size: 1.5rem;
         font-family: "NotoSansCJKkr-Regular";
+      }
+      .arrow {
         background: url("~@/assets/images/common/right_arrow.png") no-repeat
           right center / 3%;
-      }
-      .last_lnb {
-        @extend .lnb;
-        margin-top: 4%;
       }
     }
     .support {
       padding-bottom: 0;
-      background: white;
-      margin-top: 2%;
       padding: 4.445%;
       button {
         width: 100%;
         text-align: left;
         font-size: 1.5rem;
         display: block;
-        background: url("~@/assets/images/common/right_arrow.png") no-repeat
-          right center / 3%;
       }
       .faq_btn {
         margin: 4% 0;
@@ -289,7 +289,6 @@
     .logout {
       background: white;
       padding: 4.445%;
-      padding-top: 0;
       position: absolute;
       bottom: 0;
       width: 100%;

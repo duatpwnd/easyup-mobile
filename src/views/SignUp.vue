@@ -406,15 +406,18 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
 </script>
 <style scoped lang="scss">
   #signup {
-    padding: 4.445%;
+    padding: 16px;
+    padding-top: 0;
+    margin-top: 13px;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
+      margin-bottom: 13px;
       color: #333333;
     }
     .noti {
       color: #999999;
       font-size: 1.25rem;
-      margin: 4px 0 15px 0;
+      margin: 0 0 15px 0;
     }
     .blue_btn {
       margin-top: 20px;

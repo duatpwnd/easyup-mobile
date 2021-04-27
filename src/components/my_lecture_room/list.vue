@@ -8,41 +8,37 @@
     </slot>
   </div>
 </template>
-<script>
-export default {
-  components: {},
-  data() {
-    return {};
-  },
-  methods: {}
-};
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
+  @Component
+  export default class List extends Vue {}
 </script>
 <style scoped lang="scss">
-.tr {
-  width: 100%;
-  margin-top: 1%;
-  .td {
-    display: inline-block;
-    font-size: 14px;
-    color: #666666;
-    vertical-align: middle;
-  }
-  .td1 {
-    width: 63%;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .td2 {
-    font-weight: bold;
-    width: 37%;
-    text-align: right;
-    color: #333333;
-  }
+  .tr {
+    width: 100%;
+    margin-top: 3px;
+    .td {
+      display: inline-block;
+      font-size: 14px;
+      color: #666666;
+      vertical-align: middle;
+    }
+    .td1 {
+      width: 60%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .td2 {
+      font-weight: bold;
+      width: 40%;
+      text-align: right;
+      color: #333333;
+    }
 
-  .date {
-    color: black;
-    font-weight: bold;
+    .date {
+      color: black;
+      font-weight: bold;
+    }
   }
-}
 </style>

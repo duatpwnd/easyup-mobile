@@ -50,7 +50,15 @@
       class="left reg_btn"
       v-if="list.buttonType == 'upload' && $route.name == 'resume'"
     >
-      <button slot="blue_btn" @click="$router.push('/uniJob/register')">
+      <button
+        slot="blue_btn"
+        @click="
+          $router.push({
+            path: '/uniJob/register',
+            query: { type: $route.name, is_notice: false },
+          })
+        "
+      >
         이력서 등록
       </button>
     </BlueBtn>
@@ -88,7 +96,7 @@
           ><span v-else>{{ li.title }}</span></span
         >
 
-        <span class="right">{{ li.created_at }}</span>
+        <span class="right">{{ li.created_at.split(" ")[0] }}</span>
       </li>
     </ul>
     <Pagination>
@@ -112,10 +120,10 @@
   </div>
 </template>
 <script lang="ts">
-  import Pagination from "@/components/common/Pagination.vue";
+  import Search from "@/components/common/Search.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import BoardTitle from "@/components/common/BoardTitle.vue";
-  import Search from "@/components/common/Search.vue";
+  import Pagination from "@/components/common/Pagination.vue";
   import { Vue, Component, Watch } from "vue-property-decorator";
   @Component({
     components: { BoardTitle, Search, Pagination, BlueBtn },
@@ -146,7 +154,7 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
           console.log("유니잡", result.data.data);
           this.$router
             .push({

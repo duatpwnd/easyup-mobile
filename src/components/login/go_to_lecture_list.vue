@@ -5,17 +5,19 @@
       <li>
         <span
           @click="
-            $router.push({
-              path: '/category',
-              query: {
-                title: '전체',
-                category_code: 'ALL',
-                action: 'get_course_list',
-                keyword: '',
-                pageCurrent: 1,
-                order: 'type_date',
-              },
-            });
+            $router
+              .push({
+                path: '/category',
+                query: {
+                  title: '전체',
+                  category_code: 'ALL',
+                  action: 'get_course_list',
+                  keyword: '',
+                  pageCurrent: 1,
+                  order: 'type_date',
+                },
+              })
+              .catch((err) => {});
             $store.commit('toggleStore/Toggle', {
               login_modal: false,
               mask: false,
@@ -53,19 +55,19 @@
   import { Vue, Component } from "vue-property-decorator";
   @Component
   export default class LectureList extends Vue {
-    category_list = "";
-    async getCategoryList() {
+    private category_list = {};
+    private getCategoryList(): void {
       const data = {
         action: "get_category_list",
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
           console.log(result);
           this.category_list = result.data.data;
         });
     }
-    back(): void {
+    private back(): void {
       this.$EventBus.$emit("LoginInfo", true);
       this.$EventBus.$emit("LoginForm", true);
     }

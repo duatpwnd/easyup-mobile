@@ -1,17 +1,55 @@
 <template>
   <div id="course_detail" v-if="Object.keys(detail).length > 0">
+    <ConfirmModal class="course-modal" v-if="couseIsFreeModal">
+      <template slot="button_type">
+        <BlueBtn
+          @click.native="
+            subscribe();
+            couseIsFreeModal = false;
+          "
+          class="confirm"
+        >
+          <button slot="blue_btn">
+            확인
+          </button>
+        </BlueBtn>
+      </template>
+    </ConfirmModal>
+    <PurchaseApply
+      v-if="toggleStore_purchase_apply"
+      @goToOrder="
+        detail.price.format_final == '-'
+          ? test()
+          : $router.push({
+              path: 'order',
+              query: {
+                type: 'session',
+                cart_id: $route.query.id,
+              },
+            })
+      "
+      :lecture_info="detail"
+    ></PurchaseApply>
+    <GoToCart
+      @goToCart="$router.push('cart')"
+      v-if="toggleStore_cartModal"
+    ></GoToCart>
     <img
       :src="detail.course_image"
       alt="파이썬 코딩 기본편"
       title="파이썬 코딩 기본편"
     />
     <div class="update_noti">
-      <span>{{ detail.creation_date }}</span>
+      <span
+        >{{ detail.creation_date }}(업데이트 일자:{{
+          detail.update_date
+        }})</span
+      >
     </div>
     <section class="section1">
       <div class="lecture_title">
-        <h3 class="sub_title">{{ detail.category }}</h3>
-        <h2 class="title">{{ detail.title }}</h2>
+        <h3 class="sub_title" v-html="detail.category"></h3>
+        <h2 class="title" v-html="detail.title"></h2>
       </div>
       <div class="star_rating">
         <StarRating
@@ -43,8 +81,13 @@
           ]"
         ></StarRating>
       </div>
-      <div class="price">
-        <del class="original">{{ detail.price.format_original }}</del>
+      <h2 class="free" v-if="detail.price.is_free">무료</h2>
+      <div class="price" v-else>
+        <del
+          class="original"
+          v-if="detail.price.format_original != detail.price.format_final"
+          >{{ detail.price.format_original }}</del
+        >
         <span class="final">{{ detail.price.format_final }}원</span>
       </div>
       <div id="tag_wrap">
@@ -73,7 +116,11 @@
       <div id="subscribe">
         <div>
           <div class="subscribe_wrap">
-            <BlueBtn v-if="is_subscribe">
+            <BlueBtn
+              v-if="
+                is_subscribe || (is_subscribe == false && detail.is_teacher)
+              "
+            >
               <button
                 ref="subs_btn"
                 class="active_subscribe"
@@ -83,20 +130,9 @@
                 코스 보러가기
               </button>
             </BlueBtn>
+
             <BlueBtn v-else>
-              <button
-                ref="subs_btn"
-                slot="blue_btn"
-                @click="
-                  $router.push({
-                    path: 'order',
-                    query: {
-                      type: 'session',
-                      cart_id: $route.query.id,
-                    },
-                  })
-                "
-              >
+              <button ref="subs_btn" slot="blue_btn" @click="isPurchase()">
                 구매하기
               </button>
             </BlueBtn>
@@ -104,12 +140,13 @@
         </div>
         <div class="fixed_subs_btn" v-if="subscribe_btn">
           <button
-            v-if="is_subscribe"
+            v-if="is_subscribe || (is_subscribe == false && detail.is_teacher)"
             class="active_subscribe"
             @click="goToPath()"
           >
             코스 보러가기
           </button>
+
           <div v-else>
             <button class="add_btn" @click="cartAdd()">코스담기</button>
             <button
@@ -120,30 +157,36 @@
             >
               공유하기
             </button>
-            <button
-              class="purchase_btn"
-              @click="
-                $router.push({
-                  path: 'order',
-                  query: {
-                    type: 'session',
-                    cart_id: $route.query.id,
-                  },
-                })
-              "
-            >
+            <button class="purchase_btn" @click="isPurchase()">
               구매하기
             </button>
           </div>
         </div>
       </div>
       <div class="add_share">
-        <BlueBtn class="add" @click.native="cartAdd()">
+        <BlueBtn
+          class="add"
+          @click.native="cartAdd()"
+          v-if="
+            detail.price.is_free == false &&
+              is_subscribe == false &&
+              detail.is_teacher == false
+          "
+        >
           <button slot="blue_btn">
             코스담기
           </button>
         </BlueBtn>
-        <BlueBtn class="share">
+        <BlueBtn
+          class="share"
+          :style="[
+            detail.price.is_free == false &&
+            is_subscribe == false &&
+            detail.is_teacher == false
+              ? { 'margin-left': '2%' }
+              : { 'margin-left': 0, width: '100%' },
+          ]"
+        >
           <button slot="blue_btn" v-clipboard="url" v-clipboard:success="share">
             공유하기
           </button>
@@ -153,25 +196,31 @@
     <section class="section2">
       <div class="user_intro">
         <span class="total_lec"
-          >총<span class="color">{{ detail.course_list.length }}</span
-          >강</span
+          ><span class="color">{{ detail.course_list.length }}</span
+          >개 클래스</span
         >
         <div
           class="ol_list"
           v-for="(list, index) in detail.course_list"
           :key="index"
         >
-          <span class="title">{{ index + 1 }}강</span>
-          <span> {{ list.title }}</span>
+          <span v-html="list.title"></span>
+          <div class="limit-date">
+            <span>{{ list.limit }}</span>
+          </div>
         </div>
       </div>
       <span class="name">{{ detail.teachers }}</span>
     </section>
+    <section class="section3">
+      <h2 class="title">코스개요</h2>
+      <div class="description_contents" v-html="detail.description"></div>
+    </section>
     <div class="course_info">
       <h2 class="course_list">
-        <span>코스 별 강좌 안내</span>
+        <span>코스 별 강의 안내</span>
         <span class="all_lecture_num"
-          >총 {{ detail.course_list.length }}강</span
+          >{{ detail.course_list.length }}개 클래스</span
         >
       </h2>
       <div
@@ -179,13 +228,14 @@
         v-for="(list, index) in detail.course_list"
         :key="index"
       >
-        <h2 class="title">{{ index + 1 }}강.</h2>
+        <h2 class="title" v-if="index + 1 < 10">STEP 0{{ index + 1 }}.</h2>
+        <h2 class="title" v-else>STEP {{ index + 1 }}.</h2>
         <CourseItem>
           <span class="lec_list" slot="router">
             <img :src="list.thumbnail" alt="이지업" title="이지업" />
           </span>
           <h4 slot="teacher">{{ list.teacher }}</h4>
-          <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+          <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
           <span slot="grade" class="score">{{ list.ranking }}</span>
           <h1 class="free" slot="free" v-if="list.is_free == 'Y'">
             FREE
@@ -293,68 +343,82 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Component } from "vue-property-decorator";
+  import PurchaseApply from "@/components/modal/PurchaseApply.vue";
+  import GoToCart from "@/components/modal/GotoCart.vue";
   import StarRating from "vue-star-rating";
-  import CommentWrap from "@/components/lecture_detail/CommentWrap";
-  import ProgressBar from "@/components/common/ProgressBar.vue";
-  import CourseItem from "@/components/common/LectureItem.vue";
   import BlueBtn from "@/components/common/BaseButton.vue";
-  import mixin from "@/views/mixins/lec_course_detail.js";
-  import { mapState, mapMutations } from "vuex";
-  export default {
-    mixins: [mixin],
+  import CourseItem from "@/components/common/LectureItem.vue";
+  import ProgressBar from "@/components/common/ProgressBar.vue";
+  import CommentWrap from "@/components/lecture_detail/CommentWrap.vue";
+  import Mixin from "@/views/mixins/lec_course_detail";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import { mapState } from "vuex";
+  @Component({
     components: {
+      ConfirmModal,
+      GoToCart,
       ProgressBar,
       StarRating,
       CommentWrap,
       BlueBtn,
       CourseItem,
+      PurchaseApply,
     },
     computed: {
       ...mapState("toggleStore", {
+        toggleStore_cartModal: "cart_modal",
         toggleStore_score_info: "score_info",
+        toggleStore_purchase_apply: "purchase_apply",
       }),
       ...mapState("userStore", {
         userStore_userinfo: "userinfo",
       }),
     },
-    data() {
-      return {};
-    },
-    methods: {
-      goToPath() {
-        this.$router.push({
-          path: "/myClass/course",
-          query: {
-            keyword: "",
-            pageCurrent: 1,
-            order: "",
-          },
-        });
-      },
-      // 코스 상세 조회
-      async getCourseDetail() {
-        const data = {
-          action: "get_session_info",
-          session_id: this.$route.query.id,
-        };
-        await this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("코스상세:", result.data.data);
-            this.detail = result.data.data;
-          });
-      },
-    },
+  })
+  export default class CourseDetail extends Mixin {
+    couseIsFreeModal = false;
+    userStore_userinfo!: { [key: string]: any };
+    test() {
+      this.couseIsFreeModal = true;
+      this.$confirmMessage("코스 구매 신청이 완료되었습니다.");
+    }
+    isPurchase(): void {
+      this.$store.commit("toggleStore/Toggle", {
+        purchase_apply: true,
+      });
+    }
+    goToPath(): void {
+      this.$router.push({
+        path: "/myClass/course",
+        query: {
+          keyword: "",
+          pageCurrent: 1,
+          order: "",
+          view:
+            this.$route.query.view === undefined
+              ? this.userStore_userinfo.info.status == 1
+                ? "teacher"
+                : "student"
+              : this.$route.query.view,
+        },
+      });
+    }
     created() {
       if (this.$cookies.get("user_info") != null) {
         this.isSubscribe();
       }
-      this.getCourseDetail();
-    },
-  };
+      this.getDetail("get_session_info");
+    }
+  }
 </script>
 <style scoped lang="scss">
+  ::v-deep .course-modal {
+    .btn_wrap {
+      text-align: center;
+    }
+  }
   .update_noti {
     padding: 15px 4.445%;
     background: #f8f8f8;
@@ -369,11 +433,11 @@
     border-bottom: 4px solid #f8f8f8;
     .lecture_title {
       .sub_title {
-        font-size: 12px;
+        font-size: 14px;
         color: #999999;
       }
       .title {
-        font-size: 16px;
+        font-size: 18px;
         color: #333333;
       }
     }
@@ -484,6 +548,7 @@
           text-align: center;
         }
         .add_btn {
+          border-right: 1px solid #ccc;
           background: #333333
             url("~@/assets/images/lec_detail/fixed_lecture_add_ico.png")
             no-repeat center / 28px 27px;
@@ -508,13 +573,35 @@
     padding: 4.445%;
     border-bottom: 4px solid #f8f8f8;
     .user_intro {
+      font-size: 14px;
       .total_lec {
         margin-bottom: 7px;
         display: block;
       }
+      .ol_list {
+        .limit-date {
+          color: #999999;
+        }
+      }
     }
     .name {
       font-size: 14px;
+    }
+  }
+  .section3 {
+    padding: 4.445%;
+    border-bottom: 4px solid #f8f8f8;
+    .title {
+      font-size: 18px;
+      display: inline;
+      background: linear-gradient(#ffffff 60%, rgba(94, 244, 255, 0.34) 40%);
+    }
+    .description_contents {
+      margin-top: 10px;
+      color: #666666;
+      font-size: 14px;
+      text-align: justify;
+      font-family: "NotoSansCJKkr-Regular";
     }
   }
   .add_share {
@@ -551,7 +638,7 @@
   .course_info {
     padding: 4.445%;
     .course_list {
-      font-size: 2rem;
+      font-size: 18px;
       position: relative;
       .all_lecture_num {
         font-size: 14px;
@@ -567,7 +654,7 @@
       // width: 48.782%;
       margin-top: 5%;
       .title {
-        font-size: 1.6875rem;
+        font-size: 18px;
       }
       ::v-deep .item {
         h4 {
@@ -605,6 +692,7 @@
           }
         }
         .confirm_btn {
+          width: 100%;
           ::v-deep button {
             background: white;
             color: #114fff;
@@ -617,11 +705,10 @@
     margin-top: 30px;
     padding: 0 4.445%;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
     }
     .section_wrap {
       margin-top: 10px;
-
       .left_sec {
         width: 41%;
         text-align: center;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="list_wrap" v-if="list">
     <div class="filter">
       <Search>
         <select
@@ -9,14 +9,14 @@
           @change="getList(1, order, keyword)"
         >
           <option value="">전체</option>
-          <option value="success">결제완료</option>
-          <option value="refund">환불완료</option>
+          <option value="pay">결제완료</option>
+          <option value="refund">취소완료</option>
           <option value="cancel">취소신청</option>
         </select>
         <input
           slot="slot_input"
           class="search_contents"
-          placeholder="강의명을 검색하세요."
+          placeholder="검색어 입력"
           :value="keyword"
           v-on:input="keyword = $event.target.value"
         />
@@ -28,7 +28,10 @@
       </Search>
       <DatePicker @emitDatePick="datePick"></DatePicker>
     </div>
-    <Row v-for="(li, index) in list.list" :key="index">
+    <p class="no_result" v-if="list.list.length == 0">
+      구매 내역 리스트가 없습니다.
+    </p>
+    <Row v-for="(li, index) in list.list" :key="index" v-else>
       <template slot="row">
         <div class="row contain_btn">
           <h2 class="date">
@@ -46,9 +49,7 @@
           </BaseButton>
         </div>
         <div class="row">
-          <span class="dt lec" v-if="li.type == 'course'">강의</span>
-          <span class="dt course" v-else>코스</span>
-          <span class="dd">{{ li.product_name }}</span>
+          <span class="dt product-name" v-html="li.product_name"></span>
         </div>
         <div class="row">
           <span class="dt">강의 비용</span>
@@ -60,16 +61,19 @@
         </div>
         <div class="row">
           <span class="dt">결제 금액</span>
-          <span class="dd">{{ li.price.format_final }}원</span>
+          <span class="dd final-price">{{ li.price.format_final }}원</span>
         </div>
         <div class="row">
-          <span class="status" v-if="li.status == 'success'">결제완료</span>
+          <span class="dt">상태</span>
+          <span class="dd">{{ li.status }}</span>
+        </div>
+        <div class="row">
+          <span class="status" v-if="li.status == 'pay'">결제완료</span>
           <span class="status" v-else-if="li.status == 'refund'">환불완료</span>
           <span class="status" v-else-if="li.status == 'cancel'">취소신청</span>
         </div>
       </template>
     </Row>
-
     <Pagination>
       <template slot="paging">
         <li
@@ -91,11 +95,11 @@
   </div>
 </template>
 <script lang="ts">
-  import BaseButton from "@/components/common/BaseButton.vue";
-  import Search from "@/components/common/Search.vue";
   import DatePicker from "@/components/common/DatePicker.vue";
-  import Pagination from "@/components/common/Pagination.vue";
+  import Search from "@/components/common/Search.vue";
   import Row from "@/components/common/Row.vue";
+  import BaseButton from "@/components/common/BaseButton.vue";
+  import Pagination from "@/components/common/Pagination.vue";
   import { Vue, Component } from "vue-property-decorator";
   interface BodyData {
     action: string;
@@ -109,12 +113,13 @@
     components: { BaseButton, Search, DatePicker, Pagination, Row },
   })
   export default class List extends Vue {
-    $dateFormat!: Function;
-    keyword = "";
-    order = "";
-    current = 1;
-    list = "";
-    datePick(result: [object, object]): void {
+    private $dateFormat!: Function;
+    private keyword = "";
+    private order = "";
+    private current = 1;
+    private list = "";
+    private datePick(result: [object, object]): void {
+      console.log(result);
       this.$router
         .push({
           query: {
@@ -133,19 +138,25 @@
         this.$route.query.keyword as string
       );
     }
-    getList(num: number, order: string, keyword: string): void {
+    private getList(num: number, order: string, keyword: string): void {
       const data: BodyData = {
         action: "order_list",
         current: num,
         keyword: keyword,
         search_status: order,
-        search_start_date: this.$route.query.start_date as string,
-        search_end_date: this.$route.query.end_date as string,
+        search_start_date:
+          this.$route.query.start_date == undefined
+            ? ""
+            : (this.$route.query.start_date as string),
+        search_end_date:
+          this.$route.query.end_date == undefined
+            ? ""
+            : (this.$route.query.end_date as string),
       };
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
           console.log(result);
           this.list = result.data.data;
           this.$router
@@ -175,17 +186,38 @@
   }
 </script>
 <style scoped lang="scss">
-  .filter {
-    padding: 0 4.445%;
-    .box {
+  .list_wrap {
+    padding: 0 16px;
+    .filter {
+      .box {
+        margin-top: 15px;
+      }
+      .search {
+        margin-top: 0;
+      }
+    }
+    .no_result {
+      text-align: center;
+      font-size: 16px;
       margin-top: 15px;
     }
-  }
-  .li {
-    padding: 4.445%;
-    border-bottom: 4px solid #f8f8f8;
-    .contain_btn {
-      margin-bottom: 10px;
+    .li {
+      padding: 4.445% 0;
+      border-bottom: 4px solid #f8f8f8;
+      .contain_btn {
+        margin-bottom: 10px;
+      }
+      .row {
+        .blue_btn {
+          width: 55%;
+        }
+        .final-price {
+          font-weight: bold;
+        }
+        .product-name {
+          font-weight: bold;
+        }
+      }
     }
   }
 </style>

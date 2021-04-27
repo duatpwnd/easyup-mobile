@@ -170,30 +170,33 @@
     comment = "";
     view = 4;
     toggle(modify: string): void {
+      const eventObj = event as { [key: string]: any };
       if (
-        event!["path"][2].nextElementSibling.nextElementSibling.style.display ==
-        "none"
+        eventObj["path"][2].nextElementSibling.nextElementSibling.style
+          .display == "none"
       ) {
-        event!["path"][2].nextElementSibling.nextElementSibling.style.display =
-          "block";
+        eventObj[
+          "path"
+        ][2].nextElementSibling.nextElementSibling.style.display = "block";
         if (modify != undefined) {
-          event![
+          eventObj[
             "path"
-          ][2].nextElementSibling.nextElementSibling.children[0].value = event![
-            "path"
-          ][2].nextElementSibling.innerText;
+          ][2].nextElementSibling.nextElementSibling.children[0].value =
+            eventObj["path"][2].nextElementSibling.innerText;
         }
       } else {
-        event!["path"][2].nextElementSibling.nextElementSibling.style.display =
-          "none";
+        eventObj[
+          "path"
+        ][2].nextElementSibling.nextElementSibling.style.display = "none";
       }
     }
     // 토글 일부취소
     private toggle_cancel(): void {
-      if (event!["path"][3].style.display == "none") {
-        event!["path"][3].style.display = "block";
+      const eventObj = event as { [key: string]: any };
+      if (eventObj["path"][3].style.display == "none") {
+        eventObj["path"][3].style.display = "block";
       } else {
-        event!["path"][3].style.display = "none";
+        eventObj["path"][3].style.display = "none";
       }
     }
     private toggleOff(): void {
@@ -221,7 +224,7 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-        .then((result: any) => {
+        .then((result: { [key: string]: any }) => {
           console.log("댓글삭제", result);
           if (result.data.error != true) {
             this.$noticeMessage(result.data.data.msg);
@@ -238,7 +241,7 @@
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result: any) => {
+        .then((result: { [key: string]: any }) => {
           console.log("답글등록ddd", result);
           if (result.data.error != true) {
             this.$noticeMessage(result.data.data.msg);
@@ -251,16 +254,17 @@
       // this.write_cancel();
     }
     // 답글 수정
-    reply_comment_modify(index: number, num: number) {
+    reply_comment_modify(index: number, num: number): void {
+      const eventObj = event as { [key: string]: any };
       const obj: Data = {
         action: "modify_comment",
         review_comment_id: index,
-        contents: event!["path"][3].children[0].value.trim(),
+        contents: eventObj["path"][3].children[0].value.trim(),
       };
       console.log("수정:", obj);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-        .then((result: any) => {
+        .then((result: { [key: string]: any }) => {
           if (result.data.error != true) {
             this.$noticeMessage(result.data.data.msg);
             this.toggleOff();
@@ -269,14 +273,14 @@
         });
     }
     // 답글 삭제
-    reply_comment_del(index: number) {
+    reply_comment_del(index: number): void {
       const obj: Data = {
         action: "delete_comment",
         review_comment_id: index,
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-        .then((result: any) => {
+        .then((result: { [key: string]: any }) => {
           this.getCommentList();
         });
     }
@@ -284,14 +288,14 @@
     //   this.editor = -1;
     // }
     // 각별점 개수 필터링
-    scoreCount(result: number) {
+    scoreCount(result: number): number {
       const filter = Array.prototype.filter.call(this.comment, (el, index) => {
         return el.reviews.score == result;
       });
       return filter.length;
     }
     // 더많은 평가 보기
-    moreView() {
+    moreView(): void {
       this.view = this.comment.length;
       // const data = {
       //   action: "list_more",
@@ -305,11 +309,11 @@
       //   });
     }
     // 강의평가 조회
-    getCommentList() {
+    getCommentList(): void {
       const data = this.action;
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result: any) => {
+        .then((result: { [key: string]: any }) => {
           console.log(result.data.data);
           this.comment = result.data.data;
           const score = {

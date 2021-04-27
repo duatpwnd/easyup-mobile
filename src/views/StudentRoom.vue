@@ -1,31 +1,36 @@
 <template>
   <div id="my_lecture" v-if="dashboard_list">
     <Profile
-      v-show="profile_modal"
+      v-if="profile_modal"
       @profileModalClose="profile_modal = false"
     ></Profile>
     <UserInfo v-if="top_count">
       <span slot="user_name" class="name"
-        >{{ userStore_userinfo.info.username }}
-      </span>
+        >{{ userStore_userinfo.info.username }}님의 강의실</span
+      >
       <p slot="user_email" class="email">
         {{ userStore_userinfo.info.email }}
       </p>
-      <template slot="convert"> </template>
-      <span
+      <template
         slot="convert"
-        v-if="$route.query.view == 'student'"
-        @click="convert('teacher')"
-        class="convert"
-        >강사전환</span
+        v-if="
+          $route.query.view == 'teacher' || userStore_userinfo.info.status == 1
+        "
       >
-      <template v-else slot="convert">
         <span class="report" @click="profile_modal = true">프로필</span>
-        <span class="convert" @click="convert('student')">학생전환</span>
+        <span
+          class="convert"
+          @click="convert('student')"
+          v-if="$route.query.view == 'teacher'"
+          >학생전환</span
+        >
+        <span slot="convert" @click="convert('teacher')" v-else class="convert"
+          >강사전환</span
+        >
       </template>
-      <p class="update_date" slot="update_date">
+      <!-- <p class="update_date" slot="update_date">
         최근 접속일: {{ userStore_userinfo.info.last_login }}
-      </p>
+      </p> -->
       <template slot="info">
         <li>
           <h3>진행중인 강의</h3>
@@ -67,13 +72,15 @@
           class="td td1"
           slot="td1"
           @click="
-            $router.push({
-              path: '/play',
-              query: {
-                course_id: list.id,
-                lp_id: list.lp_id,
-              },
-            })
+            list.status == 'ing'
+              ? $router.push({
+                  path: '/play',
+                  query: {
+                    course_id: list.id,
+                    lp_id: list.lp_id,
+                  },
+                })
+              : ''
           "
         >
           {{ list.title }}
@@ -180,14 +187,15 @@
     </div>
   </div>
 </template>
-<script>
-  import TimeLine from "@/components/my_lecture_room/TimeLine.vue";
-  import List from "@/components/my_lecture_room/list.vue";
-  import UserInfo from "@/components/my_lecture_room/user_info.vue";
-  import ProgressBar from "@/components/common/ProgressBar.vue";
+<script lang="ts">
   import Profile from "@/components/modal/Profile.vue";
+  import UserInfo from "@/components/my_lecture_room/user_info.vue";
+  import List from "@/components/my_lecture_room/list.vue";
+  import ProgressBar from "@/components/common/ProgressBar.vue";
+  import TimeLine from "@/components/my_lecture_room/TimeLine.vue";
   import { mapState, mapMutations } from "vuex";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       Profile,
       TimeLine,
@@ -200,55 +208,40 @@
         userStore_userinfo: "userinfo",
       }),
     },
-    data() {
-      return {
-        profile_modal: false,
-        top_count: "",
-        dashboard_list: "",
+  })
+  export default class MyLectureRoom extends Vue {
+    profile_modal = false;
+    top_count = "";
+    dashboard_list = "";
+    convert(type: string): void {
+      this.$router
+        .push({
+          query: {
+            view: type,
+          },
+        })
+        .catch(() => {});
+    }
+    getMyLecture(action: string): void {
+      const obj = {
+        action: action,
       };
-    },
-    methods: {
-      convert(type) {
-        console.log(type);
-        this.$router
-          .push({
-            query: {
-              view: type,
-            },
-          })
-          .catch(() => {});
-        // 학생전환 강사전환
-        // this.$EventBus.$emit("typeConversion", true);
-        // let userinfo = this.userStore_userinfo;
-        // if (type == "student") {
-        //   userinfo.info.status = 5;
-        // } else {
-        //   userinfo.info.status = 1;
-        // }
-        // this.$store.commit("userStore/loginToken", this.userStore_userinfo);
-      },
-
-      getMyLecture(action) {
-        const obj = {
-          action: action,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-          .then((result) => {
-            console.log(result);
-            if (action == "get_top_count") {
-              this.top_count = result.data.data;
-            } else {
-              this.dashboard_list = result.data.data;
-            }
-          });
-      },
-    },
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          if (action == "get_top_count") {
+            this.top_count = result.data.data;
+          } else {
+            this.dashboard_list = result.data.data;
+          }
+        });
+    }
     created() {
       this.getMyLecture("get_top_count");
       this.getMyLecture("get_dashboard_list");
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   #my_lecture {
@@ -256,8 +249,10 @@
   }
   .contents {
     padding: 4.445%;
+    padding-top: 0;
+    margin-top: 20px;
     h2 {
-      font-size: 2rem;
+      font-size: 18px;
       &:not(:first-child) {
         margin-top: 20px;
       }
@@ -269,14 +264,14 @@
     }
     .subscribed_lec {
       .td_wrap {
-        width: 37%;
+        width: 40%;
         text-align: right;
         vertical-align: middle;
         display: inline-block;
         ::v-deep .progress_bar {
-          width: 55%;
+          width: 45%;
+          margin: 0;
           margin-left: 5px;
-          margin-right: 0;
           height: 16px;
           position: relative;
           border: 1px solid #cacaca;

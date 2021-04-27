@@ -2,36 +2,42 @@
   <Search>
     <select slot="option" class="select" v-model="order" @change="search()">
       <option value="">전체</option>
-      <option value="success">결제완료</option>
-      <option value="refund">환불완료</option>
+      <option value="pay">결제완료</option>
+      <option value="refund">취소완료</option>
     </select>
     <input
       slot="slot_input"
       class="search_contents"
-      placeholder="강의명을 검색하세요."
+      placeholder="검색어 입력"
       :value="keyword"
       v-on:input="keyword = $event.target.value"/>
     <button slot="search_btn" class="search_btn" @click="search()"></button
   ></Search>
 </template>
-<script>
+<script lang="ts">
   import Search from "@/components/common/Search.vue";
-
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       Search,
     },
-    data() {
-      return { order: "", keyword: "" };
-    },
-    methods: {
-      search() {
-        this.$EventBus.$emit(`search`, {
-          order: this.order,
-          keyword: this.keyword,
-        });
-      },
-    },
-  };
+  })
+  export default class SearchClass extends Vue {
+    order = "";
+    keyword = "";
+    search(): void {
+      this.$EventBus.$emit(`search`, {
+        order: this.order,
+        keyword: this.keyword,
+      });
+    }
+  }
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .select {
+    height: 42px;
+  }
+  .search_contents {
+    height: 42px;
+  }
+</style>

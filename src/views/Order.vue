@@ -16,6 +16,12 @@
           class="thumb"
           :alt="li.title"
           :title="li.title"
+          @click="
+            $router.push({
+              path: li.type == 'course' ? '/lecDetail' : '/courseDetail',
+              query: { id: li.id },
+            })
+          "
         />
       </template>
       <template slot="info">
@@ -24,7 +30,11 @@
             {{ li.title }}
           </h2>
           <div class="price">
-            <del class="final_price">{{ li.price.format_original }}</del>
+            <del
+              class="final_price"
+              v-if="li.price.format_original != li.price.format_final"
+              >{{ li.price.format_original }}</del
+            >
             <span class="ori_price">{{ li.price.format_final }}</span>
           </div>
           <div>
@@ -57,7 +67,7 @@
         <div class="row ">
           <span class="dt">강의 할인</span>
           <span class="dd"
-            >-{{
+            >{{
               list.info.calculate_price_info.format_sum_discount_course
             }}원</span
           >
@@ -65,9 +75,18 @@
         <div class="row ">
           <span class="dt">코스 할인</span>
           <span class="dd"
-            >-{{
+            >{{
               list.info.calculate_price_info.format_sum_discount_session
             }}원</span
+          >
+        </div>
+        <div
+          class="row "
+          v-if="list.info.calculate_price_info.format_purchased_price != 0"
+        >
+          <span class="dt">이미 구매한 강의</span>
+          <span class="dd"
+            >{{ list.info.calculate_price_info.format_purchased_price }}원</span
           >
         </div>
         <!-- <div class="row line contain_btn">
@@ -97,7 +116,6 @@
         </div>
       </template>
     </Row>
-
     <div class="btn_wrap">
       <h2>결제 수단</h2>
       <div class="payMethod">
@@ -117,14 +135,14 @@
             무통장 입금
           </button>
         </BaseButton>
-        <BaseButton
+        <!-- <BaseButton
           @click.native="payMethod = '0000010000'"
           :class="{ active: payMethod == '0000010000' }"
         >
           <button slot="blue_btn">
             휴대폰 결제
           </button>
-        </BaseButton>
+        </BaseButton> -->
       </div>
     </div>
     <div class="isAgree">
@@ -177,24 +195,24 @@
   </div>
 </template>
 <script lang="ts">
-  import Row from "@/components/common/Row.vue";
-  import BaseButton from "@/components/common/BaseButton.vue";
-  import LectureCourseList from "@/components/common/LectureCourseList.vue";
-  import MyCoupon from "@/components/modal/MyCoupon.vue";
-  import CheckBox from "@/components/common/BaseCheckBox.vue";
-  import Policy from "@/views/Policy.vue";
   import Terms from "@/components/policy/Terms.vue";
   import Privacy from "@/components/policy/Privacy.vue";
+  import LectureCourseList from "@/components/common/LectureCourseList.vue";
+  import BaseButton from "@/components/common/BaseButton.vue";
+  import Policy from "@/views/Policy.vue";
+  import CheckBox from "@/components/common/BaseCheckBox.vue";
+  import Row from "@/components/common/Row.vue";
   import OrderForm from "@/components/order/OrderForm.vue";
+  import MyCoupon from "@/components/modal/MyCoupon.vue";
   import { Vue, Component } from "vue-property-decorator";
   @Component({
     components: {
       Policy,
       CheckBox,
       MyCoupon,
+      LectureCourseList,
       Row,
       BaseButton,
-      LectureCourseList,
       Terms,
       Privacy,
       OrderForm,
@@ -245,12 +263,12 @@
       console.log("결제하기 리스트 데이터:", data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
           console.log("결제하기 리스트 결과:", result);
           this.list = result.data.data;
         });
     }
-    _pay(_frm): void {
+    _pay(_frm: HTMLFormElement): void {
       if (this.isAgree == false) {
         this.$noticeMessage(
           "구매조건 확인 및 결제대행 서비스 약관에 동의해주세요"
@@ -364,7 +382,7 @@
     .payMethod {
       .blue_btn {
         display: inline-block;
-        width: 32.666%;
+        width: 49.5%;
         &:not(:last-child) {
           margin-right: 1%;
         }

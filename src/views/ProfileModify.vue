@@ -132,20 +132,12 @@
             new_password_confirm: this.new_password_confirm,
             picture: this.file_obj,
           };
-          for (var key in data) {
-            formData.append(key, data[key]);
+          for (let key in data) {
+            formData.append(key, data[key as never]);
           }
-
           this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, formData, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: this.$cookies.get("user_info")
-                  ? "Bearer " + this.$cookies.get("user_info").access_token
-                  : null,
-              },
-            })
-            .then((result) => {
+            .post(this.$ApiUrl.mobileAPI_v1, formData)
+            .then((result: { [key: string]: any }) => {
               console.log(result);
               if (result.data.error) {
                 this.$noticeMessage(result.data.message);
@@ -169,6 +161,7 @@
 <style scoped lang="scss">
   #profile_modify {
     padding: 4.445%;
+    padding-bottom: 65px;
     .blue_btn {
       margin-top: 5%;
     }

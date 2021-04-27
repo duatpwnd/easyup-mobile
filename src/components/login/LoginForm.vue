@@ -28,11 +28,11 @@
       >
     </div>
     <div class="lec_course">
-      <button class="lec" @click="goToLecture()">
+      <button class="lec arrow" @click="goToLecture()">
         강의
       </button>
       <button
-        class="course"
+        class="course arrow"
         @click="
           $router.push({
             path: '/course',
@@ -50,6 +50,26 @@
         "
       >
         코스
+      </button>
+      <button
+        class="blog"
+        @click="
+          $router
+            .push({
+              path: '/techBlog',
+              query: {
+                pageCurrent: 1,
+                keyword: '',
+              },
+            })
+            .catch(() => {});
+          $store.commit('toggleStore/Toggle', {
+            login_modal: false,
+            mask: false,
+          });
+        "
+      >
+        이지채널
       </button>
     </div>
     <div class="support">
@@ -118,25 +138,26 @@
     },
   })
   export default class LoginForm extends Vue {
-    userid = "";
-    userpw = "";
-    userStore_referer!: string;
-    goToLecture() {
+    private userid = "";
+    private userpw = "";
+    private userStore_referer!: string;
+    private goToLecture(): void {
       this.$EventBus.$emit("GoToLecture", true);
     }
-    goToPath(url: string): void {
+    private goToPath(url: string): void {
       this.$router.push(url).catch(() => {});
       this.$store.commit("toggleStore/Toggle", {
         login_modal: false,
         mask: false,
       });
     }
-    login(): void {
+    private login(): void {
       const data = {
         action: "login",
         userid: this.userid,
         userpw: this.userpw,
       };
+
       if (this.userid.trim().length == 0 || this.userpw.trim().length == 0) {
         this.$noticeMessage("아이디 또는 비밀번호를 입력해주세요");
       } else {
@@ -146,17 +167,13 @@
             (result: {
               data: { error: boolean; message: string; data: object[] };
             }) => {
-              console.log(result);
               if (result.data.error) {
                 this.$noticeMessage(result.data.message);
               } else {
                 this.$cookies.set("user_info", result.data.data[0]);
                 this.$store.commit("userStore/loginToken", result.data.data[0]);
+
                 // 마지막 로그아웃 시점url이 있을경우
-                console.log(
-                  "★★★★★★★★★★마지막 URL:★★★★★★★★★★★★★",
-                  this.userStore_referer
-                );
                 if (this.userStore_referer != "") {
                   this.$router.push(this.userStore_referer).catch(() => {});
                 }
@@ -165,7 +182,6 @@
           );
       }
     }
-    mounted() {}
     created() {
       this.$EventBus.$on(
         "login from signUpComplete",
@@ -208,7 +224,6 @@
         font-size: 1.5rem;
         padding: 5px 10px;
       }
-
       .user_pw {
         margin: 10px 0;
       }
@@ -222,12 +237,17 @@
         width: 100%;
         font-size: 1.5rem;
         font-family: "NotoSansCJKkr-Regular";
-        background: url("~@/assets/images/common/right_arrow.png") no-repeat
-          right center / 3%;
       }
       .course {
         @extend .lec;
         margin-top: 4%;
+      }
+      .arrow {
+        background: url("~@/assets/images/common/right_arrow.png") no-repeat
+          right center / 3%;
+      }
+      .blog {
+        @extend .course;
       }
     }
     .support {
@@ -240,8 +260,6 @@
         text-align: left;
         font-size: 1.5rem;
         display: block;
-        background: url("~@/assets/images/common/right_arrow.png") no-repeat
-          right center / 3%;
       }
       .faq_btn {
         margin: 4% 0;

@@ -2,9 +2,10 @@
   <div id="lec_list">
     <div class="breadcrumb">
       <span v-if="$route.query.title || $route.query.tag"
-        >강의 >{{ $route.query.title }}{{ $route.query.tag }}</span
+        >{{ $route.meta.title }} > {{ $route.query.title
+        }}{{ $route.query.tag }}</span
       >
-      <span v-else>강의 > 전체</span>
+      <span v-else>{{ $route.meta.title }} > 전체</span>
     </div>
     <Search>
       <select
@@ -39,6 +40,7 @@
         class="li"
         v-for="(list, index) in category_list.list"
         :key="index"
+        :style="[{ 'margin-top': index > 1 ? '24px' : 0 }]"
         @click="
           $router.push({
             path: $route.name == 'course' ? '/courseDetail' : '/lecDetail',
@@ -50,16 +52,20 @@
       >
         <LecItem>
           <span class="lec_list" slot="router">
-            <img :src="list.thumbnail" alt="이지업" title="이지업" />
+            <img :src="list.thumbnail" :alt="list.title" :title="list.title" />
           </span>
           <h4 slot="teacher">{{ list.teacher }}</h4>
-          <h2 class="subtitle" slot="subtitle">{{ list.title }}</h2>
+          <h2 class="subtitle" slot="subtitle" v-html="list.title"></h2>
           <span slot="grade" class="score">{{ list.rating }}</span>
           <h1 class="free" slot="free" v-if="list.price.is_free">
             FREE
           </h1>
           <span class="price" v-else slot="free">
-            <del class="original">{{ list.price.format_original }}</del>
+            <del
+              class="original"
+              v-if="list.price.format_original != list.price.format_final"
+              >{{ list.price.format_original }}</del
+            >
             <span class="final">{{ list.price.format_final }}</span>
           </span>
         </LecItem>
@@ -87,81 +93,77 @@
     </Pagination>
   </div>
 </template>
-<script>
-  import Pagination from "@/components/common/Pagination.vue";
+<script lang="ts">
   import Search from "@/components/common/Search.vue";
   import LecItem from "@/components/common/LectureItem.vue";
-  export default {
+  import Pagination from "@/components/common/Pagination.vue";
+  import { Vue, Watch, Component } from "vue-property-decorator";
+  @Component({
     components: {
       Pagination,
-
       LecItem,
       Search,
     },
-    data() {
-      return {
-        current: "", //현재번호
-        order: "",
-        keyword: "",
-        category_list: "",
+  })
+  export default class LectureList extends Vue {
+    current = 1; //현재번호
+    order = "";
+    keyword = "";
+    category_list = "";
+    @Watch("$route")
+    onPropertyChanged(
+      to: { [key: string]: any },
+      from: { [key: string]: any }
+    ): void {
+      if (to.query.category_code != from.query.category_code) {
+        this.getList(
+          this.$route.query.pageCurrent,
+          this.$route.query.order,
+          this.$route.query.keyword
+        );
+      }
+    }
+    getList(num: number, order: string, keyword: string): void {
+      const data = {
+        action: this.$route.query.action,
+        current: num,
+        order: order,
+        keyword: keyword,
+        category_code: this.$route.query.category_code
+          ? this.$route.query.category_code
+          : null,
+        tag: this.$route.query.tag,
       };
-    },
-    methods: {
-      async getList(num, order, keyword) {
-        const data = {
-          action: this.$route.query.action,
-          current: num,
-          order: order,
-          keyword: keyword,
-          category_code: this.$route.query.category_code
-            ? this.$route.query.category_code
-            : null,
-          tag: this.$route.query.tag,
-        };
-        this.order = order;
-        this.keyword = keyword;
-        this.current = num;
-
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log(result);
-            this.category_list = result.data.data;
-            this.$router
-              .push({
-                query: {
-                  action: this.$route.query.action,
-                  pageCurrent: num,
-                  order: order,
-                  keyword: keyword,
-                  category_code: this.$route.query.category_code,
-                  tag: this.$route.query.tag,
-                },
-              })
-              .catch(() => {});
-          });
-      },
-    },
-    watch: {
-      $route(to, from) {
-        console.log(to, from);
-        if (to.query.category_code != from.query.category_code) {
-          this.getList(
-            this.$route.query.pageCurrent,
-            this.$route.query.order,
-            this.$route.query.keyword
-          );
-        }
-      },
-    },
+      this.order = order;
+      this.keyword = keyword;
+      this.current = num;
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          this.category_list = result.data.data;
+          this.$router
+            .push({
+              query: {
+                action: this.$route.query.action,
+                pageCurrent: num,
+                order: order,
+                keyword: keyword,
+                category_code: this.$route.query.category_code,
+                tag: this.$route.query.tag,
+              },
+            })
+            .catch(() => {});
+        });
+    }
     created() {
       this.getList(
         this.$route.query.pageCurrent,
         this.$route.query.order,
         this.$route.query.keyword
       );
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   #lec_list {
@@ -186,7 +188,7 @@
       }
     }
     .lec_list_wrap {
-      margin-top: 3%;
+      margin-top: 24px;
       &:after {
         display: block;
         clear: both;
@@ -195,7 +197,6 @@
       .li {
         float: left;
         width: 48.782%;
-        margin-top: 24px;
         &:nth-child(odd) {
           margin-right: 2.436%;
         }

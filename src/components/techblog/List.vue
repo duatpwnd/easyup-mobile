@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="blog-li">
     <slot name="contents">
       <img src="@/assets/images/common/thumbnail1.png" alt="" />
       <h2 class="title">DB분산처리를 위한 Sharding</h2>
@@ -9,27 +9,37 @@
   </div>
 </template>
 <script>
-export default {
-  components: {},
-  data() {
-    return {};
-  },
-  methods: {}
-};
+  export default {
+    components: {},
+    data() {
+      return {};
+    },
+    methods: {},
+  };
 </script>
 <style scoped lang="scss">
-.title {
-  font-size: 1.6875rem;
-  color: #333333;
-  margin-top: 10px;
-}
-.brief {
-  color: #666666;
-  font-size: 1.25rem;
-  margin: 5px 0;
-}
-.date {
-  color: #999999;
-  font-size: 1.125rem;
-}
+  .title {
+    font-size: 14px;
+    color: #333333;
+    margin-top: 10px;
+    line-height: 19px;
+    height: 38px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    word-break: break-all;
+    -webkit-line-clamp: 2;
+  }
+  .brief {
+    color: #666666;
+    font-size: 1.25rem;
+    margin: 5px 0;
+  }
+  .date {
+    color: #999999;
+    font-size: 14px;
+    text-align: right;
+  }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="read" v-if="list">
+  <div class="read" v-if="Object.keys(list).length > 0">
     <div class="contents_wrap">
       <div class="head">
         <h2>{{ list.info.title }}</h2>
@@ -56,76 +56,73 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
   import CommentWrap from "@/components/techblog/CommentWrap.vue";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       CommentWrap,
       BlueBtn,
     },
-    data() {
-      return {
-        editor: false,
-        write_btn: true,
-        list: "",
-        contents: "",
+  })
+  export default class Read extends Vue {
+    editor = false;
+    write_btn = true;
+    list: { [key: string]: any } = {};
+    contents = "";
+    write(): void {
+      this.editor = true;
+      this.write_btn = false;
+    }
+    write_cancel(): void {
+      this.editor = false;
+      this.write_btn = true;
+      this.contents = "";
+    }
+    comment_add(): void {
+      const data = {
+        action: "add_blog_comment",
+        id: this.list.info.id,
+        contents: this.contents.trim(),
       };
-    },
-    methods: {
-      write() {
-        this.editor = true;
-        this.write_btn = false;
-      },
-      write_cancel() {
-        this.editor = false;
-        this.write_btn = true;
-        this.contents = "";
-      },
-      comment_add() {
-        const data = {
-          action: "add_blog_comment",
-          id: this.list.info.id,
-          contents: this.contents.trim(),
-        };
-        console.log(data);
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("댓글등록", result);
-            if (result.data.error != true) {
-              this.view(this.$route.query.id);
-              this.write_cancel();
-            }
-          });
-      },
-      view(id) {
-        const data = {
-          action: "get_blog_info",
-          id: id,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            console.log("기술블로그읽기", result.data.data);
-            this.list = result.data.data;
-            this.$router
-              .push({
-                query: {
-                  id: id,
-                },
-              })
-              .catch(() => {});
-          });
-      },
-    },
+      console.log(data);
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log("댓글등록", result);
+          if (result.data.error != true) {
+            this.view(this.$route.query.id);
+            this.write_cancel();
+          }
+        });
+    }
+    view(id: number): void {
+      const data = {
+        action: "get_blog_info",
+        id: id,
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          console.log("기술블로그읽기", result.data.data);
+          this.list = result.data.data;
+          this.$router
+            .push({
+              query: {
+                id: id,
+              },
+            })
+            .catch(() => {});
+        });
+    }
     created() {
       this.view(this.$route.query.id);
       this.$EventBus.$on("techblog_list_reload", () => {
         this.view(this.$route.query.id);
       });
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .read {

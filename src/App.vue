@@ -26,7 +26,7 @@
     ></ProfileMsgTab> -->
   </div>
 </template>
-<script>
+<script lang="ts">
   import Header from "@/components/layout/Header.vue";
   import Footer from "@/components/layout/Footer.vue";
   import LoginModal from "@/components/login/LoginModal.vue";
@@ -35,7 +35,8 @@
   // import ProfileMsgTab from "@/components/layout/ProfileMsgTab.vue";
   import NoticeModal from "@/components/common/NoticeModal.vue";
   import { mapState } from "vuex";
-  export default {
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     components: {
       NoticeModal,
       // ProfileMsgTab,
@@ -58,18 +59,15 @@
         userStore_userinfo: "userinfo",
       }),
     },
-    data() {
-      return {};
-    },
-    methods: {
-      removeMask() {
-        this.$store.commit("toggleStore/Toggle", {
-          mask: false,
-          more_view: false,
-          login_modal: false,
-        });
-      },
-    },
+  })
+  export default class App extends Vue {
+    removeMask() {
+      this.$store.commit("toggleStore/Toggle", {
+        mask: false,
+        more_view: false,
+        login_modal: false,
+      });
+    }
     mounted() {
       // 가로모드 세로모드 감지
       window.addEventListener("resize", function() {
@@ -80,8 +78,8 @@
           // Landscape 모드일 때 실행할 스크립트
         }
       });
-    },
-  };
+    }
+  }
 </script>
 
 <style lang="scss">

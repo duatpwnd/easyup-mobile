@@ -15,6 +15,7 @@
           <input
             v-on:input="keyword = $event.target.value"
             class="search_input"
+            placeholder="이메일 주소"
             @keyup="search()"
           />
           <div class="icon-container" v-show="loading">
@@ -82,156 +83,156 @@
     </div>
   </div>
 </template>
-<script>
-  export default {
-    data() {
-      return {
-        view: "", // 답장정보
-        loading: false, //검색찾는동안 로딩
-        choice_active: -1, //선택된사람 active 걸어주기
-        title: "",
-        choice_list: [], // 선택된사람
-        received_list: [], // 받는사람 찾기
-        keyword: "", // 검색부분 v-model
-        file_obj: "", // 파일객체
-        search_result: false,
-        editorData: "", // 에디터 v-model
-        // editorConfig: {
-        //   // The configuration of the editor.
-        // },
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
+    components: {},
+  })
+  export default class NewMsg extends Vue {
+    $refs!: {
+      textarea: HTMLTextAreaElement;
+      upload: HTMLFormElement;
+    };
+    private view = ""; // 답장정보
+    private loading = false; //검색찾는동안 로딩
+    private choice_active = -1; //선택된사람 active 걸어주기
+    private title = "";
+    private choice_list: { [key: string]: any }[] = []; // 선택된사람
+    private received_list: { [key: string]: any }[] = []; // 받는사람 찾기
+    private keyword = ""; // 검색부분 v-model
+    private file_obj = ""; // 파일객체
+    private search_result = false;
+    private editorData = ""; // 에디터 v-model
+    private read(): void {
+      const data = {
+        action: "get_message_info",
+        id: this.$route.query.id,
+        type: "received",
       };
-    },
-    methods: {
-      read() {
-        const data = {
-          action: "get_message_info",
-          id: this.$route.query.id,
-          type: "received",
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            this.view = result.data.data.info;
-            this.title = "답 : " + result.data.data.info.title;
-            this.choice_list = [{ id: result.data.data.info.user_sender_id }];
-            this.editorData =
-              result.data.data.info.send_name +
-              " : " +
-              result.data.data.info.content;
-          });
-      },
-      // 선택된사람 다시 빼기
-      close(id) {
-        const find_item = this.choice_list.find((item) => {
-          return item.id === id;
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          this.view = result.data.data.info;
+          this.title = "답 : " + result.data.data.info.title;
+          this.choice_list = [{ id: result.data.data.info.user_sender_id }];
+          this.editorData =
+            result.data.data.info.send_name +
+            " : " +
+            result.data.data.info.content;
         });
-        const idx = this.choice_list.indexOf(find_item);
-        const result = this.choice_list.splice(idx, 1);
-      },
-      // 선택된사람
-      choice(list) {
-        this.choice_list.push(list);
-        this.choice_list = Array.from(new Set(this.choice_list));
-      },
-      search() {
-        this.search_result = false;
-        this.received_list = [];
-        const data = {
-          action: "find_user",
-          keyword: this.keyword,
-        };
-        if (this.keyword.length > 2) {
-          this.loading = true;
+    }
+    // 선택된사람 다시 빼기
+    private close(id: number): void {
+      const find_item: { [key: string]: any } = this.choice_list.find(
+        (item) => {
+          return item.id === id;
+        }
+      ) as object;
+      const idx = this.choice_list.indexOf(find_item);
+      const result = this.choice_list.splice(idx, 1);
+    }
+    // 선택된사람
+    private choice(list: { [key: string]: any }): void {
+      this.choice_list.push(list);
+      this.choice_list = Array.from(new Set(this.choice_list));
+    }
+    private search(): void {
+      this.search_result = false;
+      this.received_list = [];
+      const data = {
+        action: "find_user",
+        keyword: this.keyword,
+      };
+      if (this.keyword.length > 2) {
+        this.loading = true;
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result: { [key: string]: any }) => {
+            console.log(result);
+            this.loading = false;
+            if (result.data.data.items.length == 0) {
+              this.search_result = true;
+            } else {
+              this.received_list = result.data.data.items;
+            }
+          });
+      }
+    }
+    private send(): void {
+      this.validationCheck().then((result) => {
+        if (result == "success") {
+          const formData = new FormData();
+          const data = {
+            action: "send_message",
+            users: [] as number[],
+            title: this.title,
+            content: this.$refs.textarea.innerText.trim(),
+            attach_1: this.file_obj,
+          };
+          const map = this.choice_list.map((el, index) => {
+            return el.id;
+          });
+          data.users = map;
+          // 배열값이 배열이 빠진 문자만 들어가는현상 발생
+          for (let key in data) {
+            formData.append(key, data[key as never]);
+          }
           this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
+            .post(this.$ApiUrl.mobileAPI_v1, formData, {
               headers: {
+                "Content-Type": "multipart/form-data",
                 Authorization: this.$cookies.get("user_info")
                   ? "Bearer " + this.$cookies.get("user_info").access_token
                   : null,
               },
             })
-            .then((result) => {
+            .then((result: { [key: string]: any }) => {
               console.log(result);
-              this.loading = false;
-              if (result.data.data.items.length == 0) {
-                this.search_result = true;
+              if (result.data.error != true) {
+                if (result.data.data.fail == 0) {
+                  this.$router.push({
+                    path: "/msg/receivedList",
+                    query: {
+                      pageCurrent: 1,
+                      keyword: "",
+                      view: this.$route.query.view,
+                    },
+                  });
+                }
               } else {
-                this.received_list = result.data.data.items;
+                this.$noticeMessage(result.data.message);
               }
             });
         }
-      },
-      send() {
-        this.validationCheck().then((result) => {
-          if (result == "success") {
-            const formData = new FormData();
-            const data = {
-              action: "send_message",
-              users: [],
-              title: this.title,
-              content: this.$refs.textarea.innerText.trim(),
-              attach_1: this.file_obj,
-            };
-            const map = this.choice_list.map((el, index) => {
-              return el.id;
-            });
-            data.users = map;
-            // 배열값이 배열이 빠진 문자만 들어가는현상 발생
-            for (var key in data) {
-              formData.append(key, data[key]);
-            }
-            this.$axios
-              .post(this.$ApiUrl.mobileAPI_v1, formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                  Authorization: this.$cookies.get("user_info")
-                    ? "Bearer " + this.$cookies.get("user_info").access_token
-                    : null,
-                },
-              })
-              .then((result) => {
-                console.log(result);
-                if (result.data.error != true) {
-                  if (result.data.data.fail == 0) {
-                    this.$router.push({
-                      path: "/msg/receivedList",
-                      query: {
-                        pageCurrent: 1,
-                        keyword: "",
-                        view: this.$route.query.view,
-                      },
-                    });
-                  }
-                } else {
-                  this.$noticeMessage(result.data.message);
-                }
-              });
-          }
-        });
-      },
-      fileSelect() {
-        const selected_file = this.$refs.upload.files[0];
-        this.file_obj = selected_file;
-      },
-      validationCheck() {
-        return new Promise((resolve, reject) => {
-          if (this.choice_list.length == 0) {
-            this.$noticeMessage("받는분을 입력하세요");
-          } else if (this.title.trim().length == 0) {
-            this.$noticeMessage("제목을 입력하세요");
-          } else {
-            resolve("success");
-          }
-        });
-      },
-    },
+      });
+    }
+    private fileSelect(): void {
+      const selected_file = this.$refs.upload.files[0];
+      this.file_obj = selected_file;
+    }
+    private validationCheck(): Promise<string> {
+      return new Promise((resolve, reject) => {
+        if (this.choice_list.length == 0) {
+          this.$noticeMessage("받는분을 입력하세요");
+        } else if (this.title.trim().length == 0) {
+          this.$noticeMessage("제목을 입력하세요");
+        } else {
+          resolve("success");
+        }
+      });
+    }
     created() {
-      console.log(this.$route.query.id);
       if (this.$route.query.id != undefined) {
         this.read();
       }
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .msg_send {
@@ -254,6 +255,8 @@
       li {
         font-size: 1.5rem;
         padding: 2%;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .active {
         background: #114fff;
@@ -330,6 +333,10 @@
             width: 80%;
             padding: 0;
             outline: none;
+            &::placeholder {
+              padding-left: 3px;
+              font-size: 14px;
+            }
           }
         }
         .selected_list {

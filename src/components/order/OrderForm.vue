@@ -11,7 +11,7 @@
       name="sndStoreid"
       size="10"
       maxlength="10"
-      value="2999199999"
+      :value="sndStoreid"
     />
     <!-- 화폐단위 -->
     <input
@@ -95,9 +95,9 @@
     <!--에스크로적용여부-- 0: 적용안함, 1: 적용함 -->
     <input type="hidden" name="sndEscrow" value="0" />
     <!-- 마감일시 -->
-    <input type="hidden" name="sndVirExpDt" value="" />
+    <input type="hidden" name="sndVirExpDt" :value="sndVirExpDt" />
     <!-- 마감시간 -->
-    <input type="hidden" name="sndVirExpTm" value="" />
+    <input type="hidden" name="sndVirExpTm" value="000000" />
     <!--회사명을 한글로 넣어주세요(최대20byte)-->
     <input type="hidden" name="sndStoreName" value="유니윌" />
     <!--회사명을 영어로 넣어주세요(최대20byte)-->
@@ -105,17 +105,21 @@
     <!-- 회사 도메인을 http://를 포함해서 넣어주세요-->
     <input type="hidden" name="sndStoreDomain" value="http://uniwill.co.kr/" />
     <!--실물(1) / 디지털(2) -->
-    <input type="hidden" name="sndGoodType" value="1" />
+    <input type="hidden" name="sndGoodType" value="2" />
     <!-- 포인트거래시 60 -->
     <input type="hidden" name="sndUseBonusPoint" value="" />
     <!-- 하이브리드APP 형태로 개발시 사용하는 변수 -->
     <input type="hidden" name="sndRtApp" value="" />
     <!--  카카오페이용 상점대표자명 -->
-    <input type="hidden" name="sndStoreCeoName" value="" />
+    <input type="hidden" name="sndStoreCeoName" value="조인형" />
     <!--  카카오페이 연락처 -->
-    <input type="hidden" name="sndStorePhoneNo" value="" />
+    <input type="hidden" name="sndStorePhoneNo" value="0262558002" />
     <!--  카카오페이 주소 -->
-    <input type="hidden" name="sndStoreAddress" value="" />
+    <input
+      type="hidden"
+      name="sndStoreAddress"
+      value="서울시 강남구 테헤란로 124"
+    />
     <!-- DB저장용 상품명 -->
     <!-- <input type="hidden" name="ECHA" :value="info.info.big_title_no_cut" /> -->
     <!-- 결과페이지 DB저장 시 필요 -->
@@ -154,10 +158,20 @@
     },
   })
   export default class OrderForm extends Vue {
+    $dateFormat!: Function;
+    sndStoreid =
+      process.env.NODE_ENV == "production" ? "2001106668" : "2999199999";
+    sndVirExpDt!: String; //yyyymmdd
     // 결제수단
     @Prop(String) private value!: String;
     // 결제정보
     @Prop(Object) private info!: Object;
+    created() {
+      const date = new Date();
+      const later3Day = new Date(date.setDate(date.getDate() + 3));
+      const result = this.$dateFormat(later3Day).split("-");
+      this.sndVirExpDt = result[0] + result[1] + result[2];
+    }
   }
 </script>
 <style scoped lang="scss"></style>

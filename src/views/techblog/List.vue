@@ -13,20 +13,22 @@
         @click="getList(1, keyword)"
       ></button>
     </Search>
-    <div
-      class="list"
-      @click="goToPath(li.id)"
-      v-for="(li, index) in list.list"
-      :key="index"
-    >
-      <TechBlogList>
-        <template slot="contents">
-          <img :src="li.thumbnail" :alt="li.title" :title="li.title" />
-          <h2 class="title">{{ li.title }}</h2>
-          <p class="brief">{{ li.intro_txt }}</p>
-          <span class="date">{{ li.wdate }}</span>
-        </template>
-      </TechBlogList>
+    <div class="list-wrap">
+      <div
+        class="list"
+        @click="goToPath(li.id)"
+        v-for="(li, index) in list.list"
+        :key="index"
+      >
+        <TechBlogList>
+          <template slot="contents">
+            <img :src="li.thumbnail" :alt="li.title" :title="li.title" />
+            <h2 class="title">{{ li.title }}</h2>
+
+            <span class="date">{{ li.wdate_format }} {{ li.writer }}</span>
+          </template>
+        </TechBlogList>
+      </div>
     </div>
     <Pagination>
       <template slot="paging">
@@ -48,49 +50,47 @@
     </Pagination>
   </div>
 </template>
-<script>
-import Pagination from "@/components/common/Pagination.vue";
-import Search from "@/components/common/Search.vue";
-import TechBlogList from "@/components/techblog/List.vue";
-export default {
-  components: {
-    Pagination,
-    TechBlogList,
-    Search
-  },
-  data() {
-    return {
-      list: "",
-      keyword: "",
-      current: ""
-    };
-  },
-  methods: {
-    goToPath(id) {
+<script lang="ts">
+  import Search from "@/components/common/Search.vue";
+  import TechBlogList from "@/components/techblog/List.vue";
+  import Pagination from "@/components/common/Pagination.vue";
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
+    components: {
+      Pagination,
+      TechBlogList,
+      Search,
+    },
+  })
+  export default class List extends Vue {
+    list = "";
+    keyword = "";
+    current = 1;
+    goToPath(id: number): void {
       this.$router.push({
         path: "/techBlog/read",
         query: {
-          id: id
-        }
+          id: id,
+        },
       });
-    },
-    getList(num, keyword) {
+    }
+    getList(num: number, keyword: string): void {
       const data = {
         action: "get_blog_list", //필수
         current: num, //필수
-        keyword: keyword //옵션
+        keyword: keyword, //옵션
       };
       console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then(result => {
+        .then((result: { [key: string]: any }) => {
           console.log("기술블로그", result);
           this.$router
             .push({
               query: {
                 pageCurrent: num,
-                keyword: keyword
-              }
+                keyword: keyword,
+              },
             })
             .catch(() => {});
           this.list = result.data.data;
@@ -98,22 +98,36 @@ export default {
           this.current = num;
         });
     }
-  },
-  created() {
-    this.getList(this.$route.query.pageCurrent, this.$route.query.keyword);
+    created() {
+      this.getList(this.$route.query.pageCurrent, this.$route.query.keyword);
+    }
   }
-};
 </script>
 <style scoped lang="scss">
-.search {
-  margin: 2% 0;
-  .search_contents {
-    width: 100%;
-    margin-left: 0;
+  .search {
+    margin-top: 0;
+    .search_contents {
+      width: 100%;
+      margin-left: 0;
+    }
   }
-}
-.list {
-  border-bottom: 4px solid #f8f8f8;
-  padding: 10px 0;
-}
+  .list-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .list {
+      margin-top: 24px;
+      vertical-align: middle;
+      width: 49%;
+      .blog-li {
+        img {
+          border-radius: 10px;
+        }
+        .date {
+          font-size: 12px;
+          display: block;
+        }
+      }
+    }
+  }
 </style>

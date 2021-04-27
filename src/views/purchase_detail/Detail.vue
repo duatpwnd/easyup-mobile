@@ -1,19 +1,74 @@
 <template>
-  <div class="detail_wrap" v-if="list">
+  <div class="detail_wrap" v-if="Object.keys(list).length > 0">
     <ConfirmModal
       @ok="cancelLecture = true"
       v-if="toggleStore_confirmModal"
     ></ConfirmModal>
+    <ConfirmModal class="receipt-modal" v-if="recepit_issue">
+      <input
+        type="phone"
+        class="phone"
+        slot="contents"
+        v-model="phone"
+        placeholder="휴대폰번호"
+      />
+      <template slot="button_type">
+        <BaseButton @click.native="receiptApplication()" class="confirm">
+          <button slot="blue_btn">
+            확인
+          </button>
+        </BaseButton>
+        <BaseButton @click.native="recepit_issue = false" class="cancel">
+          <button slot="blue_btn">
+            취소
+          </button>
+        </BaseButton>
+      </template>
+    </ConfirmModal>
     <CancelLecture
       v-if="cancelLecture"
+      @emitSuccess="getList()"
       @emitClose="cancelLecture = false"
-      :lecture_info="list.lecture_info"
+      :lecture_info="list"
     ></CancelLecture>
+    <!-- 무통장 환불 은행 정보 -->
+    <RefundBankInfo @emitSuccess="getList()"></RefundBankInfo>
     <Row>
       <template slot="row">
         <div class="section">
           <div class="row">
-            <h2 class="title">결제번호 {{ list.order_id }}</h2>
+            <h2 class="title paynum">결제번호 {{ list.order_id }}</h2>
+            <BaseButton
+              class="purchase_receipt"
+              v-if="
+                list.pay_info.show_cash_receipt ||
+                  list.pay_info.show_card_receipt
+              "
+            >
+              <button
+                slot="blue_btn"
+                @click="
+                  list.pay_info.show_cash_receipt
+                    ? receiptList(
+                        `http://pgims.ksnet.co.kr/pg_infoc/src/bill/ps2.jsp?s_pg_deal_numb=${list.pay_info.tid}`
+                      )
+                    : receiptList(
+                        `http://pgims.ksnet.co.kr/pg_infoc/src/bill/credit_view.jsp?tr_no=${list.pay_info.tid}`
+                      )
+                "
+              >
+                구매영수증
+              </button>
+            </BaseButton>
+            <BaseButton
+              class="purchase_receipt"
+              v-if="list.pay_info.is_possible_receipt"
+              @click.native="recepit_issue = true"
+            >
+              <button slot="blue_btn">
+                현금영수증 발급
+              </button>
+            </BaseButton>
           </div>
         </div>
         <!-- 구매자 정보 :: S -->
@@ -41,11 +96,16 @@
           >
             <span class="dt"
               ><span class="lec" v-if="li.type == 'course'">강의</span>
-              <span class="course" v-else>코스</span>{{ li.title }}</span
-            >
+              <span class="course" v-else>코스</span
+              ><span v-html="li.title"></span
+            ></span>
             <div class="clear_both">
               <span class="dt">{{ li.teacher_name }}</span>
-              <del class="dt final_price">{{ li.price.format_original }}</del>
+              <del
+                class="dt final_price"
+                v-if="li.price.format_original != li.price.format_final"
+                >{{ li.price.format_original }}</del
+              >
               <span class="dt ori_price">{{
                 li.price.format_sum_purchased
               }}</span>
@@ -67,7 +127,7 @@
             :key="key"
           >
             <div>{{ li.order_id }}</div>
-            <div>{{ li.item_title }}</div>
+            <div v-html="li.item_title"></div>
             <div>{{ list.pay_info.price.format_purchased }}</div>
           </div>
           <!-- <table>
@@ -135,7 +195,7 @@
           </div> -->
           <div class="row">
             <span class="dt">결제금액</span>
-            <span class="dd"
+            <span class="dd final-price"
               >{{ list.pay_info.price.format_sum_purchased }}원</span
             >
           </div>
@@ -143,79 +203,116 @@
         <!-- 결제 정보 :: E -->
 
         <!-- 취소 요청 :: S -->
-        <!-- <div class="section">
+        <div
+          class="section"
+          v-if="list.status_code == 3 || list.status_code == 5"
+        >
           <h2 class="title">취소 요청</h2>
-        </div> -->
+          <div class="row">
+            <span class="cancel-lecture-title">취소 사유</span>
+            <span
+              class="cancel-lecture-contents"
+              v-html="list.cancel.cancel_reason"
+            ></span>
+          </div>
+        </div>
         <!-- 취소 요청 :: E -->
 
         <!-- 환불 계좌 :: S -->
-        <!-- <div class="section">
+        <div
+          class="section"
+          v-if="
+            (list.status_code == 3 || list.status_code == 5) &&
+              list.pay_info.method == 'bank'
+          "
+        >
           <h2 class="title">환불 계좌</h2>
           <div class="row">
-            <span class="dt">예금주</span> <span class="dd">염세종</span>
+            <span class="dt">예금주</span>
+            <span class="dd">{{ list.cancel.bank_account_name }}</span>
           </div>
           <div class="row">
-            <span class="dt">은행명</span> <span class="dd"> </span>
+            <span class="dt">은행명</span>
+            <span class="dd">{{ list.cancel.bank_name }}</span>
           </div>
           <div class="row">
-            <span class="dt">계좌번호</span> <span class="dd"> </span>
+            <span class="dt">계좌번호</span>
+            <span class="dd">{{ list.cancel.bank_account_number }}</span>
           </div>
-        </div> -->
+        </div>
         <!-- 환불 계좌 :: E -->
 
         <!-- 환불 정보 :: S -->
-        <!-- <div class="section">
-          <h2 class="title">환불 정보</h2>
+        <div
+          class="section"
+          v-if="
+            list.cancel != null &&
+              list.cancel.state == 3 &&
+              list.cancel.refund_date != null
+          "
+        >
+          <h2 class="title">환불 처리</h2>
           <div class="row">
-            <span class="dt">
-              {{ list.refund_info.refund_date.split(" ")[0] }}
+            <span class="dt">처리일</span>
+            <span class="dd">
+              {{ list.cancel.refund_date }}
             </span>
           </div>
           <div class="row">
             <span class="dt">공제 금액</span>
             <span class="dd">
-              {{
-                list.refund_info.penalty
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원
+              {{ list.cancel.price_info.format_refund_fee }}원
             </span>
           </div>
           <div class="row">
-            <span class="dt">환불 정보</span>
-            <span class="dd">
-              {{
-                list.refund_info.refund_price
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }}원
+            <span class="dt">환불 금액</span>
+            <span class="dd final-price">
+              {{ list.cancel.price_info.format_refund }}원
             </span>
           </div>
-        </div> -->
+        </div>
         <!-- 환불 정보 :: E -->
       </template>
     </Row>
-    <div class="btn_wrap">
-      <!-- <BaseButton class="left">
-        <button
-          slot="blue_btn"
-          v-if="list.cancel_btn_status == 'request'"
-          @click="isCancel()"
-        >
+    <div class="btn_wrap_list">
+      <BaseButton
+        class="left"
+        v-if="list.is_possible_cancel.result && list.status_code == 1"
+        @click.native="isCancel()"
+      >
+        <button slot="blue_btn">
           취소 요청
         </button>
-        <button
-          slot="blue_btn"
-          class="cancel_req_btn"
-          v-else-if="list.cancel_btn_status == 'exceeded'"
-        >
+      </BaseButton>
+      <BaseButton
+        @click.native="$noticeMessage(list.is_possible_cancel.false_reason)"
+        class="left"
+        v-else-if="
+          list.is_possible_cancel.result == false && list.status_code != 3
+        "
+      >
+        <button slot="blue_btn" class="cancel_req_btn">
           취소 요청
         </button>
-        <button slot="blue_btn" v-if="list.cancel_btn_status == 'ing'">
+      </BaseButton>
+      <BaseButton
+        @click.native="$noticeMessage('취소 신청 내역을 확인 중입니다.')"
+        class="left"
+        v-else-if="list.is_possible_cancel.result && list.status_code == 5"
+      >
+        <button slot="blue_btn">
           취소 진행
         </button>
-      </BaseButton> -->
-      <BaseButton class="right">
+      </BaseButton>
+      <BaseButton
+        class="right"
+        :style="[
+          {
+            width:
+              list.status_code == 3 || list.status_code == 4 ? '100%' : '49%',
+          },
+        ]"
+      >
         <button
           slot="blue_btn"
           @click="
@@ -237,11 +334,12 @@
   </div>
 </template>
 <script lang="ts">
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
+  import CancelLecture from "@/components/modal/CancelLecture.vue";
+  import RefundBankInfo from "@/components/modal/RefundBankInfo.vue";
   import Row from "@/components/common/Row.vue";
   import BaseButton from "@/components/common/BaseButton.vue";
   import { mapState } from "vuex";
-  import ConfirmModal from "@/components/common/ConfirmModal.vue";
-  import CancelLecture from "@/components/modal/CancelLecture.vue";
   import { Vue, Component } from "vue-property-decorator";
   @Component({
     components: {
@@ -249,6 +347,7 @@
       ConfirmModal,
       Row,
       BaseButton,
+      RefundBankInfo,
     },
     computed: {
       ...mapState("toggleStore", {
@@ -257,21 +356,47 @@
     },
   })
   export default class Detail extends Vue {
-    list = "";
-    cancelLecture = false;
-    isCancel(): void {
+    private list: { [key: string]: any } = {};
+    private cancelLecture = false;
+    private refundBankInfo = false;
+    private phone: string = "";
+    private recepit_issue = false;
+    // 영수증 조회
+    private receiptList(url: string): void {
+      window.location.href = url;
+    }
+    private isCancel(): void {
       this.$confirmMessage(
         "구매하신 강의를 취소 하시겠습니까?<br>취소 신청 시 강의 시청이 불가 합니다."
       );
     }
-    getList(): void {
+    // 현금영수증 발급 신청
+    private receiptApplication(): void {
       const data = {
-        action: "order_info",
-        order_id: String(this.$route.query.order_id),
+        action: "request_cash_receipt",
+        order_id: this.$route.query.order_id,
+        receipt_number: this.phone,
       };
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-        .then((result) => {
+        .then((result: { [key: string]: any }) => {
+          console.log(result);
+          if (result.data.data.result == false) {
+            this.recepit_issue = false;
+            this.$noticeMessage(result.data.data.msg);
+          } else {
+            this.$noticeMessage("현금영수증 발급이 신청되었습니다.");
+          }
+        });
+    }
+    private getList(): void {
+      const data = {
+        action: "order_info",
+        order_id: this.$route.query.order_id,
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
           console.log(result);
           this.list = result.data.data;
         });
@@ -282,10 +407,70 @@
   }
 </script>
 <style scoped lang="scss">
+  ::v-deep .receipt-modal {
+    .notice_modal {
+      .phone {
+        border: 1px solid #ccc;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 14px;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      .btn_wrap {
+        &:after {
+          display: block;
+          content: "";
+          clear: both;
+        }
+        .blue_btn {
+          width: 48%;
+        }
+        .confirm {
+          float: left;
+        }
+        .cancel {
+          float: right;
+          button {
+            border: 1px solid #dbdbdb;
+            background: #dbdbdb;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+  .section {
+    .row {
+      .paynum {
+        float: left;
+        height: 30px;
+        line-height: 30px;
+      }
+      .cancel-lecture-title {
+        width: 18%;
+      }
+      .cancel-lecture-contents {
+        width: 82%;
+      }
+      .cancel-lecture-title,
+      .cancel-lecture-contents {
+        font-size: 14px;
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+  }
   .detail_wrap {
     .section {
       padding: 4.445%;
       border-bottom: 4px solid #f8f8f8;
+      .row {
+        .final-price {
+          font-weight: bold;
+        }
+      }
     }
     .user_info,
     .payment_info,
@@ -298,6 +483,9 @@
       .row {
         margin-top: 10px;
       }
+    }
+    .cancel_req_list {
+      margin-top: 10px;
     }
     .purchased {
       font-family: "NotoSansCJKkr-Regular";
@@ -330,7 +518,7 @@
         color: #114fff;
       }
     }
-    .btn_wrap {
+    .btn_wrap_list {
       padding: 4.445%;
       &:after {
         display: block;
@@ -338,7 +526,7 @@
         clear: both;
       }
       .blue_btn {
-        width: 100%;
+        width: 49%;
         button {
           height: 40px;
           line-height: 31px;
@@ -359,6 +547,11 @@
         border: 1px solid #dbdbdb;
         background: #dbdbdb;
         color: white;
+      }
+      .purchase_receipt {
+        width: 100%;
+        clear: both;
+        padding-top: 4.445%;
       }
     }
   }

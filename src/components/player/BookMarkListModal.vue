@@ -18,16 +18,10 @@
     </ul>
   </div>
 </template>
-<script>
-  import { mapState, mapMutations } from "vuex";
-
-  export default {
-    components: {},
-    data() {
-      return {
-        list: "",
-      };
-    },
+<script lang="ts">
+  import { mapState } from "vuex";
+  import { Vue, Component } from "vue-property-decorator";
+  @Component({
     computed: {
       ...mapState("toggleStore", {
         toggleStore_bookmark_list_info: "bookmark_list_info",
@@ -38,57 +32,58 @@
         playerStore_lp_type: "lp_type",
       }),
     },
-
-    methods: {
-      goToPlayer(id, check_point) {
-        const check = this.$hms_to_s(check_point);
-
-        this.$store.commit("playerStore/playerState", {
-          check_time: check == 0 ? 1 : check,
+  })
+  export default class BookmarkListModal extends Vue {
+    list: object[] = [{}];
+    toggleStore_bookmark_list_info!: { [key: string]: any };
+    goToPlayer(id: number, check_point: number): void {
+      const check = this.$hms_to_s(check_point);
+      this.$store.commit("playerStore/playerState", {
+        check_time: check == 0 ? 1 : check,
+      });
+      this.$emit("bookmark_move", id, "bookmark");
+      this.close();
+    }
+    close(): void {
+      this.$store.commit("toggleStore/bookmarkListToggle", {
+        bookmark_list_modal: false,
+        current_id: "",
+      });
+    }
+    bookmark_remove(id: number): void {
+      const data = {
+        action: "delete_bookmark",
+        id: id,
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          this.getList();
         });
-        this.$emit("bookmark_move", id, "bookmark");
-
-        this.close();
-      },
-      close() {
-        this.$store.commit("toggleStore/bookmarkListToggle", {
-          bookmark_list_modal: false,
-          current_id: "",
-        });
-      },
-      bookmark_remove(id) {
-        const data = {
-          action: "delete_bookmark",
-          id: id,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            this.getList();
-          });
-      },
-      getList() {
-        const data = {
-          action: "get_player_bookmark",
-          current_id: this.toggleStore_bookmark_list_info.current_id,
-        };
-        this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
-          .then((result) => {
-            this.list = result.data.data;
-            this.list.sort(function(a, b) {
+    }
+    getList(): void {
+      const data = {
+        action: "get_player_bookmark",
+        current_id: this.toggleStore_bookmark_list_info.current_id,
+      };
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+        .then((result: { [key: string]: any }) => {
+          this.list = result.data.data;
+          this.list.sort(
+            (a: { [key: string]: any }, b: { [key: string]: any }) => {
               return a.check_point - b.check_point;
-            });
-            this.list.map((el, index) => {
-              el.check_point = this.$getTimeStringSeconds(el.check_point);
-            });
+            }
+          );
+          this.list.map((el: { [key: string]: any }) => {
+            el.check_point = this.$getTimeStringSeconds(el.check_point);
           });
-      },
-    },
+        });
+    }
     created() {
       this.getList();
-    },
-  };
+    }
+  }
 </script>
 <style scoped lang="scss">
   .bookmark-list {

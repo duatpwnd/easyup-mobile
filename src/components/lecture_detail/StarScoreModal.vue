@@ -64,17 +64,17 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import BlueBtn from "@/components/common/BaseButton.vue";
   import StarRating from "vue-star-rating";
   import { mapState, mapMutations } from "vuex";
-
-  export default {
-    props: {
-      score_info: {
-        type: Object,
-      },
-    },
+  import { Vue, Component, Prop } from "vue-property-decorator";
+  interface BodyData {
+    action: string;
+    star: number;
+    contents: string;
+  }
+  @Component({
     computed: {
       ...mapState("toggleStore", {
         toggleStore_score_info: "score_info",
@@ -84,77 +84,81 @@
       BlueBtn,
       StarRating,
     },
-    data() {
-      return {
-        contents: this.score_info.score_contents,
-        rating: this.score_info.score,
+  })
+  export default class StarScoreModal extends Vue {
+    @Prop(Object) private score_info!: { [key: string]: any };
+    contents = this.score_info.score_contents;
+    rating = this.score_info.score;
+    setRating(rating: number): void {
+      this.rating = rating;
+    }
+    cancel(): void {
+      this.$store.commit("toggleStore/scoreToggle", {
+        review_id: "",
+        score_modal: false, // 강의평가 모달
+        score: 0, // 스코어점수
+        score_mode: "", // 스코어 모드(수정할때인지, 평가일때인지)
+        score_contents: "", // 스코어 컨텐츠
+      });
+    }
+    // 댓글 수정
+    comment_modify(): void {
+      interface ObjProperty extends BodyData {
+        review_id: number;
+      }
+      const obj: ObjProperty = {
+        action: "modify_review",
+        star: this.rating,
+        review_id: this.score_info.review_id,
+        contents: this.contents,
       };
-    },
-    methods: {
-      setRating(rating) {
-        this.rating = rating;
-      },
-      cancel() {
-        this.$store.commit("toggleStore/scoreToggle", {
-          review_id: "",
-          score_modal: false, // 강의평가 모달
-          score: 0, // 스코어점수
-          score_mode: "", // 스코어 모드(수정할때인지, 평가일때인지)
-          score_contents: "", // 스코어 컨텐츠
+      this.$axios
+        .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
+        .then((result: { [key: string]: any }) => {
+          console.log("수정완료", result);
+          if (result.data.error != true) {
+            this.$noticeMessage(result.data.data.msg);
+            this.$EventBus.$emit("commentReload", true);
+            this.cancel();
+          }
         });
-      },
-      // 댓글 수정
-      comment_modify() {
-        const obj = {
-          action: "modify_review",
-          star: this.rating,
-          review_id: this.score_info.review_id,
-          contents: this.contents,
-        };
+    }
+    // 댓글 추가
+    add_review(): void {
+      interface ObjProperty extends BodyData {
+        course_id: number;
+        type: string;
+      }
+      const data: ObjProperty = {
+        action: "add_review",
+        course_id: this.$route.query.id,
+        star: this.rating,
+        contents: this.contents.trim(),
+        type: "course",
+      };
+      if (data.star == 0) {
+        this.$noticeMessage("점수를 선택해주세요.");
+      } else {
         this.$axios
-          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(obj))
-          .then((result) => {
-            console.log("수정완료", result);
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result: { [key: string]: any }): void => {
+            console.log("댓글등록", result);
             if (result.data.error != true) {
               this.$noticeMessage(result.data.data.msg);
+
               this.$EventBus.$emit("commentReload", true);
               this.cancel();
             }
           });
-      },
-      // 댓글 추가
-      add_review() {
-        const data = {
-          action: "add_review",
-          course_id: this.$route.query.id,
-          star: this.rating,
-          contents: this.contents.trim(),
-          type: "course",
-        };
-        if (data.star == 0) {
-          this.$noticeMessage("점수를 선택해주세요.");
-        } else {
-          this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
-              headers: {
-                Authorization: this.$cookies.get("user_info")
-                  ? "Bearer " + this.$cookies.get("user_info").access_token
-                  : null,
-              },
-            })
-            .then((result) => {
-              console.log("댓글등록", result);
-              if (result.data.error != true) {
-                this.$noticeMessage(result.data.data.msg);
-
-                this.$EventBus.$emit("commentReload", true);
-                this.cancel();
-              }
-            });
-        }
-      },
-    },
-  };
+      }
+    }
+  }
 </script>
 <style scoped lang="scss">
   .lec_eval_modal {

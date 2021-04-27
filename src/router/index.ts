@@ -16,13 +16,6 @@ const routes = [
     name: "signup",
     component: () => import("../views/SignUp.vue"),
     meta: { isFooter: false, unauthorized: true },
-    beforeEnter(to, from, next) {
-      if (VueCookies.get("access_token")) {
-        next("/");
-      } else {
-        next();
-      }
-    },
   },
   {
     path: "/signupComplete",
@@ -93,7 +86,7 @@ const routes = [
     name: "lecDetail",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/LecDetail.vue"),
-    meta: { isFooter: true, unauthorized: true },
+    meta: { isFooter: true, unauthorized: true, title: "강의" },
   },
 
   {
@@ -101,19 +94,19 @@ const routes = [
     name: "courseDetail",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/CourseDetail.vue"),
-    meta: { isFooter: true, unauthorized: true },
+    meta: { isFooter: true, unauthorized: true, title: "코스" },
   },
   {
     path: "/category",
     name: "category",
     component: () => import("../views/LectureList.vue"),
-    meta: { isFooter: true, unauthorized: true },
+    meta: { isFooter: true, unauthorized: true, title: "강의" },
   },
   {
     path: "/course",
     name: "course",
     component: () => import("../views/LectureList.vue"),
-    meta: { isFooter: true, unauthorized: true },
+    meta: { isFooter: true, unauthorized: true, title: "코스" },
   },
   {
     path: "/teacherClassRoom",
@@ -277,7 +270,7 @@ const routes = [
   {
     path: "/play",
     name: "play",
-    component: () => import("../views/Player.vue"),
+    component: () => import(/* webpackPrefetch: true */ "../views/Player.vue"),
     meta: { isFooter: false },
   },
   {
@@ -467,8 +460,8 @@ const router = new VueRouter({
   // duplicateNavigationPolicy: "ignore",
   routes,
   scrollBehavior(to, from, savedPosition) {
-    if (to.name == "lecDetail" && from.name == "myClassLecture") {
-      return { x: 0, y: 9999 };
+    if (to.params.type == "review") {
+      return { x: 0, y: 99999 };
     } else {
       return { x: 0, y: 0 };
     }
@@ -480,7 +473,9 @@ router.beforeEach(async (to, from, next) => {
     store.commit("userStore/loginToken", VueCookies.get("user_info"));
   }
   const arr = ["GnbBottomMenu", "isFooter", "ProfileMsgTab"];
-  const result = arr.reduce((acc, el) => {
+  const result: {
+    [key: string]: any;
+  } = arr.reduce((acc: { [key: string]: any }, el: string) => {
     if (el == Object.keys(to.meta)[0]) {
       acc[el] = Object.values(to.meta)[0];
     } else {

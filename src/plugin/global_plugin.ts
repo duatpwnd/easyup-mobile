@@ -2,7 +2,7 @@ const VueCookies = require("vue-cookies");
 const store = require("@/store").default;
 const router = require("@/router").router;
 export default {
-  install(Vue: any) {
+  install(Vue: { [key: string]: any }) {
     Vue.noticeMessage = (msg: string): void => {
       store.commit("toggleStore/Toggle", {
         notice_modal: true,
@@ -21,15 +21,6 @@ export default {
         info: "",
       });
     };
-
-    // Vue.directive("my-directive", {
-    //   bind(el, binding, vnode, oldVnode) {
-    //     el.style.color = "red";
-    //   },
-    // });
-    Vue.mixin({
-      created: function() {},
-    });
     // 로그인 모달 닫기
     Vue.prototype.$loginModalClose = (): void => {
       store.commit("toggleStore/Toggle", {
@@ -73,7 +64,7 @@ export default {
     };
 
     // 로그아웃
-    Vue.prototype.$logOut = () => {
+    Vue.prototype.$logOut = (): void => {
       router
         .push({
           path: "/",
@@ -87,7 +78,7 @@ export default {
       });
     };
     // 데이트 포맷
-    Vue.prototype.$dateFormat = <T>(a: T): String => {
+    Vue.prototype.$dateFormat = <T>(a: T): string => {
       let date;
       if (typeof a === "object") {
         date = new Date(a as any);

@@ -31,7 +31,7 @@
   import external_subtitle from "@/assets/js/youtube/youtube_external_subtitle.js";
   import { mapState } from "vuex";
   import BaseBtn from "@/components/common/BaseButton.vue";
-  import { ResultData } from "@/assets/js/util.ts";
+  import { ResultData } from "@/assets/js/util";
   interface BodyData {
     action: string;
     course_id: number;
@@ -147,7 +147,7 @@
     // 자막파일 파싱
     srtParsing<T>(link: T): void {
       if (typeof link === "string" && link.length > 0) {
-        const subtitles: any[] = parser.fromSrt(link, true);
+        const subtitles: { [key: string]: any }[] = parser.fromSrt(link, true);
         for (let i in subtitles) {
           subtitles[i] = {
             start: subtitles[i]["startTime"] / 1000,

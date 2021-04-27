@@ -1,17 +1,22 @@
 import Vue from "vue";
 import App from "./App.vue";
-import { router } from "./router";
 import store from "./store";
 import VueAwesomeSwiper from "vue-awesome-swiper";
 import "swiper/swiper-bundle.css";
 import VueMq from "vue-mq";
 import CKEditor from "ckeditor4-vue";
 const VueCookies = require("vue-cookies");
-import ApiUrl from "@/assets/js/api_url.js";
-import GlobalPlugin from "@/plugin/global_plugin.ts";
+import ApiUrl from "@/assets/js/api_url";
+import GlobalPlugin from "@/plugin/global_plugin";
 import axios from "axios";
 import VueRouterBackButton from "vue-router-back-button";
 import Clipboard from "v-clipboard";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { router } from "./router";
+library.add(faTimes);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.use(Clipboard);
 Vue.prototype.$EventBus = new Vue();
 Vue.prototype.$ApiUrl = ApiUrl;
@@ -33,6 +38,7 @@ Vue.config.productionTip = true;
 // NODE_ENV = '앱실행모드'
 if (process.env.NODE_ENV == "development") {
   axios.defaults.baseURL = "http://develop.hell0world.net";
+  // pg http://develop.hell0world.net:5580/
   // ApiUrl.mobileAPI_v1 = "http://develop.hell0world.net/main/mobileAPI/v1.php";
   // ApiUrl.mobileAPI_v2 = "http://develop.hell0world.net/main/mobileAPI/v2.php";
 } else if (process.env.NODE_ENV == "production") {
@@ -57,8 +63,8 @@ axios.interceptors.response.use((response) => {
   if (response.data.type == "token") {
     // 토큰이없을경우 마지막 url 기억
     store.commit("userStore/referer", router.currentRoute.fullPath);
-    Vue["noticeMessage"]("로그인을 해주세요.");
-    Vue["logOut"]();
+    Vue.noticeMessage("로그인을 해주세요.");
+    Vue.logOut();
   }
   return response;
 });

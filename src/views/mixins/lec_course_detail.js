@@ -3,10 +3,10 @@ import { Component, Watch, Vue } from "vue-property-decorator";
 let GroupMixin = class GroupMixin extends Vue {
     constructor() {
         super(...arguments);
+        this.detail = {}; //코스는 지금 타입스크립트 적용안되서 지금 일딴 써놨음 코스도 타입스크립트 적용시키면 제거 시키기
         this.isPossibleReview = false;
         this.is_subscribe = false;
         this.subscribe_btn = false;
-        this.detail = {};
         this.score_info = {}; // 각 별점의 개수
         this.url = window.document.location.href; // 클립보드 현재 url
     }
@@ -47,6 +47,7 @@ let GroupMixin = class GroupMixin extends Vue {
         else {
             data.session_id = Number(this.$route.query.id);
         }
+        console.log("dddd", data);
         await this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {
@@ -68,6 +69,9 @@ let GroupMixin = class GroupMixin extends Vue {
             const scroll_top = window.scrollY;
             if (scroll_top > btn_offset_top + btn_h) {
                 this.subscribe_btn = true;
+                // footer
+                this.$root.$el.children[2].style.cssText =
+                    "padding-bottom : 78px; position: unset;";
             }
             else {
                 this.subscribe_btn = false;
@@ -88,8 +92,22 @@ let GroupMixin = class GroupMixin extends Vue {
         this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {
-            this.$noticeMessage("강의바구니에 담았습니다.");
+            if (result.data.error == false) {
+                this.$store.commit("toggleStore/Toggle", {
+                    cart_modal: true,
+                });
+                this.$store.commit("toggleStore/noticeMessage", "강의 바구니에 담았습니다.<br> 강의 바구니로 이동하시겠습니까?");
+            }
+        })
+            .catch((err) => {
+            console.log(err);
         });
+    }
+    destroyed() {
+        // this.$root.$el.children[2] == footer
+        if (this.$root.$el.children[2] != undefined) {
+            this.$root.$el.children[2].removeAttribute("style");
+        }
     }
     created() {
         window.onscroll = () => {
