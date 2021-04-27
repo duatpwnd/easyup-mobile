@@ -22,8 +22,6 @@
           </BaseButton>
         </div>
         <div class="row">
-          <span class="dt type" v-if="li.type == 'course'">강의</span>
-          <span class="dt type" v-else>코스</span>
           <span class="dt subtitle" v-html="li.title"></span>
         </div>
         <!-- <div class="row">
@@ -112,7 +110,6 @@
     private list = "";
     private current = 1;
     private getList(num: number): void {
-      console.log("type", this.$route.query.type);
       const data = {
         action: "get_settlement_detail",
         type: this.$route.query.type,
@@ -194,6 +191,7 @@
         }
         .subtitle {
           width: 92%;
+          font-weight: bold;
         }
       }
     }

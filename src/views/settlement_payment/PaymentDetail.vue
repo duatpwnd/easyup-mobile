@@ -49,7 +49,7 @@
       <Row>
         <template slot="row">
           <div class="row">
-            <span class="dt">{{ list.pay_info.pay_date.split(" ")[0] }}</span>
+            <span class="dt">{{ list.pay_info.pay_date }}</span>
           </div>
           <div class="row">
             <span class="dt">결제 수단</span>
@@ -226,14 +226,12 @@
           font-weight: bold;
         }
         .type {
-          width: 8%;
+          color: #999999;
+          margin-right: 10px;
           font-size: 14px;
-          vertical-align: top;
-          display: inline-block;
         }
         .subtitle {
-          @extend .type;
-          width: 92%;
+          font-size: 14px;
         }
         .price {
           color: #114fff;

@@ -11,13 +11,6 @@
       </template>
     </Row>
     <div class="payment_info" v-if="list.list.length != 0">
-      <div class="abox">
-        <h2 class="dt">결제 금액</h2>
-        <span class="dd">
-          {{ payInfo.payment }}
-        </span>
-        <span class="unit"> 원</span>
-      </div>
       <div class="bbox">
         <h2 class="dt">환불 금액</h2>
         <span class="dd">
@@ -56,8 +49,6 @@
           </BaseButton>
         </div>
         <div class="row">
-          <span class="dt type" v-if="li.type == 'course'">강의</span>
-          <span class="dt type" v-else>코스</span>
           <span class="dt subtitle" v-html="li.title"></span>
         </div>
         <div class="row">
@@ -224,13 +215,12 @@
     margin-top: 10px;
     border-radius: 4px;
     background: #f8f8f8;
-    .abox,
     .bbox,
     .cbox,
     .dbox {
       text-align: center;
       display: inline-block;
-      width: 25%;
+      width: 33.333%;
       box-sizing: border-box;
       .dt {
         font-size: 12px;
@@ -243,7 +233,6 @@
         font-size: 12px;
       }
     }
-    .abox,
     .bbox,
     .cbox {
       border-right: 1px solid #333333;
@@ -275,6 +264,7 @@
         width: 8%;
       }
       .subtitle {
+        font-weight: bold;
         width: 92%;
       }
     }

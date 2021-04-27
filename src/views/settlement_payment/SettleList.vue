@@ -3,7 +3,7 @@
     <Row class="amount_wrap" v-if="list.list.length != 0">
       <template slot="row">
         <div class="row">
-          <span class="dt amount">정산 예정 금액</span>
+          <span class="dt amount">누적 수익 금액</span>
           <span class="dd unit">원</span>
           <span class="dd settlement"> {{ priceInfo.settle_amount }}</span>
         </div>
@@ -24,13 +24,6 @@
         <h2 class="dt">정산 완료 금액</h2>
         <span class="dd">
           {{ priceInfo.settle_amount_complete }}
-        </span>
-        <span class="unit">원</span>
-      </div>
-      <div class="dbox">
-        <h2 class="dt">누적 수익 금액</h2>
-        <span class="dd">
-          {{ priceInfo.total_proceeds }}
         </span>
         <span class="unit">원</span>
       </div>
@@ -193,6 +186,13 @@
       this.$EventBus.$off(`settleList_datePick`);
     }
     created() {
+      this.$EventBus.$on(
+        `search`,
+        (result: { order: string; keyword: string }) => {
+          console.log(result);
+          this.getList(1);
+        }
+      );
       this.$EventBus.$on(`settleList_datePick`, () => {
         this.getList(1);
       });
@@ -228,11 +228,10 @@
     background: #f8f8f8;
     .abox,
     .bbox,
-    .cbox,
-    .dbox {
+    .cbox {
       text-align: center;
       display: inline-block;
-      width: 25%;
+      width: 33.333%;
       box-sizing: border-box;
       .dt {
         font-size: 12px;
@@ -244,8 +243,7 @@
       }
     }
     .abox,
-    .bbox,
-    .cbox {
+    .bbox {
       border-right: 1px solid #333333;
     }
   }
