@@ -30,12 +30,13 @@
     components: { BlueBtn },
   })
   export default class FindPw extends Vue {
-    email = "";
-    send() {
+    private email = "";
+    private send(): void {
       const data = {
         action: "reset_password_send_mail",
         email: this.email,
       };
+      console.log(data);
       if (this.email.trim().length == 0) {
         this.$noticeMessage("이메일 주소를 입력해주세요.");
       } else {
@@ -43,7 +44,7 @@
           .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
           .then((result: { [key: string]: any }) => {
             console.log("이메일", result);
-            this.$noticeMessage(result.data.data.msg);
+            // this.$noticeMessage(result.data.data.msg);
             this.$router.push("/");
           });
       }

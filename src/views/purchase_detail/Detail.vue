@@ -356,22 +356,22 @@
     },
   })
   export default class Detail extends Vue {
-    list: { [key: string]: any } = {};
-    cancelLecture = false;
-    refundBankInfo = false;
-    phone: string = "";
-    recepit_issue = false;
+    private list: { [key: string]: any } = {};
+    private cancelLecture = false;
+    private refundBankInfo = false;
+    private phone: string = "";
+    private recepit_issue = false;
     // 영수증 조회
-    receiptList(url: string): void {
+    private receiptList(url: string): void {
       window.location.href = url;
     }
-    isCancel(): void {
+    private isCancel(): void {
       this.$confirmMessage(
         "구매하신 강의를 취소 하시겠습니까?<br>취소 신청 시 강의 시청이 불가 합니다."
       );
     }
     // 현금영수증 발급 신청
-    receiptApplication(): void {
+    private receiptApplication(): void {
       const data = {
         action: "request_cash_receipt",
         order_id: this.$route.query.order_id,
@@ -389,7 +389,7 @@
           }
         });
     }
-    getList(): void {
+    private getList(): void {
       const data = {
         action: "order_info",
         order_id: this.$route.query.order_id,

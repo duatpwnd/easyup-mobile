@@ -91,11 +91,11 @@
     },
   })
   export default class List extends Vue {
-    current = 1; //현재번호
-    order = "";
-    keyword = "";
-    bookmark_list = "";
-    go_to_path(url: string, id: number): void {
+    private current = 1; //현재번호
+    private order = "";
+    private keyword = "";
+    private bookmark_list = "";
+    private go_to_path(url: string, id: number): void {
       this.$router
         .push({
           path: url,
@@ -106,7 +106,7 @@
         })
         .catch(() => {});
     }
-    getList(num: number, order: string, keyword: string): void {
+    private getList(num: number, order: string, keyword: string): void {
       const data = {
         action: "get_bookmark_list",
         current: num,

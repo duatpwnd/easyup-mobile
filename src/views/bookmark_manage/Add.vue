@@ -1,5 +1,5 @@
 <template>
-  <div class="bookmark_add" v-if="info">
+  <div class="bookmark_add" v-if="Object.keys(info).length > 0">
     <div class="row">
       <span class="left ">
         책갈피
@@ -63,12 +63,12 @@
     },
   })
   export default class Add extends Vue {
-    editorData = "";
-    info: { [key: string]: any } = {};
     $refs!: {
       textarea: HTMLTextAreaElement;
     };
-    bookmarkRead(): void {
+    private editorData = "";
+    private info: { [key: string]: any } = {};
+    private bookmarkRead(): void {
       const data = {
         action: "get_bookmark_info",
         id: this.$route.query.id, //게시물ID
@@ -87,7 +87,7 @@
           }
         });
     }
-    bookmarkAdd(): void {
+    private bookmarkAdd(): void {
       const data = {
         action: "edit_bookmark",
         id: this.$route.query.id,

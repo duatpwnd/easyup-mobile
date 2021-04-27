@@ -120,13 +120,13 @@
     components: { Row, CheckBox, BaseButton, LectureCourseList },
   })
   export default class Cart extends Vue {
-    activeAll = false;
-    list: { [key: string]: any } = {};
-    checked_list: { [key: string]: any }[] = [];
-    allCheck = false;
-    format_sum_final = ""; // 총 금액
-    format_sum_discount = ""; // 할인 금액
-    format_sum_original = ""; // 강의 비용
+    private activeAll = false;
+    private list: { [key: string]: any } = {};
+    private checked_list: { [key: string]: any }[] = [];
+    private allCheck = false;
+    private format_sum_final = ""; // 총 금액
+    private format_sum_original = ""; // 강의 비용
+    private format_sum_discount = ""; // 할인 금액
     // computed: {
     // 강의 비용
     // format_sum_original: {
@@ -177,7 +177,7 @@
     //   );
     // },
     // },
-    costCalculate(arr: number[]): void {
+    private costCalculate(arr: number[]): void {
       const data = {
         action: "calculate_cart_items",
         items: arr,
@@ -199,14 +199,14 @@
           });
       }
     }
-    all(): void {
+    private all(): void {
       let allList = [...this.list.courses, ...this.list.sessions];
       if (this.allCheck == false) {
         allList = [];
       }
     }
     // 전체체크
-    all_check(): void {
+    private all_check(): void {
       this.allCheck = !this.allCheck;
       if (this.allCheck) {
         this.checked_list = [...this.list.courses, ...this.list.sessions];
@@ -216,7 +216,7 @@
       this.costCalculate(this.checked_list.map((el) => el.cart_id));
     }
     // 부분체크
-    partial_check(): void {
+    private partial_check(): void {
       this.costCalculate(this.checked_list.map((el) => el.cart_id));
       if (
         this.list.courses.length + this.list.sessions.length !=
@@ -227,7 +227,7 @@
         this.allCheck = true;
       }
     }
-    goToOrder(): void {
+    private goToOrder(): void {
       const map: string[] = this.checked_list.map((el) => {
         return el.type + "_" + el.item_id;
       });
@@ -258,7 +258,7 @@
           });
       }
     }
-    cartRemove(id: { [key: string]: any }[]): void {
+    private cartRemove(id: { [key: string]: any }[]): void {
       if (id.length == 0) {
         this.$noticeMessage("삭제할 강의를 선택해주세요.");
       } else {
@@ -302,7 +302,7 @@
           });
       }
     }
-    getList(): Promise<boolean> {
+    private getList(): Promise<boolean> {
       const data = {
         action: "cart_list",
       };

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="info">
+  <div v-if="Object.keys(info).length > 0">
     <div class="head">
       <span class="title">[{{ info.course_name }}]</span>
       <span v-html="info.section_name"></span> <span v-html="info.title"></span>
@@ -60,8 +60,8 @@
     },
   })
   export default class Read extends Vue {
-    info: { [key: string]: any } = {};
-    go_to_path(url: string, id: number): void {
+    private info: { [key: string]: any } = {};
+    private go_to_path(url: string, id: number): void {
       this.$router
         .push({
           path: url,
@@ -73,7 +73,7 @@
         })
         .catch(() => {});
     }
-    deleteBookmark(): void {
+    private deleteBookmark(): void {
       const data = {
         action: "delete_bookmark",
         id: this.$route.query.id, //게시물ID
@@ -96,7 +96,7 @@
           }
         });
     }
-    bookmarkRead(): void {
+    private bookmarkRead(): void {
       const data = {
         action: "get_bookmark_info",
         id: this.$route.query.id, //게시물ID
