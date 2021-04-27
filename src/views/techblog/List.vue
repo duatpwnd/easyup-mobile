@@ -24,7 +24,8 @@
           <template slot="contents">
             <img :src="li.thumbnail" :alt="li.title" :title="li.title" />
             <h2 class="title">{{ li.title }}</h2>
-            <div class="date">{{ li.wdate.split(" ")[0] }} {{ li.writer }}</div>
+
+            <span class="date">{{ li.wdate_format }} {{ li.writer }}</span>
           </template>
         </TechBlogList>
       </div>
@@ -121,6 +122,10 @@
       .blog-li {
         img {
           border-radius: 10px;
+        }
+        .date {
+          font-size: 12px;
+          display: block;
         }
       }
     }
