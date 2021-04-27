@@ -1,15 +1,32 @@
 <template>
   <div id="course_detail" v-if="Object.keys(detail).length > 0">
+    <ConfirmModal class="course-modal" v-if="couseIsFreeModal">
+      <template slot="button_type">
+        <BlueBtn
+          @click.native="
+            subscribe();
+            couseIsFreeModal = false;
+          "
+          class="confirm"
+        >
+          <button slot="blue_btn">
+            확인
+          </button>
+        </BlueBtn>
+      </template>
+    </ConfirmModal>
     <PurchaseApply
       v-if="toggleStore_purchase_apply"
       @goToOrder="
-        $router.push({
-          path: 'order',
-          query: {
-            type: 'session',
-            cart_id: $route.query.id,
-          },
-        })
+        detail.price.format_final == '-'
+          ? test()
+          : $router.push({
+              path: 'order',
+              query: {
+                type: 'session',
+                cart_id: $route.query.id,
+              },
+            })
       "
       :lecture_info="detail"
     ></PurchaseApply>
@@ -23,7 +40,11 @@
       title="파이썬 코딩 기본편"
     />
     <div class="update_noti">
-      <span>{{ detail.creation_date }}</span>
+      <span
+        >{{ detail.creation_date }}(업데이트 일자:{{
+          detail.update_date
+        }})</span
+      >
     </div>
     <section class="section1">
       <div class="lecture_title">
@@ -332,9 +353,11 @@
   import ProgressBar from "@/components/common/ProgressBar.vue";
   import CommentWrap from "@/components/lecture_detail/CommentWrap.vue";
   import Mixin from "@/views/mixins/lec_course_detail";
+  import ConfirmModal from "@/components/common/ConfirmModal.vue";
   import { mapState } from "vuex";
   @Component({
     components: {
+      ConfirmModal,
       GoToCart,
       ProgressBar,
       StarRating,
@@ -355,7 +378,12 @@
     },
   })
   export default class CourseDetail extends Mixin {
+    couseIsFreeModal = false;
     userStore_userinfo!: { [key: string]: any };
+    test() {
+      this.couseIsFreeModal = true;
+      this.$confirmMessage("코스 구매 신청이 완료되었습니다.");
+    }
     isPurchase(): void {
       this.$store.commit("toggleStore/Toggle", {
         purchase_apply: true,
@@ -386,6 +414,11 @@
   }
 </script>
 <style scoped lang="scss">
+  ::v-deep .course-modal {
+    .btn_wrap {
+      text-align: center;
+    }
+  }
   .update_noti {
     padding: 15px 4.445%;
     background: #f8f8f8;
