@@ -33,11 +33,3 @@
     }
   }
 </script>
-<style scoped lang="scss">
-  .select {
-    height: 42px;
-  }
-  .search_contents {
-    height: 42px;
-  }
-</style>

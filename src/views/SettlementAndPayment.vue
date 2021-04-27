@@ -36,31 +36,8 @@
       ><span class="active_bar"></span>결제</router-link
     >
     <div class="filter">
-      <select
-        v-if="$route.name == 'settleList'"
-        class="settle-filter"
-        v-model="order"
-        @change="search()"
-      >
-        <option value="">전체</option>
-        <option value="pay">정산예정</option>
-        <option value="refund">정산보류</option>
-        <option value="refund">정산완료</option>
-      </select>
       <router-view name="Search"></router-view>
       <DatePicker
-        :style="[
-          $route.name == 'settleList'
-            ? {
-                width: '70%',
-                'margin-left': '2%',
-                'box-sizing': 'border-box',
-                'margin-top': 0,
-                display: 'inline-block',
-                'vertical-align': 'middle',
-              }
-            : { width: '100%', 'margin-left': 0 },
-        ]"
         v-if="$route.name != 'paymentDetail'"
         @emitDatePick="datePick"
       ></DatePicker>
@@ -79,12 +56,6 @@
       };
     },
     methods: {
-      search() {
-        this.$EventBus.$emit(`search`, {
-          order: this.order,
-          keyword: this.keyword,
-        });
-      },
       datePick(result) {
         console.log(result);
         if (this.$route.name == "payList") {
@@ -156,18 +127,6 @@
       margin-top: 10px;
       .box {
         margin-top: 10px;
-      }
-      .settle-filter {
-        width: 28%;
-        vertical-align: middle;
-        border: 1px solid #333333;
-        padding: 0 1.755%;
-        height: 42px;
-        font-size: 1.25rem;
-        color: #333333;
-        background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 92%
-          center / 7px 5px;
-        display: inline-block;
       }
     }
   }

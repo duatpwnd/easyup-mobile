@@ -74,6 +74,9 @@
         </div>
       </template>
     </Row>
+    <p class="no_result" v-if="list.list.length == 0">
+      정산 내역 리스트가 없습니다.
+    </p>
     <Pagination>
       <template slot="paging">
         <li
@@ -165,6 +168,11 @@
       font-size: 16px;
       padding: 0 4.445%;
       margin-top: 24px;
+    }
+    .no_result {
+      text-align: center;
+      font-size: 16px;
+      margin-top: 15px;
     }
     .li {
       padding: 4.445%;
