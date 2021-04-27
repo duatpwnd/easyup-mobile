@@ -3,13 +3,12 @@
     <PurchaseApply
       v-if="toggleStore_purchase_apply"
       @goToOrder="
-        $router.push({
-          path: 'order',
-          query: {
-            type: 'course',
-            cart_id: $route.query.id,
-          },
-        })
+        detail.price.is_free == true
+          ? lecPurchaseComplete()
+          : $router.push({
+              path: 'order',
+              query: { type: 'course', cart_id: $route.query.id },
+            })
       "
       :lecture_info="detail"
     ></PurchaseApply>
@@ -142,7 +141,10 @@
             </BlueBtn>
 
             <!-- 무료강의인경우 -->
-            <BlueBtn v-else-if="detail.price.is_free" @click.native="isWatch()">
+            <BlueBtn
+              v-else-if="detail.price.is_free"
+              @click.native="isPurchase()"
+            >
               <button ref="subs_btn" slot="blue_btn">
                 구매하기
               </button>
@@ -170,7 +172,7 @@
           <button
             class="free_lecture_btn"
             v-else-if="detail.price.is_free"
-            @click="isWatch()"
+            @click="isPurchase()"
           >
             구매하기
           </button>
@@ -456,6 +458,12 @@
     private get isCountFalse(): object[] {
       return this.detail.curriculum_list.items.filter(
         (item: { [key: string]: any }) => item.children_count == null
+      );
+    }
+    private lecPurchaseComplete(): void {
+      this.subscribe();
+      this.$noticeMessage(
+        "신청이 완료되었습니다.<br>내 강의실에서 강의 내역을 확인하세요."
       );
     }
     private isPurchase(): void {
