@@ -50,7 +50,15 @@
       class="left reg_btn"
       v-if="list.buttonType == 'upload' && $route.name == 'resume'"
     >
-      <button slot="blue_btn" @click="$router.push('/uniJob/register')">
+      <button
+        slot="blue_btn"
+        @click="
+          $router.push({
+            path: '/uniJob/register',
+            query: { type: $route.name, is_notice: false },
+          })
+        "
+      >
         이력서 등록
       </button>
     </BlueBtn>
@@ -88,7 +96,7 @@
           ><span v-else>{{ li.title }}</span></span
         >
 
-        <span class="right">{{ li.created_at }}</span>
+        <span class="right">{{ li.created_at.split(" ")[0] }}</span>
       </li>
     </ul>
     <Pagination>
