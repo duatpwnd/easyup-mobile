@@ -2,7 +2,6 @@ import { shallowMount } from "@vue/test-utils";
 import Main from "@/views/Main.vue";
 import axios from "axios";
 import Vue from "vue";
-import ApiUrl from "@/assets/js/api_url.js";
 import VueAwesomeSwiper from "vue-awesome-swiper";
 import VueRouter from "vue-router";
 const VueCookies = require("vue-cookies");

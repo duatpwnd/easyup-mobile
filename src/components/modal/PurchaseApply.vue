@@ -5,7 +5,7 @@
         <span v-if="$route.name == 'courseDetail'">코스</span
         ><span v-else>강의</span> 구매 신청
       </h2>
-      <h3 class="lecture-title">{{ lecture_info.title }}</h3>
+      <h3 class="lecture-title" v-html="lecture_info.title"></h3>
       <div class="row-wrap">
         <div class="row">
           <span class="dt" v-if="$route.name == 'courseDetail'">총 클래스</span

@@ -27,7 +27,6 @@ describe("책갈피 추가", () => {
     expect(wrapper.vm.bookmarkRead).toHaveBeenCalled();
   });
   test("책갈피 추가 함수 호출", () => {
-    wrapper.vm.$refs.textarea.innerText = "test";
     jest.spyOn(wrapper.vm, "bookmarkAdd");
     wrapper.vm.bookmarkAdd();
     expect(wrapper.vm.bookmarkAdd).toHaveBeenCalled();

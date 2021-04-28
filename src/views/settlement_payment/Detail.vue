@@ -22,7 +22,7 @@
           </BaseButton>
         </div>
         <div class="row">
-          <span class="dt subtitle" v-html="li.title"></span>
+          <span class="dt subtitle" v-html="li.title.trim()"></span>
         </div>
         <!-- <div class="row">
           <span class="dt">구매자</span>

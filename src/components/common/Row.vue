@@ -1,9 +1,6 @@
 <template>
   <div class="li">
-    <slot name="row">
-      <span class="dt">강의 비용</span>
-      <span class="dd">2,000원</span>
-    </slot>
+    <slot name="row"></slot>
   </div>
 </template>
 <script>
