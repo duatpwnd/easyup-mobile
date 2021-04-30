@@ -130,25 +130,9 @@
             <div v-html="li.item_title"></div>
             <div>{{ list.pay_info.price.format_purchased }}</div>
           </div>
-          <!-- <table>
-            <colgroup>
-              <col width="50%" />
-              <col width="25%" />
-              <col width="25%" />
-            </colgroup>
-            <tr>
-              <th>주문번호</th>
-              <th>강의명</th>
-              <th>총금액</th>
-            </tr>
-            <tr v-for="(li, index) in list.purchased_item" :key="index">
-              <td>{{ li.order_id }}</td>
-              <td>{{ li.item_title }}</td>
-              <td>{{ list.pay_info.price.format_purchased }}</td>
-            </tr>
-          </table> -->
         </div>
         <!-- 이미 구매한 강의 :: E -->
+
         <!-- 결제 정보 :: S -->
         <div class="section payment_info">
           <h2 class="title">결제 정보</h2>
@@ -209,7 +193,6 @@
         >
           <h2 class="title">취소 요청</h2>
           <div class="row">
-            <span class="cancel-lecture-title">취소 사유</span>
             <span
               class="cancel-lecture-contents"
               v-html="list.cancel.cancel_reason"
@@ -277,7 +260,7 @@
     <div class="btn_wrap_list">
       <BaseButton
         class="left"
-        v-if="list.is_possible_cancel.result && list.status_code == 1"
+        v-if="list.is_possible_cancel.button_type == 'possible'"
         @click.native="isCancel()"
       >
         <button slot="blue_btn">
@@ -287,18 +270,17 @@
       <BaseButton
         @click.native="$noticeMessage(list.is_possible_cancel.false_reason)"
         class="left"
-        v-else-if="
-          list.is_possible_cancel.result == false && list.status_code != 3
-        "
+        v-else-if="list.is_possible_cancel.button_type == 'not-possible'"
       >
         <button slot="blue_btn" class="cancel_req_btn">
           취소 요청
         </button>
       </BaseButton>
+
       <BaseButton
         @click.native="$noticeMessage('취소 신청 내역을 확인 중입니다.')"
         class="left"
-        v-else-if="list.is_possible_cancel.result && list.status_code == 5"
+        v-else-if="list.is_possible_cancel.button_type == 'ing'"
       >
         <button slot="blue_btn">
           취소 진행
@@ -309,7 +291,7 @@
         :style="[
           {
             width:
-              list.status_code == 3 || list.status_code == 4 ? '100%' : '49%',
+              list.is_possible_cancel.button_type == 'hidden' ? '100%' : '49%',
           },
         ]"
       >
@@ -448,13 +430,6 @@
         height: 30px;
         line-height: 30px;
       }
-      .cancel-lecture-title {
-        width: 18%;
-      }
-      .cancel-lecture-contents {
-        width: 82%;
-      }
-      .cancel-lecture-title,
       .cancel-lecture-contents {
         font-size: 14px;
         display: inline-block;

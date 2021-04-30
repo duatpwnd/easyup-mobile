@@ -111,7 +111,6 @@
       <Row>
         <template slot="row">
           <div class="row">
-            <span class="cancel-lecture-title">취소 사유</span>
             <span
               class="cancel-lecture-contents"
               v-html="list.cancel.cancel_reason"
@@ -246,15 +245,11 @@
         .price {
           color: #114fff;
         }
-        .cancel-lecture-title {
+        .cancel-lecture-contents {
           font-size: 14px;
           display: inline-block;
           vertical-align: top;
-          width: 18%;
-        }
-        .cancel-lecture-contents {
-          @extend .cancel-lecture-title;
-          width: 82%;
+          width: 100%;
         }
       }
     }

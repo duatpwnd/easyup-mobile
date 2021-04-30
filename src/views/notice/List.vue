@@ -247,7 +247,7 @@
                 pageCurrent: num,
                 order: order,
                 keyword: keyword,
-                view: String(this.$route.query.view),
+                view: this.$route.query.view,
               },
             })
             .catch(() => {});

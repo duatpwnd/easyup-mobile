@@ -1,8 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 import Cart from "@/views/Cart.vue";
 import axios from "axios";
-import Vue from "vue";
-import ApiUrl from "@/assets/js/api_url.ts";
 const VueCookies = require("vue-cookies");
 function mockFn(action, data) {
   switch (action) {
