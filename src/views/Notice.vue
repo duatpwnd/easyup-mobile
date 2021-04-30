@@ -1,8 +1,6 @@
 <template>
   <div id="notice">
-    <div v-if="notice">
-      <h2 class="title">공지사항</h2>
-    </div>
+    <h2 class="title">공지사항</h2>
     <router-view />
   </div>
 </template>
