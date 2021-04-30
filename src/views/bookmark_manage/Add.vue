@@ -73,11 +73,10 @@
         action: "get_bookmark_info",
         id: this.$route.query.id, //게시물ID
       };
-      console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: { [key: string]: any }) => {
-          console.log(result.data);
+          console.log(result);
           this.info = result.data.data.info;
           this.info.check_point = this.$getTimeStringSeconds(
             this.info.check_point
