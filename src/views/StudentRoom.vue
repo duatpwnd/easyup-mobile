@@ -120,8 +120,8 @@
               query: { id: list.session_id },
             })
           "
+          v-html="list.session_name"
         >
-          {{ list.session_name }}
         </span>
         <span
           slot="right"
