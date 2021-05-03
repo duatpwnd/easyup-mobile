@@ -274,12 +274,8 @@
   }
   ::v-deep .list_wrap {
     .tr {
-      .left_td {
-        width: 40%;
-      }
-      .right_td {
-        padding-left: 9%;
-        width: 60%;
+      .td {
+        width: 50%;
       }
     }
   }
