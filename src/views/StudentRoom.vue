@@ -71,6 +71,7 @@
         <span
           class="td td1"
           slot="td1"
+          v-html="list.title"
           @click="
             list.status == 'ing'
               ? $router.push({
@@ -83,7 +84,6 @@
               : ''
           "
         >
-          {{ list.title }}
         </span>
         <template slot="right">
           <span class="td_wrap">
