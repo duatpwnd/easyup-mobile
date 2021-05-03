@@ -116,21 +116,24 @@
         <!-- 이미 구매한 강의 :: S-->
         <div class="section purchased" v-if="list.purchased_item">
           <h2 class="title">이미 구매한 강의</h2>
-          <div class="left_box">
-            <div>주문번호</div>
-            <div>강의명</div>
-            <div>총금액</div>
+          <div class="row" v-for="(li, key) in list.purchased_item" :key="key">
+            <div class="left_box">
+              <div>주문번호</div>
+              <div>강의명</div>
+            </div>
+            <div class="right_box">
+              <div>{{ li.order_id }}</div>
+              <div v-html="li.item_title"></div>
+            </div>
           </div>
-          <div
-            class="right_box"
-            v-for="(li, key) in list.purchased_item"
-            :key="key"
-          >
-            <div>{{ li.order_id }}</div>
-            <div v-html="li.item_title"></div>
-            <div>{{ list.pay_info.price.format_purchased }}</div>
+          <div class="row">
+            <span class="amount">총금액</span>
+            <span class="amount-price">{{
+              list.pay_info.price.format_purchased
+            }}</span>
           </div>
         </div>
+
         <!-- 이미 구매한 강의 :: E -->
 
         <!-- 결제 정보 :: S -->
@@ -448,8 +451,7 @@
       }
     }
     .user_info,
-    .payment_info,
-    .purchased {
+    .payment_info {
       .title {
         margin-bottom: 10px;
       }
@@ -464,13 +466,19 @@
     }
     .purchased {
       font-family: "NotoSansCJKkr-Regular";
-      .left_box,
-      .right_box {
-        display: inline-block;
-        font-size: 14px;
-      }
-      .left_box {
-        width: 17%;
+      .row {
+        margin-top: 10px;
+        .left_box,
+        .right_box,
+        .amount,
+        .amount-price {
+          display: inline-block;
+          font-size: 14px;
+        }
+        .left_box,
+        .amount {
+          width: 17%;
+        }
       }
     }
     .clear_both {
