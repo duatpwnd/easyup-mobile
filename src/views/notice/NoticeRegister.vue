@@ -35,7 +35,7 @@
       <label for="upload" class="file">파일 선택</label>
       <div class="file_name" v-if="file_obj != ''">{{ file_obj.name }}</div>
     </div>
-    <div class="file_wrap" v-if="file_list.hasOwnProperty('filename')">
+    <div class="file_wrap" v-if="file_list != null">
       <span class="oname">
         {{ file_list.filename }}
       </span>
@@ -55,7 +55,7 @@
       textarea: HTMLTextAreaElement;
       upload: HTMLFormElement;
     };
-    private file_list: { [key: string]: any } = {};
+    private file_list: { [key: string]: any } | null = null;
     private view = "";
     private title = "";
     private selected = null; // 강의선택 v-model
@@ -66,7 +66,7 @@
       console.log(filename);
       const data = {
         action: "delete_notice_attached_file",
-        id: this.file_list.id,
+        id: (this.file_list as { [key: string]: any }).id,
         course_id: this.$route.query.c_id,
       };
       console.log(data);
@@ -165,11 +165,10 @@
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: { [key: string]: any }) => {
-          console.log(result, result.data.data.attachment_list);
           if (result.data.data.attachment_list != undefined) {
             this.file_list = result.data.data.attachment_list;
           } else {
-            this.file_list = {};
+            this.file_list = null;
           }
           this.view = result.data.data;
           this.title = result.data.data.subject;
@@ -178,8 +177,10 @@
     }
     created() {
       if (this.$route.query.type == "write") {
+        console.log("글쓰기");
         this.dropBoxList();
       } else {
+        console.log("글수정");
         this.read();
       }
     }
