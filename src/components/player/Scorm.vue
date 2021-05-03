@@ -53,7 +53,7 @@
         </BlueBtn>
       </div>
     </div>
-    <h2>{{ player_info.title }}</h2>
+    <h2 v-html="player_info.title"></h2>
     <ProgressBar
       :max="100"
       :value="Number(player_info.percent[0])"
@@ -97,77 +97,65 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { Component, Prop } from "vue-property-decorator";
   import StarRating from "vue-star-rating";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import ProgressBar from "@/components/common/ProgressBar.vue";
-  import { mapState, mapMutations } from "vuex";
-  import mixin from "@/components/player/player_mixin.js";
-
-  export default {
-    mixins: [mixin],
-    props: {
-      player_info: {
-        type: Object,
-        required: true,
-      },
-    },
-    data() {
-      return {
-        evaluate: true,
-        modal: false,
-        contents: "",
-        rating: "",
-      };
-    },
+  import Mixin from "@/components/player/player_mixin";
+  @Component({
     components: {
       StarRating,
       ProgressBar,
       BlueBtn,
     },
-    methods: {
-      add_review() {
-        const data = {
-          action: "add_review",
-          course_id: this.$route.query.course_id,
-          star: this.rating,
-          contents: this.contents.trim(),
-          type: "course",
-        };
-        console.log(data);
-        if (data.star == 0) {
-          this.$noticeMessage("점수를 선택해주세요.");
-        } else {
-          this.$axios
-            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
-              headers: {
-                Authorization: this.$cookies.get("user_info")
-                  ? "Bearer " + this.$cookies.get("user_info").access_token
-                  : null,
-              },
-            })
-            .then((result) => {
-              console.log("강의평가등록", result);
-              if (result.data.error != true) {
-                this.$noticeMessage(result.data.data.msg);
-                this.modal = false;
-                this.evaluate = false;
-              }
-            });
-        }
-      },
-      setRating(rating) {
-        this.rating = rating;
-      },
-      // 즐겨찾기 추가 모달
-      bookmarkAddModal() {
-        this.$store.commit("toggleStore/Toggle", {
-          bookmark_modal: true,
-        });
-      },
-    },
-    created() {},
-  };
+  })
+  export default class Scorm extends Mixin {
+    @Prop(Object) private player_info!: object;
+    private evaluate = true;
+    private modal = false;
+    private contents = "";
+    private rating!: number;
+    private add_review(): void {
+      const data = {
+        action: "add_review",
+        course_id: this.$route.query.course_id,
+        star: this.rating,
+        contents: this.contents.trim(),
+        type: "course",
+      };
+      console.log(data);
+      if (data.star == 0) {
+        this.$noticeMessage("점수를 선택해주세요.");
+      } else {
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data), {
+            headers: {
+              Authorization: this.$cookies.get("user_info")
+                ? "Bearer " + this.$cookies.get("user_info").access_token
+                : null,
+            },
+          })
+          .then((result: { [key: string]: any }) => {
+            console.log("강의평가등록", result);
+            if (result.data.error != true) {
+              this.$noticeMessage(result.data.data.msg);
+              this.modal = false;
+              this.evaluate = false;
+            }
+          });
+      }
+    }
+    private setRating(rating: number): void {
+      this.rating = rating;
+    }
+    // 즐겨찾기 추가 모달
+    private bookmarkAddModal(): void {
+      this.$store.commit("toggleStore/Toggle", {
+        bookmark_modal: true,
+      });
+    }
+  }
 </script>
 <style scoped lang="scss">
   .scorm {

@@ -49,7 +49,7 @@
           </BaseButton>
         </div>
         <div class="row">
-          <span class="dt subtitle" v-html="li.title"></span>
+          <span class="dt subtitle" v-html="li.title.trim()"></span>
         </div>
         <div class="row">
           <span class="dt">구매자</span>
@@ -59,9 +59,7 @@
         <div class="row">
           <span class="dt ">금액</span>
           <span class="dd  special-default">원</span>
-          <span class="dd special-default price">{{
-            li.payment_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}</span>
+          <span class="dd special-default price">{{ li.payment_price }}</span>
         </div>
         <div class="row">
           <span class="dt status">{{ li.status }}</span>

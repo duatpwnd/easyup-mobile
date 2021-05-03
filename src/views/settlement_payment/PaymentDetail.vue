@@ -26,7 +26,10 @@
     <section>
       <h3 class="h3_title info">강의 정보</h3>
       <Row v-for="(li, index) in list.lecture_info" :key="index">
-        <template slot="row">
+        <template
+          slot="row"
+          v-if="userStore_userinfo.info.complete_name == li.teacher_name"
+        >
           <div class="row">
             <span class="type" v-if="li.type == 'course'">강의</span>
             <span class="type" v-else>코스</span
@@ -108,7 +111,6 @@
       <Row>
         <template slot="row">
           <div class="row">
-            <span class="cancel-lecture-title">취소 사유</span>
             <span
               class="cancel-lecture-contents"
               v-html="list.cancel.cancel_reason"
@@ -143,6 +145,7 @@
   </div>
 </template>
 <script lang="ts">
+  import { mapState } from "vuex";
   import { Vue, Component } from "vue-property-decorator";
   import Row from "@/components/common/Row.vue";
   interface BodyData {
@@ -153,6 +156,11 @@
     item_id: number;
   }
   @Component({
+    computed: {
+      ...mapState("userStore", {
+        userStore_userinfo: "userinfo",
+      }),
+    },
     components: {
       Row,
     },
@@ -179,6 +187,7 @@
         };
         data = { ...data, ...settle };
       }
+      console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: { [key: string]: any }) => {
@@ -236,15 +245,11 @@
         .price {
           color: #114fff;
         }
-        .cancel-lecture-title {
+        .cancel-lecture-contents {
           font-size: 14px;
           display: inline-block;
           vertical-align: top;
-          width: 18%;
-        }
-        .cancel-lecture-contents {
-          @extend .cancel-lecture-title;
-          width: 82%;
+          width: 100%;
         }
       }
     }

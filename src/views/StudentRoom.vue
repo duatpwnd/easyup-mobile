@@ -71,6 +71,7 @@
         <span
           class="td td1"
           slot="td1"
+          v-html="list.title"
           @click="
             list.status == 'ing'
               ? $router.push({
@@ -83,7 +84,6 @@
               : ''
           "
         >
-          {{ list.title }}
         </span>
         <template slot="right">
           <span class="td_wrap">
@@ -120,8 +120,8 @@
               query: { id: list.session_id },
             })
           "
+          v-html="list.session_name"
         >
-          {{ list.session_name }}
         </span>
         <span
           slot="right"
@@ -162,6 +162,7 @@
         <span
           class="td td1"
           slot="td1"
+          v-html="'[' + list.course_name + ']' + list.title"
           @click="
             $router.push({
               path: '/notice/read',
@@ -169,7 +170,6 @@
             })
           "
         >
-          [{{ list.course_name }}]{{ list.title }}
         </span>
         <span
           slot="right"

@@ -3,7 +3,7 @@
     <h2>업로드</h2>
     <div class="row">
       <label class="dt">강의선택</label>
-      <select name="" id="" @change="targetSelect()" v-model="selected">
+      <select @change="targetSelect()" v-model="selected">
         <option value="null">강의를 선택해주세요.</option>
         <option
           :value="value"

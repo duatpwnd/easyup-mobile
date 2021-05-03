@@ -240,7 +240,7 @@
 
         .left {
           float: left;
-          width: 55%;
+          width: 70%;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;

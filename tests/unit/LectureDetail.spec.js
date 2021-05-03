@@ -1,9 +1,7 @@
 import { shallowMount } from "@vue/test-utils";
 import LecDetail from "@/views/LecDetail.vue";
 import axios from "axios";
-import Vue from "vue";
 import ApiUrl from "@/assets/js/api_url.ts";
-import VueRouter from "vue-router";
 import MyMixin from "@/views/mixins/lec_course_detail.ts";
 import store from "@/store/index.ts";
 const VueCookies = require("vue-cookies");

@@ -4,6 +4,7 @@
       <option value="">전체</option>
       <option value="pay">결제완료</option>
       <option value="refund">취소완료</option>
+      <option value="cancel">취소신청</option>
     </select>
     <input
       slot="slot_input"
@@ -23,9 +24,9 @@
     },
   })
   export default class SearchClass extends Vue {
-    order = "";
-    keyword = "";
-    search(): void {
+    private order = "";
+    private keyword = "";
+    private search(): void {
       this.$EventBus.$emit(`search`, {
         order: this.order,
         keyword: this.keyword,
@@ -33,11 +34,3 @@
     }
   }
 </script>
-<style scoped lang="scss">
-  .select {
-    height: 42px;
-  }
-  .search_contents {
-    height: 42px;
-  }
-</style>

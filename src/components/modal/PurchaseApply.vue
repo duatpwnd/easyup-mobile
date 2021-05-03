@@ -5,7 +5,7 @@
         <span v-if="$route.name == 'courseDetail'">코스</span
         ><span v-else>강의</span> 구매 신청
       </h2>
-      <h3 class="lecture-title">{{ lecture_info.title }}</h3>
+      <h3 class="lecture-title" v-html="lecture_info.title"></h3>
       <div class="row-wrap">
         <div class="row">
           <span class="dt" v-if="$route.name == 'courseDetail'">총 클래스</span
@@ -17,9 +17,7 @@
         </div>
         <div class="row">
           <span class="dt">총 비용</span
-          ><span class="dd total" v-if="lecture_info.price.format_final == '-'"
-            >무료</span
-          >
+          ><span class="dd total" v-if="lecture_info.price.is_free">무료</span>
           <span class="dd total" v-else
             >{{ lecture_info.price.format_final }}원</span
           >

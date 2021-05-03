@@ -5,7 +5,7 @@
         <div class="row">
           <span class="dt amount">누적 수익 금액</span>
           <span class="dd unit">원</span>
-          <span class="dd settlement"> {{ priceInfo.settle_amount }}</span>
+          <span class="dd settlement"> {{ priceInfo.total_proceeds }}</span>
         </div>
       </template>
     </Row>
@@ -38,8 +38,8 @@
               $router.push({
                 path: '/settlementAndPayment/detail',
                 query: {
-                  start_date: $route.query.start_date,
-                  end_date: $route.query.end_date,
+                  start_date: undefined,
+                  end_date: undefined,
                   pageCurrent: 1,
                   view: $route.query.view,
                   settle_date: li.settlement_date,
@@ -162,11 +162,10 @@
             ? ""
             : this.$route.query.end_date,
       };
-      console.log(data);
       this.$axios
         .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
         .then((result: { [key: string]: any }) => {
-          console.log(result, data);
+          console.log(result);
           this.list = result.data.data;
           this.$router
             .push({

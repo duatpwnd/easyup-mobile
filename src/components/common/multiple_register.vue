@@ -1,6 +1,5 @@
 <template>
   <div>
-    <slot name="title"> </slot>
     <div class="row">
       <span class="left">강의 선택</span>
       <select class="select" name="" id="">
@@ -13,7 +12,12 @@
     </div>
     <div class="row">
       <span class="left contents">내용</span>
-      <CkEditor></CkEditor>
+      <div
+        contenteditable="true"
+        v-html="editorData"
+        class="textarea"
+        ref="textarea"
+      ></div>
     </div>
     <div class="row">
       <span class="left"></span>
@@ -21,13 +25,12 @@
     </div>
   </div>
 </template>
-<script>
-  import CkEditor from "@/components/common/CkEditor.vue";
-  export default {
-    components: {
-      CkEditor,
-    },
-  };
+<script lang="ts">
+  import { Vue, Component } from "vue-property-decorator";
+  @Component
+  export default class Register extends Vue {
+    private editorData = ""; // 에디터 v-model
+  }
 </script>
 <style scoped lang="scss">
   .title {
@@ -54,7 +57,8 @@
     .contents {
       vertical-align: top;
     }
-    input {
+    input,
+    .textarea {
       width: 100%;
       font-size: 1.5rem;
       color: black;
@@ -65,6 +69,10 @@
       &::placeholder {
         color: #dbdbdb;
       }
+    }
+    .textarea {
+      height: 300px;
+      overflow: auto;
     }
     .save_btn {
       color: #ffffff;

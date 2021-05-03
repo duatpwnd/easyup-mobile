@@ -18,8 +18,8 @@
     <PurchaseApply
       v-if="toggleStore_purchase_apply"
       @goToOrder="
-        detail.price.format_final == '-'
-          ? test()
+        detail.price.is_free
+          ? coursePurchaseComplete()
           : $router.push({
               path: 'order',
               query: {
@@ -146,8 +146,18 @@
           >
             코스 보러가기
           </button>
-
-          <div v-else>
+          <!-- 무료코스인경우 -->
+          <button
+            class="free_course_btn"
+            v-else-if="detail.price.is_free"
+            @click="isPurchase()"
+          >
+            구매하기
+          </button>
+          <!-- 코스 구매를 안한경우 -->
+          <div
+            v-else-if="is_subscribe == false && detail.price.is_free == false"
+          >
             <button class="add_btn" @click="cartAdd()">코스담기</button>
             <button
               class="share_btn"
@@ -378,18 +388,18 @@
     },
   })
   export default class CourseDetail extends Mixin {
-    couseIsFreeModal = false;
-    userStore_userinfo!: { [key: string]: any };
-    test() {
+    private couseIsFreeModal = false;
+    private userStore_userinfo!: { [key: string]: any };
+    private coursePurchaseComplete(): void {
       this.couseIsFreeModal = true;
       this.$confirmMessage("코스 구매 신청이 완료되었습니다.");
     }
-    isPurchase(): void {
+    private isPurchase(): void {
       this.$store.commit("toggleStore/Toggle", {
         purchase_apply: true,
       });
     }
-    goToPath(): void {
+    private goToPath(): void {
       this.$router.push({
         path: "/myClass/course",
         query: {
@@ -403,6 +413,11 @@
                 : "student"
               : this.$route.query.view,
         },
+      });
+    }
+    destroyed() {
+      this.$store.commit("toggleStore/Toggle", {
+        confirm_modal: false,
       });
     }
     created() {
@@ -565,6 +580,16 @@
           font-size: 20px;
           color: white;
           height: 64px;
+        }
+        .free_course_btn {
+          width: 100%;
+          display: block;
+          height: 64px;
+          line-height: 64px;
+          background: transparent;
+          font-family: "NotoSansCJKkr-Medium";
+          font-size: 20px;
+          color: #ffffff;
         }
       }
     }
