@@ -10,6 +10,9 @@ import GlobalPlugin from "@/plugin/global_plugin";
 import axios from "axios";
 import VueRouterBackButton from "vue-router-back-button";
 import Clipboard from "v-clipboard";
+// 주소찾기 api
+import VueDaumPostcode from "vue-daum-postcode";
+Vue.use(VueDaumPostcode);
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";

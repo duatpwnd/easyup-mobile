@@ -2,7 +2,7 @@
   <div id="signup">
     <h2>회원가입 : 학생</h2>
     <p class="noti">강사로 등록 희망하시는 분은 고객센터로 연락 주세요.</p>
-    <form>
+    <form class="signup-form">
       <legend>회원가입</legend>
       <fieldset>
         <div class="row">
@@ -18,10 +18,10 @@
           <input v-model="firstname" type="text" id="first_name" />
         </div>
         <div class="row">
-          <label class="dt" for="email"
-            >이메일<span class="required">＊</span></label
+          <label class="dt" for="userid"
+            >아이디<span class="required">＊</span></label
           >
-          <input v-model="email" type="text" id="email" />
+          <input v-model="userid" type="text" id="userid" />
         </div>
         <div class="row">
           <label class="dt" for="pw"
@@ -36,11 +36,44 @@
           <input v-model="pw2" type="password" id="re_pw" />
         </div>
         <div class="row">
-          <label class="dt">연락처</label>
+          <label class="dt" for="email"
+            >이메일<span class="required">＊</span></label
+          >
+          <input v-model="email" type="text" id="email" />
+        </div>
+        <div class="row">
+          <label class="dt">연락처<span class="required">＊</span></label>
           <input v-model="phone" type="tell" id="phone" />
         </div>
-
         <div class="row">
+          <label class="dt address">주소</label>
+          <Search>
+            <input
+              type="text"
+              v-model="address"
+              slot="slot_input"
+              class="search_contents"
+            />
+            <button
+              slot="search_btn"
+              class="search_btn"
+              @click="isOpen = true"
+              type="button"
+            ></button>
+          </Search>
+          <div class="address-search" v-if="isOpen" @click="isOpen = false">
+            <vue-daum-postcode @complete="onComplete" />
+          </div>
+        </div>
+        <div class="row">
+          <label class="dt">상세주소</label>
+          <input v-model="detailAddress" type="text" />
+        </div>
+        <div class="row">
+          <label class="dt">생년월일</label>
+          <SelecyYYMMDD></SelecyYYMMDD>
+        </div>
+        <div class="row agree-line">
           <label class="dt">서비스 이용약관</label>
           <textarea
             name=""
@@ -283,19 +316,47 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
 [부칙]
 본 약관은 2020년 09월 11일부터 적용됩니다.'
           ></textarea>
+          <div class="agree">
+            <CheckBox>
+              <input
+                v-model="agree1"
+                type="checkbox"
+                checked
+                id="check1"
+                slot="check"
+              />
+            </CheckBox>
+            <label class="agree-check" for="check1"
+              >약관 내용을 모두 확인하였으며 동의합니다.</label
+            >
+          </div>
         </div>
-        <div class="row agree">
-          <CheckBox>
-            <input
-              v-model="agree"
-              type="checkbox"
-              checked
-              id="check"
-              slot="check"
-            />
-          </CheckBox>
-          <label for="check">약관 내용을 모두 확인하였으며 동의합니다.</label>
+
+        <div class="row agree-line">
+          <label class="dt">개인정보 수집 및 활용동의</label>
+          <textarea
+            name=""
+            readonly
+            disabled
+            rows="3"
+            placeholder="개인정보 처리방침"
+          ></textarea>
+          <div class="agree">
+            <CheckBox>
+              <input
+                v-model="agree2"
+                type="checkbox"
+                checked
+                id="check2"
+                slot="check"
+              />
+            </CheckBox>
+            <label class="agree-check" for="check2"
+              >약관 내용을 모두 확인하였으며 동의합니다.</label
+            >
+          </div>
         </div>
+
         <BlueBtn>
           <button slot="blue_btn" type="button" @click="register()">
             등록
@@ -309,17 +370,30 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
   import { Component, Vue } from "vue-property-decorator";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import CheckBox from "@/components/common/BaseCheckBox.vue";
+  import Search from "@/components/common/Search.vue";
+  import SelecyYYMMDD from "@/components/common/SelectYYMMDD.vue";
   @Component({
-    components: { CheckBox, BlueBtn },
+    components: { Search, CheckBox, BlueBtn, SelecyYYMMDD },
   })
   export default class SignUp extends Vue {
-    lastname = "";
-    firstname = "";
-    email = "";
-    pw1 = "";
-    pw2 = "";
-    phone: number | string = "";
-    agree = false;
+    private detailAddress = ""; // 상세주소
+    private address = ""; // 주소
+    private isOpen = false; // 주소찾기모달창
+    private userid = ""; // 아이디
+    private lastname = ""; // 이름
+    private firstname = ""; // 성
+    private email = "";
+    private pw1 = "";
+    private pw2 = "";
+    private phone: number | string = "";
+    private agree1 = false; // 서비스 이용약관 동의
+    private agree2 = false; // 개인정보 수집 동의
+    // 주소 검색 완료후 이벤트
+    private onComplete(result: { [key: string]: any }): void {
+      console.log(result);
+      this.address = result.address;
+      this.isOpen = false;
+    }
     private validationCheck(): Promise<string> {
       let err;
       return new Promise((resolve, reject) => {
@@ -354,10 +428,18 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
           err = new Error("비밀번호가 서로 다릅니다");
           err.name = "wrong password";
           reject(err);
-        } else if (this.agree == false) {
-          this.$noticeMessage("약관 내용에 동의 해주세요");
-          err = new Error("약관 내용에 동의 해주세요");
+        } else if (this.agree1 == false) {
+          this.$noticeMessage("서비스 이용약관 내용에 동의 해주세요");
+          err = new Error("서비스 이용약관 내용에 동의 해주세요");
           err.name = "Agreement to terms and conditions";
+          reject(err);
+        } else if (this.agree2 == false) {
+          this.$noticeMessage(
+            "개인정보 수집 및 활용 동의 내용에 동의 해주세요"
+          );
+          err = new Error("개인정보 수집 및 활용 동의 내용에 동의 해주세요");
+          err.name =
+            "Please agree to the consent to the collection and use of personal information";
           reject(err);
         } else {
           resolve("success");
@@ -418,89 +500,133 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
       font-size: 1.25rem;
       margin: 0 0 15px 0;
     }
-    .blue_btn {
-      margin-top: 20px;
-      width: calc(100% - 35%);
-      float: right;
-      ::v-deep button {
-        width: 70%;
+    .signup-form {
+      border-top: 4px solid #f8f8f8;
+      padding-top: 15px;
+      .address-search {
+        position: fixed;
+        max-width: 720px;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 6;
+        .vue-daum-postcode {
+          overflow: auto;
+          height: 100%;
+        }
       }
-    }
-    .row {
-      margin-top: 10px;
-      clear: both;
-
-      input,
-      textarea,
-      select {
-        font-family: "NotoSansCJKkr-Regular";
-        font-size: 14px;
+      .blue_btn {
+        margin-top: 20px;
         width: calc(100% - 35%);
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        outline: none;
-        padding: 5px 6px;
-        height: 32px;
-        line-height: 13px;
-        box-sizing: border-box;
-      }
-      select {
-        background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
-          center / 7px 5px;
-      }
-      textarea {
-        vertical-align: top;
-        resize: none;
-
-        height: 60px;
-        &::placeholder {
-          color: #666666;
-          font-size: 12px;
+        float: right;
+        ::v-deep button {
+          width: 70%;
         }
       }
-
-      .dt {
-        width: 35%;
-        display: inline-block;
-        font-size: 14px;
-        font-family: "NotoSansCJKkr-Regular";
-        .required {
-          color: #114fff;
+      .row {
+        &:not(:first-child) {
+          margin-top: 10px;
         }
-      }
-    }
-    .agree {
-      width: calc(100% - 35%);
-      position: relative;
-      float: right;
-      color: #666666;
-      margin: 2% 0;
-      font-size: 1.125rem;
-      font-family: "NotoSansCJKkr-Regular";
-      &:after {
-        display: block;
-        content: "";
         clear: both;
-      }
-      ::v-deep .container-checkbox {
-        width: 15px;
-        height: 15px;
-        position: unset;
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 10px;
-        input[type="checkbox"] + .checkmark {
-          width: 15px;
-          height: 15px;
+        input,
+        textarea,
+        select {
+          font-family: "NotoSansCJKkr-Regular";
+          font-size: 14px;
+          width: calc(100% - 35%);
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          outline: none;
+          padding: 5px 6px;
+          height: 32px;
+          line-height: 13px;
+          box-sizing: border-box;
+        }
+        select {
+          background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat
+            90% center / 7px 5px;
+        }
+        textarea {
+          vertical-align: top;
+          resize: none;
+
+          height: 60px;
+          &::placeholder {
+            color: #666666;
+            font-size: 12px;
+          }
+        }
+
+        .dt {
+          width: 35%;
           display: inline-block;
-          padding: 0;
-          position: unset;
+          font-size: 14px;
+          font-family: "NotoSansCJKkr-Regular";
+          .required {
+            color: #114fff;
+          }
+        }
+        .search,
+        .select-wrap {
+          margin-top: 0;
+          width: calc(100% - 35%);
+          display: inline-block;
+          vertical-align: middle;
+          .search_contents {
+            margin-left: 0;
+            width: 100%;
+          }
+        }
+        ::v-deep .select-wrap {
+          .select {
+            width: 31.333%;
+            &:not(:last-child) {
+              margin-right: 3%;
+            }
+          }
+        }
+        .address {
+          vertical-align: middle;
         }
       }
-      label[for="check"] {
-        display: inline-block;
-        font-size: 0.8em;
-        vertical-align: middle;
+      .agree-line {
+        &:after {
+          display: block;
+          content: "";
+          clear: both;
+        }
+        .agree {
+          width: calc(100% - 35%);
+          position: relative;
+          float: right;
+          color: #666666;
+          margin-top: 5px;
+          font-size: 1.125rem;
+          font-family: "NotoSansCJKkr-Regular";
+          ::v-deep .container-checkbox {
+            width: 15px;
+            height: 15px;
+            position: unset;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+            input[type="checkbox"] + .checkmark {
+              width: 15px;
+              height: 15px;
+              display: inline-block;
+              padding: 0;
+              position: unset;
+            }
+          }
+          .agree-check {
+            width: calc(100% - 30px);
+            display: inline-block;
+            font-size: 0.8em;
+            vertical-align: middle;
+          }
+        }
       }
     }
   }
