@@ -31,11 +31,11 @@
     components: { BlueBtn },
   })
   export default class ReissuePw extends Vue {
-    pw1 = "";
-    pw2 = "";
-    time = "";
-    reload = true;
-    countdown(): void {
+    private pw1 = "";
+    private pw2 = "";
+    private time = "";
+    private reload = true;
+    private countdown(): void {
       let timeArray = this.time.split(":");
       let seconds = this.timeToSeconds(timeArray);
       if (typeof seconds === "string") {
@@ -48,12 +48,12 @@
         let timeoutMyOswego = setTimeout(this.countdown, 1000);
       }
     }
-    timeToSeconds(timeArray: string[]): number | string {
+    private timeToSeconds(timeArray: string[]): number | string {
       const minutes = ((timeArray[0] as unknown) as number) * 1;
       let seconds = (((minutes * 60 + timeArray[1]) as unknown) as number) * 1;
       return seconds;
     }
-    secondsToTime(secs: number): string {
+    private secondsToTime(secs: number): string {
       let hours: string | number = Math.floor(secs / (60 * 60));
       hours = hours < 10 ? "0" + hours : hours;
       const divisor_for_minutes = secs % (60 * 60);
@@ -64,7 +64,7 @@
       seconds = seconds < 10 ? "0" + seconds : seconds;
       return minutes + ":" + seconds;
     }
-    pwChange(): void {
+    private pwChange(): void {
       const data = {
         action: "reset_password",
         token: this.$route.query.token,
@@ -94,7 +94,7 @@
           });
       }
     }
-    tokenCheck(): void {
+    private tokenCheck(): void {
       const data = {
         action: "reset_password_token_chk",
         token: this.$route.query.token,
