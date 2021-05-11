@@ -1,12 +1,27 @@
 <template>
   <div class="select-wrap">
-    <select class="select" ref="select_year" @change="lastDay">
+    <select
+      class="select"
+      ref="select_year"
+      v-model="birthYear"
+      @change="lastDay"
+    >
       <option value="null">년</option>
     </select>
-    <select class="select" ref="select_month" @change="lastDay">
+    <select
+      class="select"
+      ref="select_month"
+      v-model="birthMonth"
+      @change="lastDay"
+    >
       <option value="null">월</option>
     </select>
-    <select class="select" ref="select_day">
+    <select
+      class="select"
+      ref="select_day"
+      v-model="birthDays"
+      @change="birthDaySet"
+    >
       <option value="null">일</option>
     </select>
   </div>
@@ -20,9 +35,19 @@
       select_month: HTMLSelectElement;
       select_day: HTMLSelectElement;
     };
-    start_year = 1900;
-    today_year = new Date().getFullYear();
-    index = 1;
+    private birthYear = null;
+    private birthMonth = null;
+    private birthDays = null;
+    private start_year = 1900;
+    private today_year = new Date().getFullYear();
+    private index = 1;
+    private birthDaySet(): void {
+      this.$emit("birthday", {
+        birthYear: this.birthYear,
+        birthMonth: this.birthMonth,
+        birthDays: this.birthDays,
+      });
+    }
     private lastDay(): void {
       const Year = (this.$refs.select_year.value as unknown) as number;
       const Month = (this.$refs.select_month.value as unknown) as number;
