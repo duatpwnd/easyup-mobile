@@ -12,6 +12,9 @@ describe("SignUp.vue", () => {
         $noticeMessage: jest.fn(),
       },
     });
+    jest.spyOn(wrapper.vm, "phoneAuth");
+    jest.spyOn(wrapper.vm, "reSend");
+    jest.spyOn(wrapper.vm, "start");
   });
   test("성을 입력 안했을경우", () => {
     const lastName = wrapper.vm.lastname;
@@ -41,16 +44,43 @@ describe("SignUp.vue", () => {
     expect(wrapper.vm.agree1).toBeFalsy();
     expect(wrapper.vm.agree2).toBeFalsy();
   });
-  test("연락처 전송버튼 클릭시", () => {
+  test("연락처 전송버튼 클릭시", async () => {
     const submitBtn = wrapper.find(".submit-btn");
+    wrapper.setData({ phone: "01089511569" });
+    Axios.post = jest
+      .fn()
+      .mockResolvedValue({ data: { data: { cert_number: "123456" } } });
     submitBtn.trigger("click");
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.isTimer).toBeTruthy();
   });
-  test("연락처 재전송 버튼 클릭시", () => {
+  test.only("연락처 재전송 버튼 클릭시", async () => {
     const submitBtn = wrapper.find(".submit-btn");
+    wrapper.setData({ phone: "01089511569" });
+    Axios.post = jest
+      .fn()
+      .mockResolvedValue({ data: { data: { cert_number: "123456" } } });
+    // 처음 전송하기 누른 시점 :: S //
+    await submitBtn.trigger("click");
+    /* phoneAuth가 계속 호출이 안되었다고 오류가 나온이유는 template에서 phoneAuth()가 아닌 phoneAuth로 실행되고있었음
+    그래서 클릭을해도 phoneAuth함수가 실행된게 아니기때문에 tohavebeencalled로 감지를 할수 없음
+    */
+    expect(wrapper.vm.phoneAuth).toHaveBeenCalled();
+    expect(wrapper.vm.start).toHaveBeenCalled();
+    // 처음 전송하기 누른 시점 :: E //
+    await wrapper.vm.$nextTick();
+    expect(submitBtn.text()).toBe("재전송");
+    // 처음 재전송하기 누른 시점 :: S //
     submitBtn.trigger("click");
-    submitBtn.trigger("click");
-    expect(wrapper.vm.isWait).toBeTruthy();
+    expect(wrapper.vm.reSend).toHaveBeenCalled();
+    // 처음 재전송하기 누른 시점 :: E //
+
+    // 1분이내에 재전송버튼 누를경우 1분후에 전송이 가능하다는 문구를 넣어야함
+    if (wrapper.vm.time > 120) {
+      expect(wrapper.vm.isWait).toBeTruthy();
+    } else {
+      expect(wrapper.vm.isWait).toBeFalsy();
+    }
   });
   test("인증번호 입력 시간이 만료되었을경우", () => {
     jest.spyOn(wrapper.vm, "stop");
