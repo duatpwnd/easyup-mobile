@@ -2,21 +2,29 @@
   <div id="profile_modify">
     <h2>프로필 편집</h2>
     <!-- 휴대폰 인증 모달 :: S -->
+    <div class="mask" v-if="authModal"></div>
     <div class="phone-auth-modal" v-if="authModal">
       <h2>프로필 편집</h2>
       <div class="row">
-        <label class="dt phone-title"
-          >연락처<span class="required">＊</span></label
-        >
+        <label class="dt phone-title">연락처</label>
         <div class="phone">
           <input v-model="phone" type="tell" id="phone" />
+          <button
+            type="button"
+            class="submit-btn"
+            @click="phoneAuth"
+            v-if="time == 0"
+          >
+            전송
+          </button>
           <button
             ref="submit_btn"
             type="button"
             class="submit-btn"
-            @click="start"
+            @click="reSend"
+            v-else
           >
-            전송
+            재전송
           </button>
         </div>
         <p class="auth-phone-msg" v-if="isWait">
@@ -26,8 +34,10 @@
       <div class="row">
         <label class="dt phone-title">인증번호</label>
         <div class="phone">
-          <input v-model="auth" type="number" id="auth" />
-          <button type="button" class="submit-btn">인증</button>
+          <input v-model="certInput" type="text" id="auth" />
+          <button type="button" class="submit-btn" @click="certIsPass()">
+            인증
+          </button>
         </div>
         <div class="timer" v-if="isTimer">{{ prettyTime | prettify }}</div>
       </div>
@@ -35,13 +45,13 @@
         <slot name="button_type">
           <BlueBtn>
             <slot name="btn1">
-              <button class="confirm_ok" slot="blue_btn">
+              <button class="confirm_ok" slot="blue_btn" @click="phoneUpdate">
                 확인
               </button>
             </slot>
           </BlueBtn>
-          <BlueBtn>
-            <button class="cancel" slot="blue_btn" @click="authModal = false">
+          <BlueBtn class="cancel-blue-btn">
+            <button class="cancel" slot="blue_btn" @click="phoneUpdateCancel">
               취소
             </button>
           </BlueBtn>
@@ -75,18 +85,16 @@
         <div class="row">
           <label for="email">이메일</label>
           <span class="email_column">{{ userStore_userinfo.info.email }}</span>
-          <!-- <input
-            type="text"
-            id="email"
-            class="readonly"
-            readonly
-            :value="userStore_userinfo.info.email"
-          /> -->
         </div>
         <div class="row">
           <label>연락처</label>
           <div class="phone">
-            <input type="tell" v-model="phone" id="phone" disabled />
+            <input
+              type="number"
+              :value="userStore_userinfo.info.phone"
+              id="phone"
+              disabled
+            />
             <button type="button" class="submit-btn" @click="authModal = true">
               재인증
             </button>
@@ -148,7 +156,14 @@
         </div>
         <div class="row">
           <label class="dt">생년월일</label>
-          <SelectYYMMDD @birthday="birthdaySet"></SelectYYMMDD>
+          <SelectYYMMDD
+            @birthday="birthdaySet"
+            :birthday="
+              userStore_userinfo.info.birth == ''
+                ? null
+                : userStore_userinfo.info.birth
+            "
+          ></SelectYYMMDD>
         </div>
         <BlueBtn>
           <button slot="blue_btn" type="button" @click="editProfile()">
@@ -177,12 +192,29 @@
         userStore_userinfo: "userinfo",
       }),
     },
+    filters: {
+      prettify(value: string): string {
+        let data = value.split(":");
+        let minutes = data[0] as number | string;
+        let secondes = data[1] as number | string;
+        if (minutes < 10) {
+          minutes = "0" + minutes;
+        }
+        if (((secondes as unknown) as number) < 10) {
+          secondes = "0" + secondes;
+        }
+        return minutes + ":" + secondes;
+      },
+    },
   })
   export default class ProfileModify extends Vue {
     $refs!: {
       upload: HTMLFormElement;
       submit_btn: HTMLButtonElement;
     };
+    private isCert = false; // 인증이 완료된경우 true
+    private certNumber = ""; // 인증번호
+    private certInput = ""; // 인증번호 입력
     private authModal = false;
     private detailAddress = ""; // 상세주소
     private address = ""; // 주소
@@ -200,38 +232,114 @@
     private timer = 1;
     private isWait = false; //인증번호 안내 메시지
     private isTimer = false;
-
-    private start(): void {
-      this.$refs.submit_btn.innerText = "재전송";
-      if (this.time > 0) {
-        console.log("재전송이다");
+    private get prettyTime(): string {
+      let time = this.time / 60;
+      let minutes = Math.floor(time);
+      let secondes = Math.round((time - minutes) * 60);
+      return minutes + ":" + secondes;
+    }
+    private phoneUpdate(): void {
+      if (this.isCert == false) {
+        this.$noticeMessage("인증번호를 다시 확인 후 입력해 주세요.");
+      } else {
+        const userinfo = this.userStore_userinfo;
+        userinfo.info.phone = this.phone;
+        this.$cookies.set("user_info", userinfo);
+        this.certInput = "";
+        this.editProfile();
+      }
+    }
+    private phoneUpdateCancel(): void {
+      this.phone = this.userStore_userinfo.info.phone;
+      this.certInput = "";
+      this.isCert = false;
+      this.authModal = false;
+      this.stop();
+    }
+    private certIsPass(): void {
+      if (this.certNumber != this.certInput) {
+        this.$noticeMessage("인증번호를 다시 확인 후 입력해 주세요.");
+      } else {
+        this.$noticeMessage("인증이 완료되었습니다.");
+        this.isCert = true;
+        this.isWait = false;
+        this.stop();
+      }
+    }
+    private reSend(): void {
+      if (this.time > 120) {
         this.isWait = true;
       } else {
-        console.log("전송이다");
-        this.time = 180;
-        this.isTimer = true;
-        this.timer = window.setInterval(() => {
-          if (this.time > 0) {
-            this.time--;
-          } else {
-            clearInterval(this.timer);
-            this.stop();
-          }
-        }, 1000);
+        this.isWait = false;
+        this.phoneAuth();
       }
+    }
+    private phoneAuth(): void {
+      const re = /^\d{3}\d{3,4}\d{4}$/;
+      if (re.test(this.phone) == false) {
+        this.$noticeMessage("형식에 맞지 않는 번호입니다.");
+      } else if (this.phone == this.userStore_userinfo.info.phone) {
+        this.$noticeMessage("현재 휴대폰번호와 동일합니다.");
+      } else {
+        this.isCert = false;
+        const data = {
+          action: "send_sms",
+          phone: this.phone,
+        };
+        this.$axios
+          .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+          .then((result: { [key: string]: any }) => {
+            console.log(result);
+            if (result.data.data.result == false) {
+              this.$noticeMessage(result.data.data.msg);
+            } else {
+              this.$noticeMessage("인증문자가 발송되었습니다.");
+              this.certNumber = result.data.data.cert_number;
+              this.start();
+            }
+          });
+      }
+    }
+    private start(): void {
+      clearInterval(this.timer);
+      this.time = 180;
+      this.isTimer = true;
+      this.timer = window.setInterval(() => {
+        if (this.time > 0) {
+          this.time--;
+        } else {
+          this.$noticeMessage(
+            "인증번호 입력 시간이 만료 되었습니다.<br>인증번호를 재 발송 후 입력해 주세요."
+          );
+          this.stop();
+        }
+      }, 1000);
     }
     private stop(): void {
       clearInterval(this.timer);
-      this.$noticeMessage(
-        "인증번호 입력 시간이 만료 되었습니다.<br>인증번호를 재 발송 후 입력해 주세요."
-      );
       this.time = 0;
       this.isTimer = false;
     }
     // 주소 검색 완료후 이벤트
     private onComplete(result: { [key: string]: any }): void {
       console.log(result);
-      this.address = "(" + result.zonecode + ") " + result.address;
+      // 도로명 검색인경우
+      if (result.userSelectedType == "R") {
+        this.address =
+          "(" +
+          result.zonecode +
+          ") " +
+          result.address +
+          " (" +
+          result.bname +
+          "," +
+          result.buildingName +
+          ")";
+      } else {
+        // 지번검색
+        console.log("d");
+        this.address = "(" + result.zonecode + ") " + result.jibunAddress;
+      }
       this.isOpen = false;
     }
     private birthdaySet(day: { [key: string]: string }): void {
@@ -280,18 +388,45 @@
               if (result.data.error) {
                 this.$noticeMessage(result.data.message);
               } else {
-                // this.$cookies.set("user_info", result.data.data[0]);
-                // this.$store.commit(
-                //   "userStore/loginToken",
-                //   result.data.data[0]
-                // );
+                const userinfo = this.userStore_userinfo;
+                userinfo.info.address =
+                  this.address + "||" + this.detailAddress;
+                if (
+                  this.birthYear != "" &&
+                  this.birthMonth != "" &&
+                  this.birthDays != ""
+                ) {
+                  userinfo.info.birth =
+                    this.birthYear +
+                    "-" +
+                    this.birthMonth +
+                    "-" +
+                    this.birthDays;
+                  console.log(
+                    this.birthYear +
+                      "-" +
+                      this.birthMonth +
+                      "-" +
+                      this.birthDays
+                  );
+                }
+                this.$cookies.set("user_info", userinfo);
+                this.authModal = false;
                 this.$noticeMessage("새 프로필이 저장되었습니다.");
               }
             });
         }
       });
     }
+    destroyed() {
+      this.stop();
+    }
     created() {
+      if (this.userStore_userinfo.info.address != "") {
+        const address = this.userStore_userinfo.info.address.split("||");
+        this.address = address[0];
+        this.detailAddress = address[1];
+      }
       this.phone = this.userStore_userinfo.info.phone;
     }
   }
@@ -310,20 +445,22 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 2;
+      z-index: 6;
       .btn_wrap {
         .blue_btn {
-          text-align: center;
           width: 50%;
           display: inline-block;
           .confirm_ok,
           .cancel {
-            width: 90%;
+            width: 96%;
           }
           .cancel {
             background: #ccc;
             border: 2px solid #ccc;
           }
+        }
+        .cancel-blue-btn {
+          text-align: right;
         }
       }
     }
@@ -382,14 +519,13 @@
       }
       .readonly {
         border: 0;
-        outline: none;
       }
       .email_column {
         font-family: "NotoSansCJKkr-Regular";
-        font-size: 1.5rem;
+        font-size: 14px;
         white-space: pre-wrap;
         display: inline-block;
-        width: 65%;
+        width: calc(100% - 35%);
         word-break: break-all;
         vertical-align: middle;
       }
@@ -397,6 +533,7 @@
         display: none;
       }
       input {
+        vertical-align: middle;
         font-family: "NotoSansCJKkr-Regular";
         font-size: 14px;
         width: calc(100% - 35%);
@@ -408,7 +545,7 @@
         line-height: 13px;
         box-sizing: border-box;
       }
-      input[type="tell"]:disabled {
+      #phone:disabled {
         background: #dbdbdb;
         box-shadow: 0px 0px 1px 1px #dbdbdb;
       }
@@ -422,10 +559,10 @@
       }
 
       label {
-        width: 35%;
         vertical-align: middle;
+        width: 35%;
         display: inline-block;
-        font-size: 1.5rem;
+        font-size: 14px;
         font-family: "NotoSansCJKkr-Regular";
       }
       .file {
@@ -449,8 +586,14 @@
         vertical-align: middle;
         .search_contents {
           margin-left: 0;
-          width: 100%;
+          width: 90%;
+          border: 0;
         }
+      }
+      .search {
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
       }
       ::v-deep .select-wrap {
         .select {
@@ -460,6 +603,14 @@
           }
         }
       }
+    }
+    .timer,
+    .auth-phone-msg,
+    .email-notice {
+      color: #ff0000;
+      margin-left: 35%;
+      font-size: 14px;
+      margin-top: 5px;
     }
   }
 </style>
