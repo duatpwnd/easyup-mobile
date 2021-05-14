@@ -249,8 +249,7 @@
           &:not(:last-child) {
             margin-right: 15px;
           }
-          width: 40px;
-          height: 40px;
+          width: 20.87%;
         }
       }
     }
