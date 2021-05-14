@@ -2,7 +2,7 @@ import { shallowMount } from "@vue/test-utils";
 import SignUp from "@/views/SignUp.vue";
 import Axios from "axios";
 
-describe("SignUp.vue", () => {
+describe("회원가입페이지", () => {
   let wrapper;
   beforeAll(() => {
     wrapper = shallowMount(SignUp, {

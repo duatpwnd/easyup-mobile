@@ -73,14 +73,17 @@
             >연락처<span class="required">＊</span></label
           >
           <div class="phone">
-            <input v-model="phone" type="tell" id="phone" />
+            <input v-model="phone" type="number" id="phone" />
             <button
-              ref="submit_btn"
               type="button"
               class="submit-btn"
-              @click="start"
+              @click="phoneAuth()"
+              v-if="time == 0"
             >
               전송
+            </button>
+            <button type="button" class="submit-btn" @click="reSend" v-else>
+              재전송
             </button>
           </div>
           <p class="auth-phone-msg" v-if="isWait">
@@ -90,8 +93,10 @@
         <div class="row">
           <label class="dt phone-title">인증번호</label>
           <div class="phone">
-            <input v-model="auth" type="number" id="auth" />
-            <button type="button" class="submit-btn">인증</button>
+            <input v-model="certInput" type="number" id="auth" />
+            <button type="button" class="submit-btn" @click="certIsPass()">
+              인증
+            </button>
           </div>
           <div class="timer" v-if="isTimer">{{ prettyTime | prettify }}</div>
         </div>
@@ -406,7 +411,6 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
             >
           </div>
         </div>
-
         <BlueBtn>
           <button slot="blue_btn" type="button" @click="register()">
             등록
@@ -440,15 +444,14 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
     },
   })
   export default class SignUp extends Vue {
-    $refs!: {
-      submit_btn: HTMLButtonElement;
-    };
+    private isCert = false; // 인증이 완료된경우 true
+    private certNumber = ""; // 인증번호
     private snsType = "";
     private birthYear = "";
     private birthMonth = "";
     private birthDays = "";
     private isWait = false; //인증번호 안내 메시지
-    private auth = ""; // 인증번호 입력
+    private certInput = ""; // 인증번호 입력
     private detailAddress = ""; // 상세주소
     private address = ""; // 주소
     private isOpen = false; // 주소찾기모달창
@@ -459,7 +462,7 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
     private email = "";
     private pw1 = "";
     private pw2 = "";
-    private phone: number | string = "";
+    private phone: string = "";
     private agree1 = false; // 서비스 이용약관 동의
     private agree2 = false; // 개인정보 수집 동의
     private time = 0;
@@ -474,6 +477,54 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
       let secondes = Math.round((time - minutes) * 60);
       return minutes + ":" + secondes;
     }
+    private certIsPass(): void {
+      if (this.certNumber != this.certInput) {
+        this.$noticeMessage("인증번호를 다시 확인 후 입력해 주세요.");
+      } else {
+        this.$noticeMessage("인증이 완료되었습니다.");
+        this.isCert = true;
+        this.isWait = false;
+        this.stop();
+      }
+    }
+    flag = true;
+    private reSend(): void {
+      console.log("재전송이다");
+      if (this.time > 120) {
+        this.isWait = true;
+      } else {
+        this.flag = true;
+        this.isWait = false;
+        this.phoneAuth();
+      }
+    }
+    private phoneAuth(): void {
+      const re = /^\d{3}\d{3,4}\d{4}$/;
+      if (re.test(this.phone) == false) {
+        this.$noticeMessage("형식에 맞지 않는 번호입니다.");
+      } else {
+        this.isCert = false;
+        const data = {
+          action: "send_sms",
+          phone: this.phone,
+        };
+        if (this.flag) {
+          this.flag = false;
+          this.$axios
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+            .then((result: { [key: string]: any }) => {
+              console.log(result);
+              if (result.data.data.result == false) {
+                this.$noticeMessage(result.data.data.msg);
+              } else {
+                this.$noticeMessage("인증문자가 발송되었습니다.");
+                this.certNumber = result.data.data.cert_number;
+                this.start();
+              }
+            });
+        }
+      }
+    }
     private birthdaySet(day: { [key: string]: string }): void {
       console.log(day);
       this.birthYear = day.birthYear;
@@ -481,36 +532,46 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
       this.birthDays = day.birthDays;
     }
     private start(): void {
-      this.$refs.submit_btn.innerText = "재전송";
-      if (this.time > 0) {
-        console.log("재전송이다");
-        this.isWait = true;
-      } else {
-        console.log("전송이다");
-        this.time = 180;
-        this.isTimer = true;
-        this.timer = window.setInterval(() => {
-          if (this.time > 0) {
-            this.time--;
-          } else {
-            clearInterval(this.timer);
-            this.stop();
-          }
-        }, 1000);
-      }
+      clearInterval(this.timer);
+      this.time = 180;
+      this.isTimer = true;
+      console.log("전송이다");
+      this.timer = window.setInterval(() => {
+        if (this.time > 0) {
+          this.time--;
+        } else {
+          this.$noticeMessage(
+            "인증번호 입력 시간이 만료 되었습니다.<br>인증번호를 재 발송 후 입력해 주세요."
+          );
+          this.stop();
+        }
+      }, 1000);
     }
     private stop(): void {
       clearInterval(this.timer);
-      this.$noticeMessage(
-        "인증번호 입력 시간이 만료 되었습니다.<br>인증번호를 재 발송 후 입력해 주세요."
-      );
       this.time = 0;
       this.isTimer = false;
+      this.flag = true;
     }
     // 주소 검색 완료후 이벤트
     private onComplete(result: { [key: string]: any }): void {
       console.log(result);
-      this.address = "(" + result.zonecode + ") " + result.address;
+      // 도로명 검색인경우
+      if (result.userSelectedType == "R") {
+        this.address =
+          "(" +
+          result.zonecode +
+          ") " +
+          result.address +
+          " (" +
+          result.bname +
+          "," +
+          result.buildingName +
+          ")";
+      } else {
+        // 지번검색
+        this.address = "(" + result.zonecode + ") " + result.jibunAddress;
+      }
       this.isOpen = false;
     }
     private validationCheck(): Promise<string> {
@@ -526,6 +587,11 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
           this.$noticeMessage("이름을 입력하세요");
           err = new Error("이름을 입력하세요");
           err.name = "enter your name";
+          reject(err);
+        } else if (this.userid.trim().length == 0) {
+          this.$noticeMessage("아이디를 입력하세요");
+          err = new Error("아이디를 입력하세요");
+          err.name = "enter your 아이디를";
           reject(err);
         } else if (this.email.trim().length == 0) {
           this.$noticeMessage("이메일을 입력하세요");
@@ -559,6 +625,12 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
           err = new Error("개인정보 수집 및 활용 동의 내용에 동의 해주세요");
           err.name =
             "Please agree to the consent to the collection and use of personal information";
+          reject(err);
+        } else if (this.isCert == false) {
+          this.$noticeMessage("인증번호를 다시 확인 후 입력해 주세요.");
+          err = new Error("인증번호를 다시 확인 후 입력해 주세요");
+          err.name =
+            "Please check the authentication number again and enter it";
           reject(err);
         } else {
           resolve("success");
@@ -596,6 +668,9 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
       } catch (e) {
         console.log(e);
       }
+    }
+    destroyed() {
+      this.stop();
     }
   }
 </script>
@@ -708,8 +783,14 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
           vertical-align: middle;
           .search_contents {
             margin-left: 0;
-            width: 100%;
+            width: 90%;
+            border: 0;
           }
+        }
+        .search {
+          box-sizing: border-box;
+          border: 1px solid #ccc;
+          border-radius: 5px;
         }
         ::v-deep .select-wrap {
           .select {

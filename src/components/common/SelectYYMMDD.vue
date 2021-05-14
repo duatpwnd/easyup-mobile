@@ -27,17 +27,18 @@
   </div>
 </template>
 <script lang="ts">
-  import { Vue, Component } from "vue-property-decorator";
+  import { Vue, Component, Prop } from "vue-property-decorator";
   @Component
   export default class YYMMDD extends Vue {
+    @Prop(String) private birthday!: String;
     $refs!: {
       select_year: HTMLSelectElement;
       select_month: HTMLSelectElement;
       select_day: HTMLSelectElement;
     };
-    private birthYear = null;
-    private birthMonth = null;
-    private birthDays = null;
+    private birthYear: string | null = null;
+    private birthMonth: string | null = null;
+    private birthDays: string | null = null;
     private start_year = 1900;
     private today_year = new Date().getFullYear();
     private index = 1;
@@ -49,8 +50,8 @@
       });
     }
     private lastDay(): void {
-      const Year = (this.$refs.select_year.value as unknown) as number;
-      const Month = (this.$refs.select_month.value as unknown) as number;
+      const Year = (this.birthYear as unknown) as number;
+      const Month = (this.birthMonth as unknown) as number;
       const Day = new Date(
         new Date(Year, Month, 1).getTime() - 86400000
       ).getDate();
@@ -87,6 +88,14 @@
       this.lastDay();
     }
     mounted() {
+      if (this.birthday != null) {
+        console.log(this.birthday, "아니다");
+        const birth = this.birthday.split("-");
+        this.birthYear = birth[0];
+        this.birthMonth = (parseFloat(birth[1]) as unknown) as string;
+        this.birthDays = (parseFloat(birth[2]) as unknown) as string;
+        this.birthDaySet();
+      }
       this.dateSet();
     }
   }
