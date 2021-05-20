@@ -2,7 +2,7 @@
   <div id="signup">
     <h2>회원가입 : 학생</h2>
     <p class="noti">강사로 등록 희망하시는 분은 고객센터로 연락 주세요.</p>
-    <div class="sns-login">
+    <!-- <div class="sns-login">
       <span class="login-title">SNS 로그인</span>
       <span class="sns-login-btn">
         <img
@@ -21,7 +21,7 @@
           title="구글로그인"
         />
       </span>
-    </div>
+    </div> -->
     <form class="signup-form">
       <legend>회원가입</legend>
       <fieldset>

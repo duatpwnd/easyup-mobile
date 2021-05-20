@@ -1,6 +1,6 @@
 <template>
   <div class="menu_modal">
-    <div class="sns-login">
+    <!-- <div class="sns-login">
       <span class="login-title">SNS 로그인</span>
       <span class="sns-login-btn">
         <img
@@ -19,7 +19,7 @@
           title="구글로그인"
         />
       </span>
-    </div>
+    </div> -->
     <form class="login_form">
       <fieldset>
         <legend>로그인정보</legend>
