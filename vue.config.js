@@ -3,6 +3,17 @@ const webpack = require("webpack");
 // const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
 //   .BundleAnalyzerPlugin;
 module.exports = {
+  devServer: {
+    // 프록시 설정
+    proxy: {
+      // 프록시 요청을 보낼 api의 시작 부분
+      "/": {
+        // 프록시 요청을 보낼 서버의 주소
+        target: "https://www.easyupclass.com",
+        changeOrigin: true,
+      },
+    },
+  },
   chainWebpack: (config) => {
     // lazyload 한번에 리소스를 다운받기보다는 해당라우터에서 필요한 리로스만 다운받을수있도록
     config.plugins.delete("prefetch");
