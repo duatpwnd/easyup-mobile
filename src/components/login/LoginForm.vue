@@ -1,5 +1,25 @@
 <template>
   <div class="menu_modal">
+    <!-- <div class="sns-login">
+      <span class="login-title">SNS 로그인</span>
+      <span class="sns-login-btn">
+        <img
+          src="@/assets/images/main/icon_kakao.png"
+          alt="카카오로그인"
+          title="카카오로그인"
+        />
+        <img
+          src="@/assets/images/main/icon_naver.png"
+          alt="네이버로그인"
+          title="네이버로그인"
+        />
+        <img
+          src="@/assets/images/main/icon_google.png"
+          alt="구글로그인"
+          title="구글로그인"
+        />
+      </span>
+    </div> -->
     <form class="login_form">
       <fieldset>
         <legend>로그인정보</legend>
@@ -211,6 +231,28 @@
     height: 100%;
     box-sizing: border-box;
     background: #f8f8f8;
+    .sns-login {
+      background: white;
+      padding: 4.445%;
+      padding-bottom: 0;
+      .login-title {
+        vertical-align: middle;
+        font-size: 1.5rem;
+        display: inline-block;
+        width: 40%;
+      }
+      .sns-login-btn {
+        width: 60%;
+        display: inline-block;
+        text-align: right;
+        img {
+          &:not(:last-child) {
+            margin-right: 15px;
+          }
+          width: 20.87%;
+        }
+      }
+    }
     .login_form {
       background: white;
       padding: 4.445%;

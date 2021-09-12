@@ -130,8 +130,14 @@
         current: num,
         search_status: order,
         keyword: keyword,
-        search_start_date: this.$route.query.start_date,
-        search_end_date: this.$route.query.end_date,
+        search_start_date:
+          this.$route.query.start_date == undefined
+            ? ""
+            : this.$route.query.start_date,
+        search_end_date:
+          this.$route.query.end_date == undefined
+            ? ""
+            : this.$route.query.end_date,
       };
       console.log(data);
       this.$axios

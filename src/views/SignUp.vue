@@ -2,7 +2,27 @@
   <div id="signup">
     <h2>회원가입 : 학생</h2>
     <p class="noti">강사로 등록 희망하시는 분은 고객센터로 연락 주세요.</p>
-    <form>
+    <!-- <div class="sns-login">
+      <span class="login-title">SNS 로그인</span>
+      <span class="sns-login-btn">
+        <img
+          src="@/assets/images/main/icon_kakao.png"
+          alt="카카오로그인"
+          title="카카오로그인"
+        />
+        <img
+          src="@/assets/images/main/icon_naver.png"
+          alt="네이버로그인"
+          title="네이버로그인"
+        />
+        <img
+          src="@/assets/images/main/icon_google.png"
+          alt="구글로그인"
+          title="구글로그인"
+        />
+      </span>
+    </div> -->
+    <form class="signup-form">
       <legend>회원가입</legend>
       <fieldset>
         <div class="row">
@@ -18,10 +38,10 @@
           <input v-model="firstname" type="text" id="first_name" />
         </div>
         <div class="row">
-          <label class="dt" for="email"
-            >이메일<span class="required">＊</span></label
+          <label class="dt" for="userid"
+            >아이디<span class="required">＊</span></label
           >
-          <input v-model="email" type="text" id="email" />
+          <input v-model="userid" type="text" id="userid" />
         </div>
         <div class="row">
           <label class="dt" for="pw"
@@ -36,11 +56,79 @@
           <input v-model="pw2" type="password" id="re_pw" />
         </div>
         <div class="row">
-          <label class="dt">연락처</label>
-          <input v-model="phone" type="tell" id="phone" />
+          <label class="dt" for="email"
+            >이메일<span class="required">＊</span></label
+          >
+          <input v-model="email" type="text" id="email" />
+          <p
+            class="email-notice"
+            v-if="emailValidation == false && email.trim().length > 0"
+          >
+            이메일이 유효 하지 않습니다.
+          </p>
         </div>
 
         <div class="row">
+          <label class="dt phone-title"
+            >연락처<span class="required">＊</span></label
+          >
+          <div class="phone">
+            <input v-model="phone" type="number" id="phone" />
+            <button
+              type="button"
+              class="submit-btn"
+              @click="phoneAuth()"
+              v-if="time == 0"
+            >
+              전송
+            </button>
+            <button type="button" class="submit-btn" @click="reSend" v-else>
+              재전송
+            </button>
+          </div>
+          <p class="auth-phone-msg" v-if="isWait">
+            1분 후에 인증번호를 발송할 수 있습니다.
+          </p>
+        </div>
+        <div class="row">
+          <label class="dt phone-title">인증번호</label>
+          <div class="phone">
+            <input v-model="certInput" type="number" id="auth" />
+            <button type="button" class="submit-btn" @click="certIsPass()">
+              인증
+            </button>
+          </div>
+          <div class="timer" v-if="isTimer">{{ prettyTime | prettify }}</div>
+        </div>
+        <div class="row">
+          <label class="dt address">주소</label>
+          <Search>
+            <input
+              type="text"
+              v-model="address"
+              slot="slot_input"
+              class="search_contents"
+            />
+            <button
+              slot="search_btn"
+              class="search_btn"
+              @click="isOpen = true"
+              type="button"
+            ></button>
+          </Search>
+          <div class="address-search" v-if="isOpen" @click="isOpen = false">
+            <vue-daum-postcode @complete="onComplete" />
+          </div>
+        </div>
+        <div class="row">
+          <label class="dt">상세주소</label>
+          <input v-model="detailAddress" type="text" />
+        </div>
+        <div class="row">
+          <label class="dt">생년월일</label>
+          <SelectYYMMDD @birthday="birthdaySet"></SelectYYMMDD>
+        </div>
+        <div class="row agree-line">
           <label class="dt">서비스 이용약관</label>
           <textarea
             name=""
@@ -283,18 +371,45 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
 [부칙]
 본 약관은 2020년 09월 11일부터 적용됩니다.'
           ></textarea>
+          <div class="agree">
+            <CheckBox>
+              <input
+                v-model="agree1"
+                type="checkbox"
+                checked
+                id="check1"
+                slot="check"
+              />
+            </CheckBox>
+            <label class="agree-check" for="check1"
+              >약관 내용을 모두 확인하였으며 동의합니다.</label
+            >
+          </div>
         </div>
-        <div class="row agree">
-          <CheckBox>
-            <input
-              v-model="agree"
-              type="checkbox"
-              checked
-              id="check"
-              slot="check"
-            />
-          </CheckBox>
-          <label for="check">약관 내용을 모두 확인하였으며 동의합니다.</label>
+
+        <div class="row agree-line">
+          <label class="dt">개인정보 수집 및 활용동의</label>
+          <textarea
+            name=""
+            readonly
+            disabled
+            rows="3"
+            placeholder="개인정보 처리방침"
+          ></textarea>
+          <div class="agree">
+            <CheckBox>
+              <input
+                v-model="agree2"
+                type="checkbox"
+                checked
+                id="check2"
+                slot="check"
+              />
+            </CheckBox>
+            <label class="agree-check" for="check2"
+              >약관 내용을 모두 확인하였으며 동의합니다.</label
+            >
+          </div>
         </div>
         <BlueBtn>
           <button slot="blue_btn" type="button" @click="register()">
@@ -309,17 +424,156 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
   import { Component, Vue } from "vue-property-decorator";
   import BlueBtn from "@/components/common/BaseButton.vue";
   import CheckBox from "@/components/common/BaseCheckBox.vue";
+  import Search from "@/components/common/Search.vue";
+  import SelectYYMMDD from "@/components/common/SelectYYMMDD.vue";
   @Component({
-    components: { CheckBox, BlueBtn },
+    components: { Search, CheckBox, BlueBtn, SelectYYMMDD },
+    filters: {
+      prettify(value: string): string {
+        let data = value.split(":");
+        let minutes = data[0] as number | string;
+        let secondes = data[1] as number | string;
+        if (minutes < 10) {
+          minutes = "0" + minutes;
+        }
+        if (((secondes as unknown) as number) < 10) {
+          secondes = "0" + secondes;
+        }
+        return minutes + ":" + secondes;
+      },
+    },
   })
   export default class SignUp extends Vue {
-    lastname = "";
-    firstname = "";
-    email = "";
-    pw1 = "";
-    pw2 = "";
-    phone: number | string = "";
-    agree = false;
+    private isCert = false; // 인증이 완료된경우 true
+    private certNumber = ""; // 인증번호
+    private snsType = "";
+    private birthYear = "";
+    private birthMonth = "";
+    private birthDays = "";
+    private isWait = false; //인증번호 안내 메시지
+    private certInput = ""; // 인증번호 입력
+    private detailAddress = ""; // 상세주소
+    private address = ""; // 주소
+    private isOpen = false; // 주소찾기모달창
+    private userid = ""; // 아이디
+    private isTimer = false;
+    private lastname = ""; // 이름
+    private firstname = ""; // 성
+    private email = "";
+    private pw1 = "";
+    private pw2 = "";
+    private phone: string = "";
+    private agree1 = false; // 서비스 이용약관 동의
+    private agree2 = false; // 개인정보 수집 동의
+    private time = 0;
+    private timer = 1;
+    private get emailValidation(): boolean {
+      const re = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+      return re.test(this.email);
+    }
+    private get prettyTime(): string {
+      let time = this.time / 60;
+      let minutes = Math.floor(time);
+      let secondes = Math.round((time - minutes) * 60);
+      return minutes + ":" + secondes;
+    }
+    private certIsPass(): void {
+      if (this.certNumber != this.certInput) {
+        this.$noticeMessage("인증번호를 다시 확인 후 입력해 주세요.");
+      } else {
+        this.$noticeMessage("인증이 완료되었습니다.");
+        this.isCert = true;
+        this.isWait = false;
+        this.stop();
+      }
+    }
+    flag = true;
+    private reSend(): void {
+      console.log("재전송이다");
+      if (this.time > 120) {
+        this.isWait = true;
+      } else {
+        this.flag = true;
+        this.isWait = false;
+        this.phoneAuth();
+      }
+    }
+    private phoneAuth(): void {
+      const re = /^\d{3}\d{3,4}\d{4}$/;
+      if (re.test(this.phone) == false) {
+        this.$noticeMessage("형식에 맞지 않는 번호입니다.");
+      } else {
+        this.isCert = false;
+        const data = {
+          action: "send_sms",
+          phone: this.phone,
+        };
+        if (this.flag) {
+          this.flag = false;
+          this.$axios
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+            .then((result: { [key: string]: any }) => {
+              console.log(result);
+              if (result.data.data.result == false) {
+                this.$noticeMessage(result.data.data.msg);
+              } else {
+                this.$noticeMessage("인증문자가 발송되었습니다.");
+                this.certNumber = result.data.data.cert_number;
+                this.start();
+              }
+            });
+        }
+      }
+    }
+    private birthdaySet(day: { [key: string]: string }): void {
+      console.log(day);
+      this.birthYear = day.birthYear;
+      this.birthMonth = day.birthMonth;
+      this.birthDays = day.birthDays;
+    }
+    private start(): void {
+      clearInterval(this.timer);
+      this.time = 180;
+      this.isTimer = true;
+      console.log("전송이다");
+      this.timer = window.setInterval(() => {
+        if (this.time > 0) {
+          this.time--;
+        } else {
+          this.$noticeMessage(
+            "인증번호 입력 시간이 만료 되었습니다.<br>인증번호를 재 발송 후 입력해 주세요."
+          );
+          this.stop();
+        }
+      }, 1000);
+    }
+    private stop(): void {
+      clearInterval(this.timer);
+      this.time = 0;
+      this.isTimer = false;
+      this.flag = true;
+    }
+    // 주소 검색 완료후 이벤트
+    private onComplete(result: { [key: string]: any }): void {
+      console.log(result);
+      // 도로명 검색인경우
+      if (result.userSelectedType == "R") {
+        this.address =
+          "(" +
+          result.zonecode +
+          ") " +
+          result.address +
+          " (" +
+          result.bname +
+          "," +
+          result.buildingName +
+          ")";
+      } else {
+        // 지번검색
+        this.address = "(" + result.zonecode + ") " + result.jibunAddress;
+      }
+      this.isOpen = false;
+    }
     private validationCheck(): Promise<string> {
       let err;
       return new Promise((resolve, reject) => {
@@ -333,6 +587,11 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
           this.$noticeMessage("이름을 입력하세요");
           err = new Error("이름을 입력하세요");
           err.name = "enter your name";
+          reject(err);
+        } else if (this.userid.trim().length == 0) {
+          this.$noticeMessage("아이디를 입력하세요");
+          err = new Error("아이디를 입력하세요");
+          err.name = "enter your 아이디를";
           reject(err);
         } else if (this.email.trim().length == 0) {
           this.$noticeMessage("이메일을 입력하세요");
@@ -354,10 +613,24 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
           err = new Error("비밀번호가 서로 다릅니다");
           err.name = "wrong password";
           reject(err);
-        } else if (this.agree == false) {
-          this.$noticeMessage("약관 내용에 동의 해주세요");
-          err = new Error("약관 내용에 동의 해주세요");
+        } else if (this.agree1 == false) {
+          this.$noticeMessage("서비스 이용약관 내용에 동의 해주세요");
+          err = new Error("서비스 이용약관 내용에 동의 해주세요");
           err.name = "Agreement to terms and conditions";
+          reject(err);
+        } else if (this.agree2 == false) {
+          this.$noticeMessage(
+            "개인정보 수집 및 활용 동의 내용에 동의 해주세요"
+          );
+          err = new Error("개인정보 수집 및 활용 동의 내용에 동의 해주세요");
+          err.name =
+            "Please agree to the consent to the collection and use of personal information";
+          reject(err);
+        } else if (this.isCert == false) {
+          this.$noticeMessage("인증번호를 다시 확인 후 입력해 주세요.");
+          err = new Error("인증번호를 다시 확인 후 입력해 주세요");
+          err.name =
+            "Please check the authentication number again and enter it";
           reject(err);
         } else {
           resolve("success");
@@ -365,25 +638,20 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
       });
     }
     private register(): void {
-      interface UserData {
-        action: string;
-        firstname: string;
-        lastname: string;
-        email: string;
-        password: string;
-        password_confirm: string;
-        phone: number | string;
-      }
       try {
         this.validationCheck().then((result: string) => {
-          const data: UserData = {
+          const data = {
             action: "join",
             firstname: this.firstname, //필수
             lastname: this.lastname, //필수
             email: this.email, //필수, 이메일 형식체크, 이미 사용중인 계정인지는 백단에서 체크하고 있음
             password: this.pw1, //필수
             password_confirm: this.pw2, //필수, 비밀번호란과 동일여부 체크
-            phone: this.phone, //옵션, 입력할 경우 숫자만 입력
+            phone: this.phone, //옵션, 입력할 경우 숫자만 입력,
+            addr1: this.address + this.detailAddress,
+            birth_year: this.birthYear,
+            birth_month: this.birthMonth,
+            birth_day: this.birthDays,
           };
           this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
@@ -401,6 +669,9 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
         console.log(e);
       }
     }
+    destroyed() {
+      this.stop();
+    }
   }
 </script>
 <style scoped lang="scss">
@@ -413,94 +684,201 @@ g. 회사는 이용자가 서비스 이용 중에 복제프로그램을 실행�
       margin-bottom: 13px;
       color: #333333;
     }
+    .sns-login {
+      margin-bottom: 15px;
+      .login-title {
+        font-size: 14px;
+        display: inline-block;
+        width: 35%;
+      }
+      .sns-login-btn {
+        width: calc(100% - 35%);
+        display: inline-block;
+        img {
+          &:not(:last-child) {
+            margin-right: 15px;
+          }
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
     .noti {
       color: #999999;
       font-size: 1.25rem;
       margin: 0 0 15px 0;
     }
-    .blue_btn {
-      margin-top: 20px;
-      width: calc(100% - 35%);
-      float: right;
-      ::v-deep button {
-        width: 70%;
+    .signup-form {
+      border-top: 4px solid #f8f8f8;
+      padding-top: 15px;
+      .address-search {
+        position: fixed;
+        max-width: 720px;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 6;
+        .vue-daum-postcode {
+          overflow: auto;
+          height: 100%;
+        }
       }
-    }
-    .row {
-      margin-top: 10px;
-      clear: both;
-
-      input,
-      textarea,
-      select {
-        font-family: "NotoSansCJKkr-Regular";
-        font-size: 14px;
+      .blue_btn {
+        margin-top: 20px;
         width: calc(100% - 35%);
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        outline: none;
-        padding: 5px 6px;
-        height: 32px;
-        line-height: 13px;
-        box-sizing: border-box;
-      }
-      select {
-        background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat 90%
-          center / 7px 5px;
-      }
-      textarea {
-        vertical-align: top;
-        resize: none;
-
-        height: 60px;
-        &::placeholder {
-          color: #666666;
-          font-size: 12px;
+        float: right;
+        ::v-deep button {
+          width: 70%;
         }
       }
-
-      .dt {
-        width: 35%;
-        display: inline-block;
-        font-size: 14px;
-        font-family: "NotoSansCJKkr-Regular";
-        .required {
-          color: #114fff;
+      .row {
+        &:not(:first-child) {
+          margin-top: 10px;
         }
-      }
-    }
-    .agree {
-      width: calc(100% - 35%);
-      position: relative;
-      float: right;
-      color: #666666;
-      margin: 2% 0;
-      font-size: 1.125rem;
-      font-family: "NotoSansCJKkr-Regular";
-      &:after {
-        display: block;
-        content: "";
         clear: both;
-      }
-      ::v-deep .container-checkbox {
-        width: 15px;
-        height: 15px;
-        position: unset;
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 10px;
-        input[type="checkbox"] + .checkmark {
-          width: 15px;
-          height: 15px;
+        input,
+        textarea,
+        select {
+          font-family: "NotoSansCJKkr-Regular";
+          font-size: 14px;
+          width: calc(100% - 35%);
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          outline: none;
+          padding: 5px 6px;
+          height: 32px;
+          line-height: 13px;
+          box-sizing: border-box;
+        }
+        select {
+          background: url("~@/assets/images/lec_list/arrow_ico.png") no-repeat
+            90% center / 7px 5px;
+        }
+        textarea {
+          vertical-align: top;
+          resize: none;
+          height: 60px;
+          &::placeholder {
+            color: #666666;
+            font-size: 12px;
+          }
+        }
+
+        .dt {
+          width: 35%;
           display: inline-block;
-          padding: 0;
-          position: unset;
+          font-size: 14px;
+          font-family: "NotoSansCJKkr-Regular";
+          .required {
+            color: #114fff;
+          }
+        }
+        .search,
+        .select-wrap {
+          margin-top: 0;
+          width: calc(100% - 35%);
+          display: inline-block;
+          vertical-align: middle;
+          .search_contents {
+            margin-left: 0;
+            width: 90%;
+            border: 0;
+          }
+        }
+        .search {
+          box-sizing: border-box;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+        }
+        ::v-deep .select-wrap {
+          .select {
+            width: 31.333%;
+            &:not(:last-child) {
+              margin-right: 3%;
+            }
+          }
+        }
+        .address,
+        .phone-title {
+          vertical-align: middle;
+        }
+        .phone {
+          vertical-align: middle;
+          display: inline-block;
+          font-size: 14px;
+          width: calc(100% - 35%);
+          border: 1px solid #ccc;
+          border-right: 0;
+          border-radius: 5px;
+          box-sizing: border-box;
+          position: relative;
+          #phone,
+          #auth {
+            border: 0;
+            width: 80%;
+            padding: 5px 6px 5px 6px;
+            height: 30px;
+          }
+          .submit-btn {
+            height: 32px;
+            font-weight: bold;
+            width: 20%;
+            vertical-align: middle;
+            border-radius: 4px;
+            border: 1px solid #114fff;
+            color: #114fff;
+            position: absolute;
+            top: -1px;
+            right: 0;
+          }
         }
       }
-      label[for="check"] {
-        display: inline-block;
-        font-size: 0.8em;
-        vertical-align: middle;
+      .timer,
+      .auth-phone-msg,
+      .email-notice {
+        color: #ff0000;
+        margin-left: 35%;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+      .agree-line {
+        &:after {
+          display: block;
+          content: "";
+          clear: both;
+        }
+        .agree {
+          width: calc(100% - 35%);
+          position: relative;
+          float: right;
+          color: #666666;
+          margin-top: 5px;
+          font-size: 1.125rem;
+          font-family: "NotoSansCJKkr-Regular";
+          ::v-deep .container-checkbox {
+            width: 15px;
+            height: 15px;
+            position: unset;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+            input[type="checkbox"] + .checkmark {
+              width: 15px;
+              height: 15px;
+              display: inline-block;
+              padding: 0;
+              position: unset;
+            }
+          }
+          .agree-check {
+            width: calc(100% - 30px);
+            display: inline-block;
+            font-size: 0.8em;
+            vertical-align: middle;
+          }
+        }
       }
     }
   }
