@@ -1,5 +1,6 @@
 import { Vue } from "vue-property-decorator";
 export default class Unijob extends Vue {
+<<<<<<< HEAD
     constructor() {
         super(...arguments);
         this.view = {};
@@ -7,6 +8,12 @@ export default class Unijob extends Vue {
         this.editorData = ""; // 에디터 v-model
         this.file_list = "";
     }
+=======
+    view = {};
+    title = "";
+    editorData = ""; // 에디터 v-model
+    file_list = "";
+>>>>>>> 23e63313c915e09357079cb388b7655d73e5a069
     read(id) {
         const data = {
             action: "get_unijob_info",

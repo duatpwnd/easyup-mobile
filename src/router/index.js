@@ -3,6 +3,10 @@ import VueRouter from "vue-router";
 import store from "@/store";
 const VueCookies = require("vue-cookies");
 Vue.use(VueRouter);
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch((error) => { });
+};
 const routes = [
     {
         path: "/",
@@ -21,6 +25,13 @@ const routes = [
         name: "signupComplete",
         component: () => import("../views/SignUpComplete.vue"),
         meta: { isFooter: false },
+        // beforeEnter(to, from, next) {
+        //   if (VueCookies.get("access_token")) {
+        //     next("/");
+        //   } else {
+        //     next();
+        //   }
+        // },
     },
     {
         path: "/pwChange",

@@ -19,7 +19,10 @@ import { router } from "./router";
 library.add(faTimes);
 const VueCookies = require("vue-cookies");
 Vue.component("font-awesome-icon", FontAwesomeIcon);
+<<<<<<< HEAD
 Vue.use(VueDaumPostcode);
+=======
+>>>>>>> 23e63313c915e09357079cb388b7655d73e5a069
 Vue.use(VueRouterBackButton, { router });
 Vue.use(Clipboard);
 Vue.use(VueCookies);
@@ -34,10 +37,24 @@ Vue.use(VueMq, {
         tablet: 769,
     },
 });
+<<<<<<< HEAD
+=======
+Vue.use(VueAwesomeSwiper);
+>>>>>>> 23e63313c915e09357079cb388b7655d73e5a069
 Vue.prototype.$EventBus = new Vue();
 Vue.prototype.$ApiUrl = ApiUrl;
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = true;
+<<<<<<< HEAD
+=======
+// NODE_ENV = '앱실행모드'
+if (process.env.NODE_ENV == "development") {
+    axios.defaults.baseURL = "http://develop.hell0world.net";
+}
+else if (process.env.NODE_ENV == "production") {
+    axios.defaults.baseURL = "https://www.easyupclass.com";
+}
+>>>>>>> 23e63313c915e09357079cb388b7655d73e5a069
 // 개발서버인경우 Authorization 으로 들어가는데 실서버인경우 authorization으로 들어가있음.
 axios.interceptors.request.use((config) => {
     if (VueCookies.get("user_info") != null) {

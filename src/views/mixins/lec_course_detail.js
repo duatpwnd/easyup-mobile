@@ -1,6 +1,7 @@
 import { __decorate } from "tslib";
 import { Component, Watch, Vue } from "vue-property-decorator";
 let GroupMixin = class GroupMixin extends Vue {
+<<<<<<< HEAD
     constructor() {
         super(...arguments);
         this.detail = {};
@@ -10,6 +11,15 @@ let GroupMixin = class GroupMixin extends Vue {
         this.score_info = {}; // 각 별점의 개수
         this.url = window.document.location.href; // 클립보드 현재 url
     }
+=======
+    $refs;
+    detail = {};
+    isPossibleReview = false;
+    is_subscribe = false;
+    subscribe_btn = false;
+    score_info = {}; // 각 별점의 개수
+    url = window.document.location.href; // 클립보드 현재 url
+>>>>>>> 23e63313c915e09357079cb388b7655d73e5a069
     onPropertyChanged(value, oldValue) {
         this.isSubscribe();
     }
