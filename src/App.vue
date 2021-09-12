@@ -61,7 +61,7 @@
     },
   })
   export default class App extends Vue {
-   private noticePopup():void{
+    private noticePopup(): void {
       // 2021.05.28 자정까지만 팝업 띄우기 :: S
       if (
         new Date() >= new Date("05/27/2021 13:00:00") && // 언제부터
@@ -73,7 +73,7 @@
       }
       // 2021.05.28 자정까지만 팝업 띄우기 :: E
     }
-    pirvate removeMask():void {
+    private removeMask(): void {
       this.$store.commit("toggleStore/Toggle", {
         mask: false,
         more_view: false,

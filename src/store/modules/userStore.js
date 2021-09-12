@@ -1,14 +1,11 @@
 import { __decorate } from "tslib";
 import { Module, VuexModule, Mutation } from "vuex-module-decorators";
 let UserStore = class UserStore extends VuexModule {
-    constructor() {
-        super(...arguments);
-        this.userinfo = {
-            access_token: null || "",
-            info: {},
-        };
-        this.refererLink = "";
-    }
+    userinfo = {
+        access_token: null || "",
+        info: {},
+    };
+    refererLink = "";
     get isToken() {
         return this.userinfo.access_token;
     }

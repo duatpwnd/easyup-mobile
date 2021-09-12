@@ -1,15 +1,13 @@
 import { __decorate } from "tslib";
 import { Component, Watch, Vue } from "vue-property-decorator";
 let GroupMixin = class GroupMixin extends Vue {
-    constructor() {
-        super(...arguments);
-        this.detail = {}; //코스는 지금 타입스크립트 적용안되서 지금 일딴 써놨음 코스도 타입스크립트 적용시키면 제거 시키기
-        this.isPossibleReview = false;
-        this.is_subscribe = false;
-        this.subscribe_btn = false;
-        this.score_info = {}; // 각 별점의 개수
-        this.url = window.document.location.href; // 클립보드 현재 url
-    }
+    $refs;
+    detail = {};
+    isPossibleReview = false;
+    is_subscribe = false;
+    subscribe_btn = false;
+    score_info = {}; // 각 별점의 개수
+    url = window.document.location.href; // 클립보드 현재 url
     onPropertyChanged(value, oldValue) {
         this.isSubscribe();
     }
@@ -92,6 +90,7 @@ let GroupMixin = class GroupMixin extends Vue {
         this.$axios
             .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
             .then((result) => {
+            console.log(result);
             if (result.data.error == false) {
                 this.$store.commit("toggleStore/Toggle", {
                     cart_modal: true,
@@ -101,6 +100,24 @@ let GroupMixin = class GroupMixin extends Vue {
         })
             .catch((err) => {
             console.log(err);
+        });
+    }
+    // 강의 || 코스 상세 조회
+    getDetail(type) {
+        let data = {
+            action: type,
+        };
+        if (type == "get_session_info") {
+            data.session_id = this.$route.query.id;
+        }
+        else {
+            data.course_id = this.$route.query.id;
+        }
+        this.$axios
+            .post(this.$ApiUrl.mobileAPI_v1, JSON.stringify(data))
+            .then((result) => {
+            console.log(result);
+            this.detail = result.data.data;
         });
     }
     destroyed() {

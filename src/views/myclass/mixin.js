@@ -1,13 +1,10 @@
 import { __decorate } from "tslib";
 import { Vue, Component } from "vue-property-decorator";
 let MyLectureCourse = class MyLectureCourse extends Vue {
-    constructor() {
-        super(...arguments);
-        this.lec_course_list = "";
-        this.current = 1; //현재번호
-        this.order = "";
-        this.keyword = "";
-    }
+    lec_course_list = "";
+    current = 1; //현재번호
+    order = "";
+    keyword = "";
     getMyCourse(action, num, order, keyword) {
         const data = {
             action: action,
