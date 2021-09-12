@@ -3,6 +3,12 @@ import VueRouter from "vue-router";
 import store from "@/store";
 const VueCookies = require("vue-cookies");
 Vue.use(VueRouter);
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location: string) {
+  return (originalPush.call(this, location) as unknown as Promise<any>).catch(
+    (error: Error) => {}
+  );
+};
 
 const routes = [
   {
